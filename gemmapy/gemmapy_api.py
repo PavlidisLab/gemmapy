@@ -307,7 +307,7 @@ class GemmaPy(object):
         :param int result_set: (required)
         :return: DataFrame
         """
-        api_response = self.api.get_result_set(result_set, **kwargs)
+        api_response = self.api.get_result_set_as_tsv(result_set, **kwargs)
         df = pandas.read_csv(StringIO(api_response), sep='\t', comment='#')
         df = df.drop(columns=['id','probe_id','gene_id','gene_name'], errors='ignore')
         df = df.rename(columns={'probe_name':'Probe','gene_official_symbol':'GeneSymbol',
@@ -320,7 +320,7 @@ class GemmaPy(object):
         :param int result_set: (required)
         :return: DataFrame
         """
-        api_response = self.api.get_result_set_factors(result_set, **kwargs)
+        api_response = self.api.get_result_set(result_set, **kwargs)
         df = pandas.DataFrame(columns=['id', 'factorValue', 'category'])
         for f in api_response.data.experimental_factors:
             for v in f.values:
@@ -514,7 +514,7 @@ if __name__ == '__main__':
         print('Testing searchDatasets function:')
         api_response = api_instance.searchDatasets(["bipolar"], taxon="human", limit=100)
         for d in api_response.data:
-            if d.geeq.batch_corrected:
+            if d.geeq is not None and  d.geeq.batch_corrected:
                 print(d.short_name, d.name, d.bio_assay_count)
         print('')
 
@@ -606,5 +606,5 @@ if __name__ == '__main__':
     #df2 = api_instance.getDatasetDE(None,485406)
     #obj = api_instance.api.get_platforms_by_ids(['GPL96'])
     #df2 = api_instance.getPlatformAnnotation('GPL96')
-    df2 = api_instance.getPlatformsInfo(['GPL96'])
-    print(df2)
+    #df2 = api_instance.getPlatformsInfo(['GPL96'])
+    #print(df2)
