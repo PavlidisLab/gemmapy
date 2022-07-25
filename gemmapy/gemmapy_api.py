@@ -4,7 +4,7 @@ Gemma python API (https://gemma.msl.ubc.ca/rest/v2/)
 """
 
 import logging
-import gemma_py
+from   gemmapy import sdk
 import pandas
 import numpy
 import anndata
@@ -18,11 +18,11 @@ class GemmaPy(object):
     """
 
     def __init__(self, api_client=None):
-        configuration = gemma_py.Configuration()
+        configuration = sdk.Configuration()
         configuration.host = 'dev.gemma.msl.ubc.ca/rest/v2'
 
         # create an instance of the API class
-        self.api = gemma_py.DefaultApi(gemma_py.ApiClient(configuration))
+        self.api = sdk.DefaultApi(sdk.ApiClient(configuration))
 
     def getDatasetAnnotations(self, dataset, **kwargs):  # noqa: E501
         """Retrieve the annotations analysis of a dataset  # noqa: E501
