@@ -27,16 +27,8 @@ class GemmaPy(object):
     def getDatasetAnnotations(self, dataset, **kwargs):  # noqa: E501
         """Retrieve the annotations analysis of a dataset
 
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        
-        >>> thread = api.getDatasetAnnotations(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param bool async_req:
         :param str dataset: (required)
-        :return: ResponseDataObjectSetAnnotationValueObject.
-          If the method is called asynchronously, returns the request thread.
+        :return: ResponseDataObjectSetAnnotationValueObject
         """
         return self.api.get_dataset_annotations(dataset, **kwargs)
 
@@ -59,18 +51,10 @@ class GemmaPy(object):
     def getDatasetDEA(self, dataset, **kwargs):  # noqa: E501
         """Retrieve the differential analyses of a dataset
 
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        
-        >>> thread = api.getDatasetDEA(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param bool async_req: (optional) See above
         :param str dataset: (required)
         :param int offset: The offset of the first retrieved result
         :param int limit: Limit the number of results retrieved
-        :return: ResponseDataObjectListDifferentialExpressionAnalysisValueObject.
-          If the method is called asynchronously, returns the request thread.
+        :return: ResponseDataObjectListDifferentialExpressionAnalysisValueObject
         """
         return self.api.get_dataset_differential_expression_analyses(dataset, **kwargs)
 
@@ -79,8 +63,7 @@ class GemmaPy(object):
 
         :param str dataset: (required)
         :param bool filter: Filter results by matching the expression
-        :return: DataFrame.
-          If the method is called asynchronously, returns the request thread.
+        :return: DataFrame
         """
         api_response = self.api.get_dataset_expression(dataset, **kwargs)
         df = pandas.read_csv(StringIO(api_response), sep='\t', comment='#', dtype={'Probe':'str'})
@@ -94,196 +77,108 @@ class GemmaPy(object):
     def getDatasetPlatforms(self, dataset, **kwargs):  # noqa: E501
         """Retrieve the platform of a dataset
 
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        
-        >>> thread = api.getDatasetPlatforms(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param bool async_req: (optional) See above
         :param str dataset: (required)
-        :return: ResponseDataObjectListArrayDesignValueObject.
-          If the method is called asynchronously, returns the request thread.
+        :return: ResponseDataObjectListArrayDesignValueObject
         """
         return self.api.get_dataset_platforms(dataset, **kwargs)
 
     def getDatasetSamples(self, dataset, **kwargs):  # noqa: E501
         """Retrieve the samples of a dataset
 
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        
-        >>> thread = api.getDatasetSamples(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param bool async_req: (optional) See above
         :param str dataset: (required)
-        :return: ResponseDataObjectListBioAssayValueObject.
-          If the method is called asynchronously, returns the request thread.
+        :return: ResponseDataObjectListBioAssayValueObject
         """
         return self.api.get_dataset_samples(dataset, **kwargs)
 
     def getDatasetsInfo(self, dataset, **kwargs):  # noqa: E501
         """Retrieve datasets by their identifiers
 
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        
-        >>> thread = api.getDatasetsInfo(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param bool async_req: (optional) See above
         :param list[str] dataset: (required)
         :param str filter: Filter results by matching the expression
         :param int offset: The offset of the first retrieved result
         :param int limit: Limit the number of results retrieved
         :param str sort: Order results by the given property and direction. The '+'
           sign indicate ascending order whereas the '-' indicate descending.
-        :return: PaginatedResponseDataObjectExpressionExperimentValueObject.
-          If the method is called asynchronously, returns the request thread.
+        :return: PaginatedResponseDataObjectExpressionExperimentValueObject
         """
         return self.api.get_datasets_by_ids(dataset, **kwargs)
 
     def getGeneGO(self, gene, **kwargs):  # noqa: E501
         """Retrieve the GO terms associated to a gene
 
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        
-        >>> thread = api.getGeneGO(gene, async_req=True)
-        >>> result = thread.get()
-
-        :param bool async_req: (optional) See above
         :param str gene: (required)
         :return: ResponseDataObjectListGeneOntologyTermValueObject
-          If the method is called asynchronously, returns the request thread.
         """
         return self.api.get_gene_go_terms(gene, **kwargs)
 
     def getGeneLocation(self, gene, **kwargs):  # noqa: E501
         """Retrieve the physical locations of a given gene
 
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        
-        >>> thread = api.getGeneLocation(gene, async_req=True)
-        >>> result = thread.get()
-
-        :param bool async_req: (optional) See above
         :param str gene: (required)
         :return: ResponseDataObjectListPhysicalLocationValueObject
-          If the method is called asynchronously, returns the request thread.
         """
         return self.api.get_gene_locations(gene, **kwargs)
 
     def getGeneProbes(self, gene, **kwargs):  # noqa: E501
         """Retrieve the probes associated to a genes
 
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        
-        >>> thread = api.getGeneProbes(gene, async_req=True)
-        >>> result = thread.get()
-
-        :param bool async_req: (optional) See above
         :param str gene: (required)
         :param int offset: The offset of the first retrieved result
         :param int limit: Limit the number of results retrieved
         :return: PaginatedResponseDataObjectCompositeSequenceValueObject
-          If the method is called asynchronously, returns the request thread.
         """
         return self.api.get_gene_probes(gene, **kwargs)
 
     def getGenesInfo(self, genes, **kwargs):  # noqa: E501
         """Retrieve genes matching a gene identifier
 
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        
-        >>> thread = api.getGenesInfo(genes, async_req=True)
-        >>> result = thread.get()
-
-        :param bool async_req: (optional) See above
         :param list[str] genes: (required)
         :return: ResponseDataObjectListGeneValueObject
-          If the method is called asynchronously, returns the request thread.
         """
         return self.api.get_genes(genes, **kwargs)
 
     def getPlatformDatasets(self, platform, **kwargs):  # noqa: E501
         """Retrieve all experiments within a given platform
 
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        
-        >>> thread = api.getPlatformDatasets(platform, async_req=True)
-        >>> result = thread.get()
-
-        :param bool async_req: (optional) See above
         :param str platform: (required)
         :param int offset: The offset of the first retrieved result
         :param int limit: Limit the number of results retrieved
-        :return: PaginatedResponseDataObjectExpressionExperimentValueObject.
-          If the method is called asynchronously, returns the request thread.
+        :return: PaginatedResponseDataObjectExpressionExperimentValueObject
         """
         return self.api.get_platform_datasets(platform, **kwargs)
 
     def getPlatformElements(self, platform, probes, **kwargs):  # noqa: E501
         """Retrieve the selected composite sequences for a given platform
 
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        
-        >>> thread = api.getPlatformElements(platform, probes, async_req=True)
-        >>> result = thread.get()
-
-        :param bool async_req: (optional) See above
         :param str platform: (required)
         :param list[str] probes: (required)
         :param int offset: The offset of the first retrieved result
         :param int limit: Limit the number of results retrieved
-        :return: PaginatedResponseDataObjectCompositeSequenceValueObject.
-          If the method is called asynchronously, returns the request thread.
+        :return: PaginatedResponseDataObjectCompositeSequenceValueObject
         """
         return self.api.get_platform_element(platform, probes, **kwargs)
 
     def getPlatformElementGenes(self, platform, probe, **kwargs):  # noqa: E501
         """Retrieve the genes associated to a probe in a given platform
 
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        
-        >>> thread = api.getPlatformElementGenes(platform, probe, async_req=True)
-        >>> result = thread.get()
-
-        :param bool async_req: (optional) See above
         :param str platform: (required)
         :param str probe: (required)
         :param int offset: The offset of the first retrieved result
         :param int limit: Limit the number of results retrieved
-        :return: PaginatedResponseDataObjectGeneValueObject.
-          If the method is called asynchronously, returns the request thread.
+        :return: PaginatedResponseDataObjectGeneValueObject
         """
         return self.api.get_platform_element_genes(platform, probe, **kwargs)
 
     def getPlatformsInfo(self, platform, **kwargs):  # noqa: E501
         """Retrieve all platforms matching a set of platform identifiers
 
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        
-        >>> thread = api.getPlatformsInfo(platform, async_req=True)
-        >>> result = thread.get()
-
-        :param bool async_req: (optional) See above
         :param list[str] platform: (required)
         :param str filter: Filter results by matching the expression
         :param int offset: The offset of the first retrieved result
         :param int limit: Limit the number of results retrieved
         :param str sort: Order results by the given property and direction. The '+'
           sign indicate ascending order whereas the '-' indicate descending.
-        :return: PaginatedResponseDataObjectArrayDesignValueObject.
-          If the method is called asynchronously, returns the request thread.
+        :return: PaginatedResponseDataObjectArrayDesignValueObject
         """
         return self.api.get_platforms_by_ids(platform, **kwargs)
 
@@ -333,29 +228,14 @@ class GemmaPy(object):
     def searchAnnotations(self, query, **kwargs):  # noqa: E501
         """Search for annotation tags
 
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        
-        >>> thread = api.searchAnnotations(query, async_req=True)
-        >>> result = thread.get()
-
-        :param bool async_req: (optional) See above
         :param list[str] query: (required)
-        :return: ResponseDataObjectListAnnotationSearchResultValueObject.
-          If the method is called asynchronously, returns the request thread.
+        :return: ResponseDataObjectListAnnotationSearchResultValueObject
         """
         return self.api.search_annotations(query, **kwargs)
 
     def searchDatasets(self, query, taxon, **kwargs):
         """Retrieve datasets within a given taxa associated to an annotation tags search
 
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        
-        >>> thread = api.search_taxon_datasets(taxon, query, async_req=True)
-        >>> result = thread.get()
-
-        :param bool async_req: (optional) See above
         :param str taxon: (required)
         :param list[str] query: (required)
         :param str filter: Filter results by matching the expression
@@ -363,8 +243,7 @@ class GemmaPy(object):
         :param int limit: Limit the number of results retrieved
         :param str sort: Order results by the given property and direction. The '+'
           sign indicate ascending order whereas the '-' indicate descending.
-        :return: PaginatedResponseDataObjectExpressionExperimentValueObject.
-          If the method is called asynchronously, returns the request thread.
+        :return: PaginatedResponseDataObjectExpressionExperimentValueObject
         """
         return self.api.search_taxon_datasets(taxon, query, **kwargs)
 
