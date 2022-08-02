@@ -28,7 +28,7 @@ class GemmaPy(object):
         """Retrieve the annotations analysis of a dataset
 
         :param str dataset: (required)
-        :return: ResponseDataObjectSetAnnotationValueObject
+        :rtype: ResponseDataObjectSetAnnotationValueObject
         """
         return self.api.get_dataset_annotations(dataset, **kwargs)
 
@@ -54,7 +54,7 @@ class GemmaPy(object):
         :param str dataset: (required)
         :param int offset: The offset of the first retrieved result
         :param int limit: Limit the number of results retrieved
-        :return: ResponseDataObjectListDifferentialExpressionAnalysisValueObject
+        :rtype: ResponseDataObjectListDifferentialExpressionAnalysisValueObject
         """
         return self.api.get_dataset_differential_expression_analyses(dataset, **kwargs)
 
@@ -78,7 +78,7 @@ class GemmaPy(object):
         """Retrieve the platform of a dataset
 
         :param str dataset: (required)
-        :return: ResponseDataObjectListArrayDesignValueObject
+        :rtype: ResponseDataObjectListArrayDesignValueObject
         """
         return self.api.get_dataset_platforms(dataset, **kwargs)
 
@@ -86,7 +86,7 @@ class GemmaPy(object):
         """Retrieve the samples of a dataset
 
         :param str dataset: (required)
-        :return: ResponseDataObjectListBioAssayValueObject
+        :rtype: ResponseDataObjectListBioAssayValueObject
         """
         return self.api.get_dataset_samples(dataset, **kwargs)
 
@@ -99,7 +99,7 @@ class GemmaPy(object):
         :param int limit: Limit the number of results retrieved
         :param str sort: Order results by the given property and direction. The '+'
           sign indicate ascending order whereas the '-' indicate descending.
-        :return: PaginatedResponseDataObjectExpressionExperimentValueObject
+        :rtype: PaginatedResponseDataObjectExpressionExperimentValueObject
         """
         return self.api.get_datasets_by_ids(dataset, **kwargs)
 
@@ -107,7 +107,7 @@ class GemmaPy(object):
         """Retrieve the GO terms associated to a gene
 
         :param str gene: (required)
-        :return: ResponseDataObjectListGeneOntologyTermValueObject
+        :rtype: ResponseDataObjectListGeneOntologyTermValueObject
         """
         return self.api.get_gene_go_terms(gene, **kwargs)
 
@@ -115,7 +115,7 @@ class GemmaPy(object):
         """Retrieve the physical locations of a given gene
 
         :param str gene: (required)
-        :return: ResponseDataObjectListPhysicalLocationValueObject
+        :rtype: ResponseDataObjectListPhysicalLocationValueObject
         """
         return self.api.get_gene_locations(gene, **kwargs)
 
@@ -125,7 +125,7 @@ class GemmaPy(object):
         :param str gene: (required)
         :param int offset: The offset of the first retrieved result
         :param int limit: Limit the number of results retrieved
-        :return: PaginatedResponseDataObjectCompositeSequenceValueObject
+        :rtype: PaginatedResponseDataObjectCompositeSequenceValueObject
         """
         return self.api.get_gene_probes(gene, **kwargs)
 
@@ -133,7 +133,7 @@ class GemmaPy(object):
         """Retrieve genes matching a gene identifier
 
         :param list[str] genes: (required)
-        :return: ResponseDataObjectListGeneValueObject
+        :rtype: ResponseDataObjectListGeneValueObject
         """
         return self.api.get_genes(genes, **kwargs)
 
@@ -143,7 +143,7 @@ class GemmaPy(object):
         :param str platform: (required)
         :param int offset: The offset of the first retrieved result
         :param int limit: Limit the number of results retrieved
-        :return: PaginatedResponseDataObjectExpressionExperimentValueObject
+        :rtype: PaginatedResponseDataObjectExpressionExperimentValueObject
         """
         return self.api.get_platform_datasets(platform, **kwargs)
 
@@ -154,7 +154,7 @@ class GemmaPy(object):
         :param list[str] probes: (required)
         :param int offset: The offset of the first retrieved result
         :param int limit: Limit the number of results retrieved
-        :return: PaginatedResponseDataObjectCompositeSequenceValueObject
+        :rtype: PaginatedResponseDataObjectCompositeSequenceValueObject
         """
         return self.api.get_platform_element(platform, probes, **kwargs)
 
@@ -165,7 +165,7 @@ class GemmaPy(object):
         :param str probe: (required)
         :param int offset: The offset of the first retrieved result
         :param int limit: Limit the number of results retrieved
-        :return: PaginatedResponseDataObjectGeneValueObject
+        :rtype: PaginatedResponseDataObjectGeneValueObject
         """
         return self.api.get_platform_element_genes(platform, probe, **kwargs)
 
@@ -178,7 +178,7 @@ class GemmaPy(object):
         :param int limit: Limit the number of results retrieved
         :param str sort: Order results by the given property and direction. The '+'
           sign indicate ascending order whereas the '-' indicate descending.
-        :return: PaginatedResponseDataObjectArrayDesignValueObject
+        :rtype: PaginatedResponseDataObjectArrayDesignValueObject
         """
         return self.api.get_platforms_by_ids(platform, **kwargs)
 
@@ -229,7 +229,7 @@ class GemmaPy(object):
         """Search for annotation tags
 
         :param list[str] query: (required)
-        :return: ResponseDataObjectListAnnotationSearchResultValueObject
+        :rtype: ResponseDataObjectListAnnotationSearchResultValueObject
         """
         return self.api.search_annotations(query, **kwargs)
 
@@ -243,7 +243,7 @@ class GemmaPy(object):
         :param int limit: Limit the number of results retrieved
         :param str sort: Order results by the given property and direction. The '+'
           sign indicate ascending order whereas the '-' indicate descending.
-        :return: PaginatedResponseDataObjectExpressionExperimentValueObject
+        :rtype: PaginatedResponseDataObjectExpressionExperimentValueObject
         """
         return self.api.search_taxon_datasets(taxon, query, **kwargs)
 
