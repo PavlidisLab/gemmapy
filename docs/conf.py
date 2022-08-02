@@ -81,5 +81,6 @@ set_type_checking_flag = True  # Enable 'expensive' imports for sphinx_autodoc_t
 #autodoc_typehints = "description" # Sphinx-native method. Not as good as sphinx_autodoc_typehints
 #add_module_names = False # Remove namespaces from class/method signatures
 
-autosummary_mock_imports = ['gemmapy.sdk']
-autosummary_imported_members = False
+#autodoc_mock_imports = ['gemmapy.sdk']
+#autosummary_mock_imports = ['gemmapy.sdk']
+#autosummary_imported_members = False
