@@ -35,7 +35,7 @@ Additional packages
 -------------------
 
 For the purpose of making plots in this tutorial the following packages should be installed
-and imported: *matplotlib*, *plotnine*.
+and imported: :code:`matplotlib`, :code:`plotnine`.
 
 
 Downloading expression data
@@ -74,7 +74,7 @@ Last Updated (by provider): Sep 05 2014
 Contributors:  Christian C Witt Benedikt Brors Dilafruz Juraeva Jens Treutlein Carsten Sticht Stephanie H Witt Jana Strohmaier Helene Dukal Josef Frank Franziska Degenhardt Markus M Nöthen Sven Cichon Maren Lang Marcella Rietschel Sandra Meier Manuel Mattheisen
 
 To access the expression data in a convenient form, you can use
-:py:func:`~gemmapy_api.GemmaPy.getDataset`. It is a high-level wrapper
+:py:func:`~gemmapy.GemmaPy.getDataset`. It is a high-level wrapper
 that combines various endpoint calls to return an `anndata
 <https://anndata.readthedocs.io/>`_ (Annotated Data) object of the
 queried dataset for downstream analyses. They include the expression
@@ -89,7 +89,7 @@ AnnData object with n_obs × n_vars = 21986 × 32
     uns: 'title', 'abstract', 'url', 'database', 'accession', 'GemmaQualityScore', 'GemmaSuitabilityScore', 'taxon'
 
 To show how subsetting works, we'll keep the manic phase data and the
-*reference_subject_role*\s, which refers to the control samples in Gemma
+:code:`reference_subject_role`\s, which refers to the control samples in Gemma
 datasets.
 
 >>> # Check the levels of the disease factor
@@ -146,8 +146,8 @@ Let's check the expression for every sample to make sure they look OK:
 
 Gene expression distributions of bipolar patients during manic phase and controls.
 
-You can also use :py:func:`~gemmapy_api.GemmaPy.getDatasetExpression` to only get the expression 
-matrix, and :py:func:`~gemmapy_api.GemmaPy.getDatasetDesign` to get the experimental design matrix.
+You can also use :py:func:`~gemmapy.GemmaPy.getDatasetExpression` to only get the expression 
+matrix, and :py:func:`~gemmapy.GemmaPy.getDatasetDesign` to get the experimental design matrix.
 
 Differential expression analyses
 --------------------------------
@@ -156,7 +156,7 @@ Gemma also contains precomputed differential expression analyses for
 most of its datasets, and some datasets contain more than one analysis
 to account for different factors and their interactions. These tables
 are stored as resultSets, and you can access them using
-:py:func:`~gemmapy_api.GemmaPy.getDatasetDE`. From here on, we can
+:py:func:`~gemmapy.GemmaPy.getDatasetDE`. From here on, we can
 explore and visualize the data to find the most
 differentially-expressed genes:
 
@@ -260,7 +260,7 @@ Differentially-expressed genes in bipolar patients during manic phase versus con
 Larger queries
 --------------
 
-The *\*Info()* endpoints accept multiple identifiers in a single
+The :code:`*Info()` endpoints accept multiple identifiers in a single
 function call. For example, getting information on 2 datasets at the
 same time.
 
@@ -272,7 +272,7 @@ GSE35974 Expression data from the human cerebellum brain 5939 GSE35974 144 human
 GSE46416 State- and trait-specific gene expression in euthymia and mania 8997 GSE46416 32 human
 
 To query large amounts of data, the API has a pagination system which
-uses the *limit* and *offset* parameters. To avoid overloading the server,
+uses the :code:`limit` and :code:`offset` parameters. To avoid overloading the server,
 calls are limited to a maximum of 100 entries, so the offset allows
 you to get the next batch of entries in the next call(s). For
 simplicity, this example shows how pagination works with 5 entries per
