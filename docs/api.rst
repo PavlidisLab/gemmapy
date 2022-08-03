@@ -1,3 +1,4 @@
+
 API Reference
 =============
 
@@ -9,7 +10,7 @@ Basic package usage:
 
 Where ``FUNCTION`` is one of the methods of the :py:class:`gemmapy.GemmaPy`
 class described below. 
-Return types (classes) are described in `gemmapy.sdk.models Subpackage`_ 
+Return types (classes) are described in :py:mod:`gemmapy.sdk.models`
 (unless they are `Pandas DataFrame <https://pandas.pydata.org/docs/reference/frame.html>`_ 
 or `AnnData <https://anndata.readthedocs.io/en/latest/generated/anndata.AnnData.html>`_ objects).
 
@@ -17,17 +18,49 @@ or `AnnData <https://anndata.readthedocs.io/en/latest/generated/anndata.AnnData.
 gemmapy Package
 ---------------
 
-Main package containing :py:class:`~gemmapy.GemmaPy` class and :py:mod:`gemmapy.sdk`
-subpackage containing lower level swagger generated code.
+Main package containing :py:class:`~gemmapy.GemmaPy` class described below and :py:mod:`gemmapy.sdk`
+subpackage containing lower level swagger generated code. Of the latter only :py:mod:`gemmapy.sdk.models` module is documented here as its classes represent :py:class:`~gemmapy.GemmaPy` method 
+return values.
 
-.. 
-  currentmodule:: gemmapy.sdk.models
+.. _GemmaPy-sec:
 
-.. automodule:: gemmapy
+gemmapy.GemmaPy Class
+---------------------
+
+.. currentmodule:: gemmapy
+
+.. autoclass:: GemmaPy
    :members:
-   :undoc-members:
-   :imported-members:
 
+   .. rubric:: Methods
+
+   .. autosummary::
+
+      ~GemmaPy.getDataset
+      ~GemmaPy.getDatasetAnnotations
+      ~GemmaPy.getDatasetDE
+      ~GemmaPy.getDatasetDEA
+      ~GemmaPy.getDatasetDesign
+      ~GemmaPy.getDatasetExpression
+      ~GemmaPy.getDatasetPlatforms
+      ~GemmaPy.getDatasetResultSets
+      ~GemmaPy.getDatasetSamples
+      ~GemmaPy.getDatasetsInfo
+      ~GemmaPy.getGeneGO
+      ~GemmaPy.getGeneLocation
+      ~GemmaPy.getGeneProbes
+      ~GemmaPy.getGenesInfo
+      ~GemmaPy.getPlatformAnnotation
+      ~GemmaPy.getPlatformDatasets
+      ~GemmaPy.getPlatformElementGenes
+      ~GemmaPy.getPlatformElements
+      ~GemmaPy.getPlatformsInfo
+      ~GemmaPy.getResultSets
+      ~GemmaPy.getResultSetsFactors
+      ~GemmaPy.searchAnnotations
+      ~GemmaPy.searchDatasets
+
+   
 gemmapy.sdk.models Subpackage
 -----------------------------
 
