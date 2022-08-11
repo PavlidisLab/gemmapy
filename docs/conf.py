@@ -18,7 +18,7 @@ sys.path.insert(0, os.path.abspath('..'))
 # -- Project information -----------------------------------------------------
 
 project = 'GemmaPy'
-copyright = '2022, D. Vavilov'
+copyright = '2022, The University of British Columbia'
 author = 'D. Vavilov'
 
 # The full version, including alpha/beta/rc tags
@@ -35,6 +35,7 @@ extensions = [
    'sphinx.ext.autosummary',
    'sphinx.ext.viewcode',
    'sphinx_autodoc_typehints',
+   'm2r2',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
