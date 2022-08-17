@@ -11,7 +11,7 @@
    Tutorial <tutorial>
    API Reference <api>
 
-.. mdinclude:: ../README.md
+.. include:: ../README.rst
 
 Indices and tables
 ==================
