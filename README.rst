@@ -18,7 +18,12 @@ Installation instructions
 Usage
 -----
 
-To get started with *gemmapy*, read the :doc:`tutorial <tutorial>`.
+To get started with *gemmapy*, read the 
+`Tutorial <https://pavlidislab.github.io/gemmapy/tutorial.html>`_.
+
+The full documentation can be found at 
+https://pavlidislab.github.io/gemmapy/.
+
 
 Citation
 --------
