@@ -17,9 +17,10 @@ class GemmaPy(object):
     Main API class
     """
 
-    def __init__(self, api_client=None):
+    def __init__(self, devel=True):
         configuration = sdk.Configuration()
-        configuration.host = 'dev.gemma.msl.ubc.ca/rest/v2'
+        if devel:
+            configuration.host = 'dev.gemma.msl.ubc.ca/rest/v2'
 
         # create an instance of the API class
         self.api = sdk.DefaultApi(sdk.ApiClient(configuration))
