@@ -25,7 +25,7 @@ class GemmaPy(object):
         # create an instance of the API class
         self.api = sdk.DefaultApi(sdk.ApiClient(configuration))
 
-    def getDatasetAnnotations(self, dataset, **kwargs):  # noqa: E501
+    def get_dataset_annotations(self, dataset, **kwargs):  # noqa: E501
         """Retrieve the annotations analysis of a dataset
 
         :param str dataset: (required)
@@ -33,7 +33,7 @@ class GemmaPy(object):
         """
         return self.api.get_dataset_annotations(dataset, **kwargs)
 
-    def getDatasetDesign(self, dataset, **kwargs):  # noqa: E501
+    def get_dataset_design(self, dataset, **kwargs):  # noqa: E501
         """Retrieve the design of a dataset
 
         :param str dataset: (required)
@@ -49,7 +49,7 @@ class GemmaPy(object):
 
         return df.drop(columns=['Bioassay', 'ExternalID'], errors='ignore')
 
-    def getDatasetDEA(self, dataset, **kwargs):  # noqa: E501
+    def get_dataset_differential_expression_analyses(self, dataset, **kwargs):  # noqa: E501
         """Retrieve the differential analyses of a dataset
 
         :param str dataset: (required)
@@ -59,7 +59,7 @@ class GemmaPy(object):
         """
         return self.api.get_dataset_differential_expression_analyses(dataset, **kwargs)
 
-    def getDatasetExpression(self, dataset, **kwargs):  # noqa: E501
+    def get_dataset_expression(self, dataset, **kwargs):  # noqa: E501
         """Retrieve the expression data of a dataset
 
         :param str dataset: (required)
@@ -75,7 +75,7 @@ class GemmaPy(object):
         return df
 
 
-    def getDatasetPlatforms(self, dataset, **kwargs):  # noqa: E501
+    def get_dataset_platforms(self, dataset, **kwargs):  # noqa: E501
         """Retrieve the platform of a dataset
 
         :param str dataset: (required)
@@ -83,7 +83,7 @@ class GemmaPy(object):
         """
         return self.api.get_dataset_platforms(dataset, **kwargs)
 
-    def getDatasetSamples(self, dataset, **kwargs):  # noqa: E501
+    def get_dataset_samples(self, dataset, **kwargs):  # noqa: E501
         """Retrieve the samples of a dataset
 
         :param str dataset: (required)
@@ -91,7 +91,7 @@ class GemmaPy(object):
         """
         return self.api.get_dataset_samples(dataset, **kwargs)
 
-    def getDatasetsInfo(self, dataset, **kwargs):  # noqa: E501
+    def get_datasets_by_ids(self, dataset, **kwargs):  # noqa: E501
         """Retrieve datasets by their identifiers
 
         :param list[str] dataset: (required)
@@ -104,7 +104,7 @@ class GemmaPy(object):
         """
         return self.api.get_datasets_by_ids(dataset, **kwargs)
 
-    def getGeneGO(self, gene, **kwargs):  # noqa: E501
+    def get_gene_go_terms(self, gene, **kwargs):  # noqa: E501
         """Retrieve the GO terms associated to a gene
 
         :param str gene: (required)
@@ -112,7 +112,7 @@ class GemmaPy(object):
         """
         return self.api.get_gene_go_terms(gene, **kwargs)
 
-    def getGeneLocation(self, gene, **kwargs):  # noqa: E501
+    def get_gene_locations(self, gene, **kwargs):  # noqa: E501
         """Retrieve the physical locations of a given gene
 
         :param str gene: (required)
@@ -120,7 +120,7 @@ class GemmaPy(object):
         """
         return self.api.get_gene_locations(gene, **kwargs)
 
-    def getGeneProbes(self, gene, **kwargs):  # noqa: E501
+    def get_gene_probes(self, gene, **kwargs):  # noqa: E501
         """Retrieve the probes associated to a genes
 
         :param str gene: (required)
@@ -130,7 +130,7 @@ class GemmaPy(object):
         """
         return self.api.get_gene_probes(gene, **kwargs)
 
-    def getGenesInfo(self, genes, **kwargs):  # noqa: E501
+    def get_genes(self, genes, **kwargs):  # noqa: E501
         """Retrieve genes matching a gene identifier
 
         :param list[str] genes: (required)
@@ -138,7 +138,7 @@ class GemmaPy(object):
         """
         return self.api.get_genes(genes, **kwargs)
 
-    def getPlatformDatasets(self, platform, **kwargs):  # noqa: E501
+    def get_platform_datasets(self, platform, **kwargs):  # noqa: E501
         """Retrieve all experiments within a given platform
 
         :param str platform: (required)
@@ -148,7 +148,7 @@ class GemmaPy(object):
         """
         return self.api.get_platform_datasets(platform, **kwargs)
 
-    def getPlatformElements(self, platform, probes, **kwargs):  # noqa: E501
+    def get_platform_element(self, platform, probes, **kwargs):  # noqa: E501
         """Retrieve the selected composite sequences for a given platform
 
         :param str platform: (required)
@@ -159,7 +159,7 @@ class GemmaPy(object):
         """
         return self.api.get_platform_element(platform, probes, **kwargs)
 
-    def getPlatformElementGenes(self, platform, probe, **kwargs):  # noqa: E501
+    def get_platform_element_genes(self, platform, probe, **kwargs):  # noqa: E501
         """Retrieve the genes associated to a probe in a given platform
 
         :param str platform: (required)
@@ -170,7 +170,7 @@ class GemmaPy(object):
         """
         return self.api.get_platform_element_genes(platform, probe, **kwargs)
 
-    def getPlatformsInfo(self, platform, **kwargs):  # noqa: E501
+    def get_platforms_by_ids(self, platform, **kwargs):  # noqa: E501
         """Retrieve all platforms matching a set of platform identifiers
 
         :param list[str] platform: (required)
@@ -183,7 +183,7 @@ class GemmaPy(object):
         """
         return self.api.get_platforms_by_ids(platform, **kwargs)
 
-    def getResultSets(self, result_set, **kwargs):  # noqa: E501
+    def get_result_set(self, result_set, **kwargs):  # noqa: E501
         """Retrieve a single analysis result set by its identifier
 
         :param int result_set: (required)
@@ -196,7 +196,7 @@ class GemmaPy(object):
                                 'gene_official_name':'GeneName','gene_ncbi_id':'NCBIid'})
         return df
 
-    def getResultSetsFactors(self, result_set, **kwargs):
+    def get_result_set_factors(self, result_set, **kwargs):
         """Retrieve a single analysis result set by its identifier with Factors
 
         :param int result_set: (required)
@@ -210,7 +210,7 @@ class GemmaPy(object):
                                ignore_index=True)
         return df
 
-    def getDatasetResultSets(self, dataset, **kwargs):  # noqa: E501
+    def get_result_sets(self, dataset, **kwargs):  # noqa: E501
         """Retrieve all result sets matching the provided criteria
 
         :param str dataset: (required)
@@ -226,7 +226,7 @@ class GemmaPy(object):
                             'factor.level': leve}, ignore_index=True)
         return df
 
-    def searchAnnotations(self, query, **kwargs):  # noqa: E501
+    def search_annotations(self, query, **kwargs):  # noqa: E501
         """Search for annotation tags
 
         :param list[str] query: (required)
@@ -234,7 +234,7 @@ class GemmaPy(object):
         """
         return self.api.search_annotations(query, **kwargs)
 
-    def searchDatasets(self, query, taxon, **kwargs):
+    def search_datasets(self, query, taxon, **kwargs):
         """Retrieve datasets within a given taxa associated to an annotation tags search
 
         :param str taxon: (required)
@@ -249,7 +249,7 @@ class GemmaPy(object):
         return self.api.search_taxon_datasets(taxon, query, **kwargs)
 
 # Below are "Convenience" (combination) functions
-    def getDataset(self, dataset, **kwargs):
+    def get_dataset_object(self, dataset, **kwargs):
         """Combines various endpoint calls to return an annotated data object
         of the queried dataset, including expression data and the experimental
         design.
@@ -258,9 +258,9 @@ class GemmaPy(object):
         :return: AnnData class object
         """
 
-        exM = self.getDatasetExpression(dataset, **kwargs)
-        des = self.getDatasetDesign(dataset, **kwargs)
-        mdata = self.getDatasetsInfo([dataset], **kwargs)
+        exM = self.get_dataset_expression(dataset, **kwargs)
+        des = self.get_dataset_design(dataset, **kwargs)
+        mdata = self.get_datasets_by_ids([dataset], **kwargs)
 
         # condition expr. data: add index
         exM.index = exM["Probe"]
@@ -297,9 +297,9 @@ class GemmaPy(object):
 
         return adata
 
-    def getDatasetDE(self, dataset = None, resultSet = None, all = False, **kwargs):
+    def get_differential_expression_values(self, dataset = None, resultSet = None, all = False, **kwargs):
         """Retrieves the differential expression resultSet(s) associated with the dataset.
-        If there is more than one resultSet, use getDatasetResultSets() to see the options
+        If there is more than one resultSet, use get_result_sets() to see the options
         and get the ID you want. Alternatively, you can query the resultSet directly
         if you know its ID beforehand.
 
@@ -310,18 +310,18 @@ class GemmaPy(object):
         :return: list[DataFrame] or DataFrame (if there is the list has only one element)
         """
         if dataset is not None and resultSet is not None:
-            rss = self.getDatasetResultSets(dataset)
+            rss = self.get_result_sets(dataset)
             if not resultSet in rss['resultSet.id'].values:
                 logger.warning('The queried resultSet is not derived from this dataset. ' 
-                               'Check the available resultSets with "getDatasetResultSets()" '
+                               'Check the available resultSets with "get_result_sets()" '
                                'or query without the dataset parameter.')
                 return
             resultSet = [resultSet,]
         elif dataset is not None and resultSet is None:
-            rss = self.getDatasetResultSets(dataset)
+            rss = self.get_result_sets(dataset)
             if rss.shape[0] > 1 and all == False:
                 logger.warning('There are multiple resultSets for this dataset. '
-                               'Check the available resultSets with "getDatasetResultSets()" or choose all = TRUE')
+                               'Check the available resultSets with "get_result_sets()" or choose all = TRUE')
                 return
             elif rss.shape[0] > 1 and all == True:
                 resultSet = rss['resultSet.id'].unique()
@@ -335,8 +335,8 @@ class GemmaPy(object):
 
         rss = []
         for rs in resultSet:
-            df = self.getResultSets(rs)
-            fact = self.getResultSetsFactors(rs)
+            df = self.get_result_set(rs)
+            fact = self.get_result_set_factors(rs)
             cols = [s.replace('log2fc','logFoldChange') for s in df.columns]
             for i in range(fact.shape[0]):
                 cols = [s.replace(str(fact.loc[i,'id']),fact.loc[i,'factorValue']) for s in cols]
@@ -351,7 +351,7 @@ class GemmaPy(object):
     # annotType = c("bioProcess", "noParents", "allParents")
     # This feature is not implemented here, the return value corresponds to "noParents"
     # (as of 2022-05-19)
-    def getPlatformAnnotation(self, platform, **kwargs):
+    def get_platform_annotations(self, platform, **kwargs):
         """Retrieve the annotations of a given platform
 
         :param str platform: (required)
@@ -371,35 +371,35 @@ if __name__ == '__main__':
 
     api_instance = GemmaPy()
 
-    def getDatasetAnnotations_test():
-        print('Testing getDatasetAnnotations function:')
-        api_response = api_instance.getDatasetAnnotations("GSE46416")
+    def get_dataset_annotations_test():
+        print('Testing get_dataset_annotations function:')
+        api_response = api_instance.get_dataset_annotations("GSE46416")
         pprint(api_response.data)
         print('')
 
-    def searchDatasets_test():
-        print('Testing searchDatasets function:')
-        api_response = api_instance.searchDatasets(["bipolar"], taxon="human", limit=100)
+    def search_datasets_test():
+        print('Testing search_datasets function:')
+        api_response = api_instance.search_datasets(["bipolar"], taxon="human", limit=100)
         for d in api_response.data:
             if d.geeq is not None and  d.geeq.batch_corrected:
                 print(d.short_name, d.name, d.bio_assay_count)
         print('')
 
-    def getDatasetsInfo_test():
-        print('Testing getDatasetsInfo function:')
-        api_response = api_instance.getDatasetsInfo(["GSE46416"])
+    def get_datasets_by_ids_test():
+        print('Testing get_datasets_by_ids function:')
+        api_response = api_instance.get_datasets_by_ids(["GSE46416"])
         for d in api_response.data:
             print(d.short_name, d.name, d.id, d.description)
         print('')
 
-    def searchAnnotations_test():
-        print('Testing searchAnnotations function:')
-        api_response = api_instance.searchAnnotations(["GSE46416"])
+    def search_annotations_test():
+        print('Testing search_annotations function:')
+        api_response = api_instance.search_annotations(["GSE46416"])
         print(api_response.data)
 
-    def getDataset_test():
-        print('Testing getDataset function:')
-        adata = api_instance.getDataset("GSE46416")
+    def get_dataset_object_test():
+        print('Testing get_dataset_object function:')
+        adata = api_instance.get_dataset_object("GSE46416")
         print(adata)
         print('\nUnstructured Info:')
         for l in adata.uns: print('%s: %s' % (l, adata.uns[l]))
@@ -422,15 +422,15 @@ if __name__ == '__main__':
         print(manic)
         print(manic.var)
 
-    def getDatasetResultSets_test():
-        print('Testing getDatasetResultSets function:')
-        df = api_instance.getDatasetResultSets('GSE6711')
+    def get_result_sets_test():
+        print('Testing get_result_sets function:')
+        df = api_instance.get_result_sets('GSE6711')
         print(df)
-        df2 = api_instance.getResultSets(485406)
+        df2 = api_instance.get_result_set(485406)
         print(df2)
 
-    def getDatasetDE_test():
-        de = api_instance.getDatasetDE('GSE46416')
+    def get_differential_expression_values_test():
+        de = api_instance.get_differential_expression_values('GSE46416')
         de['diffexpr'] = 'No'   # add extra column
         #de['diffexpr'][(de['contrast_bipolar disorder, manic phase_logFoldChange']>1.0) &
         #               (de['contrast_bipolar disorder, manic phase_pvalue']<0.05)] = 'Up'
@@ -454,9 +454,9 @@ if __name__ == '__main__':
         with pandas.option_context('display.max_rows', None, 'display.max_columns', None):
             print(de_dn[:10])
 
-    def getPlatformAnnotation_test():
-        print('Testing getPlatformAnnotation function')
-        df = api_instance.getPlatformAnnotation('GPL96')
+    def get_platform_annotations_test():
+        print('Testing get_platform_annotations function')
+        df = api_instance.get_platform_annotations('GPL96')
         print(df)
 
     if len(sys.argv) > 1:
@@ -467,11 +467,11 @@ if __name__ == '__main__':
             func = dict[fname]
             func()
 
-    #df2 = api_instance.getResultSets(423177)
-    #df2 = api_instance.getResultSetsFactors(423177)
-    #df2 = api_instance.getDatasetDE(None,423177)
-    #df2 = api_instance.getDatasetDE(None,485406)
+    #df2 = api_instance.get_result_set(423177)
+    #df2 = api_instance.get_result_set_factors(423177)
+    #df2 = api_instance.get_differential_expression_values(None,423177)
+    #df2 = api_instance.get_differential_expression_values(None,485406)
     #obj = api_instance.api.get_platforms_by_ids(['GPL96'])
-    #df2 = api_instance.getPlatformAnnotation('GPL96')
-    #df2 = api_instance.getPlatformsInfo(['GPL96'])
+    #df2 = api_instance.get_platform_annotations('GPL96')
+    #df2 = api_instance.get_platforms_by_ids(['GPL96'])
     #print(df2)

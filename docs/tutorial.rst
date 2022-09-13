@@ -50,7 +50,7 @@ corrected.
 
 >>> import gemmapy
 >>> api_instance = gemmapy.GemmaPy()
->>> api_response = api_instance.searchDatasets(["bipolar"], taxon="human", limit=100)
+>>> api_response = api_instance.search_datasets(["bipolar"], taxon="human", limit=100)
 >>> for d in api_reponse.data:
 ...   if d.geeq is not None and  d.geeq.batch_corrected:
 ...     print(d.short_name, d.name, d.bio_assay_count)
@@ -63,7 +63,7 @@ We are left with two datasets. For simplicity, we'll pick
 since it has the smaller number of samples. Now that we have the ID
 for our experiment, we can fetch the data associated with it.
 
->>> api_response = api_instance.getDatasetsInfo(["GSE46416"])
+>>> api_response = api_instance.get_datasets_by_ids(["GSE46416"])
 >>> for d in api_response.data:
 ...   print(d.short_name, d.name, d.id)
 ... 
@@ -74,14 +74,14 @@ Last Updated (by provider): Sep 05 2014
 Contributors:  Christian C Witt Benedikt Brors Dilafruz Juraeva Jens Treutlein Carsten Sticht Stephanie H Witt Jana Strohmaier Helene Dukal Josef Frank Franziska Degenhardt Markus M Nöthen Sven Cichon Maren Lang Marcella Rietschel Sandra Meier Manuel Mattheisen
 
 To access the expression data in a convenient form, you can use
-:py:func:`~gemmapy.GemmaPy.getDataset`. It is a high-level wrapper
+:py:func:`~gemmapy.GemmaPy.get_dataset_object`. It is a high-level wrapper
 that combines various endpoint calls to return an `anndata
 <https://anndata.readthedocs.io/>`_ (Annotated Data) object of the
 queried dataset for downstream analyses. They include the expression
 matrix along with the experimental design, and ensure the sample names
 match between both when transforming/subsetting data.
 
->>> adata = api_instance.getDataset("GSE46416")
+>>> adata = api_instance.get_dataset_object("GSE46416")
 >>> print(adata)
 AnnData object with n_obs × n_vars = 21986 × 32
     obs: 'GeneSymbol', 'GeneName', 'NCBIid'
@@ -146,8 +146,8 @@ Let's check the expression for every sample to make sure they look OK:
 
 Gene expression distributions of bipolar patients during manic phase and controls.
 
-You can also use :py:func:`~gemmapy.GemmaPy.getDatasetExpression` to only get the expression 
-matrix, and :py:func:`~gemmapy.GemmaPy.getDatasetDesign` to get the experimental design matrix.
+You can also use :py:func:`~gemmapy.GemmaPy.get_dataset_expression` to only get the expression 
+matrix, and :py:func:`~gemmapy.GemmaPy.get_dataset_design` to get the experimental design matrix.
 
 Differential expression analyses
 --------------------------------
@@ -156,11 +156,11 @@ Gemma also contains precomputed differential expression analyses for
 most of its datasets, and some datasets contain more than one analysis
 to account for different factors and their interactions. These tables
 are stored as resultSets, and you can access them using
-:py:func:`~gemmapy.GemmaPy.getDatasetDE`. From here on, we can
+:py:func:`~gemmapy.GemmaPy.get_differential_expression_values`. From here on, we can
 explore and visualize the data to find the most
 differentially-expressed genes:
 
->>> de = api_instance.getDatasetDE('GSE46416')
+>>> de = api_instance.get_differential_expression_values('GSE46416')
 >>>
 >>> # Classify probes for plotting
 >>> de['diffexpr'] = 'No'   # add extra column
@@ -264,7 +264,7 @@ The :code:`*Info()` endpoints accept multiple identifiers in a single
 function call. For example, getting information on 2 datasets at the
 same time.
 
->>> api_response = api_instance.getDatasetsInfo(["GSE35974","GSE46416"])
+>>> api_response = api_instance.get_datasets_by_ids(["GSE35974","GSE46416"])
 >>> for d in api_response.data:
 ...             print(d.short_name, d.name, d.id, d.accession, d.bio_assay_count, d.taxon)
 ... 
@@ -279,7 +279,7 @@ simplicity, this example shows how pagination works with 5 entries per
 query.
 
 >>> for ofs in [0,5,10]:
-...     api_response=api_instance.getPlatformsInfo([],offset=ofs,limit=5)
+...     api_response=api_instance.get_platforms_by_ids([],offset=ofs,limit=5)
 ...     for d in api_response.data:
 ...         print(d.id, d.short_name, d.taxon)
 ...     print('--')
@@ -305,14 +305,14 @@ query.
 
 The rest of the endpoints only support a single identifier:
 
->>> api_response = api_instance.getDatasetAnnotations(["GSE35974","GSE12649"])
+>>> api_response = api_instance.get_dataset_annotations(["GSE35974","GSE12649"])
 ...Error Traceback...
 
 In these cases, you will have to loop over all the identifiers you
 wish to query and send separate requests:
 
 >>> for dataset in ["GSE35974","GSE12649"]:
-...     api_response = api_instance.getDatasetAnnotations(dataset)
+...     api_response = api_instance.get_dataset_annotations(dataset)
 ...     for d in api_response.data:
 ...         print('%s %-15s %-15s %-15s' % (dataset, d.object_class, d.class_name, d.term_name))
 ...     print('--')
