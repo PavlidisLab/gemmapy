@@ -59,6 +59,8 @@ gemmapy.GemmaPy Class
       ~GemmaPy.get_result_set_factors
       ~GemmaPy.search_annotations
       ~GemmaPy.search_datasets
+      ~GemmaPy.get_taxa
+      ~GemmaPy.get_taxon_datasets
 
    
 gemmapy.sdk.models Subpackage

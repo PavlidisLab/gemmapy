@@ -360,6 +360,46 @@ class GemmaPy(object):
         api_response = self.api.get_platform_annotations(platform, **kwargs)
         return pandas.read_csv(StringIO(api_response), sep='\t', comment='#')
 
+    def get_taxa(self, **kwargs):  # noqa: E501
+        """Retrieve all available taxa
+
+        :rtype: ResponseDataObjectListTaxonValueObject
+        """
+        return self.api.get_taxa(**kwargs)
+
+    def get_taxon_datasets(self, taxon, **kwargs):  # noqa: E501
+        """Retrieve the datasets for a given taxon
+
+        :param str/int taxon: (required)
+
+        **taxon** can either be Taxon ID, Taxon NCBI ID, or one of its
+        string identifiers: scientific name, common name. It is
+        recommended to use Taxon ID for efficiency. Please note, that
+        not all taxa have all the possible identifiers available. Use
+        the get_taxa_by_ids function to retrieve the necessary
+        information. For convenience, below is a list of officially
+        supported taxa:
+
+        ==  =========   ======================== ==========
+        ID  Comm.name   Scient.name              NcbiID
+        ==  =========   ======================== ==========
+        1   human       Homo sapiens             9606
+        2   mouse       Mus musculus             10090
+        3   rat         Rattus norvegicus        10116
+        11  yeast       Saccharomyces cerevisiae 4932
+        12  zebrafish   Danio rerio              7955
+        13  fly         Drosophila melanogaster  7227
+        14  worm        Caenorhabditis elegans   6239
+        ==  =========   ======================== ==========
+
+        :param str filter:
+        :param int offset:
+        :param int limit:
+        :param str sort:
+        :rtype: PaginatedResponseDataObjectExpressionExperimentValueObject
+        """
+        return self.api.get_taxon_datasets(taxon, **kwargs)
+
 # Tests
 if __name__ == '__main__':
     # dv temp
