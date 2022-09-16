@@ -257,10 +257,104 @@ differentially-expressed genes:
 
 Differentially-expressed genes in bipolar patients during manic phase versus controls.
 
+Platform Annotations
+--------------------
+
+Expression data in Gemma comes with annotations for the gene each
+expression profile corresponds to. Using the
+:py:func:`~gemmapy.GemmaPy.get_platform_annotations` function, these
+annotations can be retrieved independently of the expression data,
+along with additional annotations such as Gene Ontology terms.
+
+Examples:
+
+>>> import pandas
+>>> api_response = api_instance.get_platform_annotations('GPL96')
+>>> with pandas.option_context('display.max_rows', None, 'display.max_columns', None): print(api_response[:6])
+     ProbeName    GeneSymbols                                      GeneNames  \
+0  211750_x_at  TUBA1A|TUBA1C              tubulin alpha 1a|tubulin alpha 1c   
+1    216678_at            NaN                                            NaN   
+2    216345_at         ZSWIM8             zinc finger SWIM-type containing 8   
+3    207273_at            NaN                                            NaN   
+4  216025_x_at         CYP2C9  cytochrome P450 family 2 subfamily C member 9   
+5  218191_s_at         LMBRD1                      LMBR1 domain containing 1   
+                                             GOTerms       GemmaIDs  \
+0  GO:0005737|GO:0000166|GO:0051234|GO:0005856|GO...  172797|360802   
+1                                                NaN            NaN   
+2  GO:0043170|GO:1990234|GO:0044260|GO:0050789|GO...         235733   
+3                                                NaN            NaN   
+4  GO:0005737|GO:0072330|GO:0008203|GO:0008202|GO...          32964   
+5  GO:0043170|GO:0016192|GO:0051234|GO:0044260|GO...         303717   
+      NCBIids  
+0  7846|84790  
+1         NaN  
+2       23053  
+3         NaN  
+4        1559  
+5       55788  
+
+>>> api_response = api_instance.get_platform_annotations('Generic_human')
+>>> with pandas.option_context('display.max_rows', None, 'display.max_columns', None): print(api_response[:6])
+      ProbeName   GeneSymbols  \
+0         LCN10         LCN10   
+1      STAG3L5P      STAG3L5P   
+2  LOC101059976  LOC101059976   
+3          GAB3          GAB3   
+4  LOC100287155  LOC100287155   
+5        RASSF2        RASSF2   
+                                           GeneNames  \
+0                                       lipocalin 10   
+1                stromal antigen 3-like 5 pseudogene   
+2  arf-GAP with GTPase, ANK repeat and PH domain-...   
+3                  GRB2 associated binding protein 3   
+4                  hypothetical protein LOC100287155   
+5             Ras association domain family member 2   
+                                             GOTerms GemmaIDs    NCBIids  
+0        GO:0005576|GO:0005488|GO:0110165|GO:0036094   441399     414332  
+1                                                NaN  8799043  101735302  
+2                                                NaN  8779607  101059976  
+3  GO:0002573|GO:0032502|GO:0030225|GO:0002521|GO...   389635     139716  
+4                                                NaN  8090381  100287155  
+5  GO:0048585|GO:0005737|GO:0043170|GO:0048584|GO...   201914       9770  
+
+If you are interested in a particular gene, you can see which
+platforms include it using
+:py:func:`~gemmapy.GemmaPy.get_gene_probes`. Note that functions to
+search gene work best with unambigious identifiers rather than symbols.
+
+>>> # lists genes in gemma matching the symbol or identifier
+>>> api_response = api_instance.get_genes(['Eno2'])
+>>> print(api_response.data[0]) # investigate the object structure
+>>> keys = ['official_symbol','ensembl_id','ncbi_id','official_name','taxon_common_name','taxon_id','taxon_scientific_name']
+>>> for d in api_response.data: print("%s %-18s %6d %-30s %-10s %2i %s" % tuple(d.to_dict()[k] for k in keys))
+... 
+ENO2 ENSG00000111674      2026 enolase 2                      human       1 Homo sapiens
+Eno2 ENSMUSG00000004267  13807 enolase 2, gamma neuronal      mouse       2 Mus musculus
+Eno2 ENSRNOG00000013141  24334 enolase 2                      rat         3 Rattus norvegicus
+ENO2 None               856579 phosphopyruvate hydratase ENO2 yeast      11 Saccharomyces cerevisiae
+eno2 ENSDARG00000014287 402874 enolase 2                      zebrafish  12 Danio rerio
+
+
+>>> # ncbi id for human ENO2
+>>> probs=api_instance.get_gene_probes(2026)
+>>> print(probs.data[0]) # investigate the object structure
+>>> # print only fields of interest
+>>> for d in probs.data[0:6]: 
+...   print("%-10s %-12s %-20s %s %s %s %s" % 
+(d.name,d.array_design.short_name,d.array_design.name,d.array_design.taxon,
+ d.array_design.taxon_id,d.array_design.technology_type,d.array_design.troubled))
+20016      GPL3093      LC-25                human 1 TWOCOLOR False
+20024      GPL3092      LC-19                human 1 TWOCOLOR False
+20024      lymphochip-2 Lymphochip 37k       human 1 TWOCOLOR False
+1639       GPL962       CHUGAI 41K           human 1 TWOCOLOR False
+35850      NHGRI-6.5k   NHGRI-6.5k           human 1 TWOCOLOR False
+201313_at  GPL96        Affymetrix GeneChip Human Genome U133 Array Set HG-U133A human 1 ONECOLOR False
+
+
 Larger queries
 --------------
 
-The :code:`*Info()` endpoints accept multiple identifiers in a single
+Some endpoints accept multiple identifiers in a single
 function call. For example, getting information on 2 datasets at the
 same time.
 
