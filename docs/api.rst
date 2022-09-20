@@ -53,7 +53,6 @@ gemmapy.GemmaPy Class
       ~GemmaPy.get_platform_annotations
       ~GemmaPy.get_platform_datasets
       ~GemmaPy.get_platform_element_genes
-      ~GemmaPy.get_platform_element
       ~GemmaPy.get_platforms_by_ids
       ~GemmaPy.get_result_set
       ~GemmaPy.get_result_set_factors

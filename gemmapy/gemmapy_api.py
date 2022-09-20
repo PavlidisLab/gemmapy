@@ -148,17 +148,6 @@ class GemmaPy(object):
         """
         return self.api.get_platform_datasets(platform, **kwargs)
 
-    def get_platform_element(self, platform, probes, **kwargs):  # noqa: E501
-        """Retrieve the selected composite sequences for a given platform
-
-        :param str platform: (required)
-        :param list[str] probes: (required)
-        :param int offset: The offset of the first retrieved result
-        :param int limit: Limit the number of results retrieved
-        :rtype: PaginatedResponseDataObjectCompositeSequenceValueObject
-        """
-        return self.api.get_platform_element(platform, probes, **kwargs)
-
     def get_platform_element_genes(self, platform, probe, **kwargs):  # noqa: E501
         """Retrieve the genes associated to a probe in a given platform
 
