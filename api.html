@@ -56,101 +56,88 @@ return values.</p>
 <span id="gemmapy-sec"></span><h2>gemmapy.GemmaPy Class<a class="headerlink" href="#gemmapy-gemmapy-class" title="Permalink to this heading">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="gemmapy.GemmaPy">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gemmapy.</span></span><span class="sig-name descname"><span class="pre">GemmaPy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">api_client</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gemmapy.</span></span><span class="sig-name descname"><span class="pre">GemmaPy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">devel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Main API class</p>
 <p class="rubric">Methods</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#gemmapy.GemmaPy.getDataset" title="gemmapy.GemmaPy.getDataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getDataset</span></code></a>(dataset, **kwargs)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gemmapy.GemmaPy.get_dataset_object" title="gemmapy.GemmaPy.get_dataset_object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_dataset_object</span></code></a>(dataset, **kwargs)</p></td>
 <td><p>Combines various endpoint calls to return an annotated data object of the queried dataset, including expression data and the experimental design.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#gemmapy.GemmaPy.getDatasetAnnotations" title="gemmapy.GemmaPy.getDatasetAnnotations"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getDatasetAnnotations</span></code></a>(dataset, **kwargs)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#gemmapy.GemmaPy.get_dataset_annotations" title="gemmapy.GemmaPy.get_dataset_annotations"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_dataset_annotations</span></code></a>(dataset, **kwargs)</p></td>
 <td><p>Retrieve the annotations analysis of a dataset</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#gemmapy.GemmaPy.getDatasetDE" title="gemmapy.GemmaPy.getDatasetDE"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getDatasetDE</span></code></a>([dataset, resultSet, all])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gemmapy.GemmaPy.get_differential_expression_values" title="gemmapy.GemmaPy.get_differential_expression_values"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_differential_expression_values</span></code></a>([...])</p></td>
 <td><p>Retrieves the differential expression resultSet(s) associated with the dataset.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#gemmapy.GemmaPy.getDatasetDEA" title="gemmapy.GemmaPy.getDatasetDEA"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getDatasetDEA</span></code></a>(dataset, **kwargs)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#gemmapy.GemmaPy.get_dataset_differential_expression_analyses" title="gemmapy.GemmaPy.get_dataset_differential_expression_analyses"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_dataset_differential_expression_analyses</span></code></a>(...)</p></td>
 <td><p>Retrieve the differential analyses of a dataset</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#gemmapy.GemmaPy.getDatasetDesign" title="gemmapy.GemmaPy.getDatasetDesign"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getDatasetDesign</span></code></a>(dataset, **kwargs)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gemmapy.GemmaPy.get_dataset_design" title="gemmapy.GemmaPy.get_dataset_design"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_dataset_design</span></code></a>(dataset, **kwargs)</p></td>
 <td><p>Retrieve the design of a dataset</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#gemmapy.GemmaPy.getDatasetExpression" title="gemmapy.GemmaPy.getDatasetExpression"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getDatasetExpression</span></code></a>(dataset, **kwargs)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#gemmapy.GemmaPy.get_dataset_expression" title="gemmapy.GemmaPy.get_dataset_expression"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_dataset_expression</span></code></a>(dataset, **kwargs)</p></td>
 <td><p>Retrieve the expression data of a dataset</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#gemmapy.GemmaPy.getDatasetPlatforms" title="gemmapy.GemmaPy.getDatasetPlatforms"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getDatasetPlatforms</span></code></a>(dataset, **kwargs)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gemmapy.GemmaPy.get_dataset_platforms" title="gemmapy.GemmaPy.get_dataset_platforms"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_dataset_platforms</span></code></a>(dataset, **kwargs)</p></td>
 <td><p>Retrieve the platform of a dataset</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#gemmapy.GemmaPy.getDatasetResultSets" title="gemmapy.GemmaPy.getDatasetResultSets"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getDatasetResultSets</span></code></a>(dataset, **kwargs)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#gemmapy.GemmaPy.get_result_sets" title="gemmapy.GemmaPy.get_result_sets"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_result_sets</span></code></a>(dataset, **kwargs)</p></td>
 <td><p>Retrieve all result sets matching the provided criteria</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#gemmapy.GemmaPy.getDatasetSamples" title="gemmapy.GemmaPy.getDatasetSamples"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getDatasetSamples</span></code></a>(dataset, **kwargs)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gemmapy.GemmaPy.get_dataset_samples" title="gemmapy.GemmaPy.get_dataset_samples"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_dataset_samples</span></code></a>(dataset, **kwargs)</p></td>
 <td><p>Retrieve the samples of a dataset</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#gemmapy.GemmaPy.getDatasetsInfo" title="gemmapy.GemmaPy.getDatasetsInfo"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getDatasetsInfo</span></code></a>(dataset, **kwargs)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#gemmapy.GemmaPy.get_datasets_by_ids" title="gemmapy.GemmaPy.get_datasets_by_ids"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_datasets_by_ids</span></code></a>(dataset, **kwargs)</p></td>
 <td><p>Retrieve datasets by their identifiers</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#gemmapy.GemmaPy.getGeneGO" title="gemmapy.GemmaPy.getGeneGO"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getGeneGO</span></code></a>(gene, **kwargs)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gemmapy.GemmaPy.get_gene_go_terms" title="gemmapy.GemmaPy.get_gene_go_terms"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_gene_go_terms</span></code></a>(gene, **kwargs)</p></td>
 <td><p>Retrieve the GO terms associated to a gene</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#gemmapy.GemmaPy.getGeneLocation" title="gemmapy.GemmaPy.getGeneLocation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getGeneLocation</span></code></a>(gene, **kwargs)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#gemmapy.GemmaPy.get_gene_locations" title="gemmapy.GemmaPy.get_gene_locations"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_gene_locations</span></code></a>(gene, **kwargs)</p></td>
 <td><p>Retrieve the physical locations of a given gene</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#gemmapy.GemmaPy.getGeneProbes" title="gemmapy.GemmaPy.getGeneProbes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getGeneProbes</span></code></a>(gene, **kwargs)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gemmapy.GemmaPy.get_gene_probes" title="gemmapy.GemmaPy.get_gene_probes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_gene_probes</span></code></a>(gene, **kwargs)</p></td>
 <td><p>Retrieve the probes associated to a genes</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#gemmapy.GemmaPy.getGenesInfo" title="gemmapy.GemmaPy.getGenesInfo"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getGenesInfo</span></code></a>(genes, **kwargs)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#gemmapy.GemmaPy.get_genes" title="gemmapy.GemmaPy.get_genes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_genes</span></code></a>(genes, **kwargs)</p></td>
 <td><p>Retrieve genes matching a gene identifier</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#gemmapy.GemmaPy.getPlatformAnnotation" title="gemmapy.GemmaPy.getPlatformAnnotation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getPlatformAnnotation</span></code></a>(platform, **kwargs)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gemmapy.GemmaPy.get_platform_annotations" title="gemmapy.GemmaPy.get_platform_annotations"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_platform_annotations</span></code></a>(platform, **kwargs)</p></td>
 <td><p>Retrieve the annotations of a given platform</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#gemmapy.GemmaPy.getPlatformDatasets" title="gemmapy.GemmaPy.getPlatformDatasets"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getPlatformDatasets</span></code></a>(platform, **kwargs)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#gemmapy.GemmaPy.get_platform_datasets" title="gemmapy.GemmaPy.get_platform_datasets"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_platform_datasets</span></code></a>(platform, **kwargs)</p></td>
 <td><p>Retrieve all experiments within a given platform</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#gemmapy.GemmaPy.getPlatformElementGenes" title="gemmapy.GemmaPy.getPlatformElementGenes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getPlatformElementGenes</span></code></a>(platform, probe, ...)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gemmapy.GemmaPy.get_platform_element_genes" title="gemmapy.GemmaPy.get_platform_element_genes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_platform_element_genes</span></code></a>(platform, probe, ...)</p></td>
 <td><p>Retrieve the genes associated to a probe in a given platform</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#gemmapy.GemmaPy.getPlatformElements" title="gemmapy.GemmaPy.getPlatformElements"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getPlatformElements</span></code></a>(platform, probes, **kwargs)</p></td>
-<td><p>Retrieve the selected composite sequences for a given platform</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#gemmapy.GemmaPy.getPlatformsInfo" title="gemmapy.GemmaPy.getPlatformsInfo"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getPlatformsInfo</span></code></a>(platform, **kwargs)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#gemmapy.GemmaPy.get_platforms_by_ids" title="gemmapy.GemmaPy.get_platforms_by_ids"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_platforms_by_ids</span></code></a>(platform, **kwargs)</p></td>
 <td><p>Retrieve all platforms matching a set of platform identifiers</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#gemmapy.GemmaPy.getResultSets" title="gemmapy.GemmaPy.getResultSets"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getResultSets</span></code></a>(result_set, **kwargs)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gemmapy.GemmaPy.get_result_set" title="gemmapy.GemmaPy.get_result_set"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_result_set</span></code></a>(result_set, **kwargs)</p></td>
 <td><p>Retrieve a single analysis result set by its identifier</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#gemmapy.GemmaPy.getResultSetsFactors" title="gemmapy.GemmaPy.getResultSetsFactors"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getResultSetsFactors</span></code></a>(result_set, **kwargs)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#gemmapy.GemmaPy.get_result_set_factors" title="gemmapy.GemmaPy.get_result_set_factors"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_result_set_factors</span></code></a>(result_set, **kwargs)</p></td>
 <td><p>Retrieve a single analysis result set by its identifier with Factors</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#gemmapy.GemmaPy.searchAnnotations" title="gemmapy.GemmaPy.searchAnnotations"><code class="xref py py-obj docutils literal notranslate"><span class="pre">searchAnnotations</span></code></a>(query, **kwargs)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gemmapy.GemmaPy.search_annotations" title="gemmapy.GemmaPy.search_annotations"><code class="xref py py-obj docutils literal notranslate"><span class="pre">search_annotations</span></code></a>(query, **kwargs)</p></td>
 <td><p>Search for annotation tags</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#gemmapy.GemmaPy.searchDatasets" title="gemmapy.GemmaPy.searchDatasets"><code class="xref py py-obj docutils literal notranslate"><span class="pre">searchDatasets</span></code></a>(query, taxon, **kwargs)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#gemmapy.GemmaPy.search_datasets" title="gemmapy.GemmaPy.search_datasets"><code class="xref py py-obj docutils literal notranslate"><span class="pre">search_datasets</span></code></a>(query, taxon, **kwargs)</p></td>
 <td><p>Retrieve datasets within a given taxa associated to an annotation tags search</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gemmapy.GemmaPy.get_taxa" title="gemmapy.GemmaPy.get_taxa"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_taxa</span></code></a>(**kwargs)</p></td>
+<td><p>Retrieve all available taxa</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#gemmapy.GemmaPy.get_taxon_datasets" title="gemmapy.GemmaPy.get_taxon_datasets"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_taxon_datasets</span></code></a>(taxon, **kwargs)</p></td>
+<td><p>Retrieve the datasets for a given taxon</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py method">
-<dt class="sig sig-object py" id="gemmapy.GemmaPy.getDataset">
-<span class="sig-name descname"><span class="pre">getDataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.getDataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.getDataset" title="Permalink to this definition">¶</a></dt>
-<dd><p>Combines various endpoint calls to return an annotated data object
-of the queried dataset, including expression data and the experimental
-design.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>dataset</strong> (<em>str</em>) – (required)</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>AnnData class object</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="gemmapy.GemmaPy.getDatasetAnnotations">
-<span class="sig-name descname"><span class="pre">getDatasetAnnotations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.getDatasetAnnotations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.getDatasetAnnotations" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="gemmapy.GemmaPy.get_dataset_annotations">
+<span class="sig-name descname"><span class="pre">get_dataset_annotations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.get_dataset_annotations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.get_dataset_annotations" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieve the annotations analysis of a dataset</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -163,30 +150,22 @@ design.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="gemmapy.GemmaPy.getDatasetDE">
-<span class="sig-name descname"><span class="pre">getDatasetDE</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resultSet</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">all</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.getDatasetDE"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.getDatasetDE" title="Permalink to this definition">¶</a></dt>
-<dd><p>Retrieves the differential expression resultSet(s) associated with the dataset.
-If there is more than one resultSet, use getDatasetResultSets() to see the options
-and get the ID you want. Alternatively, you can query the resultSet directly
-if you know its ID beforehand.</p>
+<dt class="sig sig-object py" id="gemmapy.GemmaPy.get_dataset_design">
+<span class="sig-name descname"><span class="pre">get_dataset_design</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.get_dataset_design"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.get_dataset_design" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve the design of a dataset</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>dataset</strong> (<em>str</em>) – (optional)</p></li>
-<li><p><strong>resultSet</strong> (<em>int</em>) – (optional)</p></li>
-<li><p><strong>all</strong> (<em>bool</em>) – (optional) Default is False. If True, will download all differential
-expression resultSets for the dataset.</p></li>
-</ul>
+<dd class="field-odd"><p><strong>dataset</strong> (<em>str</em>) – (required)</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>list[DataFrame] or DataFrame (if there is the list has only one element)</p>
+<dd class="field-even"><p>DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="gemmapy.GemmaPy.getDatasetDEA">
-<span class="sig-name descname"><span class="pre">getDatasetDEA</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.getDatasetDEA"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.getDatasetDEA" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="gemmapy.GemmaPy.get_dataset_differential_expression_analyses">
+<span class="sig-name descname"><span class="pre">get_dataset_differential_expression_analyses</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.get_dataset_differential_expression_analyses"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.get_dataset_differential_expression_analyses" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieve the differential analyses of a dataset</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -203,22 +182,8 @@ expression resultSets for the dataset.</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="gemmapy.GemmaPy.getDatasetDesign">
-<span class="sig-name descname"><span class="pre">getDatasetDesign</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.getDatasetDesign"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.getDatasetDesign" title="Permalink to this definition">¶</a></dt>
-<dd><p>Retrieve the design of a dataset</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>dataset</strong> (<em>str</em>) – (required)</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>DataFrame</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="gemmapy.GemmaPy.getDatasetExpression">
-<span class="sig-name descname"><span class="pre">getDatasetExpression</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.getDatasetExpression"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.getDatasetExpression" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="gemmapy.GemmaPy.get_dataset_expression">
+<span class="sig-name descname"><span class="pre">get_dataset_expression</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.get_dataset_expression"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.get_dataset_expression" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieve the expression data of a dataset</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -234,8 +199,24 @@ expression resultSets for the dataset.</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="gemmapy.GemmaPy.getDatasetPlatforms">
-<span class="sig-name descname"><span class="pre">getDatasetPlatforms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.getDatasetPlatforms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.getDatasetPlatforms" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="gemmapy.GemmaPy.get_dataset_object">
+<span class="sig-name descname"><span class="pre">get_dataset_object</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.get_dataset_object"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.get_dataset_object" title="Permalink to this definition">¶</a></dt>
+<dd><p>Combines various endpoint calls to return an annotated data object
+of the queried dataset, including expression data and the experimental
+design.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dataset</strong> (<em>str</em>) – (required)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>AnnData class object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gemmapy.GemmaPy.get_dataset_platforms">
+<span class="sig-name descname"><span class="pre">get_dataset_platforms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.get_dataset_platforms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.get_dataset_platforms" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieve the platform of a dataset</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -248,22 +229,8 @@ expression resultSets for the dataset.</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="gemmapy.GemmaPy.getDatasetResultSets">
-<span class="sig-name descname"><span class="pre">getDatasetResultSets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.getDatasetResultSets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.getDatasetResultSets" title="Permalink to this definition">¶</a></dt>
-<dd><p>Retrieve all result sets matching the provided criteria</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>dataset</strong> (<em>str</em>) – (required)</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>DataFrame</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="gemmapy.GemmaPy.getDatasetSamples">
-<span class="sig-name descname"><span class="pre">getDatasetSamples</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.getDatasetSamples"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.getDatasetSamples" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="gemmapy.GemmaPy.get_dataset_samples">
+<span class="sig-name descname"><span class="pre">get_dataset_samples</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.get_dataset_samples"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.get_dataset_samples" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieve the samples of a dataset</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -276,8 +243,8 @@ expression resultSets for the dataset.</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="gemmapy.GemmaPy.getDatasetsInfo">
-<span class="sig-name descname"><span class="pre">getDatasetsInfo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.getDatasetsInfo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.getDatasetsInfo" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="gemmapy.GemmaPy.get_datasets_by_ids">
+<span class="sig-name descname"><span class="pre">get_datasets_by_ids</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.get_datasets_by_ids"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.get_datasets_by_ids" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieve datasets by their identifiers</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -297,8 +264,30 @@ sign indicate ascending order whereas the ‘-’ indicate descending.</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="gemmapy.GemmaPy.getGeneGO">
-<span class="sig-name descname"><span class="pre">getGeneGO</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gene</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.getGeneGO"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.getGeneGO" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="gemmapy.GemmaPy.get_differential_expression_values">
+<span class="sig-name descname"><span class="pre">get_differential_expression_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resultSet</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">all</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.get_differential_expression_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.get_differential_expression_values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves the differential expression resultSet(s) associated with the dataset.
+If there is more than one resultSet, use get_result_sets() to see the options
+and get the ID you want. Alternatively, you can query the resultSet directly
+if you know its ID beforehand.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> (<em>str</em>) – (optional)</p></li>
+<li><p><strong>resultSet</strong> (<em>int</em>) – (optional)</p></li>
+<li><p><strong>all</strong> (<em>bool</em>) – (optional) Default is False. If True, will download all differential
+expression resultSets for the dataset.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>list[DataFrame] or DataFrame (if there is the list has only one element)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gemmapy.GemmaPy.get_gene_go_terms">
+<span class="sig-name descname"><span class="pre">get_gene_go_terms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gene</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.get_gene_go_terms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.get_gene_go_terms" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieve the GO terms associated to a gene</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -311,8 +300,8 @@ sign indicate ascending order whereas the ‘-’ indicate descending.</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="gemmapy.GemmaPy.getGeneLocation">
-<span class="sig-name descname"><span class="pre">getGeneLocation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gene</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.getGeneLocation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.getGeneLocation" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="gemmapy.GemmaPy.get_gene_locations">
+<span class="sig-name descname"><span class="pre">get_gene_locations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gene</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.get_gene_locations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.get_gene_locations" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieve the physical locations of a given gene</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -325,8 +314,8 @@ sign indicate ascending order whereas the ‘-’ indicate descending.</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="gemmapy.GemmaPy.getGeneProbes">
-<span class="sig-name descname"><span class="pre">getGeneProbes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gene</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.getGeneProbes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.getGeneProbes" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="gemmapy.GemmaPy.get_gene_probes">
+<span class="sig-name descname"><span class="pre">get_gene_probes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gene</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.get_gene_probes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.get_gene_probes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieve the probes associated to a genes</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -343,8 +332,8 @@ sign indicate ascending order whereas the ‘-’ indicate descending.</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="gemmapy.GemmaPy.getGenesInfo">
-<span class="sig-name descname"><span class="pre">getGenesInfo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">genes</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.getGenesInfo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.getGenesInfo" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="gemmapy.GemmaPy.get_genes">
+<span class="sig-name descname"><span class="pre">get_genes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">genes</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.get_genes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.get_genes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieve genes matching a gene identifier</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -357,8 +346,8 @@ sign indicate ascending order whereas the ‘-’ indicate descending.</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="gemmapy.GemmaPy.getPlatformAnnotation">
-<span class="sig-name descname"><span class="pre">getPlatformAnnotation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">platform</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.getPlatformAnnotation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.getPlatformAnnotation" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="gemmapy.GemmaPy.get_platform_annotations">
+<span class="sig-name descname"><span class="pre">get_platform_annotations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">platform</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.get_platform_annotations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.get_platform_annotations" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieve the annotations of a given platform</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -371,8 +360,8 @@ sign indicate ascending order whereas the ‘-’ indicate descending.</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="gemmapy.GemmaPy.getPlatformDatasets">
-<span class="sig-name descname"><span class="pre">getPlatformDatasets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">platform</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.getPlatformDatasets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.getPlatformDatasets" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="gemmapy.GemmaPy.get_platform_datasets">
+<span class="sig-name descname"><span class="pre">get_platform_datasets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">platform</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.get_platform_datasets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.get_platform_datasets" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieve all experiments within a given platform</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -389,8 +378,8 @@ sign indicate ascending order whereas the ‘-’ indicate descending.</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="gemmapy.GemmaPy.getPlatformElementGenes">
-<span class="sig-name descname"><span class="pre">getPlatformElementGenes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">platform</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">probe</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.getPlatformElementGenes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.getPlatformElementGenes" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="gemmapy.GemmaPy.get_platform_element_genes">
+<span class="sig-name descname"><span class="pre">get_platform_element_genes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">platform</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">probe</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.get_platform_element_genes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.get_platform_element_genes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieve the genes associated to a probe in a given platform</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -408,27 +397,8 @@ sign indicate ascending order whereas the ‘-’ indicate descending.</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="gemmapy.GemmaPy.getPlatformElements">
-<span class="sig-name descname"><span class="pre">getPlatformElements</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">platform</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">probes</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.getPlatformElements"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.getPlatformElements" title="Permalink to this definition">¶</a></dt>
-<dd><p>Retrieve the selected composite sequences for a given platform</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>platform</strong> (<em>str</em>) – (required)</p></li>
-<li><p><strong>probes</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – (required)</p></li>
-<li><p><strong>offset</strong> (<em>int</em>) – The offset of the first retrieved result</p></li>
-<li><p><strong>limit</strong> (<em>int</em>) – Limit the number of results retrieved</p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#gemmapy.sdk.models.PaginatedResponseDataObjectCompositeSequenceValueObject" title="gemmapy.sdk.models.PaginatedResponseDataObjectCompositeSequenceValueObject">PaginatedResponseDataObjectCompositeSequenceValueObject</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="gemmapy.GemmaPy.getPlatformsInfo">
-<span class="sig-name descname"><span class="pre">getPlatformsInfo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">platform</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.getPlatformsInfo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.getPlatformsInfo" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="gemmapy.GemmaPy.get_platforms_by_ids">
+<span class="sig-name descname"><span class="pre">get_platforms_by_ids</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">platform</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.get_platforms_by_ids"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.get_platforms_by_ids" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieve all platforms matching a set of platform identifiers</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -448,8 +418,8 @@ sign indicate ascending order whereas the ‘-’ indicate descending.</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="gemmapy.GemmaPy.getResultSets">
-<span class="sig-name descname"><span class="pre">getResultSets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">result_set</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.getResultSets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.getResultSets" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="gemmapy.GemmaPy.get_result_set">
+<span class="sig-name descname"><span class="pre">get_result_set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">result_set</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.get_result_set"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.get_result_set" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieve a single analysis result set by its identifier</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -462,8 +432,8 @@ sign indicate ascending order whereas the ‘-’ indicate descending.</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="gemmapy.GemmaPy.getResultSetsFactors">
-<span class="sig-name descname"><span class="pre">getResultSetsFactors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">result_set</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.getResultSetsFactors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.getResultSetsFactors" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="gemmapy.GemmaPy.get_result_set_factors">
+<span class="sig-name descname"><span class="pre">get_result_set_factors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">result_set</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.get_result_set_factors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.get_result_set_factors" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieve a single analysis result set by its identifier with Factors</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -476,8 +446,110 @@ sign indicate ascending order whereas the ‘-’ indicate descending.</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="gemmapy.GemmaPy.searchAnnotations">
-<span class="sig-name descname"><span class="pre">searchAnnotations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.searchAnnotations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.searchAnnotations" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="gemmapy.GemmaPy.get_result_sets">
+<span class="sig-name descname"><span class="pre">get_result_sets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.get_result_sets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.get_result_sets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve all result sets matching the provided criteria</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dataset</strong> (<em>str</em>) – (required)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gemmapy.GemmaPy.get_taxa">
+<span class="sig-name descname"><span class="pre">get_taxa</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.get_taxa"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.get_taxa" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve all available taxa</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#gemmapy.sdk.models.ResponseDataObjectListTaxonValueObject" title="gemmapy.sdk.models.ResponseDataObjectListTaxonValueObject">ResponseDataObjectListTaxonValueObject</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gemmapy.GemmaPy.get_taxon_datasets">
+<span class="sig-name descname"><span class="pre">get_taxon_datasets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">taxon</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.get_taxon_datasets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.get_taxon_datasets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve the datasets for a given taxon</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>taxon</strong> (<em>str/int</em>) – (required)</p>
+</dd>
+</dl>
+<p><strong>taxon</strong> can either be Taxon ID, Taxon NCBI ID, or one of its
+string identifiers: scientific name, common name. It is
+recommended to use Taxon ID for efficiency. Please note, that
+not all taxa have all the possible identifiers available. Use
+the get_taxa_by_ids function to retrieve the necessary
+information. For convenience, below is a list of officially
+supported taxa:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>ID</p></th>
+<th class="head"><p>Comm.name</p></th>
+<th class="head"><p>Scient.name</p></th>
+<th class="head"><p>NcbiID</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>human</p></td>
+<td><p>Homo sapiens</p></td>
+<td><p>9606</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p>mouse</p></td>
+<td><p>Mus musculus</p></td>
+<td><p>10090</p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>rat</p></td>
+<td><p>Rattus norvegicus</p></td>
+<td><p>10116</p></td>
+</tr>
+<tr class="row-odd"><td><p>11</p></td>
+<td><p>yeast</p></td>
+<td><p>Saccharomyces cerevisiae</p></td>
+<td><p>4932</p></td>
+</tr>
+<tr class="row-even"><td><p>12</p></td>
+<td><p>zebrafish</p></td>
+<td><p>Danio rerio</p></td>
+<td><p>7955</p></td>
+</tr>
+<tr class="row-odd"><td><p>13</p></td>
+<td><p>fly</p></td>
+<td><p>Drosophila melanogaster</p></td>
+<td><p>7227</p></td>
+</tr>
+<tr class="row-even"><td><p>14</p></td>
+<td><p>worm</p></td>
+<td><p>Caenorhabditis elegans</p></td>
+<td><p>6239</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filter</strong> (<em>str</em>) – </p></li>
+<li><p><strong>offset</strong> (<em>int</em>) – </p></li>
+<li><p><strong>limit</strong> (<em>int</em>) – </p></li>
+<li><p><strong>sort</strong> (<em>str</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#gemmapy.sdk.models.PaginatedResponseDataObjectExpressionExperimentValueObject" title="gemmapy.sdk.models.PaginatedResponseDataObjectExpressionExperimentValueObject">PaginatedResponseDataObjectExpressionExperimentValueObject</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gemmapy.GemmaPy.search_annotations">
+<span class="sig-name descname"><span class="pre">search_annotations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.search_annotations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.search_annotations" title="Permalink to this definition">¶</a></dt>
 <dd><p>Search for annotation tags</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -490,8 +562,8 @@ sign indicate ascending order whereas the ‘-’ indicate descending.</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="gemmapy.GemmaPy.searchDatasets">
-<span class="sig-name descname"><span class="pre">searchDatasets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">taxon</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.searchDatasets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.searchDatasets" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="gemmapy.GemmaPy.search_datasets">
+<span class="sig-name descname"><span class="pre">search_datasets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">taxon</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.search_datasets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.search_datasets" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieve datasets within a given taxa associated to an annotation tags search</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>

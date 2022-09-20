@@ -51,7 +51,16 @@ cross-platform comparisons and meta-analyses.</p>
 </section>
 <section id="installation-instructions">
 <h2>Installation instructions<a class="headerlink" href="#installation-instructions" title="Permalink to this heading">¶</a></h2>
-<p>…to be done</p>
+<p>The package has been tested with Python3.7 but it should work with any Python3 version.</p>
+<p>Install it with:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install -i https://test.pypi.org/simple/ gemmapy
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The installation command will change as the first release of the package
+is uploaded to the PyPI repository (vs TestPyPI now).</p>
+</div>
 </section>
 <section id="additional-packages">
 <h2>Additional packages<a class="headerlink" href="#additional-packages" title="Permalink to this heading">¶</a></h2>
@@ -68,8 +77,9 @@ addition, we will subset our results to datasets that have been batch
 corrected.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">gemmapy</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">api_instance</span> <span class="o">=</span> <span class="n">gemmapy</span><span class="o">.</span><span class="n">GemmaPy</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">api_response</span> <span class="o">=</span> <span class="n">api_instance</span><span class="o">.</span><span class="n">searchDatasets</span><span class="p">([</span><span class="s2">&quot;bipolar&quot;</span><span class="p">],</span> <span class="n">taxon</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">api_reponse</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">api_response</span> <span class="o">=</span> <span class="n">api_instance</span><span class="o">.</span><span class="n">search_datasets</span><span class="p">([</span><span class="s2">&quot;bipolar&quot;</span><span class="p">],</span> <span class="n">taxon</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">api_response</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># view the object structure</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">api_response</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
 <span class="gp">... </span>  <span class="k">if</span> <span class="n">d</span><span class="o">.</span><span class="n">geeq</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span>  <span class="n">d</span><span class="o">.</span><span class="n">geeq</span><span class="o">.</span><span class="n">batch_corrected</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">short_name</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">bio_assay_count</span><span class="p">)</span>
 <span class="gp">...</span>
@@ -81,7 +91,7 @@ corrected.</p>
 <a class="reference external" href="https://gemma.msl.ubc.ca/expressionExperiment/showExpressionExperiment.html?id=8997">GSE46416</a>
 since it has the smaller number of samples. Now that we have the ID
 for our experiment, we can fetch the data associated with it.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">api_response</span> <span class="o">=</span> <span class="n">api_instance</span><span class="o">.</span><span class="n">getDatasetsInfo</span><span class="p">([</span><span class="s2">&quot;GSE46416&quot;</span><span class="p">])</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">api_response</span> <span class="o">=</span> <span class="n">api_instance</span><span class="o">.</span><span class="n">get_datasets_by_ids</span><span class="p">([</span><span class="s2">&quot;GSE46416&quot;</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">api_response</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
 <span class="gp">... </span>  <span class="nb">print</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">short_name</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
 <span class="gp">...</span>
@@ -93,12 +103,12 @@ for our experiment, we can fetch the data associated with it.</p>
 </pre></div>
 </div>
 <p>To access the expression data in a convenient form, you can use
-<a class="reference internal" href="api.html#gemmapy.GemmaPy.getDataset" title="gemmapy.GemmaPy.getDataset"><code class="xref py py-func docutils literal notranslate"><span class="pre">getDataset()</span></code></a>. It is a high-level wrapper
+<a class="reference internal" href="api.html#gemmapy.GemmaPy.get_dataset_object" title="gemmapy.GemmaPy.get_dataset_object"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_dataset_object()</span></code></a>. It is a high-level wrapper
 that combines various endpoint calls to return an <a class="reference external" href="https://anndata.readthedocs.io/">anndata</a> (Annotated Data) object of the
 queried dataset for downstream analyses. They include the expression
 matrix along with the experimental design, and ensure the sample names
 match between both when transforming/subsetting data.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">adata</span> <span class="o">=</span> <span class="n">api_instance</span><span class="o">.</span><span class="n">getDataset</span><span class="p">(</span><span class="s2">&quot;GSE46416&quot;</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">adata</span> <span class="o">=</span> <span class="n">api_instance</span><span class="o">.</span><span class="n">get_dataset_object</span><span class="p">(</span><span class="s2">&quot;GSE46416&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">adata</span><span class="p">)</span>
 <span class="go">AnnData object with n_obs × n_vars = 21986 × 32</span>
 <span class="go">    obs: &#39;GeneSymbol&#39;, &#39;GeneName&#39;, &#39;NCBIid&#39;</span>
@@ -161,8 +171,8 @@ datasets.</p>
 </div>
 <a class="reference internal image-reference" href="_images/ded.png"><img alt="_images/ded.png" class="align-left" src="_images/ded.png" style="width: 100%;" /></a>
 <p>Gene expression distributions of bipolar patients during manic phase and controls.</p>
-<p>You can also use <a class="reference internal" href="api.html#gemmapy.GemmaPy.getDatasetExpression" title="gemmapy.GemmaPy.getDatasetExpression"><code class="xref py py-func docutils literal notranslate"><span class="pre">getDatasetExpression()</span></code></a> to only get the expression
-matrix, and <a class="reference internal" href="api.html#gemmapy.GemmaPy.getDatasetDesign" title="gemmapy.GemmaPy.getDatasetDesign"><code class="xref py py-func docutils literal notranslate"><span class="pre">getDatasetDesign()</span></code></a> to get the experimental design matrix.</p>
+<p>You can also use <a class="reference internal" href="api.html#gemmapy.GemmaPy.get_dataset_expression" title="gemmapy.GemmaPy.get_dataset_expression"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_dataset_expression()</span></code></a> to only get the expression
+matrix, and <a class="reference internal" href="api.html#gemmapy.GemmaPy.get_dataset_design" title="gemmapy.GemmaPy.get_dataset_design"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_dataset_design()</span></code></a> to get the experimental design matrix.</p>
 </section>
 <section id="differential-expression-analyses">
 <h2>Differential expression analyses<a class="headerlink" href="#differential-expression-analyses" title="Permalink to this heading">¶</a></h2>
@@ -170,10 +180,13 @@ matrix, and <a class="reference internal" href="api.html#gemmapy.GemmaPy.getData
 most of its datasets, and some datasets contain more than one analysis
 to account for different factors and their interactions. These tables
 are stored as resultSets, and you can access them using
-<a class="reference internal" href="api.html#gemmapy.GemmaPy.getDatasetDE" title="gemmapy.GemmaPy.getDatasetDE"><code class="xref py py-func docutils literal notranslate"><span class="pre">getDatasetDE()</span></code></a>. From here on, we can
+<a class="reference internal" href="api.html#gemmapy.GemmaPy.get_differential_expression_values" title="gemmapy.GemmaPy.get_differential_expression_values"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_differential_expression_values()</span></code></a>. From here on, we can
 explore and visualize the data to find the most
 differentially-expressed genes:</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">de</span> <span class="o">=</span> <span class="n">api_instance</span><span class="o">.</span><span class="n">getDatasetDE</span><span class="p">(</span><span class="s1">&#39;GSE46416&#39;</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">gemmapy</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">api_instance</span> <span class="o">=</span> <span class="n">gemmapy</span><span class="o">.</span><span class="n">GemmaPy</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">de</span> <span class="o">=</span> <span class="n">api_instance</span><span class="o">.</span><span class="n">get_differential_expression_values</span><span class="p">(</span><span class="s1">&#39;GSE46416&#39;</span><span class="p">)</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Classify probes for plotting</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">de</span><span class="p">[</span><span class="s1">&#39;diffexpr&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;No&#39;</span>   <span class="c1"># add extra column</span>
@@ -272,12 +285,110 @@ differentially-expressed genes:</p>
 <img alt="_images/dea.png" src="_images/dea.png" />
 <p>Differentially-expressed genes in bipolar patients during manic phase versus controls.</p>
 </section>
+<section id="platform-annotations">
+<h2>Platform Annotations<a class="headerlink" href="#platform-annotations" title="Permalink to this heading">¶</a></h2>
+<p>Expression data in Gemma comes with annotations for the gene each
+expression profile corresponds to. Using the
+<a class="reference internal" href="api.html#gemmapy.GemmaPy.get_platform_annotations" title="gemmapy.GemmaPy.get_platform_annotations"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_platform_annotations()</span></code></a> function, these
+annotations can be retrieved independently of the expression data,
+along with additional annotations such as Gene Ontology terms.</p>
+<p>Examples:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">gemmapy</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">api_instance</span> <span class="o">=</span> <span class="n">gemmapy</span><span class="o">.</span><span class="n">GemmaPy</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">api_response</span> <span class="o">=</span> <span class="n">api_instance</span><span class="o">.</span><span class="n">get_platform_annotations</span><span class="p">(</span><span class="s1">&#39;GPL96&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">pandas</span><span class="o">.</span><span class="n">option_context</span><span class="p">(</span><span class="s1">&#39;display.max_rows&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;display.max_columns&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span> <span class="nb">print</span><span class="p">(</span><span class="n">api_response</span><span class="p">[:</span><span class="mi">6</span><span class="p">])</span>
+<span class="go">     ProbeName    GeneSymbols                                      GeneNames  \</span>
+<span class="go">0  211750_x_at  TUBA1A|TUBA1C              tubulin alpha 1a|tubulin alpha 1c</span>
+<span class="go">1    216678_at            NaN                                            NaN</span>
+<span class="go">2    216345_at         ZSWIM8             zinc finger SWIM-type containing 8</span>
+<span class="go">3    207273_at            NaN                                            NaN</span>
+<span class="go">4  216025_x_at         CYP2C9  cytochrome P450 family 2 subfamily C member 9</span>
+<span class="go">5  218191_s_at         LMBRD1                      LMBR1 domain containing 1</span>
+<span class="go">                                             GOTerms       GemmaIDs  \</span>
+<span class="go">0  GO:0005737|GO:0000166|GO:0051234|GO:0005856|GO...  172797|360802</span>
+<span class="go">1                                                NaN            NaN</span>
+<span class="go">2  GO:0043170|GO:1990234|GO:0044260|GO:0050789|GO...         235733</span>
+<span class="go">3                                                NaN            NaN</span>
+<span class="go">4  GO:0005737|GO:0072330|GO:0008203|GO:0008202|GO...          32964</span>
+<span class="go">5  GO:0043170|GO:0016192|GO:0051234|GO:0044260|GO...         303717</span>
+<span class="go">      NCBIids</span>
+<span class="go">0  7846|84790</span>
+<span class="go">1         NaN</span>
+<span class="go">2       23053</span>
+<span class="go">3         NaN</span>
+<span class="go">4        1559</span>
+<span class="go">5       55788</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">api_response</span> <span class="o">=</span> <span class="n">api_instance</span><span class="o">.</span><span class="n">get_platform_annotations</span><span class="p">(</span><span class="s1">&#39;Generic_human&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">pandas</span><span class="o">.</span><span class="n">option_context</span><span class="p">(</span><span class="s1">&#39;display.max_rows&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;display.max_columns&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span> <span class="nb">print</span><span class="p">(</span><span class="n">api_response</span><span class="p">[:</span><span class="mi">6</span><span class="p">])</span>
+<span class="go">      ProbeName   GeneSymbols  \</span>
+<span class="go">0         LCN10         LCN10</span>
+<span class="go">1      STAG3L5P      STAG3L5P</span>
+<span class="go">2  LOC101059976  LOC101059976</span>
+<span class="go">3          GAB3          GAB3</span>
+<span class="go">4  LOC100287155  LOC100287155</span>
+<span class="go">5        RASSF2        RASSF2</span>
+<span class="go">                                           GeneNames  \</span>
+<span class="go">0                                       lipocalin 10</span>
+<span class="go">1                stromal antigen 3-like 5 pseudogene</span>
+<span class="go">2  arf-GAP with GTPase, ANK repeat and PH domain-...</span>
+<span class="go">3                  GRB2 associated binding protein 3</span>
+<span class="go">4                  hypothetical protein LOC100287155</span>
+<span class="go">5             Ras association domain family member 2</span>
+<span class="go">                                             GOTerms GemmaIDs    NCBIids</span>
+<span class="go">0        GO:0005576|GO:0005488|GO:0110165|GO:0036094   441399     414332</span>
+<span class="go">1                                                NaN  8799043  101735302</span>
+<span class="go">2                                                NaN  8779607  101059976</span>
+<span class="go">3  GO:0002573|GO:0032502|GO:0030225|GO:0002521|GO...   389635     139716</span>
+<span class="go">4                                                NaN  8090381  100287155</span>
+<span class="go">5  GO:0048585|GO:0005737|GO:0043170|GO:0048584|GO...   201914       9770</span>
+</pre></div>
+</div>
+<p>If you are interested in a particular gene, you can see which
+platforms include it using
+<a class="reference internal" href="api.html#gemmapy.GemmaPy.get_gene_probes" title="gemmapy.GemmaPy.get_gene_probes"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_gene_probes()</span></code></a>. Note that functions to
+search gene work best with unambigious identifiers rather than symbols.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># lists genes in gemma matching the symbol or identifier</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">api_response</span> <span class="o">=</span> <span class="n">api_instance</span><span class="o">.</span><span class="n">get_genes</span><span class="p">([</span><span class="s1">&#39;Eno2&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">api_response</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># view the object structure</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">keys</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;official_symbol&#39;</span><span class="p">,</span><span class="s1">&#39;ensembl_id&#39;</span><span class="p">,</span><span class="s1">&#39;ncbi_id&#39;</span><span class="p">,</span><span class="s1">&#39;official_name&#39;</span><span class="p">,</span><span class="s1">&#39;taxon_common_name&#39;</span><span class="p">,</span><span class="s1">&#39;taxon_id&#39;</span><span class="p">,</span><span class="s1">&#39;taxon_scientific_name&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">api_response</span><span class="o">.</span><span class="n">data</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> </span><span class="si">%-18s</span><span class="s2"> </span><span class="si">%6d</span><span class="s2"> </span><span class="si">%-30s</span><span class="s2"> </span><span class="si">%-10s</span><span class="s2"> </span><span class="si">%2i</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">))</span>
+<span class="gp">...</span>
+<span class="go">ENO2 ENSG00000111674      2026 enolase 2                      human       1 Homo sapiens</span>
+<span class="go">Eno2 ENSMUSG00000004267  13807 enolase 2, gamma neuronal      mouse       2 Mus musculus</span>
+<span class="go">Eno2 ENSRNOG00000013141  24334 enolase 2                      rat         3 Rattus norvegicus</span>
+<span class="go">ENO2 None               856579 phosphopyruvate hydratase ENO2 yeast      11 Saccharomyces cerevisiae</span>
+<span class="go">eno2 ENSDARG00000014287 402874 enolase 2                      zebrafish  12 Danio rerio</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># ncbi id for human ENO2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">probs</span><span class="o">=</span><span class="n">api_instance</span><span class="o">.</span><span class="n">get_gene_probes</span><span class="p">(</span><span class="mi">2026</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">probs</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># view the object structure</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># print only fields of interest</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">probs</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">6</span><span class="p">]:</span>
+<span class="gp">... </span>  <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%-10s</span><span class="s2"> </span><span class="si">%-12s</span><span class="s2"> </span><span class="si">%-20s</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span>
+<span class="go">(d.name,d.array_design.short_name,d.array_design.name,d.array_design.taxon,</span>
+<span class="go"> d.array_design.taxon_id,d.array_design.technology_type,d.array_design.troubled))</span>
+<span class="go">20016      GPL3093      LC-25                human 1 TWOCOLOR False</span>
+<span class="go">20024      GPL3092      LC-19                human 1 TWOCOLOR False</span>
+<span class="go">20024      lymphochip-2 Lymphochip 37k       human 1 TWOCOLOR False</span>
+<span class="go">1639       GPL962       CHUGAI 41K           human 1 TWOCOLOR False</span>
+<span class="go">35850      NHGRI-6.5k   NHGRI-6.5k           human 1 TWOCOLOR False</span>
+<span class="go">201313_at  GPL96        Affymetrix GeneChip Human Genome U133 Array Set HG-U133A human 1 ONECOLOR False</span>
+</pre></div>
+</div>
+</section>
 <section id="larger-queries">
 <h2>Larger queries<a class="headerlink" href="#larger-queries" title="Permalink to this heading">¶</a></h2>
-<p>The <code class="code docutils literal notranslate"><span class="pre">*Info()</span></code> endpoints accept multiple identifiers in a single
+<p>Some endpoints accept multiple identifiers in a single
 function call. For example, getting information on 2 datasets at the
 same time.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">api_response</span> <span class="o">=</span> <span class="n">api_instance</span><span class="o">.</span><span class="n">getDatasetsInfo</span><span class="p">([</span><span class="s2">&quot;GSE35974&quot;</span><span class="p">,</span><span class="s2">&quot;GSE46416&quot;</span><span class="p">])</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">gemmapy</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">api_instance</span> <span class="o">=</span> <span class="n">gemmapy</span><span class="o">.</span><span class="n">GemmaPy</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">api_response</span> <span class="o">=</span> <span class="n">api_instance</span><span class="o">.</span><span class="n">get_datasets_by_ids</span><span class="p">([</span><span class="s2">&quot;GSE35974&quot;</span><span class="p">,</span><span class="s2">&quot;GSE46416&quot;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">api_response</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># view the object structure</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">api_response</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
 <span class="gp">... </span>            <span class="nb">print</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">short_name</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">accession</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">bio_assay_count</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">taxon</span><span class="p">)</span>
 <span class="gp">...</span>
@@ -292,7 +403,7 @@ you to get the next batch of entries in the next call(s). For
 simplicity, this example shows how pagination works with 5 entries per
 query.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">ofs</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">10</span><span class="p">]:</span>
-<span class="gp">... </span>    <span class="n">api_response</span><span class="o">=</span><span class="n">api_instance</span><span class="o">.</span><span class="n">getPlatformsInfo</span><span class="p">([],</span><span class="n">offset</span><span class="o">=</span><span class="n">ofs</span><span class="p">,</span><span class="n">limit</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">api_response</span><span class="o">=</span><span class="n">api_instance</span><span class="o">.</span><span class="n">get_platforms_by_ids</span><span class="p">([],</span><span class="n">offset</span><span class="o">=</span><span class="n">ofs</span><span class="p">,</span><span class="n">limit</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 <span class="gp">... </span>    <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">api_response</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
 <span class="gp">... </span>        <span class="nb">print</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">short_name</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">taxon</span><span class="p">)</span>
 <span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;--&#39;</span><span class="p">)</span>
@@ -318,14 +429,14 @@ query.</p>
 </pre></div>
 </div>
 <p>The rest of the endpoints only support a single identifier:</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">api_response</span> <span class="o">=</span> <span class="n">api_instance</span><span class="o">.</span><span class="n">getDatasetAnnotations</span><span class="p">([</span><span class="s2">&quot;GSE35974&quot;</span><span class="p">,</span><span class="s2">&quot;GSE12649&quot;</span><span class="p">])</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">api_response</span> <span class="o">=</span> <span class="n">api_instance</span><span class="o">.</span><span class="n">get_dataset_annotations</span><span class="p">([</span><span class="s2">&quot;GSE35974&quot;</span><span class="p">,</span><span class="s2">&quot;GSE12649&quot;</span><span class="p">])</span>
 <span class="go">...Error Traceback...</span>
 </pre></div>
 </div>
 <p>In these cases, you will have to loop over all the identifiers you
 wish to query and send separate requests:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">dataset</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;GSE35974&quot;</span><span class="p">,</span><span class="s2">&quot;GSE12649&quot;</span><span class="p">]:</span>
-<span class="gp">... </span>    <span class="n">api_response</span> <span class="o">=</span> <span class="n">api_instance</span><span class="o">.</span><span class="n">getDatasetAnnotations</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">api_response</span> <span class="o">=</span> <span class="n">api_instance</span><span class="o">.</span><span class="n">get_dataset_annotations</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
 <span class="gp">... </span>    <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">api_response</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
 <span class="gp">... </span>        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> </span><span class="si">%-15s</span><span class="s1"> </span><span class="si">%-15s</span><span class="s1"> </span><span class="si">%-15s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">object_class</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">class_name</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">term_name</span><span class="p">))</span>
 <span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;--&#39;</span><span class="p">)</span>
@@ -372,6 +483,7 @@ wish to query and send separate requests:</p>
 <li class="toctree-l2"><a class="reference internal" href="#additional-packages">Additional packages</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#downloading-expression-data">Downloading expression data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#differential-expression-analyses">Differential expression analyses</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#platform-annotations">Platform Annotations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#larger-queries">Larger queries</a></li>
 </ul>
 </li>

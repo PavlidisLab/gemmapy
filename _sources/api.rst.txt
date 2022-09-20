@@ -36,29 +36,30 @@ gemmapy.GemmaPy Class
 
    .. autosummary::
 
-      ~GemmaPy.getDataset
-      ~GemmaPy.getDatasetAnnotations
-      ~GemmaPy.getDatasetDE
-      ~GemmaPy.getDatasetDEA
-      ~GemmaPy.getDatasetDesign
-      ~GemmaPy.getDatasetExpression
-      ~GemmaPy.getDatasetPlatforms
-      ~GemmaPy.getDatasetResultSets
-      ~GemmaPy.getDatasetSamples
-      ~GemmaPy.getDatasetsInfo
-      ~GemmaPy.getGeneGO
-      ~GemmaPy.getGeneLocation
-      ~GemmaPy.getGeneProbes
-      ~GemmaPy.getGenesInfo
-      ~GemmaPy.getPlatformAnnotation
-      ~GemmaPy.getPlatformDatasets
-      ~GemmaPy.getPlatformElementGenes
-      ~GemmaPy.getPlatformElements
-      ~GemmaPy.getPlatformsInfo
-      ~GemmaPy.getResultSets
-      ~GemmaPy.getResultSetsFactors
-      ~GemmaPy.searchAnnotations
-      ~GemmaPy.searchDatasets
+      ~GemmaPy.get_dataset_object
+      ~GemmaPy.get_dataset_annotations
+      ~GemmaPy.get_differential_expression_values
+      ~GemmaPy.get_dataset_differential_expression_analyses
+      ~GemmaPy.get_dataset_design
+      ~GemmaPy.get_dataset_expression
+      ~GemmaPy.get_dataset_platforms
+      ~GemmaPy.get_result_sets
+      ~GemmaPy.get_dataset_samples
+      ~GemmaPy.get_datasets_by_ids
+      ~GemmaPy.get_gene_go_terms
+      ~GemmaPy.get_gene_locations
+      ~GemmaPy.get_gene_probes
+      ~GemmaPy.get_genes
+      ~GemmaPy.get_platform_annotations
+      ~GemmaPy.get_platform_datasets
+      ~GemmaPy.get_platform_element_genes
+      ~GemmaPy.get_platforms_by_ids
+      ~GemmaPy.get_result_set
+      ~GemmaPy.get_result_set_factors
+      ~GemmaPy.search_annotations
+      ~GemmaPy.search_datasets
+      ~GemmaPy.get_taxa
+      ~GemmaPy.get_taxon_datasets
 
    
 gemmapy.sdk.models Subpackage

@@ -51,14 +51,15 @@
 <span class="sd">    Main API class</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">api_client</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">devel</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="n">configuration</span> <span class="o">=</span> <span class="n">sdk</span><span class="o">.</span><span class="n">Configuration</span><span class="p">()</span>
-        <span class="n">configuration</span><span class="o">.</span><span class="n">host</span> <span class="o">=</span> <span class="s1">&#39;dev.gemma.msl.ubc.ca/rest/v2&#39;</span>
+        <span class="k">if</span> <span class="n">devel</span><span class="p">:</span>
+            <span class="n">configuration</span><span class="o">.</span><span class="n">host</span> <span class="o">=</span> <span class="s1">&#39;dev.gemma.msl.ubc.ca/rest/v2&#39;</span>
 
         <span class="c1"># create an instance of the API class</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">api</span> <span class="o">=</span> <span class="n">sdk</span><span class="o">.</span><span class="n">DefaultApi</span><span class="p">(</span><span class="n">sdk</span><span class="o">.</span><span class="n">ApiClient</span><span class="p">(</span><span class="n">configuration</span><span class="p">))</span>
 
-<div class="viewcode-block" id="GemmaPy.getDatasetAnnotations"><a class="viewcode-back" href="../../api.html#gemmapy.GemmaPy.getDatasetAnnotations">[docs]</a>    <span class="k">def</span> <span class="nf">getDatasetAnnotations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>  <span class="c1"># noqa: E501</span>
+<div class="viewcode-block" id="GemmaPy.get_dataset_annotations"><a class="viewcode-back" href="../../api.html#gemmapy.GemmaPy.get_dataset_annotations">[docs]</a>    <span class="k">def</span> <span class="nf">get_dataset_annotations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>  <span class="c1"># noqa: E501</span>
         <span class="sd">&quot;&quot;&quot;Retrieve the annotations analysis of a dataset</span>
 
 <span class="sd">        :param str dataset: (required)</span>
@@ -66,7 +67,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">get_dataset_annotations</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GemmaPy.getDatasetDesign"><a class="viewcode-back" href="../../api.html#gemmapy.GemmaPy.getDatasetDesign">[docs]</a>    <span class="k">def</span> <span class="nf">getDatasetDesign</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>  <span class="c1"># noqa: E501</span>
+<div class="viewcode-block" id="GemmaPy.get_dataset_design"><a class="viewcode-back" href="../../api.html#gemmapy.GemmaPy.get_dataset_design">[docs]</a>    <span class="k">def</span> <span class="nf">get_dataset_design</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>  <span class="c1"># noqa: E501</span>
         <span class="sd">&quot;&quot;&quot;Retrieve the design of a dataset</span>
 
 <span class="sd">        :param str dataset: (required)</span>
@@ -82,7 +83,7 @@
 
         <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Bioassay&#39;</span><span class="p">,</span> <span class="s1">&#39;ExternalID&#39;</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GemmaPy.getDatasetDEA"><a class="viewcode-back" href="../../api.html#gemmapy.GemmaPy.getDatasetDEA">[docs]</a>    <span class="k">def</span> <span class="nf">getDatasetDEA</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>  <span class="c1"># noqa: E501</span>
+<div class="viewcode-block" id="GemmaPy.get_dataset_differential_expression_analyses"><a class="viewcode-back" href="../../api.html#gemmapy.GemmaPy.get_dataset_differential_expression_analyses">[docs]</a>    <span class="k">def</span> <span class="nf">get_dataset_differential_expression_analyses</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>  <span class="c1"># noqa: E501</span>
         <span class="sd">&quot;&quot;&quot;Retrieve the differential analyses of a dataset</span>
 
 <span class="sd">        :param str dataset: (required)</span>
@@ -92,7 +93,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">get_dataset_differential_expression_analyses</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GemmaPy.getDatasetExpression"><a class="viewcode-back" href="../../api.html#gemmapy.GemmaPy.getDatasetExpression">[docs]</a>    <span class="k">def</span> <span class="nf">getDatasetExpression</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>  <span class="c1"># noqa: E501</span>
+<div class="viewcode-block" id="GemmaPy.get_dataset_expression"><a class="viewcode-back" href="../../api.html#gemmapy.GemmaPy.get_dataset_expression">[docs]</a>    <span class="k">def</span> <span class="nf">get_dataset_expression</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>  <span class="c1"># noqa: E501</span>
         <span class="sd">&quot;&quot;&quot;Retrieve the expression data of a dataset</span>
 
 <span class="sd">        :param str dataset: (required)</span>
@@ -108,7 +109,7 @@
         <span class="k">return</span> <span class="n">df</span></div>
 
 
-<div class="viewcode-block" id="GemmaPy.getDatasetPlatforms"><a class="viewcode-back" href="../../api.html#gemmapy.GemmaPy.getDatasetPlatforms">[docs]</a>    <span class="k">def</span> <span class="nf">getDatasetPlatforms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>  <span class="c1"># noqa: E501</span>
+<div class="viewcode-block" id="GemmaPy.get_dataset_platforms"><a class="viewcode-back" href="../../api.html#gemmapy.GemmaPy.get_dataset_platforms">[docs]</a>    <span class="k">def</span> <span class="nf">get_dataset_platforms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>  <span class="c1"># noqa: E501</span>
         <span class="sd">&quot;&quot;&quot;Retrieve the platform of a dataset</span>
 
 <span class="sd">        :param str dataset: (required)</span>
@@ -116,7 +117,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">get_dataset_platforms</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GemmaPy.getDatasetSamples"><a class="viewcode-back" href="../../api.html#gemmapy.GemmaPy.getDatasetSamples">[docs]</a>    <span class="k">def</span> <span class="nf">getDatasetSamples</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>  <span class="c1"># noqa: E501</span>
+<div class="viewcode-block" id="GemmaPy.get_dataset_samples"><a class="viewcode-back" href="../../api.html#gemmapy.GemmaPy.get_dataset_samples">[docs]</a>    <span class="k">def</span> <span class="nf">get_dataset_samples</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>  <span class="c1"># noqa: E501</span>
         <span class="sd">&quot;&quot;&quot;Retrieve the samples of a dataset</span>
 
 <span class="sd">        :param str dataset: (required)</span>
@@ -124,7 +125,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">get_dataset_samples</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GemmaPy.getDatasetsInfo"><a class="viewcode-back" href="../../api.html#gemmapy.GemmaPy.getDatasetsInfo">[docs]</a>    <span class="k">def</span> <span class="nf">getDatasetsInfo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>  <span class="c1"># noqa: E501</span>
+<div class="viewcode-block" id="GemmaPy.get_datasets_by_ids"><a class="viewcode-back" href="../../api.html#gemmapy.GemmaPy.get_datasets_by_ids">[docs]</a>    <span class="k">def</span> <span class="nf">get_datasets_by_ids</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>  <span class="c1"># noqa: E501</span>
         <span class="sd">&quot;&quot;&quot;Retrieve datasets by their identifiers</span>
 
 <span class="sd">        :param list[str] dataset: (required)</span>
@@ -137,7 +138,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">get_datasets_by_ids</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GemmaPy.getGeneGO"><a class="viewcode-back" href="../../api.html#gemmapy.GemmaPy.getGeneGO">[docs]</a>    <span class="k">def</span> <span class="nf">getGeneGO</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gene</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>  <span class="c1"># noqa: E501</span>
+<div class="viewcode-block" id="GemmaPy.get_gene_go_terms"><a class="viewcode-back" href="../../api.html#gemmapy.GemmaPy.get_gene_go_terms">[docs]</a>    <span class="k">def</span> <span class="nf">get_gene_go_terms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gene</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>  <span class="c1"># noqa: E501</span>
         <span class="sd">&quot;&quot;&quot;Retrieve the GO terms associated to a gene</span>
 
 <span class="sd">        :param str gene: (required)</span>
@@ -145,7 +146,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">get_gene_go_terms</span><span class="p">(</span><span class="n">gene</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GemmaPy.getGeneLocation"><a class="viewcode-back" href="../../api.html#gemmapy.GemmaPy.getGeneLocation">[docs]</a>    <span class="k">def</span> <span class="nf">getGeneLocation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gene</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>  <span class="c1"># noqa: E501</span>
+<div class="viewcode-block" id="GemmaPy.get_gene_locations"><a class="viewcode-back" href="../../api.html#gemmapy.GemmaPy.get_gene_locations">[docs]</a>    <span class="k">def</span> <span class="nf">get_gene_locations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gene</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>  <span class="c1"># noqa: E501</span>
         <span class="sd">&quot;&quot;&quot;Retrieve the physical locations of a given gene</span>
 
 <span class="sd">        :param str gene: (required)</span>
@@ -153,7 +154,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">get_gene_locations</span><span class="p">(</span><span class="n">gene</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GemmaPy.getGeneProbes"><a class="viewcode-back" href="../../api.html#gemmapy.GemmaPy.getGeneProbes">[docs]</a>    <span class="k">def</span> <span class="nf">getGeneProbes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gene</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>  <span class="c1"># noqa: E501</span>
+<div class="viewcode-block" id="GemmaPy.get_gene_probes"><a class="viewcode-back" href="../../api.html#gemmapy.GemmaPy.get_gene_probes">[docs]</a>    <span class="k">def</span> <span class="nf">get_gene_probes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gene</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>  <span class="c1"># noqa: E501</span>
         <span class="sd">&quot;&quot;&quot;Retrieve the probes associated to a genes</span>
 
 <span class="sd">        :param str gene: (required)</span>
@@ -163,7 +164,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">get_gene_probes</span><span class="p">(</span><span class="n">gene</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GemmaPy.getGenesInfo"><a class="viewcode-back" href="../../api.html#gemmapy.GemmaPy.getGenesInfo">[docs]</a>    <span class="k">def</span> <span class="nf">getGenesInfo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">genes</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>  <span class="c1"># noqa: E501</span>
+<div class="viewcode-block" id="GemmaPy.get_genes"><a class="viewcode-back" href="../../api.html#gemmapy.GemmaPy.get_genes">[docs]</a>    <span class="k">def</span> <span class="nf">get_genes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">genes</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>  <span class="c1"># noqa: E501</span>
         <span class="sd">&quot;&quot;&quot;Retrieve genes matching a gene identifier</span>
 
 <span class="sd">        :param list[str] genes: (required)</span>
@@ -171,7 +172,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">get_genes</span><span class="p">(</span><span class="n">genes</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GemmaPy.getPlatformDatasets"><a class="viewcode-back" href="../../api.html#gemmapy.GemmaPy.getPlatformDatasets">[docs]</a>    <span class="k">def</span> <span class="nf">getPlatformDatasets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">platform</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>  <span class="c1"># noqa: E501</span>
+<div class="viewcode-block" id="GemmaPy.get_platform_datasets"><a class="viewcode-back" href="../../api.html#gemmapy.GemmaPy.get_platform_datasets">[docs]</a>    <span class="k">def</span> <span class="nf">get_platform_datasets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">platform</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>  <span class="c1"># noqa: E501</span>
         <span class="sd">&quot;&quot;&quot;Retrieve all experiments within a given platform</span>
 
 <span class="sd">        :param str platform: (required)</span>
@@ -181,18 +182,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">get_platform_datasets</span><span class="p">(</span><span class="n">platform</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GemmaPy.getPlatformElements"><a class="viewcode-back" href="../../api.html#gemmapy.GemmaPy.getPlatformElements">[docs]</a>    <span class="k">def</span> <span class="nf">getPlatformElements</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">platform</span><span class="p">,</span> <span class="n">probes</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>  <span class="c1"># noqa: E501</span>
-        <span class="sd">&quot;&quot;&quot;Retrieve the selected composite sequences for a given platform</span>
-
-<span class="sd">        :param str platform: (required)</span>
-<span class="sd">        :param list[str] probes: (required)</span>
-<span class="sd">        :param int offset: The offset of the first retrieved result</span>
-<span class="sd">        :param int limit: Limit the number of results retrieved</span>
-<span class="sd">        :rtype: PaginatedResponseDataObjectCompositeSequenceValueObject</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">get_platform_element</span><span class="p">(</span><span class="n">platform</span><span class="p">,</span> <span class="n">probes</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="GemmaPy.getPlatformElementGenes"><a class="viewcode-back" href="../../api.html#gemmapy.GemmaPy.getPlatformElementGenes">[docs]</a>    <span class="k">def</span> <span class="nf">getPlatformElementGenes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">platform</span><span class="p">,</span> <span class="n">probe</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>  <span class="c1"># noqa: E501</span>
+<div class="viewcode-block" id="GemmaPy.get_platform_element_genes"><a class="viewcode-back" href="../../api.html#gemmapy.GemmaPy.get_platform_element_genes">[docs]</a>    <span class="k">def</span> <span class="nf">get_platform_element_genes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">platform</span><span class="p">,</span> <span class="n">probe</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>  <span class="c1"># noqa: E501</span>
         <span class="sd">&quot;&quot;&quot;Retrieve the genes associated to a probe in a given platform</span>
 
 <span class="sd">        :param str platform: (required)</span>
@@ -203,7 +193,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">get_platform_element_genes</span><span class="p">(</span><span class="n">platform</span><span class="p">,</span> <span class="n">probe</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GemmaPy.getPlatformsInfo"><a class="viewcode-back" href="../../api.html#gemmapy.GemmaPy.getPlatformsInfo">[docs]</a>    <span class="k">def</span> <span class="nf">getPlatformsInfo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">platform</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>  <span class="c1"># noqa: E501</span>
+<div class="viewcode-block" id="GemmaPy.get_platforms_by_ids"><a class="viewcode-back" href="../../api.html#gemmapy.GemmaPy.get_platforms_by_ids">[docs]</a>    <span class="k">def</span> <span class="nf">get_platforms_by_ids</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">platform</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>  <span class="c1"># noqa: E501</span>
         <span class="sd">&quot;&quot;&quot;Retrieve all platforms matching a set of platform identifiers</span>
 
 <span class="sd">        :param list[str] platform: (required)</span>
@@ -216,7 +206,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">get_platforms_by_ids</span><span class="p">(</span><span class="n">platform</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GemmaPy.getResultSets"><a class="viewcode-back" href="../../api.html#gemmapy.GemmaPy.getResultSets">[docs]</a>    <span class="k">def</span> <span class="nf">getResultSets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result_set</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>  <span class="c1"># noqa: E501</span>
+<div class="viewcode-block" id="GemmaPy.get_result_set"><a class="viewcode-back" href="../../api.html#gemmapy.GemmaPy.get_result_set">[docs]</a>    <span class="k">def</span> <span class="nf">get_result_set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result_set</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>  <span class="c1"># noqa: E501</span>
         <span class="sd">&quot;&quot;&quot;Retrieve a single analysis result set by its identifier</span>
 
 <span class="sd">        :param int result_set: (required)</span>
@@ -229,7 +219,7 @@
                                 <span class="s1">&#39;gene_official_name&#39;</span><span class="p">:</span><span class="s1">&#39;GeneName&#39;</span><span class="p">,</span><span class="s1">&#39;gene_ncbi_id&#39;</span><span class="p">:</span><span class="s1">&#39;NCBIid&#39;</span><span class="p">})</span>
         <span class="k">return</span> <span class="n">df</span></div>
 
-<div class="viewcode-block" id="GemmaPy.getResultSetsFactors"><a class="viewcode-back" href="../../api.html#gemmapy.GemmaPy.getResultSetsFactors">[docs]</a>    <span class="k">def</span> <span class="nf">getResultSetsFactors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result_set</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="GemmaPy.get_result_set_factors"><a class="viewcode-back" href="../../api.html#gemmapy.GemmaPy.get_result_set_factors">[docs]</a>    <span class="k">def</span> <span class="nf">get_result_set_factors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result_set</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Retrieve a single analysis result set by its identifier with Factors</span>
 
 <span class="sd">        :param int result_set: (required)</span>
@@ -243,7 +233,7 @@
                                <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">df</span></div>
 
-<div class="viewcode-block" id="GemmaPy.getDatasetResultSets"><a class="viewcode-back" href="../../api.html#gemmapy.GemmaPy.getDatasetResultSets">[docs]</a>    <span class="k">def</span> <span class="nf">getDatasetResultSets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>  <span class="c1"># noqa: E501</span>
+<div class="viewcode-block" id="GemmaPy.get_result_sets"><a class="viewcode-back" href="../../api.html#gemmapy.GemmaPy.get_result_sets">[docs]</a>    <span class="k">def</span> <span class="nf">get_result_sets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>  <span class="c1"># noqa: E501</span>
         <span class="sd">&quot;&quot;&quot;Retrieve all result sets matching the provided criteria</span>
 
 <span class="sd">        :param str dataset: (required)</span>
@@ -259,7 +249,7 @@
                             <span class="s1">&#39;factor.level&#39;</span><span class="p">:</span> <span class="n">leve</span><span class="p">},</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">df</span></div>
 
-<div class="viewcode-block" id="GemmaPy.searchAnnotations"><a class="viewcode-back" href="../../api.html#gemmapy.GemmaPy.searchAnnotations">[docs]</a>    <span class="k">def</span> <span class="nf">searchAnnotations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>  <span class="c1"># noqa: E501</span>
+<div class="viewcode-block" id="GemmaPy.search_annotations"><a class="viewcode-back" href="../../api.html#gemmapy.GemmaPy.search_annotations">[docs]</a>    <span class="k">def</span> <span class="nf">search_annotations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>  <span class="c1"># noqa: E501</span>
         <span class="sd">&quot;&quot;&quot;Search for annotation tags</span>
 
 <span class="sd">        :param list[str] query: (required)</span>
@@ -267,7 +257,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">search_annotations</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GemmaPy.searchDatasets"><a class="viewcode-back" href="../../api.html#gemmapy.GemmaPy.searchDatasets">[docs]</a>    <span class="k">def</span> <span class="nf">searchDatasets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">taxon</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="GemmaPy.search_datasets"><a class="viewcode-back" href="../../api.html#gemmapy.GemmaPy.search_datasets">[docs]</a>    <span class="k">def</span> <span class="nf">search_datasets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">taxon</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Retrieve datasets within a given taxa associated to an annotation tags search</span>
 
 <span class="sd">        :param str taxon: (required)</span>
@@ -282,7 +272,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">search_taxon_datasets</span><span class="p">(</span><span class="n">taxon</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 <span class="c1"># Below are &quot;Convenience&quot; (combination) functions</span>
-<div class="viewcode-block" id="GemmaPy.getDataset"><a class="viewcode-back" href="../../api.html#gemmapy.GemmaPy.getDataset">[docs]</a>    <span class="k">def</span> <span class="nf">getDataset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="GemmaPy.get_dataset_object"><a class="viewcode-back" href="../../api.html#gemmapy.GemmaPy.get_dataset_object">[docs]</a>    <span class="k">def</span> <span class="nf">get_dataset_object</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Combines various endpoint calls to return an annotated data object</span>
 <span class="sd">        of the queried dataset, including expression data and the experimental</span>
 <span class="sd">        design.</span>
@@ -291,9 +281,9 @@
 <span class="sd">        :return: AnnData class object</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="n">exM</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getDatasetExpression</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="n">des</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getDatasetDesign</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="n">mdata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getDatasetsInfo</span><span class="p">([</span><span class="n">dataset</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">exM</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_dataset_expression</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">des</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_dataset_design</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">mdata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_datasets_by_ids</span><span class="p">([</span><span class="n">dataset</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="c1"># condition expr. data: add index</span>
         <span class="n">exM</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">exM</span><span class="p">[</span><span class="s2">&quot;Probe&quot;</span><span class="p">]</span>
@@ -330,9 +320,9 @@
 
         <span class="k">return</span> <span class="n">adata</span></div>
 
-<div class="viewcode-block" id="GemmaPy.getDatasetDE"><a class="viewcode-back" href="../../api.html#gemmapy.GemmaPy.getDatasetDE">[docs]</a>    <span class="k">def</span> <span class="nf">getDatasetDE</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">resultSet</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="nb">all</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="GemmaPy.get_differential_expression_values"><a class="viewcode-back" href="../../api.html#gemmapy.GemmaPy.get_differential_expression_values">[docs]</a>    <span class="k">def</span> <span class="nf">get_differential_expression_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">resultSet</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="nb">all</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Retrieves the differential expression resultSet(s) associated with the dataset.</span>
-<span class="sd">        If there is more than one resultSet, use getDatasetResultSets() to see the options</span>
+<span class="sd">        If there is more than one resultSet, use get_result_sets() to see the options</span>
 <span class="sd">        and get the ID you want. Alternatively, you can query the resultSet directly</span>
 <span class="sd">        if you know its ID beforehand.</span>
 
@@ -343,18 +333,18 @@
 <span class="sd">        :return: list[DataFrame] or DataFrame (if there is the list has only one element)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">dataset</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">resultSet</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">rss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getDatasetResultSets</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+            <span class="n">rss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_result_sets</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">resultSet</span> <span class="ow">in</span> <span class="n">rss</span><span class="p">[</span><span class="s1">&#39;resultSet.id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">:</span>
                 <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;The queried resultSet is not derived from this dataset. &#39;</span> 
-                               <span class="s1">&#39;Check the available resultSets with &quot;getDatasetResultSets()&quot; &#39;</span>
+                               <span class="s1">&#39;Check the available resultSets with &quot;get_result_sets()&quot; &#39;</span>
                                <span class="s1">&#39;or query without the dataset parameter.&#39;</span><span class="p">)</span>
                 <span class="k">return</span>
             <span class="n">resultSet</span> <span class="o">=</span> <span class="p">[</span><span class="n">resultSet</span><span class="p">,]</span>
         <span class="k">elif</span> <span class="n">dataset</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">resultSet</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">rss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getDatasetResultSets</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+            <span class="n">rss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_result_sets</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">rss</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="nb">all</span> <span class="o">==</span> <span class="kc">False</span><span class="p">:</span>
                 <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;There are multiple resultSets for this dataset. &#39;</span>
-                               <span class="s1">&#39;Check the available resultSets with &quot;getDatasetResultSets()&quot; or choose all = TRUE&#39;</span><span class="p">)</span>
+                               <span class="s1">&#39;Check the available resultSets with &quot;get_result_sets()&quot; or choose all = TRUE&#39;</span><span class="p">)</span>
                 <span class="k">return</span>
             <span class="k">elif</span> <span class="n">rss</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="nb">all</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
                 <span class="n">resultSet</span> <span class="o">=</span> <span class="n">rss</span><span class="p">[</span><span class="s1">&#39;resultSet.id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
@@ -368,8 +358,8 @@
 
         <span class="n">rss</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">rs</span> <span class="ow">in</span> <span class="n">resultSet</span><span class="p">:</span>
-            <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getResultSets</span><span class="p">(</span><span class="n">rs</span><span class="p">)</span>
-            <span class="n">fact</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getResultSetsFactors</span><span class="p">(</span><span class="n">rs</span><span class="p">)</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_result_set</span><span class="p">(</span><span class="n">rs</span><span class="p">)</span>
+            <span class="n">fact</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_result_set_factors</span><span class="p">(</span><span class="n">rs</span><span class="p">)</span>
             <span class="n">cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;log2fc&#39;</span><span class="p">,</span><span class="s1">&#39;logFoldChange&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">fact</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
                 <span class="n">cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">fact</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="s1">&#39;id&#39;</span><span class="p">]),</span><span class="n">fact</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="s1">&#39;factorValue&#39;</span><span class="p">])</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">cols</span><span class="p">]</span>
@@ -384,14 +374,54 @@
     <span class="c1"># annotType = c(&quot;bioProcess&quot;, &quot;noParents&quot;, &quot;allParents&quot;)</span>
     <span class="c1"># This feature is not implemented here, the return value corresponds to &quot;noParents&quot;</span>
     <span class="c1"># (as of 2022-05-19)</span>
-<div class="viewcode-block" id="GemmaPy.getPlatformAnnotation"><a class="viewcode-back" href="../../api.html#gemmapy.GemmaPy.getPlatformAnnotation">[docs]</a>    <span class="k">def</span> <span class="nf">getPlatformAnnotation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">platform</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="GemmaPy.get_platform_annotations"><a class="viewcode-back" href="../../api.html#gemmapy.GemmaPy.get_platform_annotations">[docs]</a>    <span class="k">def</span> <span class="nf">get_platform_annotations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">platform</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Retrieve the annotations of a given platform</span>
 
 <span class="sd">        :param str platform: (required)</span>
 <span class="sd">        :return: DataFrame</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">api_response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">get_platform_annotations</span><span class="p">(</span><span class="n">platform</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">pandas</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="n">api_response</span><span class="p">),</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s1">&#39;#&#39;</span><span class="p">)</span></div></div>
+        <span class="k">return</span> <span class="n">pandas</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="n">api_response</span><span class="p">),</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s1">&#39;#&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="GemmaPy.get_taxa"><a class="viewcode-back" href="../../api.html#gemmapy.GemmaPy.get_taxa">[docs]</a>    <span class="k">def</span> <span class="nf">get_taxa</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>  <span class="c1"># noqa: E501</span>
+        <span class="sd">&quot;&quot;&quot;Retrieve all available taxa</span>
+
+<span class="sd">        :rtype: ResponseDataObjectListTaxonValueObject</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">get_taxa</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="GemmaPy.get_taxon_datasets"><a class="viewcode-back" href="../../api.html#gemmapy.GemmaPy.get_taxon_datasets">[docs]</a>    <span class="k">def</span> <span class="nf">get_taxon_datasets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">taxon</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>  <span class="c1"># noqa: E501</span>
+        <span class="sd">&quot;&quot;&quot;Retrieve the datasets for a given taxon</span>
+
+<span class="sd">        :param str/int taxon: (required)</span>
+
+<span class="sd">        **taxon** can either be Taxon ID, Taxon NCBI ID, or one of its</span>
+<span class="sd">        string identifiers: scientific name, common name. It is</span>
+<span class="sd">        recommended to use Taxon ID for efficiency. Please note, that</span>
+<span class="sd">        not all taxa have all the possible identifiers available. Use</span>
+<span class="sd">        the get_taxa_by_ids function to retrieve the necessary</span>
+<span class="sd">        information. For convenience, below is a list of officially</span>
+<span class="sd">        supported taxa:</span>
+
+<span class="sd">        ==  =========   ======================== ==========</span>
+<span class="sd">        ID  Comm.name   Scient.name              NcbiID</span>
+<span class="sd">        ==  =========   ======================== ==========</span>
+<span class="sd">        1   human       Homo sapiens             9606</span>
+<span class="sd">        2   mouse       Mus musculus             10090</span>
+<span class="sd">        3   rat         Rattus norvegicus        10116</span>
+<span class="sd">        11  yeast       Saccharomyces cerevisiae 4932</span>
+<span class="sd">        12  zebrafish   Danio rerio              7955</span>
+<span class="sd">        13  fly         Drosophila melanogaster  7227</span>
+<span class="sd">        14  worm        Caenorhabditis elegans   6239</span>
+<span class="sd">        ==  =========   ======================== ==========</span>
+
+<span class="sd">        :param str filter:</span>
+<span class="sd">        :param int offset:</span>
+<span class="sd">        :param int limit:</span>
+<span class="sd">        :param str sort:</span>
+<span class="sd">        :rtype: PaginatedResponseDataObjectExpressionExperimentValueObject</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">get_taxon_datasets</span><span class="p">(</span><span class="n">taxon</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
 
 <span class="c1"># Tests</span>
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
@@ -404,35 +434,35 @@
 
     <span class="n">api_instance</span> <span class="o">=</span> <span class="n">GemmaPy</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">getDatasetAnnotations_test</span><span class="p">():</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Testing getDatasetAnnotations function:&#39;</span><span class="p">)</span>
-        <span class="n">api_response</span> <span class="o">=</span> <span class="n">api_instance</span><span class="o">.</span><span class="n">getDatasetAnnotations</span><span class="p">(</span><span class="s2">&quot;GSE46416&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">get_dataset_annotations_test</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Testing get_dataset_annotations function:&#39;</span><span class="p">)</span>
+        <span class="n">api_response</span> <span class="o">=</span> <span class="n">api_instance</span><span class="o">.</span><span class="n">get_dataset_annotations</span><span class="p">(</span><span class="s2">&quot;GSE46416&quot;</span><span class="p">)</span>
         <span class="n">pprint</span><span class="p">(</span><span class="n">api_response</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">searchDatasets_test</span><span class="p">():</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Testing searchDatasets function:&#39;</span><span class="p">)</span>
-        <span class="n">api_response</span> <span class="o">=</span> <span class="n">api_instance</span><span class="o">.</span><span class="n">searchDatasets</span><span class="p">([</span><span class="s2">&quot;bipolar&quot;</span><span class="p">],</span> <span class="n">taxon</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">search_datasets_test</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Testing search_datasets function:&#39;</span><span class="p">)</span>
+        <span class="n">api_response</span> <span class="o">=</span> <span class="n">api_instance</span><span class="o">.</span><span class="n">search_datasets</span><span class="p">([</span><span class="s2">&quot;bipolar&quot;</span><span class="p">],</span> <span class="n">taxon</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">api_response</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">d</span><span class="o">.</span><span class="n">geeq</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span>  <span class="n">d</span><span class="o">.</span><span class="n">geeq</span><span class="o">.</span><span class="n">batch_corrected</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">short_name</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">bio_assay_count</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">getDatasetsInfo_test</span><span class="p">():</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Testing getDatasetsInfo function:&#39;</span><span class="p">)</span>
-        <span class="n">api_response</span> <span class="o">=</span> <span class="n">api_instance</span><span class="o">.</span><span class="n">getDatasetsInfo</span><span class="p">([</span><span class="s2">&quot;GSE46416&quot;</span><span class="p">])</span>
+    <span class="k">def</span> <span class="nf">get_datasets_by_ids_test</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Testing get_datasets_by_ids function:&#39;</span><span class="p">)</span>
+        <span class="n">api_response</span> <span class="o">=</span> <span class="n">api_instance</span><span class="o">.</span><span class="n">get_datasets_by_ids</span><span class="p">([</span><span class="s2">&quot;GSE46416&quot;</span><span class="p">])</span>
         <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">api_response</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">short_name</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">description</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">searchAnnotations_test</span><span class="p">():</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Testing searchAnnotations function:&#39;</span><span class="p">)</span>
-        <span class="n">api_response</span> <span class="o">=</span> <span class="n">api_instance</span><span class="o">.</span><span class="n">searchAnnotations</span><span class="p">([</span><span class="s2">&quot;GSE46416&quot;</span><span class="p">])</span>
+    <span class="k">def</span> <span class="nf">search_annotations_test</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Testing search_annotations function:&#39;</span><span class="p">)</span>
+        <span class="n">api_response</span> <span class="o">=</span> <span class="n">api_instance</span><span class="o">.</span><span class="n">search_annotations</span><span class="p">([</span><span class="s2">&quot;GSE46416&quot;</span><span class="p">])</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">api_response</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">getDataset_test</span><span class="p">():</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Testing getDataset function:&#39;</span><span class="p">)</span>
-        <span class="n">adata</span> <span class="o">=</span> <span class="n">api_instance</span><span class="o">.</span><span class="n">getDataset</span><span class="p">(</span><span class="s2">&quot;GSE46416&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">get_dataset_object_test</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Testing get_dataset_object function:&#39;</span><span class="p">)</span>
+        <span class="n">adata</span> <span class="o">=</span> <span class="n">api_instance</span><span class="o">.</span><span class="n">get_dataset_object</span><span class="p">(</span><span class="s2">&quot;GSE46416&quot;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">adata</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Unstructured Info:&#39;</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">adata</span><span class="o">.</span><span class="n">uns</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">adata</span><span class="o">.</span><span class="n">uns</span><span class="p">[</span><span class="n">l</span><span class="p">]))</span>
@@ -455,15 +485,15 @@
         <span class="nb">print</span><span class="p">(</span><span class="n">manic</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">manic</span><span class="o">.</span><span class="n">var</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">getDatasetResultSets_test</span><span class="p">():</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Testing getDatasetResultSets function:&#39;</span><span class="p">)</span>
-        <span class="n">df</span> <span class="o">=</span> <span class="n">api_instance</span><span class="o">.</span><span class="n">getDatasetResultSets</span><span class="p">(</span><span class="s1">&#39;GSE6711&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">get_result_sets_test</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Testing get_result_sets function:&#39;</span><span class="p">)</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">api_instance</span><span class="o">.</span><span class="n">get_result_sets</span><span class="p">(</span><span class="s1">&#39;GSE6711&#39;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
-        <span class="n">df2</span> <span class="o">=</span> <span class="n">api_instance</span><span class="o">.</span><span class="n">getResultSets</span><span class="p">(</span><span class="mi">485406</span><span class="p">)</span>
+        <span class="n">df2</span> <span class="o">=</span> <span class="n">api_instance</span><span class="o">.</span><span class="n">get_result_set</span><span class="p">(</span><span class="mi">485406</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">df2</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">getDatasetDE_test</span><span class="p">():</span>
-        <span class="n">de</span> <span class="o">=</span> <span class="n">api_instance</span><span class="o">.</span><span class="n">getDatasetDE</span><span class="p">(</span><span class="s1">&#39;GSE46416&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">get_differential_expression_values_test</span><span class="p">():</span>
+        <span class="n">de</span> <span class="o">=</span> <span class="n">api_instance</span><span class="o">.</span><span class="n">get_differential_expression_values</span><span class="p">(</span><span class="s1">&#39;GSE46416&#39;</span><span class="p">)</span>
         <span class="n">de</span><span class="p">[</span><span class="s1">&#39;diffexpr&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;No&#39;</span>   <span class="c1"># add extra column</span>
         <span class="c1">#de[&#39;diffexpr&#39;][(de[&#39;contrast_bipolar disorder, manic phase_logFoldChange&#39;]&gt;1.0) &amp;</span>
         <span class="c1">#               (de[&#39;contrast_bipolar disorder, manic phase_pvalue&#39;]&lt;0.05)] = &#39;Up&#39;</span>
@@ -487,9 +517,9 @@
         <span class="k">with</span> <span class="n">pandas</span><span class="o">.</span><span class="n">option_context</span><span class="p">(</span><span class="s1">&#39;display.max_rows&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;display.max_columns&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
             <span class="nb">print</span><span class="p">(</span><span class="n">de_dn</span><span class="p">[:</span><span class="mi">10</span><span class="p">])</span>
 
-    <span class="k">def</span> <span class="nf">getPlatformAnnotation_test</span><span class="p">():</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Testing getPlatformAnnotation function&#39;</span><span class="p">)</span>
-        <span class="n">df</span> <span class="o">=</span> <span class="n">api_instance</span><span class="o">.</span><span class="n">getPlatformAnnotation</span><span class="p">(</span><span class="s1">&#39;GPL96&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">get_platform_annotations_test</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Testing get_platform_annotations function&#39;</span><span class="p">)</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">api_instance</span><span class="o">.</span><span class="n">get_platform_annotations</span><span class="p">(</span><span class="s1">&#39;GPL96&#39;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
@@ -500,13 +530,13 @@
             <span class="n">func</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">[</span><span class="n">fname</span><span class="p">]</span>
             <span class="n">func</span><span class="p">()</span>
 
-    <span class="c1">#df2 = api_instance.getResultSets(423177)</span>
-    <span class="c1">#df2 = api_instance.getResultSetsFactors(423177)</span>
-    <span class="c1">#df2 = api_instance.getDatasetDE(None,423177)</span>
-    <span class="c1">#df2 = api_instance.getDatasetDE(None,485406)</span>
+    <span class="c1">#df2 = api_instance.get_result_set(423177)</span>
+    <span class="c1">#df2 = api_instance.get_result_set_factors(423177)</span>
+    <span class="c1">#df2 = api_instance.get_differential_expression_values(None,423177)</span>
+    <span class="c1">#df2 = api_instance.get_differential_expression_values(None,485406)</span>
     <span class="c1">#obj = api_instance.api.get_platforms_by_ids([&#39;GPL96&#39;])</span>
-    <span class="c1">#df2 = api_instance.getPlatformAnnotation(&#39;GPL96&#39;)</span>
-    <span class="c1">#df2 = api_instance.getPlatformsInfo([&#39;GPL96&#39;])</span>
+    <span class="c1">#df2 = api_instance.get_platform_annotations(&#39;GPL96&#39;)</span>
+    <span class="c1">#df2 = api_instance.get_platforms_by_ids([&#39;GPL96&#39;])</span>
     <span class="c1">#print(df2)</span>
 </pre></div>
 
