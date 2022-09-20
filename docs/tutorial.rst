@@ -28,8 +28,17 @@ For detailed information on the curation process, read this `page
 Installation instructions
 -------------------------
 
-...to be done
+The package has been tested with Python3.7 but it should work with any Python3 version. 
 
+Install it with:
+
+.. code-block:: bash
+
+   pip install -i https://test.pypi.org/simple/ gemmapy
+
+.. warning::
+   The installation command will change as the first release of the package
+   is uploaded to the PyPI repository (vs TestPyPI now).
 
 Additional packages
 -------------------
@@ -51,7 +60,8 @@ corrected.
 >>> import gemmapy
 >>> api_instance = gemmapy.GemmaPy()
 >>> api_response = api_instance.search_datasets(["bipolar"], taxon="human", limit=100)
->>> for d in api_reponse.data:
+>>> api_response.data[0]  # view the object structure
+>>> for d in api_response.data:
 ...   if d.geeq is not None and  d.geeq.batch_corrected:
 ...     print(d.short_name, d.name, d.bio_assay_count)
 ... 
@@ -160,6 +170,9 @@ are stored as resultSets, and you can access them using
 explore and visualize the data to find the most
 differentially-expressed genes:
 
+>>> import gemmapy
+>>> import pandas
+>>> api_instance = gemmapy.GemmaPy()
 >>> de = api_instance.get_differential_expression_values('GSE46416')
 >>>
 >>> # Classify probes for plotting
@@ -268,7 +281,9 @@ along with additional annotations such as Gene Ontology terms.
 
 Examples:
 
+>>> import gemmapy
 >>> import pandas
+>>> api_instance = gemmapy.GemmaPy()
 >>> api_response = api_instance.get_platform_annotations('GPL96')
 >>> with pandas.option_context('display.max_rows', None, 'display.max_columns', None): print(api_response[:6])
      ProbeName    GeneSymbols                                      GeneNames  \
@@ -324,7 +339,7 @@ search gene work best with unambigious identifiers rather than symbols.
 
 >>> # lists genes in gemma matching the symbol or identifier
 >>> api_response = api_instance.get_genes(['Eno2'])
->>> print(api_response.data[0]) # investigate the object structure
+>>> api_response.data[0] # view the object structure
 >>> keys = ['official_symbol','ensembl_id','ncbi_id','official_name','taxon_common_name','taxon_id','taxon_scientific_name']
 >>> for d in api_response.data: print("%s %-18s %6d %-30s %-10s %2i %s" % tuple(d.to_dict()[k] for k in keys))
 ... 
@@ -337,7 +352,7 @@ eno2 ENSDARG00000014287 402874 enolase 2                      zebrafish  12 Dani
 
 >>> # ncbi id for human ENO2
 >>> probs=api_instance.get_gene_probes(2026)
->>> print(probs.data[0]) # investigate the object structure
+>>> probs.data[0]  # view the object structure
 >>> # print only fields of interest
 >>> for d in probs.data[0:6]: 
 ...   print("%-10s %-12s %-20s %s %s %s %s" % 
@@ -358,7 +373,10 @@ Some endpoints accept multiple identifiers in a single
 function call. For example, getting information on 2 datasets at the
 same time.
 
+>>> import gemmapy
+>>> api_instance = gemmapy.GemmaPy()
 >>> api_response = api_instance.get_datasets_by_ids(["GSE35974","GSE46416"])
+>>> api_response.data[0]  # view the object structure
 >>> for d in api_response.data:
 ...             print(d.short_name, d.name, d.id, d.accession, d.bio_assay_count, d.taxon)
 ... 

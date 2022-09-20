@@ -12,8 +12,17 @@ public studies, referencing thousands of published papers.
 Installation instructions
 -------------------------
 
-...to be done
+The package has been tested with Python3.7 but it should work with any Python3 version. 
 
+Install it with:
+
+.. code-block:: bash
+
+   pip install -i https://test.pypi.org/simple/ gemmapy
+
+.. warning::
+   The installation command will change as the first release of the package
+   is uploaded to the PyPI repository (vs TestPyPI now).
 
 Usage
 -----
