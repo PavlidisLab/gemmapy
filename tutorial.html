@@ -53,7 +53,9 @@ cross-platform comparisons and meta-analyses.</p>
 <h2>Installation instructions<a class="headerlink" href="#installation-instructions" title="Permalink to this heading">¶</a></h2>
 <p>The package has been tested with Python3.7 but it should work with any Python3 version.</p>
 <p>Install it with:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install -i https://test.pypi.org/simple/ gemmapy
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install -i https://test.pypi.org/simple/ --no-deps gemmapy
+<span class="c1"># install dependencies</span>
+pip install urllib3 setuptools certifi anndata six python-dateutil pandas numpy
 </pre></div>
 </div>
 <div class="admonition warning">

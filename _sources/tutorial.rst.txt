@@ -34,7 +34,9 @@ Install it with:
 
 .. code-block:: bash
 
-   pip install -i https://test.pypi.org/simple/ gemmapy
+   pip install -i https://test.pypi.org/simple/ --no-deps gemmapy
+   # install dependencies
+   pip install urllib3 setuptools certifi anndata six python-dateutil pandas numpy
 
 .. warning::
    The installation command will change as the first release of the package
