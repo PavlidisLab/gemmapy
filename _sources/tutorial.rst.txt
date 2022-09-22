@@ -28,19 +28,8 @@ For detailed information on the curation process, read this `page
 Installation instructions
 -------------------------
 
-The package has been tested with Python3.7 but it should work with any Python3 version. 
+.. include:: install.rst
 
-Install it with:
-
-.. code-block:: bash
-
-   pip install -i https://test.pypi.org/simple/ --no-deps gemmapy
-   # install dependencies
-   pip install urllib3 setuptools certifi anndata six python-dateutil pandas numpy
-
-.. warning::
-   The installation command will change as the first release of the package
-   is uploaded to the PyPI repository (vs TestPyPI now).
 
 Additional packages
 -------------------
