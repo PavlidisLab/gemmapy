@@ -164,10 +164,12 @@ matrix, and :py:func:`~gemmapy.GemmaPy.get_dataset_design` to get the experiment
 Differential expression analyses
 --------------------------------
 
-Gemma also contains precomputed differential expression analyses for
-most of its datasets, and some datasets contain more than one analysis
-to account for different factors and their interactions. These tables
-are stored as resultSets, and you can access them using
+Gemma contains precomputed differential expression analyses for most
+of its datasets. Analyses can involve more than one factor, such as
+"sex" as well as "disease". Some datasets contain more than one
+analysis to account for different factors and their interactions. The
+results are stored as resultSets, each corresponding to one factor (or
+their interaction). You can access them using
 :py:func:`~gemmapy.GemmaPy.get_differential_expression_values`. From here on, we can
 explore and visualize the data to find the most
 differentially-expressed genes:
