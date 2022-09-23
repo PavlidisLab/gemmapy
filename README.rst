@@ -13,7 +13,7 @@ Installation instructions
 -------------------------
 .. This is a content of docs/install.rst. Update it whenever install.rst changes.
    
-The package has been tested with Python3.7 but it should work with any Python3 version. 
+The package requires Python3.6+. 
 
 #. Install it from a local copy (recommended)
 
