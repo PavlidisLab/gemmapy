@@ -286,7 +286,7 @@ class GemmaPy(object):
 
         return adata
 
-    def get_differential_expression_values(self, dataset = None, resultSet = None, all = False, **kwargs):
+    def get_differential_expression_values(self, dataset = None, resultSet = None, **kwargs):
         """Retrieves the differential expression resultSet(s) associated with the dataset.
         If there is more than one resultSet, use get_result_sets() to see the options
         and get the ID you want. Alternatively, you can query the resultSet directly
@@ -308,14 +308,7 @@ class GemmaPy(object):
             resultSet = [resultSet,]
         elif dataset is not None and resultSet is None:
             rss = self.get_result_sets(dataset)
-            if rss.shape[0] > 1 and all == False:
-                logger.warning('There are multiple resultSets for this dataset. '
-                               'Check the available resultSets with "get_result_sets()" or choose all = TRUE')
-                return
-            elif rss.shape[0] > 1 and all == True:
-                resultSet = rss['resultSet.id'].unique()
-            else:
-                resultSet = rss['resultSet.id']
+            resultSet = rss['resultSet.id'].unique()
         elif dataset is None and resultSet is not None:
             resultSet = [resultSet,]
         else:
@@ -332,7 +325,6 @@ class GemmaPy(object):
             df.columns = cols
             rss.append(df)
 
-        if len(rss) == 1: rss = rss[0]
         return rss
 
     # Corresponding gemma.R function doesn't use any endpoint (uses some alternative URL
