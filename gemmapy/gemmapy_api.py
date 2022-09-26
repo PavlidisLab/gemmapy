@@ -286,7 +286,7 @@ class GemmaPy(object):
 
         return adata
 
-    def get_differential_expression_values(self, dataset = None, resultSet = None, **kwargs):
+    def get_differential_expression_values(self, dataset = None, resultSet = None, readableContrasts = False, **kwargs):
         """Retrieves the differential expression resultSet(s) associated with the dataset.
         If there is more than one resultSet, use get_result_sets() to see the options
         and get the ID you want. Alternatively, you can query the resultSet directly
@@ -318,11 +318,12 @@ class GemmaPy(object):
         rss = []
         for rs in resultSet:
             df = self.get_result_set(rs)
-            fact = self.get_result_set_factors(rs)
-            cols = [s.replace('log2fc','logFoldChange') for s in df.columns]
-            for i in range(fact.shape[0]):
-                cols = [s.replace(str(fact.loc[i,'id']),fact.loc[i,'factorValue']) for s in cols]
-            df.columns = cols
+            if readableContrasts:
+                fact = self.get_result_set_factors(rs)
+                cols = [s.replace('log2fc','logFoldChange') for s in df.columns]
+                for i in range(fact.shape[0]):
+                    cols = [s.replace(str(fact.loc[i,'id']),fact.loc[i,'factorValue']) for s in cols]
+                df.columns = cols
             rss.append(df)
 
         return rss
