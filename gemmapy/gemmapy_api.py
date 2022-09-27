@@ -294,9 +294,11 @@ class GemmaPy(object):
 
         :param str dataset: (optional)
         :param int resultSet: (optional)
-        :param bool all: (optional) Default is False. If True, will download all differential
-          expression resultSets for the dataset.
-        :return: list[DataFrame] or DataFrame (if there is the list has only one element)
+        :param bool readableContrasts: (optional) If False (default), the returned columns
+          will use internal constrasts IDs as names. Details about the contrasts can be
+          accessed using get_dataset_differential_expression_analyses(). If True IDs
+          will be replaced with human readable contrast information.
+        :return: list[DataFrame]
         """
         if dataset is not None and resultSet is not None:
             rss = self.get_result_sets(dataset)
