@@ -265,7 +265,7 @@ sign indicate ascending order whereas the ‘-’ indicate descending.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gemmapy.GemmaPy.get_differential_expression_values">
-<span class="sig-name descname"><span class="pre">get_differential_expression_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resultSet</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">all</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.get_differential_expression_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.get_differential_expression_values" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">get_differential_expression_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resultSet</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">readableContrasts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.get_differential_expression_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.get_differential_expression_values" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieves the differential expression resultSet(s) associated with the dataset.
 If there is more than one resultSet, use get_result_sets() to see the options
 and get the ID you want. Alternatively, you can query the resultSet directly
@@ -275,12 +275,14 @@ if you know its ID beforehand.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>dataset</strong> (<em>str</em>) – (optional)</p></li>
 <li><p><strong>resultSet</strong> (<em>int</em>) – (optional)</p></li>
-<li><p><strong>all</strong> (<em>bool</em>) – (optional) Default is False. If True, will download all differential
-expression resultSets for the dataset.</p></li>
+<li><p><strong>readableContrasts</strong> (<em>bool</em>) – (optional) If False (default), the returned columns
+will use internal constrasts IDs as names. Details about the contrasts can be
+accessed using get_dataset_differential_expression_analyses(). If True IDs
+will be replaced with human readable contrast information.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>list[DataFrame] or DataFrame (if there is the list has only one element)</p>
+<dd class="field-even"><p>list[DataFrame]</p>
 </dd>
 </dl>
 </dd></dl>

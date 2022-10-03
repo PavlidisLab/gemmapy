@@ -200,7 +200,7 @@ differentially-expressed genes:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">gemmapy</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">api_instance</span> <span class="o">=</span> <span class="n">gemmapy</span><span class="o">.</span><span class="n">GemmaPy</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">de</span> <span class="o">=</span> <span class="n">api_instance</span><span class="o">.</span><span class="n">get_differential_expression_values</span><span class="p">(</span><span class="s1">&#39;GSE46416&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">de</span> <span class="o">=</span> <span class="n">api_instance</span><span class="o">.</span><span class="n">get_differential_expression_values</span><span class="p">(</span><span class="s1">&#39;GSE46416&#39;</span><span class="p">,</span> <span class="n">readableContrasts</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Classify probes for plotting</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">de</span><span class="p">[</span><span class="s1">&#39;diffexpr&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;No&#39;</span>   <span class="c1"># add extra column</span>

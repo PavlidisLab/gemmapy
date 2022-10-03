@@ -320,7 +320,7 @@
 
         <span class="k">return</span> <span class="n">adata</span></div>
 
-<div class="viewcode-block" id="GemmaPy.get_differential_expression_values"><a class="viewcode-back" href="../../api.html#gemmapy.GemmaPy.get_differential_expression_values">[docs]</a>    <span class="k">def</span> <span class="nf">get_differential_expression_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">resultSet</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="nb">all</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="GemmaPy.get_differential_expression_values"><a class="viewcode-back" href="../../api.html#gemmapy.GemmaPy.get_differential_expression_values">[docs]</a>    <span class="k">def</span> <span class="nf">get_differential_expression_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">resultSet</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">readableContrasts</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Retrieves the differential expression resultSet(s) associated with the dataset.</span>
 <span class="sd">        If there is more than one resultSet, use get_result_sets() to see the options</span>
 <span class="sd">        and get the ID you want. Alternatively, you can query the resultSet directly</span>
@@ -328,9 +328,11 @@
 
 <span class="sd">        :param str dataset: (optional)</span>
 <span class="sd">        :param int resultSet: (optional)</span>
-<span class="sd">        :param bool all: (optional) Default is False. If True, will download all differential</span>
-<span class="sd">          expression resultSets for the dataset.</span>
-<span class="sd">        :return: list[DataFrame] or DataFrame (if there is the list has only one element)</span>
+<span class="sd">        :param bool readableContrasts: (optional) If False (default), the returned columns</span>
+<span class="sd">          will use internal constrasts IDs as names. Details about the contrasts can be</span>
+<span class="sd">          accessed using get_dataset_differential_expression_analyses(). If True IDs</span>
+<span class="sd">          will be replaced with human readable contrast information.</span>
+<span class="sd">        :return: list[DataFrame]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">dataset</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">resultSet</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">rss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_result_sets</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
@@ -342,14 +344,7 @@
             <span class="n">resultSet</span> <span class="o">=</span> <span class="p">[</span><span class="n">resultSet</span><span class="p">,]</span>
         <span class="k">elif</span> <span class="n">dataset</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">resultSet</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">rss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_result_sets</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">rss</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="nb">all</span> <span class="o">==</span> <span class="kc">False</span><span class="p">:</span>
-                <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;There are multiple resultSets for this dataset. &#39;</span>
-                               <span class="s1">&#39;Check the available resultSets with &quot;get_result_sets()&quot; or choose all = TRUE&#39;</span><span class="p">)</span>
-                <span class="k">return</span>
-            <span class="k">elif</span> <span class="n">rss</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="nb">all</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
-                <span class="n">resultSet</span> <span class="o">=</span> <span class="n">rss</span><span class="p">[</span><span class="s1">&#39;resultSet.id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">resultSet</span> <span class="o">=</span> <span class="n">rss</span><span class="p">[</span><span class="s1">&#39;resultSet.id&#39;</span><span class="p">]</span>
+            <span class="n">resultSet</span> <span class="o">=</span> <span class="n">rss</span><span class="p">[</span><span class="s1">&#39;resultSet.id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
         <span class="k">elif</span> <span class="n">dataset</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">resultSet</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">resultSet</span> <span class="o">=</span> <span class="p">[</span><span class="n">resultSet</span><span class="p">,]</span>
         <span class="k">else</span><span class="p">:</span>
@@ -359,14 +354,14 @@
         <span class="n">rss</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">rs</span> <span class="ow">in</span> <span class="n">resultSet</span><span class="p">:</span>
             <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_result_set</span><span class="p">(</span><span class="n">rs</span><span class="p">)</span>
-            <span class="n">fact</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_result_set_factors</span><span class="p">(</span><span class="n">rs</span><span class="p">)</span>
-            <span class="n">cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;log2fc&#39;</span><span class="p">,</span><span class="s1">&#39;logFoldChange&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
-            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">fact</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
-                <span class="n">cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">fact</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="s1">&#39;id&#39;</span><span class="p">]),</span><span class="n">fact</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="s1">&#39;factorValue&#39;</span><span class="p">])</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">cols</span><span class="p">]</span>
-            <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">cols</span>
+            <span class="k">if</span> <span class="n">readableContrasts</span><span class="p">:</span>
+                <span class="n">fact</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_result_set_factors</span><span class="p">(</span><span class="n">rs</span><span class="p">)</span>
+                <span class="n">cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;log2fc&#39;</span><span class="p">,</span><span class="s1">&#39;logFoldChange&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">fact</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+                    <span class="n">cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">fact</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="s1">&#39;id&#39;</span><span class="p">]),</span><span class="n">fact</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="s1">&#39;factorValue&#39;</span><span class="p">])</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">cols</span><span class="p">]</span>
+                <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">cols</span>
             <span class="n">rss</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">rss</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span> <span class="n">rss</span> <span class="o">=</span> <span class="n">rss</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">rss</span></div>
 
     <span class="c1"># Corresponding gemma.R function doesn&#39;t use any endpoint (uses some alternative URL</span>

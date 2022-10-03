@@ -166,7 +166,7 @@ differentially-expressed genes:
 >>> import gemmapy
 >>> import pandas
 >>> api_instance = gemmapy.GemmaPy()
->>> de = api_instance.get_differential_expression_values('GSE46416')
+>>> de = api_instance.get_differential_expression_values('GSE46416', readableContrasts=True)
 >>>
 >>> # Classify probes for plotting
 >>> de['diffexpr'] = 'No'   # add extra column
