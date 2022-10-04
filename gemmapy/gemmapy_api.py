@@ -17,10 +17,21 @@ class GemmaPy(object):
     Main API class
     """
 
-    def __init__(self, devel=True):
+    def __init__(self, auth=None, devel=True):
+        """
+        :param list auth: (optional) A list or tuple of credential strings, e.g.
+          (your_username, your_password)
+        :param bool devel: (optional) If True development version of Gemma API will be
+          used. Default is True.
+        """
+
         configuration = sdk.Configuration()
         if devel:
             configuration.host = 'dev.gemma.msl.ubc.ca/rest/v2'
+
+        if auth is not None:
+            configuration.username = auth[0]
+            configuration.password = auth[1]
 
         # create an instance of the API class
         self.api = sdk.DefaultApi(sdk.ApiClient(configuration))
