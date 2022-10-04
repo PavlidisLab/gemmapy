@@ -27,7 +27,7 @@ class GemmaPy(object):
 
         configuration = sdk.Configuration()
         if devel:
-            configuration.host = 'dev.gemma.msl.ubc.ca/rest/v2'
+            configuration.host = 'https://dev.gemma.msl.ubc.ca/rest/v2'
 
         if auth is not None:
             configuration.username = auth[0]
