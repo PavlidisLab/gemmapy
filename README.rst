@@ -15,7 +15,7 @@ Installation instructions
    
 The package requires Python3.6+. 
 
-#. Install it from a local copy (recommended)
+#. Install it from a local copy
 
    .. code-block:: bash
 
