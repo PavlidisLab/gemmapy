@@ -2,7 +2,7 @@ gemmapy: a Python Wrapper for the Gemma API
 ===========================================
 
 This is a Python wrapper for `Gemma <https://gemma.msl.ubc.ca/>`_'s
-RESTful `API <https://gemma.msl.ubc.ca/rest/v2/>`_. Gemma is a web
+RESTful `API <https://gemma.msl.ubc.ca/resources/restapidocs/>`_. Gemma is a web
 site, database and a set of tools for the meta-analysis, re-use and
 sharing of genomics data, currently primarily targeted at the analysis
 of gene expression profiles. Gemma contains data from thousands of
