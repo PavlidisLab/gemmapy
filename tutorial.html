@@ -53,7 +53,7 @@ cross-platform comparisons and meta-analyses.</p>
 <h2>Installation instructions<a class="headerlink" href="#installation-instructions" title="Permalink to this heading">¶</a></h2>
 <p>The package requires Python3.6+.</p>
 <ol class="arabic">
-<li><p>Install it from a local copy (recommended)</p>
+<li><p>Install it from a local copy</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone git@github.com:PavlidisLab/gemmapy.git
 <span class="nb">cd</span> gemmapy
 pip install .
@@ -132,7 +132,7 @@ datasets.</p>
 </div>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Subset patients during manic phase and controls</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">manic</span><span class="o">=</span><span class="n">adata</span><span class="p">[:,(</span><span class="n">adata</span><span class="o">.</span><span class="n">var</span><span class="p">[</span><span class="s1">&#39;disease&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;reference_subject_role&#39;</span><span class="p">)</span> <span class="o">|</span>
-<span class="go">                      (adata.var[&#39;disease&#39;] == &#39;bipolar_disorder_|_manic_phase_|&#39;)].copy()</span>
+<span class="gp">... </span>              <span class="p">(</span><span class="n">adata</span><span class="o">.</span><span class="n">var</span><span class="p">[</span><span class="s1">&#39;disease&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;bipolar_disorder_|_manic_phase_|&#39;</span><span class="p">)]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">manic</span><span class="p">)</span>
 <span class="go">AnnData object with n_obs × n_vars = 21986 × 21</span>
 <span class="go">    obs: &#39;GeneSymbol&#39;, &#39;GeneName&#39;, &#39;NCBIid&#39;</span>
@@ -192,16 +192,18 @@ explore and visualize the data to find the most
 differentially-expressed genes:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">gemmapy</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">api_instance</span> <span class="o">=</span> <span class="n">gemmapy</span><span class="o">.</span><span class="n">GemmaPy</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">de</span> <span class="o">=</span> <span class="n">api_instance</span><span class="o">.</span><span class="n">get_differential_expression_values</span><span class="p">(</span><span class="s1">&#39;GSE46416&#39;</span><span class="p">,</span> <span class="n">readableContrasts</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">de</span> <span class="o">=</span> <span class="n">de</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">...</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Classify probes for plotting</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">de</span><span class="p">[</span><span class="s1">&#39;diffexpr&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;No&#39;</span>   <span class="c1"># add extra column</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">de</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">de</span><span class="p">[</span><span class="s1">&#39;contrast_bipolar disorder, manic phase_logFoldChange&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">&amp;</span>
 <span class="gp">... </span>       <span class="p">(</span><span class="n">de</span><span class="p">[</span><span class="s1">&#39;contrast_bipolar disorder, manic phase_pvalue&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">0.05</span><span class="p">),</span><span class="s1">&#39;diffexpr&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Up&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">de</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">de</span><span class="p">[</span><span class="s1">&#39;contrast_bipolar disorder, manic phase_logFoldChange&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">)</span> <span class="o">&amp;</span>
 <span class="gp">... </span>       <span class="p">(</span><span class="n">de</span><span class="p">[</span><span class="s1">&#39;contrast_bipolar disorder, manic phase_pvalue&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">0.05</span><span class="p">),</span><span class="s1">&#39;diffexpr&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Down&#39;</span>
-<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">...</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Upregulated probes</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">de_up</span> <span class="o">=</span> <span class="n">de</span><span class="p">[</span><span class="n">de</span><span class="p">[</span><span class="s1">&#39;diffexpr&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;Up&#39;</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">de_up</span> <span class="o">=</span> <span class="n">de_up</span><span class="p">[[</span><span class="s1">&#39;Probe&#39;</span><span class="p">,</span><span class="s1">&#39;GeneSymbol&#39;</span><span class="p">,</span> <span class="s1">&#39;contrast_bipolar disorder, manic phase_pvalue&#39;</span><span class="p">,</span>
@@ -210,27 +212,27 @@ differentially-expressed genes:</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">pandas</span><span class="o">.</span><span class="n">option_context</span><span class="p">(</span><span class="s1">&#39;display.max_rows&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;display.max_columns&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
 <span class="gp">... </span>        <span class="nb">print</span><span class="p">(</span><span class="n">de_up</span><span class="p">[:</span><span class="mi">10</span><span class="p">])</span>
 <span class="go">         Probe GeneSymbol  contrast_bipolar disorder, manic phase_pvalue  \</span>
-<span class="go">11705  2319550       RBP7                                       0.000179</span>
-<span class="go">13110  2548699     CYP1B1                                       0.000218</span>
-<span class="go">11825  3907190       SLPI                                       0.000625</span>
-<span class="go">18245  3629103      PCLAF                                       0.000961</span>
-<span class="go">18386  3545525      SLIRP                                       0.001044</span>
-<span class="go">3822   3146433      COX6C                                       0.001641</span>
-<span class="go">12209  2538349        NaN                                       0.002130</span>
-<span class="go">2873   2899102       H3C3                                       0.002146</span>
-<span class="go">735    3635198     BCL2A1                                       0.002975</span>
-<span class="go">11879  2633191      GPR15                                       0.003917</span>
+<span class="go">18835  2319550       RBP7                                       0.000086</span>
+<span class="go">4913   2548699     CYP1B1                                       0.000103</span>
+<span class="go">11877  3907190       SLPI                                       0.000333</span>
+<span class="go">6917   3629103      PCLAF                                       0.000518</span>
+<span class="go">6188   3545525      SLIRP                                       0.000565</span>
+<span class="go">2065   3146433      COX6C                                       0.000920</span>
+<span class="go">4839   2538349        NaN                                       0.001253</span>
+<span class="go">407    2899102       H3C3                                       0.001269</span>
+<span class="go">18009  3635198     BCL2A1                                       0.001800</span>
+<span class="go">18588  2633191      GPR15                                       0.002410</span>
 <span class="go">       contrast_bipolar disorder, manic phase_logFoldChange</span>
-<span class="go">11705                                              1.074</span>
-<span class="go">13110                                              1.322</span>
-<span class="go">11825                                              1.056</span>
-<span class="go">18245                                              1.278</span>
-<span class="go">18386                                              1.349</span>
-<span class="go">3822                                               1.467</span>
-<span class="go">12209                                              1.073</span>
-<span class="go">2873                                               1.026</span>
-<span class="go">735                                                1.080</span>
-<span class="go">11879                                              1.205</span>
+<span class="go">18835                                              1.074</span>
+<span class="go">4913                                               1.322</span>
+<span class="go">11877                                              1.056</span>
+<span class="go">6917                                               1.278</span>
+<span class="go">6188                                               1.349</span>
+<span class="go">2065                                               1.467</span>
+<span class="go">4839                                               1.073</span>
+<span class="go">407                                                1.026</span>
+<span class="go">18009                                              1.080</span>
+<span class="go">18588                                              1.205</span>
 </pre></div>
 </div>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Downregulated probes</span>
@@ -240,34 +242,34 @@ differentially-expressed genes:</p>
 <span class="gp">&gt;&gt;&gt; </span>        <span class="s1">&#39;contrast_bipolar disorder, manic phase_pvalue&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">pandas</span><span class="o">.</span><span class="n">option_context</span><span class="p">(</span><span class="s1">&#39;display.max_rows&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;display.max_columns&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
 <span class="gp">... </span>        <span class="nb">print</span><span class="p">(</span><span class="n">de_dn</span><span class="p">[:</span><span class="mi">10</span><span class="p">])</span>
-<span class="go">         Probe  GeneSymbol  contrast_bipolar disorder, manic phase_pvalue  \</span>
-<span class="go">11215  2775390         NaN                                       0.000006</span>
-<span class="go">15068  3760268         NaN                                       0.000031</span>
-<span class="go">20918  3124344         NaN                                       0.000278</span>
-<span class="go">4898   3673179         NaN                                       0.000313</span>
-<span class="go">18551  3245871       WDFY4                                       0.000337</span>
-<span class="go">2371   3022689    SND1-IT1                                       0.000448</span>
-<span class="go">2294   2679014         NaN                                       0.000574</span>
-<span class="go">15224  3336402       RBM14                                       0.000675</span>
-<span class="go">15362  4019758         NaN                                       0.000685</span>
-<span class="go">9709   3384417  ANKRD42-DT                                       0.000717</span>
+<span class="go">         Probe GeneSymbol  contrast_bipolar disorder, manic phase_pvalue  \</span>
+<span class="go">18856  2775390        NaN                                       0.000002</span>
+<span class="go">5641   3760268        NaN                                       0.000012</span>
+<span class="go">18194  3124344        NaN                                       0.000139</span>
+<span class="go">1742   3673179        NaN                                       0.000158</span>
+<span class="go">10623  3245871      WDFY4                                       0.000168</span>
+<span class="go">15046  3022689   SND1-IT1                                       0.000227</span>
+<span class="go">9240   2679014        NaN                                       0.000298</span>
+<span class="go">499    4019758        NaN                                       0.000355</span>
+<span class="go">526    3336402      RBM14                                       0.000361</span>
+<span class="go">9901   2880955        NaN                                       0.000374</span>
 <span class="go">       contrast_bipolar disorder, manic phase_logFoldChange</span>
-<span class="go">11215                                             -1.556</span>
-<span class="go">15068                                             -1.851</span>
-<span class="go">20918                                             -1.037</span>
-<span class="go">4898                                              -1.034</span>
-<span class="go">18551                                             -1.157</span>
-<span class="go">2371                                              -1.220</span>
-<span class="go">2294                                              -1.175</span>
-<span class="go">15224                                             -1.071</span>
-<span class="go">15362                                             -1.405</span>
-<span class="go">9709                                              -1.003</span>
+<span class="go">18856                                             -1.556</span>
+<span class="go">5641                                              -1.851</span>
+<span class="go">18194                                             -1.037</span>
+<span class="go">1742                                              -1.034</span>
+<span class="go">10623                                             -1.157</span>
+<span class="go">15046                                             -1.220</span>
+<span class="go">9240                                              -1.175</span>
+<span class="go">499                                               -1.405</span>
+<span class="go">526                                               -1.071</span>
+<span class="go">9901                                              -1.522</span>
 </pre></div>
 </div>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Add gene symbols as labels to DE genes</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">de</span><span class="p">[</span><span class="s1">&#39;delabel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">de</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">de</span><span class="p">[</span><span class="s1">&#39;diffexpr&#39;</span><span class="p">]</span><span class="o">!=</span><span class="s1">&#39;No&#39;</span><span class="p">,</span><span class="s1">&#39;delabel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">de</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">de</span><span class="p">[</span><span class="s1">&#39;diffexpr&#39;</span><span class="p">]</span><span class="o">!=</span><span class="s1">&#39;No&#39;</span><span class="p">,</span><span class="s1">&#39;GeneSymbol&#39;</span><span class="p">]</span>
-<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">...</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Volcano plot for bipolar patients vs controls</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">de</span><span class="p">[</span><span class="s1">&#39;-log10(p-value)&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">de</span><span class="p">[</span><span class="s1">&#39;contrast_bipolar disorder, manic phase_pvalue&#39;</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
@@ -360,8 +362,9 @@ search gene work best with unambigious identifiers rather than symbols.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># lists genes in gemma matching the symbol or identifier</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">api_response</span> <span class="o">=</span> <span class="n">api_instance</span><span class="o">.</span><span class="n">get_genes</span><span class="p">([</span><span class="s1">&#39;Eno2&#39;</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">api_response</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># view the object structure</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">keys</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;official_symbol&#39;</span><span class="p">,</span><span class="s1">&#39;ensembl_id&#39;</span><span class="p">,</span><span class="s1">&#39;ncbi_id&#39;</span><span class="p">,</span><span class="s1">&#39;official_name&#39;</span><span class="p">,</span><span class="s1">&#39;taxon_common_name&#39;</span><span class="p">,</span><span class="s1">&#39;taxon_id&#39;</span><span class="p">,</span><span class="s1">&#39;taxon_scientific_name&#39;</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">api_response</span><span class="o">.</span><span class="n">data</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> </span><span class="si">%-18s</span><span class="s2"> </span><span class="si">%6d</span><span class="s2"> </span><span class="si">%-30s</span><span class="s2"> </span><span class="si">%-10s</span><span class="s2"> </span><span class="si">%2i</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">api_response</span><span class="o">.</span><span class="n">data</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> </span><span class="si">%-18s</span><span class="s2"> </span><span class="si">%6d</span><span class="s2"> </span><span class="si">%-30s</span><span class="s2"> </span><span class="si">%-10s</span><span class="s2"> </span><span class="si">%2i</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span>
+<span class="gp">&gt;&gt;&gt; </span>  <span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">official_symbol</span><span class="p">,</span><span class="n">d</span><span class="o">.</span><span class="n">ensembl_id</span><span class="p">,</span><span class="n">d</span><span class="o">.</span><span class="n">ncbi_id</span><span class="p">,</span><span class="n">d</span><span class="o">.</span><span class="n">official_name</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>   <span class="n">d</span><span class="o">.</span><span class="n">taxon</span><span class="o">.</span><span class="n">common_name</span><span class="p">,</span><span class="n">d</span><span class="o">.</span><span class="n">taxon</span><span class="o">.</span><span class="n">id</span><span class="p">,</span><span class="n">d</span><span class="o">.</span><span class="n">taxon</span><span class="o">.</span><span class="n">scientific_name</span><span class="p">))</span>
 <span class="gp">...</span>
 <span class="go">ENO2 ENSG00000111674      2026 enolase 2                      human       1 Homo sapiens</span>
 <span class="go">Eno2 ENSMUSG00000004267  13807 enolase 2, gamma neuronal      mouse       2 Mus musculus</span>
@@ -376,8 +379,8 @@ search gene work best with unambigious identifiers rather than symbols.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># print only fields of interest</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">probs</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">6</span><span class="p">]:</span>
 <span class="gp">... </span>  <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%-10s</span><span class="s2"> </span><span class="si">%-12s</span><span class="s2"> </span><span class="si">%-20s</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span>
-<span class="go">(d.name,d.array_design.short_name,d.array_design.name,d.array_design.taxon,</span>
-<span class="go"> d.array_design.taxon_id,d.array_design.technology_type,d.array_design.troubled))</span>
+<span class="gp">... </span> <span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">name</span><span class="p">,</span><span class="n">d</span><span class="o">.</span><span class="n">array_design</span><span class="o">.</span><span class="n">short_name</span><span class="p">,</span><span class="n">d</span><span class="o">.</span><span class="n">array_design</span><span class="o">.</span><span class="n">name</span><span class="p">,</span><span class="n">d</span><span class="o">.</span><span class="n">array_design</span><span class="o">.</span><span class="n">taxon</span><span class="o">.</span><span class="n">common_name</span><span class="p">,</span>
+<span class="gp">... </span>  <span class="n">d</span><span class="o">.</span><span class="n">array_design</span><span class="o">.</span><span class="n">taxon</span><span class="o">.</span><span class="n">id</span><span class="p">,</span><span class="n">d</span><span class="o">.</span><span class="n">array_design</span><span class="o">.</span><span class="n">technology_type</span><span class="p">,</span><span class="n">d</span><span class="o">.</span><span class="n">array_design</span><span class="o">.</span><span class="n">troubled</span><span class="p">))</span>
 <span class="go">20016      GPL3093      LC-25                human 1 TWOCOLOR False</span>
 <span class="go">20024      GPL3092      LC-19                human 1 TWOCOLOR False</span>
 <span class="go">20024      lymphochip-2 Lymphochip 37k       human 1 TWOCOLOR False</span>
@@ -397,7 +400,7 @@ same time.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">api_response</span> <span class="o">=</span> <span class="n">api_instance</span><span class="o">.</span><span class="n">get_datasets_by_ids</span><span class="p">([</span><span class="s2">&quot;GSE35974&quot;</span><span class="p">,</span><span class="s2">&quot;GSE46416&quot;</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">api_response</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># view the object structure</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">api_response</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
-<span class="gp">... </span>            <span class="nb">print</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">short_name</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">accession</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">bio_assay_count</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">taxon</span><span class="p">)</span>
+<span class="gp">... </span>  <span class="nb">print</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">short_name</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">accession</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">bio_assay_count</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">taxon</span><span class="o">.</span><span class="n">common_name</span><span class="p">)</span>
 <span class="gp">...</span>
 <span class="go">GSE35974 Expression data from the human cerebellum brain 5939 GSE35974 144 human</span>
 <span class="go">GSE46416 State- and trait-specific gene expression in euthymia and mania 8997 GSE46416 32 human</span>
@@ -412,7 +415,7 @@ query.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">ofs</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">10</span><span class="p">]:</span>
 <span class="gp">... </span>    <span class="n">api_response</span><span class="o">=</span><span class="n">api_instance</span><span class="o">.</span><span class="n">get_platforms_by_ids</span><span class="p">([],</span><span class="n">offset</span><span class="o">=</span><span class="n">ofs</span><span class="p">,</span><span class="n">limit</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 <span class="gp">... </span>    <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">api_response</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
-<span class="gp">... </span>        <span class="nb">print</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">short_name</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">taxon</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="nb">print</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">short_name</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">taxon</span><span class="o">.</span><span class="n">common_name</span><span class="p">)</span>
 <span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;--&#39;</span><span class="p">)</span>
 <span class="gp">...</span>
 <span class="go">1 GPL96 human</span>
@@ -448,16 +451,16 @@ wish to query and send separate requests:</p>
 <span class="gp">... </span>        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> </span><span class="si">%-15s</span><span class="s1"> </span><span class="si">%-15s</span><span class="s1"> </span><span class="si">%-15s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">object_class</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">class_name</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">term_name</span><span class="p">))</span>
 <span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;--&#39;</span><span class="p">)</span>
 <span class="gp">...</span>
-<span class="go">GSE35974 FactorValue     disease         Bipolar Disorder</span>
 <span class="go">GSE35974 BioMaterial     biological sex  male</span>
-<span class="go">GSE35974 BioMaterial     biological sex  female</span>
 <span class="go">GSE35974 FactorValue     disease         schizophrenia</span>
-<span class="go">GSE35974 ExperimentTag   organism part   cerebellum</span>
+<span class="go">GSE35974 FactorValue     disease         Bipolar Disorder</span>
+<span class="go">GSE35974 BioMaterial     biological sex  female</span>
 <span class="go">GSE35974 FactorValue     disease         mental depression</span>
+<span class="go">GSE35974 ExperimentTag   organism part   cerebellum</span>
 <span class="go">--</span>
 <span class="go">GSE12649 BioMaterial     organism part   reference subject role</span>
-<span class="go">GSE12649 BioMaterial     disease         Bipolar Disorder</span>
 <span class="go">GSE12649 ExperimentTag   organism part   prefrontal cortex</span>
+<span class="go">GSE12649 BioMaterial     disease         Bipolar Disorder</span>
 <span class="go">GSE12649 BioMaterial     disease         schizophrenia</span>
 <span class="go">--</span>
 </pre></div>

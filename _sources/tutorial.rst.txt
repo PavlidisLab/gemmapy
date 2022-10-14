@@ -100,7 +100,7 @@ array(['reference_subject_role', 'euthymic_phase_|_Bipolar_Disorder_|',
 
 >>> # Subset patients during manic phase and controls
 >>> manic=adata[:,(adata.var['disease'] == 'reference_subject_role') |
-                      (adata.var['disease'] == 'bipolar_disorder_|_manic_phase_|')].copy()
+...               (adata.var['disease'] == 'bipolar_disorder_|_manic_phase_|')].copy()
 >>> print(manic)
 AnnData object with n_obs × n_vars = 21986 × 21
     obs: 'GeneSymbol', 'GeneName', 'NCBIid'
@@ -165,16 +165,18 @@ differentially-expressed genes:
 
 >>> import gemmapy
 >>> import pandas
+>>> import numpy as np
 >>> api_instance = gemmapy.GemmaPy()
 >>> de = api_instance.get_differential_expression_values('GSE46416', readableContrasts=True)
->>>
+>>> de = de[0]
+...
 >>> # Classify probes for plotting
 >>> de['diffexpr'] = 'No'   # add extra column
 >>> de.loc[(de['contrast_bipolar disorder, manic phase_logFoldChange'] > 1.0) &
 ...        (de['contrast_bipolar disorder, manic phase_pvalue'] < 0.05),'diffexpr'] = 'Up'
 >>> de.loc[(de['contrast_bipolar disorder, manic phase_logFoldChange'] < -1.0) &
 ...        (de['contrast_bipolar disorder, manic phase_pvalue'] < 0.05),'diffexpr'] = 'Down'
->>>
+...
 >>> # Upregulated probes
 >>> de_up = de[de['diffexpr']=='Up']
 >>> de_up = de_up[['Probe','GeneSymbol', 'contrast_bipolar disorder, manic phase_pvalue',
@@ -183,27 +185,27 @@ differentially-expressed genes:
 >>> with pandas.option_context('display.max_rows', None, 'display.max_columns', None):
 ...         print(de_up[:10])
          Probe GeneSymbol  contrast_bipolar disorder, manic phase_pvalue  \
-11705  2319550       RBP7                                       0.000179   
-13110  2548699     CYP1B1                                       0.000218   
-11825  3907190       SLPI                                       0.000625   
-18245  3629103      PCLAF                                       0.000961   
-18386  3545525      SLIRP                                       0.001044   
-3822   3146433      COX6C                                       0.001641   
-12209  2538349        NaN                                       0.002130   
-2873   2899102       H3C3                                       0.002146   
-735    3635198     BCL2A1                                       0.002975   
-11879  2633191      GPR15                                       0.003917   
+18835  2319550       RBP7                                       0.000086   
+4913   2548699     CYP1B1                                       0.000103   
+11877  3907190       SLPI                                       0.000333   
+6917   3629103      PCLAF                                       0.000518   
+6188   3545525      SLIRP                                       0.000565   
+2065   3146433      COX6C                                       0.000920   
+4839   2538349        NaN                                       0.001253   
+407    2899102       H3C3                                       0.001269   
+18009  3635198     BCL2A1                                       0.001800   
+18588  2633191      GPR15                                       0.002410   
        contrast_bipolar disorder, manic phase_logFoldChange  
-11705                                              1.074     
-13110                                              1.322     
-11825                                              1.056     
-18245                                              1.278     
-18386                                              1.349     
-3822                                               1.467     
-12209                                              1.073     
-2873                                               1.026     
-735                                                1.080     
-11879                                              1.205     
+18835                                              1.074     
+4913                                               1.322     
+11877                                              1.056     
+6917                                               1.278     
+6188                                               1.349     
+2065                                               1.467     
+4839                                               1.073     
+407                                                1.026     
+18009                                              1.080     
+18588                                              1.205     
 
 >>> # Downregulated probes
 >>> de_dn = de[de['diffexpr']=='Down']
@@ -212,33 +214,33 @@ differentially-expressed genes:
 >>>         'contrast_bipolar disorder, manic phase_pvalue')
 >>> with pandas.option_context('display.max_rows', None, 'display.max_columns', None):
 ...         print(de_dn[:10])
-         Probe  GeneSymbol  contrast_bipolar disorder, manic phase_pvalue  \
-11215  2775390         NaN                                       0.000006   
-15068  3760268         NaN                                       0.000031   
-20918  3124344         NaN                                       0.000278   
-4898   3673179         NaN                                       0.000313   
-18551  3245871       WDFY4                                       0.000337   
-2371   3022689    SND1-IT1                                       0.000448   
-2294   2679014         NaN                                       0.000574   
-15224  3336402       RBM14                                       0.000675   
-15362  4019758         NaN                                       0.000685   
-9709   3384417  ANKRD42-DT                                       0.000717   
+         Probe GeneSymbol  contrast_bipolar disorder, manic phase_pvalue  \
+18856  2775390        NaN                                       0.000002   
+5641   3760268        NaN                                       0.000012   
+18194  3124344        NaN                                       0.000139   
+1742   3673179        NaN                                       0.000158   
+10623  3245871      WDFY4                                       0.000168   
+15046  3022689   SND1-IT1                                       0.000227   
+9240   2679014        NaN                                       0.000298   
+499    4019758        NaN                                       0.000355   
+526    3336402      RBM14                                       0.000361   
+9901   2880955        NaN                                       0.000374   
        contrast_bipolar disorder, manic phase_logFoldChange  
-11215                                             -1.556     
-15068                                             -1.851     
-20918                                             -1.037     
-4898                                              -1.034     
-18551                                             -1.157     
-2371                                              -1.220     
-2294                                              -1.175     
-15224                                             -1.071     
-15362                                             -1.405     
-9709                                              -1.003     
+18856                                             -1.556     
+5641                                              -1.851     
+18194                                             -1.037     
+1742                                              -1.034     
+10623                                             -1.157     
+15046                                             -1.220     
+9240                                              -1.175     
+499                                               -1.405     
+526                                               -1.071     
+9901                                              -1.522     
 
 >>> # Add gene symbols as labels to DE genes
 >>> de['delabel'] = ''
 >>> de.loc[de['diffexpr']!='No','delabel'] = de.loc[de['diffexpr']!='No','GeneSymbol']
->>>
+...
 >>> # Volcano plot for bipolar patients vs controls
 >>> de['-log10(p-value)'] = -np.log10(de['contrast_bipolar disorder, manic phase_pvalue'])
 >>> import matplotlib.pyplot as plt
@@ -333,8 +335,9 @@ search gene work best with unambigious identifiers rather than symbols.
 >>> # lists genes in gemma matching the symbol or identifier
 >>> api_response = api_instance.get_genes(['Eno2'])
 >>> api_response.data[0] # view the object structure
->>> keys = ['official_symbol','ensembl_id','ncbi_id','official_name','taxon_common_name','taxon_id','taxon_scientific_name']
->>> for d in api_response.data: print("%s %-18s %6d %-30s %-10s %2i %s" % tuple(d.to_dict()[k] for k in keys))
+>>> for d in api_response.data: print("%s %-18s %6d %-30s %-10s %2i %s" %
+>>>   (d.official_symbol,d.ensembl_id,d.ncbi_id,d.official_name,
+>>>    d.taxon.common_name,d.taxon.id,d.taxon.scientific_name))
 ... 
 ENO2 ENSG00000111674      2026 enolase 2                      human       1 Homo sapiens
 Eno2 ENSMUSG00000004267  13807 enolase 2, gamma neuronal      mouse       2 Mus musculus
@@ -349,8 +352,8 @@ eno2 ENSDARG00000014287 402874 enolase 2                      zebrafish  12 Dani
 >>> # print only fields of interest
 >>> for d in probs.data[0:6]: 
 ...   print("%-10s %-12s %-20s %s %s %s %s" % 
-(d.name,d.array_design.short_name,d.array_design.name,d.array_design.taxon,
- d.array_design.taxon_id,d.array_design.technology_type,d.array_design.troubled))
+...  (d.name,d.array_design.short_name,d.array_design.name,d.array_design.taxon.common_name,
+...   d.array_design.taxon.id,d.array_design.technology_type,d.array_design.troubled))
 20016      GPL3093      LC-25                human 1 TWOCOLOR False
 20024      GPL3092      LC-19                human 1 TWOCOLOR False
 20024      lymphochip-2 Lymphochip 37k       human 1 TWOCOLOR False
@@ -371,7 +374,7 @@ same time.
 >>> api_response = api_instance.get_datasets_by_ids(["GSE35974","GSE46416"])
 >>> api_response.data[0]  # view the object structure
 >>> for d in api_response.data:
-...             print(d.short_name, d.name, d.id, d.accession, d.bio_assay_count, d.taxon)
+...   print(d.short_name, d.name, d.id, d.accession, d.bio_assay_count, d.taxon.common_name)
 ... 
 GSE35974 Expression data from the human cerebellum brain 5939 GSE35974 144 human
 GSE46416 State- and trait-specific gene expression in euthymia and mania 8997 GSE46416 32 human
@@ -386,7 +389,7 @@ query.
 >>> for ofs in [0,5,10]:
 ...     api_response=api_instance.get_platforms_by_ids([],offset=ofs,limit=5)
 ...     for d in api_response.data:
-...         print(d.id, d.short_name, d.taxon)
+...         print(d.id, d.short_name, d.taxon.common_name)
 ...     print('--')
 ... 
 1 GPL96 human
@@ -422,15 +425,15 @@ wish to query and send separate requests:
 ...         print('%s %-15s %-15s %-15s' % (dataset, d.object_class, d.class_name, d.term_name))
 ...     print('--')
 ... 
-GSE35974 FactorValue     disease         Bipolar Disorder
 GSE35974 BioMaterial     biological sex  male           
-GSE35974 BioMaterial     biological sex  female         
 GSE35974 FactorValue     disease         schizophrenia  
-GSE35974 ExperimentTag   organism part   cerebellum     
+GSE35974 FactorValue     disease         Bipolar Disorder
+GSE35974 BioMaterial     biological sex  female         
 GSE35974 FactorValue     disease         mental depression
+GSE35974 ExperimentTag   organism part   cerebellum     
 --
 GSE12649 BioMaterial     organism part   reference subject role
-GSE12649 BioMaterial     disease         Bipolar Disorder
 GSE12649 ExperimentTag   organism part   prefrontal cortex
+GSE12649 BioMaterial     disease         Bipolar Disorder
 GSE12649 BioMaterial     disease         schizophrenia  
 --
