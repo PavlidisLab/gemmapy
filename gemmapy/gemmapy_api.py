@@ -232,7 +232,7 @@ class GemmaPy(object):
         :param list[str] query: (required)
         :rtype: ResponseDataObjectListAnnotationSearchResultValueObject
         """
-        return self.api.search_annotations(query, **kwargs)
+        return self.api.search_annotations(query=query, **kwargs)
 
     def search_datasets(self, query, taxon, **kwargs):
         """Retrieve datasets within a given taxa associated to an annotation tags search
@@ -246,7 +246,7 @@ class GemmaPy(object):
           sign indicate ascending order whereas the '-' indicate descending.
         :rtype: PaginatedResponseDataObjectExpressionExperimentValueObject
         """
-        return self.api.search_taxon_datasets(taxon, query, **kwargs)
+        return self.api.search_taxon_datasets(taxon, query=query, **kwargs)
 
 # Below are "Convenience" (combination) functions
     def get_dataset_object(self, dataset, **kwargs):

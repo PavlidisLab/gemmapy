@@ -3,9 +3,9 @@
 """
     Gemma RESTful API
 
-    This website documents the usage of the [Gemma REST API](https://gemma.msl.ubc.ca/rest/v2/). Here you can find example script usage of the API, as well as graphical interface for each endpoint, with description of its parameters and the endpoint URL.  The documentation of the underlying java code can be found [here](https://gemma.msl.ubc.ca/resources/apidocs/ubic/gemma/web/services/rest/package-summary.html). See the [links section](https://gemma.msl.ubc.ca/resources/restapidocs/#footer) in the footer of this page for other relevant links.  Use of this webpage and Gemma web services, including the REST API, is subject to [these terms and conditions](https://pavlidislab.github.io/Gemma/terms.html). Please read these in full before continuing to use this webpage or any other part of the Gemma system.   # noqa: E501
+    This website documents the usage of the [Gemma RESTful API](https://gemma.msl.ubc.ca/rest/v2/). Here you can find example script usage of the API, as well as graphical interface for each endpoint, with description of its parameters and the endpoint URL.  Use of this webpage and the Gemma Web services, including the REST API, is subject to [these terms and conditions](https://pavlidislab.github.io/Gemma/terms.html). Please read these in full before continuing to use this webpage or any other part of the Gemma system.  Fix return type for `getResultSets` which was incorrectly referring to a renamed VO.  Remove the `security` requirements by default from the specification, which forced the Python package to supply empty credentials. There is currently no privileged endpoints, although some can return additional results.  ## Updates  ### Update 2.5.1  Restore `objectClass` visibility in `AnnotationValueObject`.  Fix incorrect response types for annotations search endpoints returning datasets.  ### Update 2.5.0  Major cleanups were performed in this release in order to stabilize the specification. Numerous properties from Gemma Web that were never intended to be exposed in Gemma REST have been hidden. It's a bit too much to describe in here, but you can navigate to the schemas section below to get a good glance at the models.  Favour `numberOfSomething` instead of `somethingCount` which is clearer. The older names are kept for backward-compatibility, but should be considered deprecated.  Gene aliases and multifunctionality rank are now filled in `GeneValueObject`.  Uniformly use `TaxonValueObject` to represent taxon. This is breaking change for the `ExpressionExperimentValueObject` and `ArrayDesignValueObject` as their `taxon` property will be an `object` instead of a `string`. Properties such as `taxonId` are now deprecated and `taxon.id` should be used instead.  Entities that have IDs now all inherit from `IdentifiableValueObject`. This implies that you can assume the presence of an `id` in a search result `resultObject` attribute for example.  New `/search` endpoint! for an unified search experience. Annotation-based search endpoints under `/annotations` are now deprecated.  New API docs! While not as nice looking, the previous theme will be gradually ported to Swagger UI as we focused on functionality over prettiness for this release.  ### Update 2.4.0 through 2.4.1  Release notes for the 2.4 series were not written down, so I'll try to do my best to recall features that were introduced at that time.  An [OpenAPI](https://www.openapis.org/) specification was introduced and available under `/rest/v2/openapi.json`, although not fully stabilized.  Add a `/resultSets` endpoint to navigate result sets directly, by ID or by dataset.  Add a `/resultSets/{resultSetId}` endpoint to retrieve a specific result set by its ID. This endpoint can be negotiated with an `Accept: text/tab-separated-values` header to obtain a TSV representation.  Add a `/datasets/{dataset}/analyses/differential/resultSets` endpoint that essentially redirect to a specific `/resultSet` endpoint by dataset ID.  Add an endpoint to retrieve preferred raw expression vectors.  ### Update 2.3.4  November 6th, 2018  November 6th [2.3.4] Bug fixes in the dataset search endpoint.  November 5th [2.3.3] Added filtering parameters to dataset search.  October 25th [2.3.2] Changed behavior of the dataset search endpoint to more closely match the Gemma web interface.  October 2nd [2.3.1] Added group information to the User value object.  September 27th [2.3.0] Breaking change in Taxa: Abbreviation property has been removed and is therefore no longer an accepted identifier.  ### Update 2.2.6  June 7th, 2018  Code maintenance, bug fixes. Geeq scores stable and made public.  June 7th [2.2.6] Added: User authentication endpoint.  May 2nd [2.2.5] Fixed: Cleaned up and optimized platforms/elements endpoint, removed redundant information (recursive properties nesting).  April 12th [2.2.3] Fixed: Array arguments not handling non-string properties properly, e.g. `ncbiIds` of genes.  April 9th [2.2.1] Fixed: Filter argument not working when the filtered field was a primitive type. This most significantly allows filtering by geeq boolean and double properties.  ### Update 2.2.0  February 8th, 2018  Breaking change in the 'Dataset differential analysis' endpoint: - No longer using `qValueThreshold` parameter. - Response format changed, now using `DifferentialExpressionAnalysisValueObject` instead of `DifferentialExpressionValueObject` - [Experimental] Added Geeq (Gene Expression Experiment Quality) scores to the dataset value objects   # noqa: E501
 
-    OpenAPI spec version: 2.4.1
+    OpenAPI spec version: 2.5.1
     Contact: pavlab-support@msl.ubc.ca
     Generated by: https://github.com/swagger-api/swagger-codegen.git
 """
@@ -29,84 +29,39 @@ class CharacteristicValueObject(object):
     """
     swagger_types = {
         'id': 'int',
-        'url_id': 'str',
-        'already_present_in_database': 'bool',
-        'already_present_on_gene': 'bool',
         'category': 'str',
         'category_uri': 'str',
-        'child': 'bool',
-        'num_times_used': 'int',
         'ontology_used': 'str',
-        'private_gene_count': 'int',
-        'public_gene_count': 'int',
-        'root': 'bool',
-        'taxon': 'str',
         'value': 'str',
         'value_uri': 'str'
     }
 
     attribute_map = {
         'id': 'id',
-        'url_id': 'urlId',
-        'already_present_in_database': 'alreadyPresentInDatabase',
-        'already_present_on_gene': 'alreadyPresentOnGene',
         'category': 'category',
         'category_uri': 'categoryUri',
-        'child': 'child',
-        'num_times_used': 'numTimesUsed',
         'ontology_used': 'ontologyUsed',
-        'private_gene_count': 'privateGeneCount',
-        'public_gene_count': 'publicGeneCount',
-        'root': 'root',
-        'taxon': 'taxon',
         'value': 'value',
         'value_uri': 'valueUri'
     }
 
-    def __init__(self, id=None, url_id=None, already_present_in_database=None, already_present_on_gene=None, category=None, category_uri=None, child=None, num_times_used=None, ontology_used=None, private_gene_count=None, public_gene_count=None, root=None, taxon=None, value=None, value_uri=None):  # noqa: E501
+    def __init__(self, id=None, category=None, category_uri=None, ontology_used=None, value=None, value_uri=None):  # noqa: E501
         """CharacteristicValueObject - a model defined in Swagger"""  # noqa: E501
         self._id = None
-        self._url_id = None
-        self._already_present_in_database = None
-        self._already_present_on_gene = None
         self._category = None
         self._category_uri = None
-        self._child = None
-        self._num_times_used = None
         self._ontology_used = None
-        self._private_gene_count = None
-        self._public_gene_count = None
-        self._root = None
-        self._taxon = None
         self._value = None
         self._value_uri = None
         self.discriminator = None
         if id is not None:
             self.id = id
-        if url_id is not None:
-            self.url_id = url_id
-        if already_present_in_database is not None:
-            self.already_present_in_database = already_present_in_database
-        if already_present_on_gene is not None:
-            self.already_present_on_gene = already_present_on_gene
         if category is not None:
             self.category = category
         if category_uri is not None:
             self.category_uri = category_uri
-        if child is not None:
-            self.child = child
-        if num_times_used is not None:
-            self.num_times_used = num_times_used
         if ontology_used is not None:
             self.ontology_used = ontology_used
-        if private_gene_count is not None:
-            self.private_gene_count = private_gene_count
-        if public_gene_count is not None:
-            self.public_gene_count = public_gene_count
-        if root is not None:
-            self.root = root
-        if taxon is not None:
-            self.taxon = taxon
         if value is not None:
             self.value = value
         if value_uri is not None:
@@ -132,69 +87,6 @@ class CharacteristicValueObject(object):
         """
 
         self._id = id
-
-    @property
-    def url_id(self):
-        """Gets the url_id of this CharacteristicValueObject.  # noqa: E501
-
-
-        :return: The url_id of this CharacteristicValueObject.  # noqa: E501
-        :rtype: str
-        """
-        return self._url_id
-
-    @url_id.setter
-    def url_id(self, url_id):
-        """Sets the url_id of this CharacteristicValueObject.
-
-
-        :param url_id: The url_id of this CharacteristicValueObject.  # noqa: E501
-        :type: str
-        """
-
-        self._url_id = url_id
-
-    @property
-    def already_present_in_database(self):
-        """Gets the already_present_in_database of this CharacteristicValueObject.  # noqa: E501
-
-
-        :return: The already_present_in_database of this CharacteristicValueObject.  # noqa: E501
-        :rtype: bool
-        """
-        return self._already_present_in_database
-
-    @already_present_in_database.setter
-    def already_present_in_database(self, already_present_in_database):
-        """Sets the already_present_in_database of this CharacteristicValueObject.
-
-
-        :param already_present_in_database: The already_present_in_database of this CharacteristicValueObject.  # noqa: E501
-        :type: bool
-        """
-
-        self._already_present_in_database = already_present_in_database
-
-    @property
-    def already_present_on_gene(self):
-        """Gets the already_present_on_gene of this CharacteristicValueObject.  # noqa: E501
-
-
-        :return: The already_present_on_gene of this CharacteristicValueObject.  # noqa: E501
-        :rtype: bool
-        """
-        return self._already_present_on_gene
-
-    @already_present_on_gene.setter
-    def already_present_on_gene(self, already_present_on_gene):
-        """Sets the already_present_on_gene of this CharacteristicValueObject.
-
-
-        :param already_present_on_gene: The already_present_on_gene of this CharacteristicValueObject.  # noqa: E501
-        :type: bool
-        """
-
-        self._already_present_on_gene = already_present_on_gene
 
     @property
     def category(self):
@@ -239,48 +131,6 @@ class CharacteristicValueObject(object):
         self._category_uri = category_uri
 
     @property
-    def child(self):
-        """Gets the child of this CharacteristicValueObject.  # noqa: E501
-
-
-        :return: The child of this CharacteristicValueObject.  # noqa: E501
-        :rtype: bool
-        """
-        return self._child
-
-    @child.setter
-    def child(self, child):
-        """Sets the child of this CharacteristicValueObject.
-
-
-        :param child: The child of this CharacteristicValueObject.  # noqa: E501
-        :type: bool
-        """
-
-        self._child = child
-
-    @property
-    def num_times_used(self):
-        """Gets the num_times_used of this CharacteristicValueObject.  # noqa: E501
-
-
-        :return: The num_times_used of this CharacteristicValueObject.  # noqa: E501
-        :rtype: int
-        """
-        return self._num_times_used
-
-    @num_times_used.setter
-    def num_times_used(self, num_times_used):
-        """Sets the num_times_used of this CharacteristicValueObject.
-
-
-        :param num_times_used: The num_times_used of this CharacteristicValueObject.  # noqa: E501
-        :type: int
-        """
-
-        self._num_times_used = num_times_used
-
-    @property
     def ontology_used(self):
         """Gets the ontology_used of this CharacteristicValueObject.  # noqa: E501
 
@@ -300,90 +150,6 @@ class CharacteristicValueObject(object):
         """
 
         self._ontology_used = ontology_used
-
-    @property
-    def private_gene_count(self):
-        """Gets the private_gene_count of this CharacteristicValueObject.  # noqa: E501
-
-
-        :return: The private_gene_count of this CharacteristicValueObject.  # noqa: E501
-        :rtype: int
-        """
-        return self._private_gene_count
-
-    @private_gene_count.setter
-    def private_gene_count(self, private_gene_count):
-        """Sets the private_gene_count of this CharacteristicValueObject.
-
-
-        :param private_gene_count: The private_gene_count of this CharacteristicValueObject.  # noqa: E501
-        :type: int
-        """
-
-        self._private_gene_count = private_gene_count
-
-    @property
-    def public_gene_count(self):
-        """Gets the public_gene_count of this CharacteristicValueObject.  # noqa: E501
-
-
-        :return: The public_gene_count of this CharacteristicValueObject.  # noqa: E501
-        :rtype: int
-        """
-        return self._public_gene_count
-
-    @public_gene_count.setter
-    def public_gene_count(self, public_gene_count):
-        """Sets the public_gene_count of this CharacteristicValueObject.
-
-
-        :param public_gene_count: The public_gene_count of this CharacteristicValueObject.  # noqa: E501
-        :type: int
-        """
-
-        self._public_gene_count = public_gene_count
-
-    @property
-    def root(self):
-        """Gets the root of this CharacteristicValueObject.  # noqa: E501
-
-
-        :return: The root of this CharacteristicValueObject.  # noqa: E501
-        :rtype: bool
-        """
-        return self._root
-
-    @root.setter
-    def root(self, root):
-        """Sets the root of this CharacteristicValueObject.
-
-
-        :param root: The root of this CharacteristicValueObject.  # noqa: E501
-        :type: bool
-        """
-
-        self._root = root
-
-    @property
-    def taxon(self):
-        """Gets the taxon of this CharacteristicValueObject.  # noqa: E501
-
-
-        :return: The taxon of this CharacteristicValueObject.  # noqa: E501
-        :rtype: str
-        """
-        return self._taxon
-
-    @taxon.setter
-    def taxon(self, taxon):
-        """Sets the taxon of this CharacteristicValueObject.
-
-
-        :param taxon: The taxon of this CharacteristicValueObject.  # noqa: E501
-        :type: str
-        """
-
-        self._taxon = taxon
 
     @property
     def value(self):

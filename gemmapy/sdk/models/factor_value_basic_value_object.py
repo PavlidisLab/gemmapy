@@ -3,9 +3,9 @@
 """
     Gemma RESTful API
 
-    This website documents the usage of the [Gemma REST API](https://gemma.msl.ubc.ca/rest/v2/). Here you can find example script usage of the API, as well as graphical interface for each endpoint, with description of its parameters and the endpoint URL.  The documentation of the underlying java code can be found [here](https://gemma.msl.ubc.ca/resources/apidocs/ubic/gemma/web/services/rest/package-summary.html). See the [links section](https://gemma.msl.ubc.ca/resources/restapidocs/#footer) in the footer of this page for other relevant links.  Use of this webpage and Gemma web services, including the REST API, is subject to [these terms and conditions](https://pavlidislab.github.io/Gemma/terms.html). Please read these in full before continuing to use this webpage or any other part of the Gemma system.   # noqa: E501
+    This website documents the usage of the [Gemma RESTful API](https://gemma.msl.ubc.ca/rest/v2/). Here you can find example script usage of the API, as well as graphical interface for each endpoint, with description of its parameters and the endpoint URL.  Use of this webpage and the Gemma Web services, including the REST API, is subject to [these terms and conditions](https://pavlidislab.github.io/Gemma/terms.html). Please read these in full before continuing to use this webpage or any other part of the Gemma system.  Fix return type for `getResultSets` which was incorrectly referring to a renamed VO.  Remove the `security` requirements by default from the specification, which forced the Python package to supply empty credentials. There is currently no privileged endpoints, although some can return additional results.  ## Updates  ### Update 2.5.1  Restore `objectClass` visibility in `AnnotationValueObject`.  Fix incorrect response types for annotations search endpoints returning datasets.  ### Update 2.5.0  Major cleanups were performed in this release in order to stabilize the specification. Numerous properties from Gemma Web that were never intended to be exposed in Gemma REST have been hidden. It's a bit too much to describe in here, but you can navigate to the schemas section below to get a good glance at the models.  Favour `numberOfSomething` instead of `somethingCount` which is clearer. The older names are kept for backward-compatibility, but should be considered deprecated.  Gene aliases and multifunctionality rank are now filled in `GeneValueObject`.  Uniformly use `TaxonValueObject` to represent taxon. This is breaking change for the `ExpressionExperimentValueObject` and `ArrayDesignValueObject` as their `taxon` property will be an `object` instead of a `string`. Properties such as `taxonId` are now deprecated and `taxon.id` should be used instead.  Entities that have IDs now all inherit from `IdentifiableValueObject`. This implies that you can assume the presence of an `id` in a search result `resultObject` attribute for example.  New `/search` endpoint! for an unified search experience. Annotation-based search endpoints under `/annotations` are now deprecated.  New API docs! While not as nice looking, the previous theme will be gradually ported to Swagger UI as we focused on functionality over prettiness for this release.  ### Update 2.4.0 through 2.4.1  Release notes for the 2.4 series were not written down, so I'll try to do my best to recall features that were introduced at that time.  An [OpenAPI](https://www.openapis.org/) specification was introduced and available under `/rest/v2/openapi.json`, although not fully stabilized.  Add a `/resultSets` endpoint to navigate result sets directly, by ID or by dataset.  Add a `/resultSets/{resultSetId}` endpoint to retrieve a specific result set by its ID. This endpoint can be negotiated with an `Accept: text/tab-separated-values` header to obtain a TSV representation.  Add a `/datasets/{dataset}/analyses/differential/resultSets` endpoint that essentially redirect to a specific `/resultSet` endpoint by dataset ID.  Add an endpoint to retrieve preferred raw expression vectors.  ### Update 2.3.4  November 6th, 2018  November 6th [2.3.4] Bug fixes in the dataset search endpoint.  November 5th [2.3.3] Added filtering parameters to dataset search.  October 25th [2.3.2] Changed behavior of the dataset search endpoint to more closely match the Gemma web interface.  October 2nd [2.3.1] Added group information to the User value object.  September 27th [2.3.0] Breaking change in Taxa: Abbreviation property has been removed and is therefore no longer an accepted identifier.  ### Update 2.2.6  June 7th, 2018  Code maintenance, bug fixes. Geeq scores stable and made public.  June 7th [2.2.6] Added: User authentication endpoint.  May 2nd [2.2.5] Fixed: Cleaned up and optimized platforms/elements endpoint, removed redundant information (recursive properties nesting).  April 12th [2.2.3] Fixed: Array arguments not handling non-string properties properly, e.g. `ncbiIds` of genes.  April 9th [2.2.1] Fixed: Filter argument not working when the filtered field was a primitive type. This most significantly allows filtering by geeq boolean and double properties.  ### Update 2.2.0  February 8th, 2018  Breaking change in the 'Dataset differential analysis' endpoint: - No longer using `qValueThreshold` parameter. - Response format changed, now using `DifferentialExpressionAnalysisValueObject` instead of `DifferentialExpressionValueObject` - [Experimental] Added Geeq (Gene Expression Experiment Quality) scores to the dataset value objects   # noqa: E501
 
-    OpenAPI spec version: 2.4.1
+    OpenAPI spec version: 2.5.1
     Contact: pavlab-support@msl.ubc.ca
     Generated by: https://github.com/swagger-api/swagger-codegen.git
 """
@@ -32,10 +32,10 @@ class FactorValueBasicValueObject(object):
         'characteristics': 'list[CharacteristicBasicValueObject]',
         'experimental_factor_category': 'CharacteristicBasicValueObject',
         'measurement': 'MeasurementValueObject',
-        'fv_value': 'str',
-        'fv_summary': 'str',
+        'value': 'str',
+        'summary': 'str',
         'experimental_factor_id': 'int',
-        'baseline': 'bool'
+        'is_baseline': 'bool'
     }
 
     attribute_map = {
@@ -43,22 +43,22 @@ class FactorValueBasicValueObject(object):
         'characteristics': 'characteristics',
         'experimental_factor_category': 'experimentalFactorCategory',
         'measurement': 'measurement',
-        'fv_value': 'fvValue',
-        'fv_summary': 'fvSummary',
+        'value': 'value',
+        'summary': 'summary',
         'experimental_factor_id': 'experimentalFactorId',
-        'baseline': 'baseline'
+        'is_baseline': 'isBaseline'
     }
 
-    def __init__(self, id=None, characteristics=None, experimental_factor_category=None, measurement=None, fv_value=None, fv_summary=None, experimental_factor_id=None, baseline=None):  # noqa: E501
+    def __init__(self, id=None, characteristics=None, experimental_factor_category=None, measurement=None, value=None, summary=None, experimental_factor_id=None, is_baseline=None):  # noqa: E501
         """FactorValueBasicValueObject - a model defined in Swagger"""  # noqa: E501
         self._id = None
         self._characteristics = None
         self._experimental_factor_category = None
         self._measurement = None
-        self._fv_value = None
-        self._fv_summary = None
+        self._value = None
+        self._summary = None
         self._experimental_factor_id = None
-        self._baseline = None
+        self._is_baseline = None
         self.discriminator = None
         if id is not None:
             self.id = id
@@ -68,14 +68,14 @@ class FactorValueBasicValueObject(object):
             self.experimental_factor_category = experimental_factor_category
         if measurement is not None:
             self.measurement = measurement
-        if fv_value is not None:
-            self.fv_value = fv_value
-        if fv_summary is not None:
-            self.fv_summary = fv_summary
+        if value is not None:
+            self.value = value
+        if summary is not None:
+            self.summary = summary
         if experimental_factor_id is not None:
             self.experimental_factor_id = experimental_factor_id
-        if baseline is not None:
-            self.baseline = baseline
+        if is_baseline is not None:
+            self.is_baseline = is_baseline
 
     @property
     def id(self):
@@ -162,46 +162,46 @@ class FactorValueBasicValueObject(object):
         self._measurement = measurement
 
     @property
-    def fv_value(self):
-        """Gets the fv_value of this FactorValueBasicValueObject.  # noqa: E501
+    def value(self):
+        """Gets the value of this FactorValueBasicValueObject.  # noqa: E501
 
 
-        :return: The fv_value of this FactorValueBasicValueObject.  # noqa: E501
+        :return: The value of this FactorValueBasicValueObject.  # noqa: E501
         :rtype: str
         """
-        return self._fv_value
+        return self._value
 
-    @fv_value.setter
-    def fv_value(self, fv_value):
-        """Sets the fv_value of this FactorValueBasicValueObject.
+    @value.setter
+    def value(self, value):
+        """Sets the value of this FactorValueBasicValueObject.
 
 
-        :param fv_value: The fv_value of this FactorValueBasicValueObject.  # noqa: E501
+        :param value: The value of this FactorValueBasicValueObject.  # noqa: E501
         :type: str
         """
 
-        self._fv_value = fv_value
+        self._value = value
 
     @property
-    def fv_summary(self):
-        """Gets the fv_summary of this FactorValueBasicValueObject.  # noqa: E501
+    def summary(self):
+        """Gets the summary of this FactorValueBasicValueObject.  # noqa: E501
 
 
-        :return: The fv_summary of this FactorValueBasicValueObject.  # noqa: E501
+        :return: The summary of this FactorValueBasicValueObject.  # noqa: E501
         :rtype: str
         """
-        return self._fv_summary
+        return self._summary
 
-    @fv_summary.setter
-    def fv_summary(self, fv_summary):
-        """Sets the fv_summary of this FactorValueBasicValueObject.
+    @summary.setter
+    def summary(self, summary):
+        """Sets the summary of this FactorValueBasicValueObject.
 
 
-        :param fv_summary: The fv_summary of this FactorValueBasicValueObject.  # noqa: E501
+        :param summary: The summary of this FactorValueBasicValueObject.  # noqa: E501
         :type: str
         """
 
-        self._fv_summary = fv_summary
+        self._summary = summary
 
     @property
     def experimental_factor_id(self):
@@ -225,25 +225,25 @@ class FactorValueBasicValueObject(object):
         self._experimental_factor_id = experimental_factor_id
 
     @property
-    def baseline(self):
-        """Gets the baseline of this FactorValueBasicValueObject.  # noqa: E501
+    def is_baseline(self):
+        """Gets the is_baseline of this FactorValueBasicValueObject.  # noqa: E501
 
 
-        :return: The baseline of this FactorValueBasicValueObject.  # noqa: E501
+        :return: The is_baseline of this FactorValueBasicValueObject.  # noqa: E501
         :rtype: bool
         """
-        return self._baseline
+        return self._is_baseline
 
-    @baseline.setter
-    def baseline(self, baseline):
-        """Sets the baseline of this FactorValueBasicValueObject.
+    @is_baseline.setter
+    def is_baseline(self, is_baseline):
+        """Sets the is_baseline of this FactorValueBasicValueObject.
 
 
-        :param baseline: The baseline of this FactorValueBasicValueObject.  # noqa: E501
+        :param is_baseline: The is_baseline of this FactorValueBasicValueObject.  # noqa: E501
         :type: bool
         """
 
-        self._baseline = baseline
+        self._is_baseline = is_baseline
 
     def to_dict(self):
         """Returns the model properties as a dict"""

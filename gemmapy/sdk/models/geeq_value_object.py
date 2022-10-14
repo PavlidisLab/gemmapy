@@ -3,9 +3,9 @@
 """
     Gemma RESTful API
 
-    This website documents the usage of the [Gemma REST API](https://gemma.msl.ubc.ca/rest/v2/). Here you can find example script usage of the API, as well as graphical interface for each endpoint, with description of its parameters and the endpoint URL.  The documentation of the underlying java code can be found [here](https://gemma.msl.ubc.ca/resources/apidocs/ubic/gemma/web/services/rest/package-summary.html). See the [links section](https://gemma.msl.ubc.ca/resources/restapidocs/#footer) in the footer of this page for other relevant links.  Use of this webpage and Gemma web services, including the REST API, is subject to [these terms and conditions](https://pavlidislab.github.io/Gemma/terms.html). Please read these in full before continuing to use this webpage or any other part of the Gemma system.   # noqa: E501
+    This website documents the usage of the [Gemma RESTful API](https://gemma.msl.ubc.ca/rest/v2/). Here you can find example script usage of the API, as well as graphical interface for each endpoint, with description of its parameters and the endpoint URL.  Use of this webpage and the Gemma Web services, including the REST API, is subject to [these terms and conditions](https://pavlidislab.github.io/Gemma/terms.html). Please read these in full before continuing to use this webpage or any other part of the Gemma system.  Fix return type for `getResultSets` which was incorrectly referring to a renamed VO.  Remove the `security` requirements by default from the specification, which forced the Python package to supply empty credentials. There is currently no privileged endpoints, although some can return additional results.  ## Updates  ### Update 2.5.1  Restore `objectClass` visibility in `AnnotationValueObject`.  Fix incorrect response types for annotations search endpoints returning datasets.  ### Update 2.5.0  Major cleanups were performed in this release in order to stabilize the specification. Numerous properties from Gemma Web that were never intended to be exposed in Gemma REST have been hidden. It's a bit too much to describe in here, but you can navigate to the schemas section below to get a good glance at the models.  Favour `numberOfSomething` instead of `somethingCount` which is clearer. The older names are kept for backward-compatibility, but should be considered deprecated.  Gene aliases and multifunctionality rank are now filled in `GeneValueObject`.  Uniformly use `TaxonValueObject` to represent taxon. This is breaking change for the `ExpressionExperimentValueObject` and `ArrayDesignValueObject` as their `taxon` property will be an `object` instead of a `string`. Properties such as `taxonId` are now deprecated and `taxon.id` should be used instead.  Entities that have IDs now all inherit from `IdentifiableValueObject`. This implies that you can assume the presence of an `id` in a search result `resultObject` attribute for example.  New `/search` endpoint! for an unified search experience. Annotation-based search endpoints under `/annotations` are now deprecated.  New API docs! While not as nice looking, the previous theme will be gradually ported to Swagger UI as we focused on functionality over prettiness for this release.  ### Update 2.4.0 through 2.4.1  Release notes for the 2.4 series were not written down, so I'll try to do my best to recall features that were introduced at that time.  An [OpenAPI](https://www.openapis.org/) specification was introduced and available under `/rest/v2/openapi.json`, although not fully stabilized.  Add a `/resultSets` endpoint to navigate result sets directly, by ID or by dataset.  Add a `/resultSets/{resultSetId}` endpoint to retrieve a specific result set by its ID. This endpoint can be negotiated with an `Accept: text/tab-separated-values` header to obtain a TSV representation.  Add a `/datasets/{dataset}/analyses/differential/resultSets` endpoint that essentially redirect to a specific `/resultSet` endpoint by dataset ID.  Add an endpoint to retrieve preferred raw expression vectors.  ### Update 2.3.4  November 6th, 2018  November 6th [2.3.4] Bug fixes in the dataset search endpoint.  November 5th [2.3.3] Added filtering parameters to dataset search.  October 25th [2.3.2] Changed behavior of the dataset search endpoint to more closely match the Gemma web interface.  October 2nd [2.3.1] Added group information to the User value object.  September 27th [2.3.0] Breaking change in Taxa: Abbreviation property has been removed and is therefore no longer an accepted identifier.  ### Update 2.2.6  June 7th, 2018  Code maintenance, bug fixes. Geeq scores stable and made public.  June 7th [2.2.6] Added: User authentication endpoint.  May 2nd [2.2.5] Fixed: Cleaned up and optimized platforms/elements endpoint, removed redundant information (recursive properties nesting).  April 12th [2.2.3] Fixed: Array arguments not handling non-string properties properly, e.g. `ncbiIds` of genes.  April 9th [2.2.1] Fixed: Filter argument not working when the filtered field was a primitive type. This most significantly allows filtering by geeq boolean and double properties.  ### Update 2.2.0  February 8th, 2018  Breaking change in the 'Dataset differential analysis' endpoint: - No longer using `qValueThreshold` parameter. - Response format changed, now using `DifferentialExpressionAnalysisValueObject` instead of `DifferentialExpressionValueObject` - [Experimental] Added Geeq (Gene Expression Experiment Quality) scores to the dataset value objects   # noqa: E501
 
-    OpenAPI spec version: 2.4.1
+    OpenAPI spec version: 2.5.1
     Contact: pavlab-support@msl.ubc.ca
     Generated by: https://github.com/swagger-api/swagger-codegen.git
 """
@@ -31,82 +31,82 @@ class GeeqValueObject(object):
         'id': 'int',
         'public_quality_score': 'float',
         'public_suitability_score': 'float',
-        'gets_score_publication': 'float',
-        'gets_score_platform_amount': 'float',
-        'gets_score_platforms_tech_multi': 'float',
-        'gets_score_avg_platform_popularity': 'float',
-        'gets_score_avg_platform_size': 'float',
-        'gets_score_sample_size': 'float',
-        'gets_score_raw_data': 'float',
-        'gets_score_missing_values': 'float',
-        'getq_score_outliers': 'float',
-        'getq_score_sample_mean_correlation': 'float',
-        'getq_score_sample_median_correlation': 'float',
-        'getq_score_sample_correlation_variance': 'float',
-        'getq_score_platforms_tech': 'float',
-        'getq_score_replicates': 'float',
-        'getq_score_batch_info': 'float',
-        'getq_score_public_batch_effect': 'float',
-        'getq_score_public_batch_confound': 'float',
         'no_vectors': 'bool',
         'corr_mat_issues': 'str',
         'replicates_issues': 'str',
-        'batch_corrected': 'bool'
+        'batch_corrected': 'bool',
+        's_score_publication': 'float',
+        's_score_platform_amount': 'float',
+        's_score_platform_tech_multi': 'float',
+        's_score_avg_platform_popularity': 'float',
+        's_score_avg_platform_size': 'float',
+        's_score_sample_size': 'float',
+        's_score_raw_data': 'float',
+        's_score_missing_values': 'float',
+        'q_score_outliers': 'float',
+        'q_score_sample_mean_correlation': 'float',
+        'q_score_sample_median_correlation': 'float',
+        'q_score_sample_correlation_variance': 'float',
+        'q_score_platforms_tech': 'float',
+        'q_score_replicates': 'float',
+        'q_score_batch_info': 'float',
+        'q_score_public_batch_effect': 'float',
+        'q_score_public_batch_confound': 'float'
     }
 
     attribute_map = {
         'id': 'id',
         'public_quality_score': 'publicQualityScore',
         'public_suitability_score': 'publicSuitabilityScore',
-        'gets_score_publication': 'getsScorePublication',
-        'gets_score_platform_amount': 'getsScorePlatformAmount',
-        'gets_score_platforms_tech_multi': 'getsScorePlatformsTechMulti',
-        'gets_score_avg_platform_popularity': 'getsScoreAvgPlatformPopularity',
-        'gets_score_avg_platform_size': 'getsScoreAvgPlatformSize',
-        'gets_score_sample_size': 'getsScoreSampleSize',
-        'gets_score_raw_data': 'getsScoreRawData',
-        'gets_score_missing_values': 'getsScoreMissingValues',
-        'getq_score_outliers': 'getqScoreOutliers',
-        'getq_score_sample_mean_correlation': 'getqScoreSampleMeanCorrelation',
-        'getq_score_sample_median_correlation': 'getqScoreSampleMedianCorrelation',
-        'getq_score_sample_correlation_variance': 'getqScoreSampleCorrelationVariance',
-        'getq_score_platforms_tech': 'getqScorePlatformsTech',
-        'getq_score_replicates': 'getqScoreReplicates',
-        'getq_score_batch_info': 'getqScoreBatchInfo',
-        'getq_score_public_batch_effect': 'getqScorePublicBatchEffect',
-        'getq_score_public_batch_confound': 'getqScorePublicBatchConfound',
         'no_vectors': 'noVectors',
         'corr_mat_issues': 'corrMatIssues',
         'replicates_issues': 'replicatesIssues',
-        'batch_corrected': 'batchCorrected'
+        'batch_corrected': 'batchCorrected',
+        's_score_publication': 'sScorePublication',
+        's_score_platform_amount': 'sScorePlatformAmount',
+        's_score_platform_tech_multi': 'sScorePlatformTechMulti',
+        's_score_avg_platform_popularity': 'sScoreAvgPlatformPopularity',
+        's_score_avg_platform_size': 'sScoreAvgPlatformSize',
+        's_score_sample_size': 'sScoreSampleSize',
+        's_score_raw_data': 'sScoreRawData',
+        's_score_missing_values': 'sScoreMissingValues',
+        'q_score_outliers': 'qScoreOutliers',
+        'q_score_sample_mean_correlation': 'qScoreSampleMeanCorrelation',
+        'q_score_sample_median_correlation': 'qScoreSampleMedianCorrelation',
+        'q_score_sample_correlation_variance': 'qScoreSampleCorrelationVariance',
+        'q_score_platforms_tech': 'qScorePlatformsTech',
+        'q_score_replicates': 'qScoreReplicates',
+        'q_score_batch_info': 'qScoreBatchInfo',
+        'q_score_public_batch_effect': 'qScorePublicBatchEffect',
+        'q_score_public_batch_confound': 'qScorePublicBatchConfound'
     }
 
-    def __init__(self, id=None, public_quality_score=None, public_suitability_score=None, gets_score_publication=None, gets_score_platform_amount=None, gets_score_platforms_tech_multi=None, gets_score_avg_platform_popularity=None, gets_score_avg_platform_size=None, gets_score_sample_size=None, gets_score_raw_data=None, gets_score_missing_values=None, getq_score_outliers=None, getq_score_sample_mean_correlation=None, getq_score_sample_median_correlation=None, getq_score_sample_correlation_variance=None, getq_score_platforms_tech=None, getq_score_replicates=None, getq_score_batch_info=None, getq_score_public_batch_effect=None, getq_score_public_batch_confound=None, no_vectors=None, corr_mat_issues=None, replicates_issues=None, batch_corrected=None):  # noqa: E501
+    def __init__(self, id=None, public_quality_score=None, public_suitability_score=None, no_vectors=None, corr_mat_issues=None, replicates_issues=None, batch_corrected=None, s_score_publication=None, s_score_platform_amount=None, s_score_platform_tech_multi=None, s_score_avg_platform_popularity=None, s_score_avg_platform_size=None, s_score_sample_size=None, s_score_raw_data=None, s_score_missing_values=None, q_score_outliers=None, q_score_sample_mean_correlation=None, q_score_sample_median_correlation=None, q_score_sample_correlation_variance=None, q_score_platforms_tech=None, q_score_replicates=None, q_score_batch_info=None, q_score_public_batch_effect=None, q_score_public_batch_confound=None):  # noqa: E501
         """GeeqValueObject - a model defined in Swagger"""  # noqa: E501
         self._id = None
         self._public_quality_score = None
         self._public_suitability_score = None
-        self._gets_score_publication = None
-        self._gets_score_platform_amount = None
-        self._gets_score_platforms_tech_multi = None
-        self._gets_score_avg_platform_popularity = None
-        self._gets_score_avg_platform_size = None
-        self._gets_score_sample_size = None
-        self._gets_score_raw_data = None
-        self._gets_score_missing_values = None
-        self._getq_score_outliers = None
-        self._getq_score_sample_mean_correlation = None
-        self._getq_score_sample_median_correlation = None
-        self._getq_score_sample_correlation_variance = None
-        self._getq_score_platforms_tech = None
-        self._getq_score_replicates = None
-        self._getq_score_batch_info = None
-        self._getq_score_public_batch_effect = None
-        self._getq_score_public_batch_confound = None
         self._no_vectors = None
         self._corr_mat_issues = None
         self._replicates_issues = None
         self._batch_corrected = None
+        self._s_score_publication = None
+        self._s_score_platform_amount = None
+        self._s_score_platform_tech_multi = None
+        self._s_score_avg_platform_popularity = None
+        self._s_score_avg_platform_size = None
+        self._s_score_sample_size = None
+        self._s_score_raw_data = None
+        self._s_score_missing_values = None
+        self._q_score_outliers = None
+        self._q_score_sample_mean_correlation = None
+        self._q_score_sample_median_correlation = None
+        self._q_score_sample_correlation_variance = None
+        self._q_score_platforms_tech = None
+        self._q_score_replicates = None
+        self._q_score_batch_info = None
+        self._q_score_public_batch_effect = None
+        self._q_score_public_batch_confound = None
         self.discriminator = None
         if id is not None:
             self.id = id
@@ -114,40 +114,6 @@ class GeeqValueObject(object):
             self.public_quality_score = public_quality_score
         if public_suitability_score is not None:
             self.public_suitability_score = public_suitability_score
-        if gets_score_publication is not None:
-            self.gets_score_publication = gets_score_publication
-        if gets_score_platform_amount is not None:
-            self.gets_score_platform_amount = gets_score_platform_amount
-        if gets_score_platforms_tech_multi is not None:
-            self.gets_score_platforms_tech_multi = gets_score_platforms_tech_multi
-        if gets_score_avg_platform_popularity is not None:
-            self.gets_score_avg_platform_popularity = gets_score_avg_platform_popularity
-        if gets_score_avg_platform_size is not None:
-            self.gets_score_avg_platform_size = gets_score_avg_platform_size
-        if gets_score_sample_size is not None:
-            self.gets_score_sample_size = gets_score_sample_size
-        if gets_score_raw_data is not None:
-            self.gets_score_raw_data = gets_score_raw_data
-        if gets_score_missing_values is not None:
-            self.gets_score_missing_values = gets_score_missing_values
-        if getq_score_outliers is not None:
-            self.getq_score_outliers = getq_score_outliers
-        if getq_score_sample_mean_correlation is not None:
-            self.getq_score_sample_mean_correlation = getq_score_sample_mean_correlation
-        if getq_score_sample_median_correlation is not None:
-            self.getq_score_sample_median_correlation = getq_score_sample_median_correlation
-        if getq_score_sample_correlation_variance is not None:
-            self.getq_score_sample_correlation_variance = getq_score_sample_correlation_variance
-        if getq_score_platforms_tech is not None:
-            self.getq_score_platforms_tech = getq_score_platforms_tech
-        if getq_score_replicates is not None:
-            self.getq_score_replicates = getq_score_replicates
-        if getq_score_batch_info is not None:
-            self.getq_score_batch_info = getq_score_batch_info
-        if getq_score_public_batch_effect is not None:
-            self.getq_score_public_batch_effect = getq_score_public_batch_effect
-        if getq_score_public_batch_confound is not None:
-            self.getq_score_public_batch_confound = getq_score_public_batch_confound
         if no_vectors is not None:
             self.no_vectors = no_vectors
         if corr_mat_issues is not None:
@@ -156,6 +122,40 @@ class GeeqValueObject(object):
             self.replicates_issues = replicates_issues
         if batch_corrected is not None:
             self.batch_corrected = batch_corrected
+        if s_score_publication is not None:
+            self.s_score_publication = s_score_publication
+        if s_score_platform_amount is not None:
+            self.s_score_platform_amount = s_score_platform_amount
+        if s_score_platform_tech_multi is not None:
+            self.s_score_platform_tech_multi = s_score_platform_tech_multi
+        if s_score_avg_platform_popularity is not None:
+            self.s_score_avg_platform_popularity = s_score_avg_platform_popularity
+        if s_score_avg_platform_size is not None:
+            self.s_score_avg_platform_size = s_score_avg_platform_size
+        if s_score_sample_size is not None:
+            self.s_score_sample_size = s_score_sample_size
+        if s_score_raw_data is not None:
+            self.s_score_raw_data = s_score_raw_data
+        if s_score_missing_values is not None:
+            self.s_score_missing_values = s_score_missing_values
+        if q_score_outliers is not None:
+            self.q_score_outliers = q_score_outliers
+        if q_score_sample_mean_correlation is not None:
+            self.q_score_sample_mean_correlation = q_score_sample_mean_correlation
+        if q_score_sample_median_correlation is not None:
+            self.q_score_sample_median_correlation = q_score_sample_median_correlation
+        if q_score_sample_correlation_variance is not None:
+            self.q_score_sample_correlation_variance = q_score_sample_correlation_variance
+        if q_score_platforms_tech is not None:
+            self.q_score_platforms_tech = q_score_platforms_tech
+        if q_score_replicates is not None:
+            self.q_score_replicates = q_score_replicates
+        if q_score_batch_info is not None:
+            self.q_score_batch_info = q_score_batch_info
+        if q_score_public_batch_effect is not None:
+            self.q_score_public_batch_effect = q_score_public_batch_effect
+        if q_score_public_batch_confound is not None:
+            self.q_score_public_batch_confound = q_score_public_batch_confound
 
     @property
     def id(self):
@@ -219,363 +219,6 @@ class GeeqValueObject(object):
         """
 
         self._public_suitability_score = public_suitability_score
-
-    @property
-    def gets_score_publication(self):
-        """Gets the gets_score_publication of this GeeqValueObject.  # noqa: E501
-
-
-        :return: The gets_score_publication of this GeeqValueObject.  # noqa: E501
-        :rtype: float
-        """
-        return self._gets_score_publication
-
-    @gets_score_publication.setter
-    def gets_score_publication(self, gets_score_publication):
-        """Sets the gets_score_publication of this GeeqValueObject.
-
-
-        :param gets_score_publication: The gets_score_publication of this GeeqValueObject.  # noqa: E501
-        :type: float
-        """
-
-        self._gets_score_publication = gets_score_publication
-
-    @property
-    def gets_score_platform_amount(self):
-        """Gets the gets_score_platform_amount of this GeeqValueObject.  # noqa: E501
-
-
-        :return: The gets_score_platform_amount of this GeeqValueObject.  # noqa: E501
-        :rtype: float
-        """
-        return self._gets_score_platform_amount
-
-    @gets_score_platform_amount.setter
-    def gets_score_platform_amount(self, gets_score_platform_amount):
-        """Sets the gets_score_platform_amount of this GeeqValueObject.
-
-
-        :param gets_score_platform_amount: The gets_score_platform_amount of this GeeqValueObject.  # noqa: E501
-        :type: float
-        """
-
-        self._gets_score_platform_amount = gets_score_platform_amount
-
-    @property
-    def gets_score_platforms_tech_multi(self):
-        """Gets the gets_score_platforms_tech_multi of this GeeqValueObject.  # noqa: E501
-
-
-        :return: The gets_score_platforms_tech_multi of this GeeqValueObject.  # noqa: E501
-        :rtype: float
-        """
-        return self._gets_score_platforms_tech_multi
-
-    @gets_score_platforms_tech_multi.setter
-    def gets_score_platforms_tech_multi(self, gets_score_platforms_tech_multi):
-        """Sets the gets_score_platforms_tech_multi of this GeeqValueObject.
-
-
-        :param gets_score_platforms_tech_multi: The gets_score_platforms_tech_multi of this GeeqValueObject.  # noqa: E501
-        :type: float
-        """
-
-        self._gets_score_platforms_tech_multi = gets_score_platforms_tech_multi
-
-    @property
-    def gets_score_avg_platform_popularity(self):
-        """Gets the gets_score_avg_platform_popularity of this GeeqValueObject.  # noqa: E501
-
-
-        :return: The gets_score_avg_platform_popularity of this GeeqValueObject.  # noqa: E501
-        :rtype: float
-        """
-        return self._gets_score_avg_platform_popularity
-
-    @gets_score_avg_platform_popularity.setter
-    def gets_score_avg_platform_popularity(self, gets_score_avg_platform_popularity):
-        """Sets the gets_score_avg_platform_popularity of this GeeqValueObject.
-
-
-        :param gets_score_avg_platform_popularity: The gets_score_avg_platform_popularity of this GeeqValueObject.  # noqa: E501
-        :type: float
-        """
-
-        self._gets_score_avg_platform_popularity = gets_score_avg_platform_popularity
-
-    @property
-    def gets_score_avg_platform_size(self):
-        """Gets the gets_score_avg_platform_size of this GeeqValueObject.  # noqa: E501
-
-
-        :return: The gets_score_avg_platform_size of this GeeqValueObject.  # noqa: E501
-        :rtype: float
-        """
-        return self._gets_score_avg_platform_size
-
-    @gets_score_avg_platform_size.setter
-    def gets_score_avg_platform_size(self, gets_score_avg_platform_size):
-        """Sets the gets_score_avg_platform_size of this GeeqValueObject.
-
-
-        :param gets_score_avg_platform_size: The gets_score_avg_platform_size of this GeeqValueObject.  # noqa: E501
-        :type: float
-        """
-
-        self._gets_score_avg_platform_size = gets_score_avg_platform_size
-
-    @property
-    def gets_score_sample_size(self):
-        """Gets the gets_score_sample_size of this GeeqValueObject.  # noqa: E501
-
-
-        :return: The gets_score_sample_size of this GeeqValueObject.  # noqa: E501
-        :rtype: float
-        """
-        return self._gets_score_sample_size
-
-    @gets_score_sample_size.setter
-    def gets_score_sample_size(self, gets_score_sample_size):
-        """Sets the gets_score_sample_size of this GeeqValueObject.
-
-
-        :param gets_score_sample_size: The gets_score_sample_size of this GeeqValueObject.  # noqa: E501
-        :type: float
-        """
-
-        self._gets_score_sample_size = gets_score_sample_size
-
-    @property
-    def gets_score_raw_data(self):
-        """Gets the gets_score_raw_data of this GeeqValueObject.  # noqa: E501
-
-
-        :return: The gets_score_raw_data of this GeeqValueObject.  # noqa: E501
-        :rtype: float
-        """
-        return self._gets_score_raw_data
-
-    @gets_score_raw_data.setter
-    def gets_score_raw_data(self, gets_score_raw_data):
-        """Sets the gets_score_raw_data of this GeeqValueObject.
-
-
-        :param gets_score_raw_data: The gets_score_raw_data of this GeeqValueObject.  # noqa: E501
-        :type: float
-        """
-
-        self._gets_score_raw_data = gets_score_raw_data
-
-    @property
-    def gets_score_missing_values(self):
-        """Gets the gets_score_missing_values of this GeeqValueObject.  # noqa: E501
-
-
-        :return: The gets_score_missing_values of this GeeqValueObject.  # noqa: E501
-        :rtype: float
-        """
-        return self._gets_score_missing_values
-
-    @gets_score_missing_values.setter
-    def gets_score_missing_values(self, gets_score_missing_values):
-        """Sets the gets_score_missing_values of this GeeqValueObject.
-
-
-        :param gets_score_missing_values: The gets_score_missing_values of this GeeqValueObject.  # noqa: E501
-        :type: float
-        """
-
-        self._gets_score_missing_values = gets_score_missing_values
-
-    @property
-    def getq_score_outliers(self):
-        """Gets the getq_score_outliers of this GeeqValueObject.  # noqa: E501
-
-
-        :return: The getq_score_outliers of this GeeqValueObject.  # noqa: E501
-        :rtype: float
-        """
-        return self._getq_score_outliers
-
-    @getq_score_outliers.setter
-    def getq_score_outliers(self, getq_score_outliers):
-        """Sets the getq_score_outliers of this GeeqValueObject.
-
-
-        :param getq_score_outliers: The getq_score_outliers of this GeeqValueObject.  # noqa: E501
-        :type: float
-        """
-
-        self._getq_score_outliers = getq_score_outliers
-
-    @property
-    def getq_score_sample_mean_correlation(self):
-        """Gets the getq_score_sample_mean_correlation of this GeeqValueObject.  # noqa: E501
-
-
-        :return: The getq_score_sample_mean_correlation of this GeeqValueObject.  # noqa: E501
-        :rtype: float
-        """
-        return self._getq_score_sample_mean_correlation
-
-    @getq_score_sample_mean_correlation.setter
-    def getq_score_sample_mean_correlation(self, getq_score_sample_mean_correlation):
-        """Sets the getq_score_sample_mean_correlation of this GeeqValueObject.
-
-
-        :param getq_score_sample_mean_correlation: The getq_score_sample_mean_correlation of this GeeqValueObject.  # noqa: E501
-        :type: float
-        """
-
-        self._getq_score_sample_mean_correlation = getq_score_sample_mean_correlation
-
-    @property
-    def getq_score_sample_median_correlation(self):
-        """Gets the getq_score_sample_median_correlation of this GeeqValueObject.  # noqa: E501
-
-
-        :return: The getq_score_sample_median_correlation of this GeeqValueObject.  # noqa: E501
-        :rtype: float
-        """
-        return self._getq_score_sample_median_correlation
-
-    @getq_score_sample_median_correlation.setter
-    def getq_score_sample_median_correlation(self, getq_score_sample_median_correlation):
-        """Sets the getq_score_sample_median_correlation of this GeeqValueObject.
-
-
-        :param getq_score_sample_median_correlation: The getq_score_sample_median_correlation of this GeeqValueObject.  # noqa: E501
-        :type: float
-        """
-
-        self._getq_score_sample_median_correlation = getq_score_sample_median_correlation
-
-    @property
-    def getq_score_sample_correlation_variance(self):
-        """Gets the getq_score_sample_correlation_variance of this GeeqValueObject.  # noqa: E501
-
-
-        :return: The getq_score_sample_correlation_variance of this GeeqValueObject.  # noqa: E501
-        :rtype: float
-        """
-        return self._getq_score_sample_correlation_variance
-
-    @getq_score_sample_correlation_variance.setter
-    def getq_score_sample_correlation_variance(self, getq_score_sample_correlation_variance):
-        """Sets the getq_score_sample_correlation_variance of this GeeqValueObject.
-
-
-        :param getq_score_sample_correlation_variance: The getq_score_sample_correlation_variance of this GeeqValueObject.  # noqa: E501
-        :type: float
-        """
-
-        self._getq_score_sample_correlation_variance = getq_score_sample_correlation_variance
-
-    @property
-    def getq_score_platforms_tech(self):
-        """Gets the getq_score_platforms_tech of this GeeqValueObject.  # noqa: E501
-
-
-        :return: The getq_score_platforms_tech of this GeeqValueObject.  # noqa: E501
-        :rtype: float
-        """
-        return self._getq_score_platforms_tech
-
-    @getq_score_platforms_tech.setter
-    def getq_score_platforms_tech(self, getq_score_platforms_tech):
-        """Sets the getq_score_platforms_tech of this GeeqValueObject.
-
-
-        :param getq_score_platforms_tech: The getq_score_platforms_tech of this GeeqValueObject.  # noqa: E501
-        :type: float
-        """
-
-        self._getq_score_platforms_tech = getq_score_platforms_tech
-
-    @property
-    def getq_score_replicates(self):
-        """Gets the getq_score_replicates of this GeeqValueObject.  # noqa: E501
-
-
-        :return: The getq_score_replicates of this GeeqValueObject.  # noqa: E501
-        :rtype: float
-        """
-        return self._getq_score_replicates
-
-    @getq_score_replicates.setter
-    def getq_score_replicates(self, getq_score_replicates):
-        """Sets the getq_score_replicates of this GeeqValueObject.
-
-
-        :param getq_score_replicates: The getq_score_replicates of this GeeqValueObject.  # noqa: E501
-        :type: float
-        """
-
-        self._getq_score_replicates = getq_score_replicates
-
-    @property
-    def getq_score_batch_info(self):
-        """Gets the getq_score_batch_info of this GeeqValueObject.  # noqa: E501
-
-
-        :return: The getq_score_batch_info of this GeeqValueObject.  # noqa: E501
-        :rtype: float
-        """
-        return self._getq_score_batch_info
-
-    @getq_score_batch_info.setter
-    def getq_score_batch_info(self, getq_score_batch_info):
-        """Sets the getq_score_batch_info of this GeeqValueObject.
-
-
-        :param getq_score_batch_info: The getq_score_batch_info of this GeeqValueObject.  # noqa: E501
-        :type: float
-        """
-
-        self._getq_score_batch_info = getq_score_batch_info
-
-    @property
-    def getq_score_public_batch_effect(self):
-        """Gets the getq_score_public_batch_effect of this GeeqValueObject.  # noqa: E501
-
-
-        :return: The getq_score_public_batch_effect of this GeeqValueObject.  # noqa: E501
-        :rtype: float
-        """
-        return self._getq_score_public_batch_effect
-
-    @getq_score_public_batch_effect.setter
-    def getq_score_public_batch_effect(self, getq_score_public_batch_effect):
-        """Sets the getq_score_public_batch_effect of this GeeqValueObject.
-
-
-        :param getq_score_public_batch_effect: The getq_score_public_batch_effect of this GeeqValueObject.  # noqa: E501
-        :type: float
-        """
-
-        self._getq_score_public_batch_effect = getq_score_public_batch_effect
-
-    @property
-    def getq_score_public_batch_confound(self):
-        """Gets the getq_score_public_batch_confound of this GeeqValueObject.  # noqa: E501
-
-
-        :return: The getq_score_public_batch_confound of this GeeqValueObject.  # noqa: E501
-        :rtype: float
-        """
-        return self._getq_score_public_batch_confound
-
-    @getq_score_public_batch_confound.setter
-    def getq_score_public_batch_confound(self, getq_score_public_batch_confound):
-        """Sets the getq_score_public_batch_confound of this GeeqValueObject.
-
-
-        :param getq_score_public_batch_confound: The getq_score_public_batch_confound of this GeeqValueObject.  # noqa: E501
-        :type: float
-        """
-
-        self._getq_score_public_batch_confound = getq_score_public_batch_confound
 
     @property
     def no_vectors(self):
@@ -660,6 +303,363 @@ class GeeqValueObject(object):
         """
 
         self._batch_corrected = batch_corrected
+
+    @property
+    def s_score_publication(self):
+        """Gets the s_score_publication of this GeeqValueObject.  # noqa: E501
+
+
+        :return: The s_score_publication of this GeeqValueObject.  # noqa: E501
+        :rtype: float
+        """
+        return self._s_score_publication
+
+    @s_score_publication.setter
+    def s_score_publication(self, s_score_publication):
+        """Sets the s_score_publication of this GeeqValueObject.
+
+
+        :param s_score_publication: The s_score_publication of this GeeqValueObject.  # noqa: E501
+        :type: float
+        """
+
+        self._s_score_publication = s_score_publication
+
+    @property
+    def s_score_platform_amount(self):
+        """Gets the s_score_platform_amount of this GeeqValueObject.  # noqa: E501
+
+
+        :return: The s_score_platform_amount of this GeeqValueObject.  # noqa: E501
+        :rtype: float
+        """
+        return self._s_score_platform_amount
+
+    @s_score_platform_amount.setter
+    def s_score_platform_amount(self, s_score_platform_amount):
+        """Sets the s_score_platform_amount of this GeeqValueObject.
+
+
+        :param s_score_platform_amount: The s_score_platform_amount of this GeeqValueObject.  # noqa: E501
+        :type: float
+        """
+
+        self._s_score_platform_amount = s_score_platform_amount
+
+    @property
+    def s_score_platform_tech_multi(self):
+        """Gets the s_score_platform_tech_multi of this GeeqValueObject.  # noqa: E501
+
+
+        :return: The s_score_platform_tech_multi of this GeeqValueObject.  # noqa: E501
+        :rtype: float
+        """
+        return self._s_score_platform_tech_multi
+
+    @s_score_platform_tech_multi.setter
+    def s_score_platform_tech_multi(self, s_score_platform_tech_multi):
+        """Sets the s_score_platform_tech_multi of this GeeqValueObject.
+
+
+        :param s_score_platform_tech_multi: The s_score_platform_tech_multi of this GeeqValueObject.  # noqa: E501
+        :type: float
+        """
+
+        self._s_score_platform_tech_multi = s_score_platform_tech_multi
+
+    @property
+    def s_score_avg_platform_popularity(self):
+        """Gets the s_score_avg_platform_popularity of this GeeqValueObject.  # noqa: E501
+
+
+        :return: The s_score_avg_platform_popularity of this GeeqValueObject.  # noqa: E501
+        :rtype: float
+        """
+        return self._s_score_avg_platform_popularity
+
+    @s_score_avg_platform_popularity.setter
+    def s_score_avg_platform_popularity(self, s_score_avg_platform_popularity):
+        """Sets the s_score_avg_platform_popularity of this GeeqValueObject.
+
+
+        :param s_score_avg_platform_popularity: The s_score_avg_platform_popularity of this GeeqValueObject.  # noqa: E501
+        :type: float
+        """
+
+        self._s_score_avg_platform_popularity = s_score_avg_platform_popularity
+
+    @property
+    def s_score_avg_platform_size(self):
+        """Gets the s_score_avg_platform_size of this GeeqValueObject.  # noqa: E501
+
+
+        :return: The s_score_avg_platform_size of this GeeqValueObject.  # noqa: E501
+        :rtype: float
+        """
+        return self._s_score_avg_platform_size
+
+    @s_score_avg_platform_size.setter
+    def s_score_avg_platform_size(self, s_score_avg_platform_size):
+        """Sets the s_score_avg_platform_size of this GeeqValueObject.
+
+
+        :param s_score_avg_platform_size: The s_score_avg_platform_size of this GeeqValueObject.  # noqa: E501
+        :type: float
+        """
+
+        self._s_score_avg_platform_size = s_score_avg_platform_size
+
+    @property
+    def s_score_sample_size(self):
+        """Gets the s_score_sample_size of this GeeqValueObject.  # noqa: E501
+
+
+        :return: The s_score_sample_size of this GeeqValueObject.  # noqa: E501
+        :rtype: float
+        """
+        return self._s_score_sample_size
+
+    @s_score_sample_size.setter
+    def s_score_sample_size(self, s_score_sample_size):
+        """Sets the s_score_sample_size of this GeeqValueObject.
+
+
+        :param s_score_sample_size: The s_score_sample_size of this GeeqValueObject.  # noqa: E501
+        :type: float
+        """
+
+        self._s_score_sample_size = s_score_sample_size
+
+    @property
+    def s_score_raw_data(self):
+        """Gets the s_score_raw_data of this GeeqValueObject.  # noqa: E501
+
+
+        :return: The s_score_raw_data of this GeeqValueObject.  # noqa: E501
+        :rtype: float
+        """
+        return self._s_score_raw_data
+
+    @s_score_raw_data.setter
+    def s_score_raw_data(self, s_score_raw_data):
+        """Sets the s_score_raw_data of this GeeqValueObject.
+
+
+        :param s_score_raw_data: The s_score_raw_data of this GeeqValueObject.  # noqa: E501
+        :type: float
+        """
+
+        self._s_score_raw_data = s_score_raw_data
+
+    @property
+    def s_score_missing_values(self):
+        """Gets the s_score_missing_values of this GeeqValueObject.  # noqa: E501
+
+
+        :return: The s_score_missing_values of this GeeqValueObject.  # noqa: E501
+        :rtype: float
+        """
+        return self._s_score_missing_values
+
+    @s_score_missing_values.setter
+    def s_score_missing_values(self, s_score_missing_values):
+        """Sets the s_score_missing_values of this GeeqValueObject.
+
+
+        :param s_score_missing_values: The s_score_missing_values of this GeeqValueObject.  # noqa: E501
+        :type: float
+        """
+
+        self._s_score_missing_values = s_score_missing_values
+
+    @property
+    def q_score_outliers(self):
+        """Gets the q_score_outliers of this GeeqValueObject.  # noqa: E501
+
+
+        :return: The q_score_outliers of this GeeqValueObject.  # noqa: E501
+        :rtype: float
+        """
+        return self._q_score_outliers
+
+    @q_score_outliers.setter
+    def q_score_outliers(self, q_score_outliers):
+        """Sets the q_score_outliers of this GeeqValueObject.
+
+
+        :param q_score_outliers: The q_score_outliers of this GeeqValueObject.  # noqa: E501
+        :type: float
+        """
+
+        self._q_score_outliers = q_score_outliers
+
+    @property
+    def q_score_sample_mean_correlation(self):
+        """Gets the q_score_sample_mean_correlation of this GeeqValueObject.  # noqa: E501
+
+
+        :return: The q_score_sample_mean_correlation of this GeeqValueObject.  # noqa: E501
+        :rtype: float
+        """
+        return self._q_score_sample_mean_correlation
+
+    @q_score_sample_mean_correlation.setter
+    def q_score_sample_mean_correlation(self, q_score_sample_mean_correlation):
+        """Sets the q_score_sample_mean_correlation of this GeeqValueObject.
+
+
+        :param q_score_sample_mean_correlation: The q_score_sample_mean_correlation of this GeeqValueObject.  # noqa: E501
+        :type: float
+        """
+
+        self._q_score_sample_mean_correlation = q_score_sample_mean_correlation
+
+    @property
+    def q_score_sample_median_correlation(self):
+        """Gets the q_score_sample_median_correlation of this GeeqValueObject.  # noqa: E501
+
+
+        :return: The q_score_sample_median_correlation of this GeeqValueObject.  # noqa: E501
+        :rtype: float
+        """
+        return self._q_score_sample_median_correlation
+
+    @q_score_sample_median_correlation.setter
+    def q_score_sample_median_correlation(self, q_score_sample_median_correlation):
+        """Sets the q_score_sample_median_correlation of this GeeqValueObject.
+
+
+        :param q_score_sample_median_correlation: The q_score_sample_median_correlation of this GeeqValueObject.  # noqa: E501
+        :type: float
+        """
+
+        self._q_score_sample_median_correlation = q_score_sample_median_correlation
+
+    @property
+    def q_score_sample_correlation_variance(self):
+        """Gets the q_score_sample_correlation_variance of this GeeqValueObject.  # noqa: E501
+
+
+        :return: The q_score_sample_correlation_variance of this GeeqValueObject.  # noqa: E501
+        :rtype: float
+        """
+        return self._q_score_sample_correlation_variance
+
+    @q_score_sample_correlation_variance.setter
+    def q_score_sample_correlation_variance(self, q_score_sample_correlation_variance):
+        """Sets the q_score_sample_correlation_variance of this GeeqValueObject.
+
+
+        :param q_score_sample_correlation_variance: The q_score_sample_correlation_variance of this GeeqValueObject.  # noqa: E501
+        :type: float
+        """
+
+        self._q_score_sample_correlation_variance = q_score_sample_correlation_variance
+
+    @property
+    def q_score_platforms_tech(self):
+        """Gets the q_score_platforms_tech of this GeeqValueObject.  # noqa: E501
+
+
+        :return: The q_score_platforms_tech of this GeeqValueObject.  # noqa: E501
+        :rtype: float
+        """
+        return self._q_score_platforms_tech
+
+    @q_score_platforms_tech.setter
+    def q_score_platforms_tech(self, q_score_platforms_tech):
+        """Sets the q_score_platforms_tech of this GeeqValueObject.
+
+
+        :param q_score_platforms_tech: The q_score_platforms_tech of this GeeqValueObject.  # noqa: E501
+        :type: float
+        """
+
+        self._q_score_platforms_tech = q_score_platforms_tech
+
+    @property
+    def q_score_replicates(self):
+        """Gets the q_score_replicates of this GeeqValueObject.  # noqa: E501
+
+
+        :return: The q_score_replicates of this GeeqValueObject.  # noqa: E501
+        :rtype: float
+        """
+        return self._q_score_replicates
+
+    @q_score_replicates.setter
+    def q_score_replicates(self, q_score_replicates):
+        """Sets the q_score_replicates of this GeeqValueObject.
+
+
+        :param q_score_replicates: The q_score_replicates of this GeeqValueObject.  # noqa: E501
+        :type: float
+        """
+
+        self._q_score_replicates = q_score_replicates
+
+    @property
+    def q_score_batch_info(self):
+        """Gets the q_score_batch_info of this GeeqValueObject.  # noqa: E501
+
+
+        :return: The q_score_batch_info of this GeeqValueObject.  # noqa: E501
+        :rtype: float
+        """
+        return self._q_score_batch_info
+
+    @q_score_batch_info.setter
+    def q_score_batch_info(self, q_score_batch_info):
+        """Sets the q_score_batch_info of this GeeqValueObject.
+
+
+        :param q_score_batch_info: The q_score_batch_info of this GeeqValueObject.  # noqa: E501
+        :type: float
+        """
+
+        self._q_score_batch_info = q_score_batch_info
+
+    @property
+    def q_score_public_batch_effect(self):
+        """Gets the q_score_public_batch_effect of this GeeqValueObject.  # noqa: E501
+
+
+        :return: The q_score_public_batch_effect of this GeeqValueObject.  # noqa: E501
+        :rtype: float
+        """
+        return self._q_score_public_batch_effect
+
+    @q_score_public_batch_effect.setter
+    def q_score_public_batch_effect(self, q_score_public_batch_effect):
+        """Sets the q_score_public_batch_effect of this GeeqValueObject.
+
+
+        :param q_score_public_batch_effect: The q_score_public_batch_effect of this GeeqValueObject.  # noqa: E501
+        :type: float
+        """
+
+        self._q_score_public_batch_effect = q_score_public_batch_effect
+
+    @property
+    def q_score_public_batch_confound(self):
+        """Gets the q_score_public_batch_confound of this GeeqValueObject.  # noqa: E501
+
+
+        :return: The q_score_public_batch_confound of this GeeqValueObject.  # noqa: E501
+        :rtype: float
+        """
+        return self._q_score_public_batch_confound
+
+    @q_score_public_batch_confound.setter
+    def q_score_public_batch_confound(self, q_score_public_batch_confound):
+        """Sets the q_score_public_batch_confound of this GeeqValueObject.
+
+
+        :param q_score_public_batch_confound: The q_score_public_batch_confound of this GeeqValueObject.  # noqa: E501
+        :type: float
+        """
+
+        self._q_score_public_batch_confound = q_score_public_batch_confound
 
     def to_dict(self):
         """Returns the model properties as a dict"""

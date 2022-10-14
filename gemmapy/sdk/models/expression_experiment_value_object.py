@@ -3,9 +3,9 @@
 """
     Gemma RESTful API
 
-    This website documents the usage of the [Gemma REST API](https://gemma.msl.ubc.ca/rest/v2/). Here you can find example script usage of the API, as well as graphical interface for each endpoint, with description of its parameters and the endpoint URL.  The documentation of the underlying java code can be found [here](https://gemma.msl.ubc.ca/resources/apidocs/ubic/gemma/web/services/rest/package-summary.html). See the [links section](https://gemma.msl.ubc.ca/resources/restapidocs/#footer) in the footer of this page for other relevant links.  Use of this webpage and Gemma web services, including the REST API, is subject to [these terms and conditions](https://pavlidislab.github.io/Gemma/terms.html). Please read these in full before continuing to use this webpage or any other part of the Gemma system.   # noqa: E501
+    This website documents the usage of the [Gemma RESTful API](https://gemma.msl.ubc.ca/rest/v2/). Here you can find example script usage of the API, as well as graphical interface for each endpoint, with description of its parameters and the endpoint URL.  Use of this webpage and the Gemma Web services, including the REST API, is subject to [these terms and conditions](https://pavlidislab.github.io/Gemma/terms.html). Please read these in full before continuing to use this webpage or any other part of the Gemma system.  Fix return type for `getResultSets` which was incorrectly referring to a renamed VO.  Remove the `security` requirements by default from the specification, which forced the Python package to supply empty credentials. There is currently no privileged endpoints, although some can return additional results.  ## Updates  ### Update 2.5.1  Restore `objectClass` visibility in `AnnotationValueObject`.  Fix incorrect response types for annotations search endpoints returning datasets.  ### Update 2.5.0  Major cleanups were performed in this release in order to stabilize the specification. Numerous properties from Gemma Web that were never intended to be exposed in Gemma REST have been hidden. It's a bit too much to describe in here, but you can navigate to the schemas section below to get a good glance at the models.  Favour `numberOfSomething` instead of `somethingCount` which is clearer. The older names are kept for backward-compatibility, but should be considered deprecated.  Gene aliases and multifunctionality rank are now filled in `GeneValueObject`.  Uniformly use `TaxonValueObject` to represent taxon. This is breaking change for the `ExpressionExperimentValueObject` and `ArrayDesignValueObject` as their `taxon` property will be an `object` instead of a `string`. Properties such as `taxonId` are now deprecated and `taxon.id` should be used instead.  Entities that have IDs now all inherit from `IdentifiableValueObject`. This implies that you can assume the presence of an `id` in a search result `resultObject` attribute for example.  New `/search` endpoint! for an unified search experience. Annotation-based search endpoints under `/annotations` are now deprecated.  New API docs! While not as nice looking, the previous theme will be gradually ported to Swagger UI as we focused on functionality over prettiness for this release.  ### Update 2.4.0 through 2.4.1  Release notes for the 2.4 series were not written down, so I'll try to do my best to recall features that were introduced at that time.  An [OpenAPI](https://www.openapis.org/) specification was introduced and available under `/rest/v2/openapi.json`, although not fully stabilized.  Add a `/resultSets` endpoint to navigate result sets directly, by ID or by dataset.  Add a `/resultSets/{resultSetId}` endpoint to retrieve a specific result set by its ID. This endpoint can be negotiated with an `Accept: text/tab-separated-values` header to obtain a TSV representation.  Add a `/datasets/{dataset}/analyses/differential/resultSets` endpoint that essentially redirect to a specific `/resultSet` endpoint by dataset ID.  Add an endpoint to retrieve preferred raw expression vectors.  ### Update 2.3.4  November 6th, 2018  November 6th [2.3.4] Bug fixes in the dataset search endpoint.  November 5th [2.3.3] Added filtering parameters to dataset search.  October 25th [2.3.2] Changed behavior of the dataset search endpoint to more closely match the Gemma web interface.  October 2nd [2.3.1] Added group information to the User value object.  September 27th [2.3.0] Breaking change in Taxa: Abbreviation property has been removed and is therefore no longer an accepted identifier.  ### Update 2.2.6  June 7th, 2018  Code maintenance, bug fixes. Geeq scores stable and made public.  June 7th [2.2.6] Added: User authentication endpoint.  May 2nd [2.2.5] Fixed: Cleaned up and optimized platforms/elements endpoint, removed redundant information (recursive properties nesting).  April 12th [2.2.3] Fixed: Array arguments not handling non-string properties properly, e.g. `ncbiIds` of genes.  April 9th [2.2.1] Fixed: Filter argument not working when the filtered field was a primitive type. This most significantly allows filtering by geeq boolean and double properties.  ### Update 2.2.0  February 8th, 2018  Breaking change in the 'Dataset differential analysis' endpoint: - No longer using `qValueThreshold` parameter. - Response format changed, now using `DifferentialExpressionAnalysisValueObject` instead of `DifferentialExpressionValueObject` - [Experimental] Added Geeq (Gene Expression Experiment Quality) scores to the dataset value objects   # noqa: E501
 
-    OpenAPI spec version: 2.4.1
+    OpenAPI spec version: 2.5.1
     Contact: pavlab-support@msl.ubc.ca
     Generated by: https://github.com/swagger-api/swagger-codegen.git
 """
@@ -36,33 +36,25 @@ class ExpressionExperimentValueObject(object):
         'last_needs_attention_event': 'AuditEventValueObject',
         'curation_note': 'str',
         'last_note_update_event': 'AuditEventValueObject',
-        'bio_assay_count': 'int',
+        'number_of_bio_assays': 'int',
         'description': 'str',
         'name': 'str',
         'accession': 'str',
-        'array_design_count': 'int',
         'batch_confound': 'str',
         'batch_effect': 'str',
-        'bio_material_count': 'int',
-        'current_user_has_write_permission': 'bool',
-        'current_user_is_owner': 'bool',
-        'experimental_design': 'int',
         'external_database': 'str',
         'external_uri': 'str',
         'geeq': 'GeeqValueObject',
-        'is_public': 'bool',
-        'is_shared': 'bool',
         'metadata': 'str',
-        'processed_expression_vector_count': 'int',
         'short_name': 'str',
         'source': 'str',
-        'suitable_for_dea': 'bool',
-        'taxon': 'str',
-        'taxon_id': 'int',
         'technology_type': 'str',
-        'user_owned': 'bool',
-        'user_can_write': 'bool',
-        'trouble_details': 'str'
+        'taxon_id': 'int',
+        'bio_assay_count': 'int',
+        'trouble_details': 'str',
+        'number_of_array_designs': 'int',
+        'number_of_processed_expression_vectors': 'int',
+        'taxon': 'TaxonValueObject'
     }
 
     attribute_map = {
@@ -74,36 +66,28 @@ class ExpressionExperimentValueObject(object):
         'last_needs_attention_event': 'lastNeedsAttentionEvent',
         'curation_note': 'curationNote',
         'last_note_update_event': 'lastNoteUpdateEvent',
-        'bio_assay_count': 'bioAssayCount',
+        'number_of_bio_assays': 'numberOfBioAssays',
         'description': 'description',
         'name': 'name',
         'accession': 'accession',
-        'array_design_count': 'arrayDesignCount',
         'batch_confound': 'batchConfound',
         'batch_effect': 'batchEffect',
-        'bio_material_count': 'bioMaterialCount',
-        'current_user_has_write_permission': 'currentUserHasWritePermission',
-        'current_user_is_owner': 'currentUserIsOwner',
-        'experimental_design': 'experimentalDesign',
         'external_database': 'externalDatabase',
         'external_uri': 'externalUri',
         'geeq': 'geeq',
-        'is_public': 'isPublic',
-        'is_shared': 'isShared',
         'metadata': 'metadata',
-        'processed_expression_vector_count': 'processedExpressionVectorCount',
         'short_name': 'shortName',
         'source': 'source',
-        'suitable_for_dea': 'suitableForDEA',
-        'taxon': 'taxon',
-        'taxon_id': 'taxonId',
         'technology_type': 'technologyType',
-        'user_owned': 'userOwned',
-        'user_can_write': 'userCanWrite',
-        'trouble_details': 'troubleDetails'
+        'taxon_id': 'taxonId',
+        'bio_assay_count': 'bioAssayCount',
+        'trouble_details': 'troubleDetails',
+        'number_of_array_designs': 'numberOfArrayDesigns',
+        'number_of_processed_expression_vectors': 'numberOfProcessedExpressionVectors',
+        'taxon': 'taxon'
     }
 
-    def __init__(self, id=None, last_updated=None, troubled=None, last_troubled_event=None, needs_attention=None, last_needs_attention_event=None, curation_note=None, last_note_update_event=None, bio_assay_count=None, description=None, name=None, accession=None, array_design_count=None, batch_confound=None, batch_effect=None, bio_material_count=None, current_user_has_write_permission=None, current_user_is_owner=None, experimental_design=None, external_database=None, external_uri=None, geeq=None, is_public=None, is_shared=None, metadata=None, processed_expression_vector_count=None, short_name=None, source=None, suitable_for_dea=None, taxon=None, taxon_id=None, technology_type=None, user_owned=None, user_can_write=None, trouble_details=None):  # noqa: E501
+    def __init__(self, id=None, last_updated=None, troubled=None, last_troubled_event=None, needs_attention=None, last_needs_attention_event=None, curation_note=None, last_note_update_event=None, number_of_bio_assays=None, description=None, name=None, accession=None, batch_confound=None, batch_effect=None, external_database=None, external_uri=None, geeq=None, metadata=None, short_name=None, source=None, technology_type=None, taxon_id=None, bio_assay_count=None, trouble_details=None, number_of_array_designs=None, number_of_processed_expression_vectors=None, taxon=None):  # noqa: E501
         """ExpressionExperimentValueObject - a model defined in Swagger"""  # noqa: E501
         self._id = None
         self._last_updated = None
@@ -113,33 +97,25 @@ class ExpressionExperimentValueObject(object):
         self._last_needs_attention_event = None
         self._curation_note = None
         self._last_note_update_event = None
-        self._bio_assay_count = None
+        self._number_of_bio_assays = None
         self._description = None
         self._name = None
         self._accession = None
-        self._array_design_count = None
         self._batch_confound = None
         self._batch_effect = None
-        self._bio_material_count = None
-        self._current_user_has_write_permission = None
-        self._current_user_is_owner = None
-        self._experimental_design = None
         self._external_database = None
         self._external_uri = None
         self._geeq = None
-        self._is_public = None
-        self._is_shared = None
         self._metadata = None
-        self._processed_expression_vector_count = None
         self._short_name = None
         self._source = None
-        self._suitable_for_dea = None
-        self._taxon = None
-        self._taxon_id = None
         self._technology_type = None
-        self._user_owned = None
-        self._user_can_write = None
+        self._taxon_id = None
+        self._bio_assay_count = None
         self._trouble_details = None
+        self._number_of_array_designs = None
+        self._number_of_processed_expression_vectors = None
+        self._taxon = None
         self.discriminator = None
         if id is not None:
             self.id = id
@@ -157,60 +133,44 @@ class ExpressionExperimentValueObject(object):
             self.curation_note = curation_note
         if last_note_update_event is not None:
             self.last_note_update_event = last_note_update_event
-        if bio_assay_count is not None:
-            self.bio_assay_count = bio_assay_count
+        if number_of_bio_assays is not None:
+            self.number_of_bio_assays = number_of_bio_assays
         if description is not None:
             self.description = description
         if name is not None:
             self.name = name
         if accession is not None:
             self.accession = accession
-        if array_design_count is not None:
-            self.array_design_count = array_design_count
         if batch_confound is not None:
             self.batch_confound = batch_confound
         if batch_effect is not None:
             self.batch_effect = batch_effect
-        if bio_material_count is not None:
-            self.bio_material_count = bio_material_count
-        if current_user_has_write_permission is not None:
-            self.current_user_has_write_permission = current_user_has_write_permission
-        if current_user_is_owner is not None:
-            self.current_user_is_owner = current_user_is_owner
-        if experimental_design is not None:
-            self.experimental_design = experimental_design
         if external_database is not None:
             self.external_database = external_database
         if external_uri is not None:
             self.external_uri = external_uri
         if geeq is not None:
             self.geeq = geeq
-        if is_public is not None:
-            self.is_public = is_public
-        if is_shared is not None:
-            self.is_shared = is_shared
         if metadata is not None:
             self.metadata = metadata
-        if processed_expression_vector_count is not None:
-            self.processed_expression_vector_count = processed_expression_vector_count
         if short_name is not None:
             self.short_name = short_name
         if source is not None:
             self.source = source
-        if suitable_for_dea is not None:
-            self.suitable_for_dea = suitable_for_dea
-        if taxon is not None:
-            self.taxon = taxon
-        if taxon_id is not None:
-            self.taxon_id = taxon_id
         if technology_type is not None:
             self.technology_type = technology_type
-        if user_owned is not None:
-            self.user_owned = user_owned
-        if user_can_write is not None:
-            self.user_can_write = user_can_write
+        if taxon_id is not None:
+            self.taxon_id = taxon_id
+        if bio_assay_count is not None:
+            self.bio_assay_count = bio_assay_count
         if trouble_details is not None:
             self.trouble_details = trouble_details
+        if number_of_array_designs is not None:
+            self.number_of_array_designs = number_of_array_designs
+        if number_of_processed_expression_vectors is not None:
+            self.number_of_processed_expression_vectors = number_of_processed_expression_vectors
+        if taxon is not None:
+            self.taxon = taxon
 
     @property
     def id(self):
@@ -381,25 +341,25 @@ class ExpressionExperimentValueObject(object):
         self._last_note_update_event = last_note_update_event
 
     @property
-    def bio_assay_count(self):
-        """Gets the bio_assay_count of this ExpressionExperimentValueObject.  # noqa: E501
+    def number_of_bio_assays(self):
+        """Gets the number_of_bio_assays of this ExpressionExperimentValueObject.  # noqa: E501
 
 
-        :return: The bio_assay_count of this ExpressionExperimentValueObject.  # noqa: E501
+        :return: The number_of_bio_assays of this ExpressionExperimentValueObject.  # noqa: E501
         :rtype: int
         """
-        return self._bio_assay_count
+        return self._number_of_bio_assays
 
-    @bio_assay_count.setter
-    def bio_assay_count(self, bio_assay_count):
-        """Sets the bio_assay_count of this ExpressionExperimentValueObject.
+    @number_of_bio_assays.setter
+    def number_of_bio_assays(self, number_of_bio_assays):
+        """Sets the number_of_bio_assays of this ExpressionExperimentValueObject.
 
 
-        :param bio_assay_count: The bio_assay_count of this ExpressionExperimentValueObject.  # noqa: E501
+        :param number_of_bio_assays: The number_of_bio_assays of this ExpressionExperimentValueObject.  # noqa: E501
         :type: int
         """
 
-        self._bio_assay_count = bio_assay_count
+        self._number_of_bio_assays = number_of_bio_assays
 
     @property
     def description(self):
@@ -465,27 +425,6 @@ class ExpressionExperimentValueObject(object):
         self._accession = accession
 
     @property
-    def array_design_count(self):
-        """Gets the array_design_count of this ExpressionExperimentValueObject.  # noqa: E501
-
-
-        :return: The array_design_count of this ExpressionExperimentValueObject.  # noqa: E501
-        :rtype: int
-        """
-        return self._array_design_count
-
-    @array_design_count.setter
-    def array_design_count(self, array_design_count):
-        """Sets the array_design_count of this ExpressionExperimentValueObject.
-
-
-        :param array_design_count: The array_design_count of this ExpressionExperimentValueObject.  # noqa: E501
-        :type: int
-        """
-
-        self._array_design_count = array_design_count
-
-    @property
     def batch_confound(self):
         """Gets the batch_confound of this ExpressionExperimentValueObject.  # noqa: E501
 
@@ -526,90 +465,6 @@ class ExpressionExperimentValueObject(object):
         """
 
         self._batch_effect = batch_effect
-
-    @property
-    def bio_material_count(self):
-        """Gets the bio_material_count of this ExpressionExperimentValueObject.  # noqa: E501
-
-
-        :return: The bio_material_count of this ExpressionExperimentValueObject.  # noqa: E501
-        :rtype: int
-        """
-        return self._bio_material_count
-
-    @bio_material_count.setter
-    def bio_material_count(self, bio_material_count):
-        """Sets the bio_material_count of this ExpressionExperimentValueObject.
-
-
-        :param bio_material_count: The bio_material_count of this ExpressionExperimentValueObject.  # noqa: E501
-        :type: int
-        """
-
-        self._bio_material_count = bio_material_count
-
-    @property
-    def current_user_has_write_permission(self):
-        """Gets the current_user_has_write_permission of this ExpressionExperimentValueObject.  # noqa: E501
-
-
-        :return: The current_user_has_write_permission of this ExpressionExperimentValueObject.  # noqa: E501
-        :rtype: bool
-        """
-        return self._current_user_has_write_permission
-
-    @current_user_has_write_permission.setter
-    def current_user_has_write_permission(self, current_user_has_write_permission):
-        """Sets the current_user_has_write_permission of this ExpressionExperimentValueObject.
-
-
-        :param current_user_has_write_permission: The current_user_has_write_permission of this ExpressionExperimentValueObject.  # noqa: E501
-        :type: bool
-        """
-
-        self._current_user_has_write_permission = current_user_has_write_permission
-
-    @property
-    def current_user_is_owner(self):
-        """Gets the current_user_is_owner of this ExpressionExperimentValueObject.  # noqa: E501
-
-
-        :return: The current_user_is_owner of this ExpressionExperimentValueObject.  # noqa: E501
-        :rtype: bool
-        """
-        return self._current_user_is_owner
-
-    @current_user_is_owner.setter
-    def current_user_is_owner(self, current_user_is_owner):
-        """Sets the current_user_is_owner of this ExpressionExperimentValueObject.
-
-
-        :param current_user_is_owner: The current_user_is_owner of this ExpressionExperimentValueObject.  # noqa: E501
-        :type: bool
-        """
-
-        self._current_user_is_owner = current_user_is_owner
-
-    @property
-    def experimental_design(self):
-        """Gets the experimental_design of this ExpressionExperimentValueObject.  # noqa: E501
-
-
-        :return: The experimental_design of this ExpressionExperimentValueObject.  # noqa: E501
-        :rtype: int
-        """
-        return self._experimental_design
-
-    @experimental_design.setter
-    def experimental_design(self, experimental_design):
-        """Sets the experimental_design of this ExpressionExperimentValueObject.
-
-
-        :param experimental_design: The experimental_design of this ExpressionExperimentValueObject.  # noqa: E501
-        :type: int
-        """
-
-        self._experimental_design = experimental_design
 
     @property
     def external_database(self):
@@ -675,48 +530,6 @@ class ExpressionExperimentValueObject(object):
         self._geeq = geeq
 
     @property
-    def is_public(self):
-        """Gets the is_public of this ExpressionExperimentValueObject.  # noqa: E501
-
-
-        :return: The is_public of this ExpressionExperimentValueObject.  # noqa: E501
-        :rtype: bool
-        """
-        return self._is_public
-
-    @is_public.setter
-    def is_public(self, is_public):
-        """Sets the is_public of this ExpressionExperimentValueObject.
-
-
-        :param is_public: The is_public of this ExpressionExperimentValueObject.  # noqa: E501
-        :type: bool
-        """
-
-        self._is_public = is_public
-
-    @property
-    def is_shared(self):
-        """Gets the is_shared of this ExpressionExperimentValueObject.  # noqa: E501
-
-
-        :return: The is_shared of this ExpressionExperimentValueObject.  # noqa: E501
-        :rtype: bool
-        """
-        return self._is_shared
-
-    @is_shared.setter
-    def is_shared(self, is_shared):
-        """Sets the is_shared of this ExpressionExperimentValueObject.
-
-
-        :param is_shared: The is_shared of this ExpressionExperimentValueObject.  # noqa: E501
-        :type: bool
-        """
-
-        self._is_shared = is_shared
-
-    @property
     def metadata(self):
         """Gets the metadata of this ExpressionExperimentValueObject.  # noqa: E501
 
@@ -736,27 +549,6 @@ class ExpressionExperimentValueObject(object):
         """
 
         self._metadata = metadata
-
-    @property
-    def processed_expression_vector_count(self):
-        """Gets the processed_expression_vector_count of this ExpressionExperimentValueObject.  # noqa: E501
-
-
-        :return: The processed_expression_vector_count of this ExpressionExperimentValueObject.  # noqa: E501
-        :rtype: int
-        """
-        return self._processed_expression_vector_count
-
-    @processed_expression_vector_count.setter
-    def processed_expression_vector_count(self, processed_expression_vector_count):
-        """Sets the processed_expression_vector_count of this ExpressionExperimentValueObject.
-
-
-        :param processed_expression_vector_count: The processed_expression_vector_count of this ExpressionExperimentValueObject.  # noqa: E501
-        :type: int
-        """
-
-        self._processed_expression_vector_count = processed_expression_vector_count
 
     @property
     def short_name(self):
@@ -801,46 +593,25 @@ class ExpressionExperimentValueObject(object):
         self._source = source
 
     @property
-    def suitable_for_dea(self):
-        """Gets the suitable_for_dea of this ExpressionExperimentValueObject.  # noqa: E501
+    def technology_type(self):
+        """Gets the technology_type of this ExpressionExperimentValueObject.  # noqa: E501
 
 
-        :return: The suitable_for_dea of this ExpressionExperimentValueObject.  # noqa: E501
-        :rtype: bool
-        """
-        return self._suitable_for_dea
-
-    @suitable_for_dea.setter
-    def suitable_for_dea(self, suitable_for_dea):
-        """Sets the suitable_for_dea of this ExpressionExperimentValueObject.
-
-
-        :param suitable_for_dea: The suitable_for_dea of this ExpressionExperimentValueObject.  # noqa: E501
-        :type: bool
-        """
-
-        self._suitable_for_dea = suitable_for_dea
-
-    @property
-    def taxon(self):
-        """Gets the taxon of this ExpressionExperimentValueObject.  # noqa: E501
-
-
-        :return: The taxon of this ExpressionExperimentValueObject.  # noqa: E501
+        :return: The technology_type of this ExpressionExperimentValueObject.  # noqa: E501
         :rtype: str
         """
-        return self._taxon
+        return self._technology_type
 
-    @taxon.setter
-    def taxon(self, taxon):
-        """Sets the taxon of this ExpressionExperimentValueObject.
+    @technology_type.setter
+    def technology_type(self, technology_type):
+        """Sets the technology_type of this ExpressionExperimentValueObject.
 
 
-        :param taxon: The taxon of this ExpressionExperimentValueObject.  # noqa: E501
+        :param technology_type: The technology_type of this ExpressionExperimentValueObject.  # noqa: E501
         :type: str
         """
 
-        self._taxon = taxon
+        self._technology_type = technology_type
 
     @property
     def taxon_id(self):
@@ -864,67 +635,25 @@ class ExpressionExperimentValueObject(object):
         self._taxon_id = taxon_id
 
     @property
-    def technology_type(self):
-        """Gets the technology_type of this ExpressionExperimentValueObject.  # noqa: E501
+    def bio_assay_count(self):
+        """Gets the bio_assay_count of this ExpressionExperimentValueObject.  # noqa: E501
 
 
-        :return: The technology_type of this ExpressionExperimentValueObject.  # noqa: E501
-        :rtype: str
+        :return: The bio_assay_count of this ExpressionExperimentValueObject.  # noqa: E501
+        :rtype: int
         """
-        return self._technology_type
+        return self._bio_assay_count
 
-    @technology_type.setter
-    def technology_type(self, technology_type):
-        """Sets the technology_type of this ExpressionExperimentValueObject.
-
-
-        :param technology_type: The technology_type of this ExpressionExperimentValueObject.  # noqa: E501
-        :type: str
-        """
-
-        self._technology_type = technology_type
-
-    @property
-    def user_owned(self):
-        """Gets the user_owned of this ExpressionExperimentValueObject.  # noqa: E501
+    @bio_assay_count.setter
+    def bio_assay_count(self, bio_assay_count):
+        """Sets the bio_assay_count of this ExpressionExperimentValueObject.
 
 
-        :return: The user_owned of this ExpressionExperimentValueObject.  # noqa: E501
-        :rtype: bool
-        """
-        return self._user_owned
-
-    @user_owned.setter
-    def user_owned(self, user_owned):
-        """Sets the user_owned of this ExpressionExperimentValueObject.
-
-
-        :param user_owned: The user_owned of this ExpressionExperimentValueObject.  # noqa: E501
-        :type: bool
+        :param bio_assay_count: The bio_assay_count of this ExpressionExperimentValueObject.  # noqa: E501
+        :type: int
         """
 
-        self._user_owned = user_owned
-
-    @property
-    def user_can_write(self):
-        """Gets the user_can_write of this ExpressionExperimentValueObject.  # noqa: E501
-
-
-        :return: The user_can_write of this ExpressionExperimentValueObject.  # noqa: E501
-        :rtype: bool
-        """
-        return self._user_can_write
-
-    @user_can_write.setter
-    def user_can_write(self, user_can_write):
-        """Sets the user_can_write of this ExpressionExperimentValueObject.
-
-
-        :param user_can_write: The user_can_write of this ExpressionExperimentValueObject.  # noqa: E501
-        :type: bool
-        """
-
-        self._user_can_write = user_can_write
+        self._bio_assay_count = bio_assay_count
 
     @property
     def trouble_details(self):
@@ -946,6 +675,69 @@ class ExpressionExperimentValueObject(object):
         """
 
         self._trouble_details = trouble_details
+
+    @property
+    def number_of_array_designs(self):
+        """Gets the number_of_array_designs of this ExpressionExperimentValueObject.  # noqa: E501
+
+
+        :return: The number_of_array_designs of this ExpressionExperimentValueObject.  # noqa: E501
+        :rtype: int
+        """
+        return self._number_of_array_designs
+
+    @number_of_array_designs.setter
+    def number_of_array_designs(self, number_of_array_designs):
+        """Sets the number_of_array_designs of this ExpressionExperimentValueObject.
+
+
+        :param number_of_array_designs: The number_of_array_designs of this ExpressionExperimentValueObject.  # noqa: E501
+        :type: int
+        """
+
+        self._number_of_array_designs = number_of_array_designs
+
+    @property
+    def number_of_processed_expression_vectors(self):
+        """Gets the number_of_processed_expression_vectors of this ExpressionExperimentValueObject.  # noqa: E501
+
+
+        :return: The number_of_processed_expression_vectors of this ExpressionExperimentValueObject.  # noqa: E501
+        :rtype: int
+        """
+        return self._number_of_processed_expression_vectors
+
+    @number_of_processed_expression_vectors.setter
+    def number_of_processed_expression_vectors(self, number_of_processed_expression_vectors):
+        """Sets the number_of_processed_expression_vectors of this ExpressionExperimentValueObject.
+
+
+        :param number_of_processed_expression_vectors: The number_of_processed_expression_vectors of this ExpressionExperimentValueObject.  # noqa: E501
+        :type: int
+        """
+
+        self._number_of_processed_expression_vectors = number_of_processed_expression_vectors
+
+    @property
+    def taxon(self):
+        """Gets the taxon of this ExpressionExperimentValueObject.  # noqa: E501
+
+
+        :return: The taxon of this ExpressionExperimentValueObject.  # noqa: E501
+        :rtype: TaxonValueObject
+        """
+        return self._taxon
+
+    @taxon.setter
+    def taxon(self, taxon):
+        """Sets the taxon of this ExpressionExperimentValueObject.
+
+
+        :param taxon: The taxon of this ExpressionExperimentValueObject.  # noqa: E501
+        :type: TaxonValueObject
+        """
+
+        self._taxon = taxon
 
     def to_dict(self):
         """Returns the model properties as a dict"""

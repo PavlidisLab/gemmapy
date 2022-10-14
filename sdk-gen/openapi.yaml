@@ -1,24 +1,119 @@
 openapi: 3.0.1
 info:
   title: Gemma RESTful API
-  description: "This website documents the usage of the [Gemma REST API](https://gemma.msl.ubc.ca/rest/v2/).\
-    \ Here you can find\nexample script usage of the API, as well\nas graphical interface\
-    \ for each endpoint, with description of its parameters and the endpoint URL.\n\
-    \nThe documentation of the underlying java code can be found [here](https://gemma.msl.ubc.ca/resources/apidocs/ubic/gemma/web/services/rest/package-summary.html).\n\
-    See the [links section](https://gemma.msl.ubc.ca/resources/restapidocs/#footer)\
-    \ in the footer of this page for\nother relevant links.\n\nUse of this webpage\
-    \ and Gemma web services, including the REST API, is subject to [these terms and\
-    \ conditions](https://pavlidislab.github.io/Gemma/terms.html).\nPlease read these\
-    \ in full before continuing to use this webpage or any other part of the Gemma\
-    \ system.\n"
+  description: |
+    This website documents the usage of the [Gemma RESTful API](https://gemma.msl.ubc.ca/rest/v2/). Here you can find
+    example script usage of the API, as well as graphical interface for each endpoint, with description of its
+    parameters and the endpoint URL.
+
+    Use of this webpage and the Gemma Web services, including the REST API, is subject to [these terms and conditions](https://pavlidislab.github.io/Gemma/terms.html).
+    Please read these in full before continuing to use this webpage or any other part of the Gemma system.
+
+    Fix return type for `getResultSets` which was incorrectly referring to a renamed VO.
+
+    Remove the `security` requirements by default from the specification, which forced the Python package to supply
+    empty credentials. There is currently no privileged endpoints, although some can return additional results.
+
+    ## Updates
+
+    ### Update 2.5.1
+
+    Restore `objectClass` visibility in `AnnotationValueObject`.
+
+    Fix incorrect response types for annotations search endpoints returning datasets.
+
+    ### Update 2.5.0
+
+    Major cleanups were performed in this release in order to stabilize the specification. Numerous properties from
+    Gemma Web that were never intended to be exposed in Gemma REST have been hidden. It's a bit too much to describe
+    in here, but you can navigate to the schemas section below to get a good glance at the models.
+
+    Favour `numberOfSomething` instead of `somethingCount` which is clearer. The older names are kept for
+    backward-compatibility, but should be considered deprecated.
+
+    Gene aliases and multifunctionality rank are now filled in `GeneValueObject`.
+
+    Uniformly use `TaxonValueObject` to represent taxon. This is breaking change for the `ExpressionExperimentValueObject`
+    and `ArrayDesignValueObject` as their `taxon` property will be an `object` instead of a `string`. Properties such
+    as `taxonId` are now deprecated and `taxon.id` should be used instead.
+
+    Entities that have IDs now all inherit from `IdentifiableValueObject`. This implies that you can assume the
+    presence of an `id` in a search result `resultObject` attribute for example.
+
+    New `/search` endpoint! for an unified search experience. Annotation-based search endpoints under `/annotations`
+    are now deprecated.
+
+    New API docs! While not as nice looking, the previous theme will be gradually ported to Swagger UI as we focused
+    on functionality over prettiness for this release.
+
+    ### Update 2.4.0 through 2.4.1
+
+    Release notes for the 2.4 series were not written down, so I'll try to do my best to recall features that were
+    introduced at that time.
+
+    An [OpenAPI](https://www.openapis.org/) specification was introduced and available under `/rest/v2/openapi.json`,
+    although not fully stabilized.
+
+    Add a `/resultSets` endpoint to navigate result sets directly, by ID or by dataset.
+
+    Add a `/resultSets/{resultSetId}` endpoint to retrieve a specific result set by its ID. This endpoint can be
+    negotiated with an `Accept: text/tab-separated-values` header to obtain a TSV representation.
+
+    Add a `/datasets/{dataset}/analyses/differential/resultSets` endpoint that essentially redirect to a specific
+    `/resultSet` endpoint by dataset ID.
+
+    Add an endpoint to retrieve preferred raw expression vectors.
+
+    ### Update 2.3.4
+
+    November 6th, 2018
+
+    November 6th [2.3.4] Bug fixes in the dataset search endpoint.
+
+    November 5th [2.3.3] Added filtering parameters to dataset search.
+
+    October 25th [2.3.2] Changed behavior of the dataset search endpoint to more closely match the Gemma web interface.
+
+    October 2nd [2.3.1] Added group information to the User value object.
+
+    September 27th [2.3.0] Breaking change in Taxa: Abbreviation property has been removed and is therefore no longer
+    an accepted identifier.
+
+    ### Update 2.2.6
+
+    June 7th, 2018
+
+    Code maintenance, bug fixes. Geeq scores stable and made public.
+
+    June 7th [2.2.6] Added: User authentication endpoint.
+
+    May 2nd [2.2.5] Fixed: Cleaned up and optimized platforms/elements endpoint, removed redundant information
+    (recursive properties nesting).
+
+    April 12th [2.2.3] Fixed: Array arguments not handling non-string properties properly, e.g. `ncbiIds` of genes.
+
+    April 9th [2.2.1] Fixed: Filter argument not working when the filtered field was a primitive type. This most
+    significantly allows filtering by geeq boolean and double properties.
+
+    ### Update 2.2.0
+
+    February 8th, 2018
+
+    Breaking change in the 'Dataset differential analysis' endpoint:
+    - No longer using `qValueThreshold` parameter.
+    - Response format changed, now using `DifferentialExpressionAnalysisValueObject` instead of `DifferentialExpressionValueObject`
+    - [Experimental] Added Geeq (Gene Expression Experiment Quality) scores to the dataset value objects
   termsOfService: https://pavlidislab.github.io/Gemma/terms.html
   contact:
     name: Pavlidis Lab Support
     url: https://pavlab.msl.ubc.ca/
     email: pavlab-support@msl.ubc.ca
-  version: 2.4.1
+  version: 2.5.1
 servers:
-- url: /rest/v2
+- url: https://gemma.msl.ubc.ca/rest/v2
+  description: Gemma
+- url: https://dev.gemma.msl.ubc.ca/rest/v2
+  description: Gemma (development server)
 security:
 - basicAuth: []
 - cookieAuth: []
@@ -41,7 +136,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseDataObjectExpressionAnalysisResultSetValueObject'
+                $ref: '#/components/schemas/ResponseDataObjectDifferentialExpressionAnalysisResultSetValueObject'
         "404":
           description: The analysis result set could not be found.
           content:
@@ -105,6 +200,7 @@ paths:
       parameters:
       - name: datasets
         in: query
+        explode: false
         schema:
           type: array
           items:
@@ -116,6 +212,7 @@ paths:
               description: A dataset short name.
       - name: databaseEntries
         in: query
+        explode: false
         schema:
           type: array
           items:
@@ -165,11 +262,36 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaginatedResponseDataObjectExpressionAnalysisResultSetValueObject'
-  /annotations/search/{query}:
+                $ref: '#/components/schemas/PaginatedResponseDataObjectDifferentialExpressionAnalysisResultSetValueObject'
+  /annotations/search:
     get:
       summary: Search for annotation tags
       operationId: searchAnnotations
+      parameters:
+      - name: query
+        in: query
+        explode: false
+        schema:
+          type: array
+          items:
+            type: string
+            default: ""
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseDataObjectListAnnotationSearchResultValueObject'
+        "400":
+          description: The search query is empty or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseErrorObject'
+  /annotations/search/{query}:
+    get:
+      summary: Search for annotation tags.
+      operationId: searchAnnotationsByPathQuery
       parameters:
       - name: query
         in: path
@@ -186,23 +308,25 @@ paths:
               schema:
                 $ref: '#/components/schemas/ResponseDataObjectListAnnotationSearchResultValueObject'
         "400":
-          description: The search query is empty.
+          description: The search query is empty or invalid.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseErrorObject'
-  /annotations/search/{query}/datasets:
+      deprecated: true
+  /annotations/search/datasets:
     get:
       summary: Retrieve datasets associated to an annotation tags search
       operationId: searchDatasets
       parameters:
       - name: query
-        in: path
-        required: true
+        in: query
+        explode: false
         schema:
           type: array
           items:
             type: string
+            default: ""
       - name: filter
         in: query
         schema:
@@ -238,17 +362,158 @@ paths:
             sign indicate ascending order whereas the '-' indicate descending.
           default: +id
       responses:
-        default:
-          description: default response
+        "200":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/PaginatedResponseDataObjectExpressionExperimentValueObject'
-  /annotations/{taxon}/search/{query}/datasets:
+        "400":
+          description: The search query is empty or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseErrorObject'
+  /annotations/search/{query}/datasets:
+    get:
+      summary: Retrieve datasets associated to an annotation tags search
+      operationId: searchDatasetsByQueryInPath
+      parameters:
+      - name: query
+        in: path
+        required: true
+        schema:
+          type: array
+          items:
+            type: string
+            default: ""
+      - name: filter
+        in: query
+        schema:
+          type: string
+          description: Filter results by matching the expression. The exact syntax
+            is described in the attached external documentation.
+          externalDocs:
+            url: https://gemma.msl.ubc.ca/resources/apidocs/index.html
+          default: ""
+      - name: offset
+        in: query
+        schema:
+          minimum: 0
+          type: integer
+          description: The offset of the first retrieved result.
+          format: int32
+          default: 0
+      - name: limit
+        in: query
+        schema:
+          maximum: 100
+          minimum: 1
+          type: integer
+          description: Limit the number of results retrieved.
+          format: int32
+          default: 20
+      - name: sort
+        in: query
+        schema:
+          pattern: ^(\+|-?)(\w+)$
+          type: string
+          description: Order results by the given property and direction. The '+'
+            sign indicate ascending order whereas the '-' indicate descending.
+          default: +id
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponseDataObjectExpressionExperimentValueObject'
+        "400":
+          description: The search query is empty or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseErrorObject'
+      deprecated: true
+  /annotations/{taxon}/search/datasets:
     get:
       summary: Retrieve datasets within a given taxa associated to an annotation tags
         search
       operationId: searchTaxonDatasets
+      parameters:
+      - name: taxon
+        in: path
+        required: true
+        schema:
+          oneOf:
+          - type: integer
+            description: A numerical taxon identifier.
+            format: int64
+          - type: integer
+            description: An NCBI taxon identifier.
+            format: int64
+            externalDocs:
+              url: https://www.ncbi.nlm.nih.gov/taxonomy
+          - type: string
+            description: A taxon identifier that matches either its scientific or
+              common name.
+      - name: query
+        in: query
+        explode: false
+        schema:
+          type: array
+          items:
+            type: string
+            default: ""
+      - name: filter
+        in: query
+        schema:
+          type: string
+          description: Filter results by matching the expression. The exact syntax
+            is described in the attached external documentation.
+          externalDocs:
+            url: https://gemma.msl.ubc.ca/resources/apidocs/index.html
+          default: ""
+      - name: offset
+        in: query
+        schema:
+          minimum: 0
+          type: integer
+          description: The offset of the first retrieved result.
+          format: int32
+          default: 0
+      - name: limit
+        in: query
+        schema:
+          maximum: 100
+          minimum: 1
+          type: integer
+          description: Limit the number of results retrieved.
+          format: int32
+          default: 20
+      - name: sort
+        in: query
+        schema:
+          pattern: ^(\+|-?)(\w+)$
+          type: string
+          description: Order results by the given property and direction. The '+'
+            sign indicate ascending order whereas the '-' indicate descending.
+          default: +id
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponseDataObjectExpressionExperimentValueObject'
+        "400":
+          description: The search query is empty or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseErrorObject'
+  /annotations/{taxon}/search/{query}/datasets:
+    get:
+      summary: Retrieve datasets within a given taxa associated to an annotation tags
+        search
+      operationId: searchTaxonDatasetsByQueryInPath
       parameters:
       - name: taxon
         in: path
@@ -273,6 +538,7 @@ paths:
           type: array
           items:
             type: string
+            default: ""
       - name: filter
         in: query
         schema:
@@ -308,15 +574,21 @@ paths:
             sign indicate ascending order whereas the '-' indicate descending.
           default: +id
       responses:
-        default:
-          description: default response
+        "200":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/PaginatedResponseDataObjectExpressionExperimentValueObject'
+        "400":
+          description: The search query is empty or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseErrorObject'
+      deprecated: true
   /datasets/{dataset}/annotations:
     get:
-      summary: Retrieve the annotations analysis of a dataset
+      summary: Retrieve the annotations of a dataset
       operationId: getDatasetAnnotations
       parameters:
       - name: dataset
@@ -430,7 +702,8 @@ paths:
                 $ref: '#/components/schemas/ResponseDataObjectListExperimentExpressionLevelsValueObject'
   /datasets/{dataset}/analyses/differential:
     get:
-      summary: Retrieve the differential analyses of a dataset
+      summary: Retrieve annotations and surface level stats for a dataset's differential
+        analyses
       operationId: getDatasetDifferentialExpressionAnalyses
       parameters:
       - name: dataset
@@ -645,7 +918,7 @@ paths:
                 $ref: '#/components/schemas/ResponseDataObjectListExperimentExpressionLevelsValueObject'
   /datasets/{dataset}/platforms:
     get:
-      summary: Retrieve the platform of a dataset
+      summary: Retrieve the platforms of a dataset
       operationId: getDatasetPlatforms
       parameters:
       - name: dataset
@@ -857,66 +1130,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PaginatedResponseDataObjectExpressionExperimentValueObject'
-  /genes/{gene}/coexpression:
-    get:
-      summary: Retrieve the coexpression of two given genes
-      operationId: getGeneGeneCoexpression
-      parameters:
-      - name: gene
-        in: path
-        required: true
-        schema:
-          oneOf:
-          - type: string
-            description: An Ensembl gene identifier which typically starts with 'ENSG'.
-            externalDocs:
-              url: https://www.ensembl.org/
-          - type: string
-            description: An NCBI gene identifier.
-            externalDocs:
-              url: https://www.ncbi.nlm.nih.gov/gene
-          - type: string
-            description: An official gene symbol approved by HGNC.
-            externalDocs:
-              url: https://www.genenames.org/
-      - name: with
-        in: query
-        schema:
-          oneOf:
-          - type: string
-            description: An Ensembl gene identifier which typically starts with 'ENSG'.
-            externalDocs:
-              url: https://www.ensembl.org/
-          - type: string
-            description: An NCBI gene identifier.
-            externalDocs:
-              url: https://www.ncbi.nlm.nih.gov/gene
-          - type: string
-            description: An official gene symbol approved by HGNC.
-            externalDocs:
-              url: https://www.genenames.org/
-      - name: limit
-        in: query
-        schema:
-          maximum: 100
-          minimum: 1
-          type: integer
-          description: Limit the number of results retrieved.
-          format: int32
-          default: 100
-      - name: stringency
-        in: query
-        schema:
-          type: integer
-          format: int32
-          default: 1
-      responses:
-        default:
-          description: default response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseDataObjectListCoexpressionValueObjectExt'
   /genes/{gene}/goTerms:
     get:
       summary: Retrieve the GO terms associated to a gene
@@ -977,7 +1190,7 @@ paths:
                 $ref: '#/components/schemas/ResponseDataObjectListPhysicalLocationValueObject'
   /genes/{gene}/probes:
     get:
-      summary: Retrieve the probes associated to a genes
+      summary: Retrieve the probes associated to a genes across all platforms
       operationId: getGeneProbes
       parameters:
       - name: gene
@@ -1023,7 +1236,7 @@ paths:
                 $ref: '#/components/schemas/PaginatedResponseDataObjectCompositeSequenceValueObject'
   /genes/{genes}:
     get:
-      summary: Retrieve genes matching a gene identifier
+      summary: Retrieve genes matching gene identifiers
       operationId: getGenes
       parameters:
       - name: genes
@@ -1077,7 +1290,7 @@ paths:
                 format: binary
   /platforms/{platform}/datasets:
     get:
-      summary: Retrieve all experiments within a given platform
+      summary: Retrieve all experiments using a given platform
       operationId: getPlatformDatasets
       parameters:
       - name: platform
@@ -1408,15 +1621,15 @@ paths:
           items:
             type: string
             enum:
-            - ubic.gemma.model.analysis.expression.ExpressionExperimentSet
-            - ubic.gemma.model.common.description.BibliographicReference
-            - ubic.gemma.model.expression.arrayDesign.ArrayDesign
-            - ubic.gemma.model.association.phenotype.PhenotypeAssociation
-            - ubic.gemma.model.expression.experiment.ExpressionExperiment
             - ubic.gemma.model.expression.designElement.CompositeSequence
-            - ubic.gemma.model.genome.Gene
-            - ubic.gemma.model.genome.biosequence.BioSequence
+            - ubic.gemma.model.common.description.BibliographicReference
+            - ubic.gemma.model.expression.experiment.ExpressionExperiment
+            - ubic.gemma.model.analysis.expression.ExpressionExperimentSet
+            - ubic.gemma.model.association.phenotype.PhenotypeAssociation
             - ubic.gemma.model.genome.gene.GeneSet
+            - ubic.gemma.model.genome.biosequence.BioSequence
+            - ubic.gemma.model.expression.arrayDesign.ArrayDesign
+            - ubic.gemma.model.genome.Gene
       - name: limit
         in: query
         schema:
@@ -1709,46 +1922,12 @@ components:
           type: string
         categoryUri:
           type: string
-    CharacteristicValueObject:
+    ContrastResultValueObject:
       type: object
       properties:
         id:
           type: integer
           format: int64
-        urlId:
-          type: string
-        alreadyPresentInDatabase:
-          type: boolean
-        alreadyPresentOnGene:
-          type: boolean
-        category:
-          type: string
-        categoryUri:
-          type: string
-        child:
-          type: boolean
-        numTimesUsed:
-          type: integer
-          format: int32
-        ontologyUsed:
-          type: string
-        privateGeneCount:
-          type: integer
-          format: int64
-        publicGeneCount:
-          type: integer
-          format: int64
-        root:
-          type: boolean
-        taxon:
-          type: string
-        value:
-          type: string
-        valueUri:
-          type: string
-    ContrastResultValueObject:
-      type: object
-      properties:
         pvalue:
           type: number
           format: double
@@ -1771,9 +1950,6 @@ components:
         id:
           type: integer
           format: int64
-        analysisId:
-          type: integer
-          format: int64
         arrayDesignsUsed:
           type: array
           items:
@@ -1781,21 +1957,10 @@ components:
             format: int64
         baselineGroup:
           $ref: '#/components/schemas/FactorValueValueObject'
-        downregulatedCount:
-          type: integer
-          format: int32
         experimentalFactors:
           type: array
           items:
             $ref: '#/components/schemas/ExperimentalFactorValueObject'
-        factorIds:
-          type: array
-          items:
-            type: integer
-            format: int64
-        numberOfDiffExpressedProbes:
-          type: integer
-          format: int32
         numberOfGenesAnalyzed:
           type: integer
           format: int32
@@ -1805,26 +1970,46 @@ components:
         threshold:
           type: number
           format: double
+        numberOfDiffExpressedProbes:
+          type: integer
+          format: int32
         upregulatedCount:
           type: integer
           format: int32
-        bioAssaySetAnalyzedId:
+        downregulatedCount:
           type: integer
-          format: int64
+          format: int32
+        numberOfUpregulatedProbes:
+          type: integer
+          format: int32
+        numberOfDownregulatedProbes:
+          type: integer
+          format: int32
         qvalue:
           type: number
           format: double
-        experimentalFactorsByValueObject:
-          type: array
-          writeOnly: true
-          items:
-            $ref: '#/components/schemas/ExperimentalFactorValueObject'
-        resultSetId:
+    DifferentialExpressionAnalysisResultSetValueObject:
+      type: object
+      properties:
+        id:
           type: integer
           format: int64
+        analysis:
+          $ref: '#/components/schemas/DifferentialExpressionAnalysisValueObject'
+        experimentalFactors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExperimentalFactorValueObject'
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/DifferentialExpressionAnalysisResultValueObject'
     DifferentialExpressionAnalysisResultValueObject:
       type: object
       properties:
+        id:
+          type: integer
+          format: int64
         probeId:
           type: integer
           format: int64
@@ -1878,7 +2063,13 @@ components:
           $ref: '#/components/schemas/ExperimentalFactorValueObject'
         subsetFactorValue:
           $ref: '#/components/schemas/FactorValueValueObject'
-        subset:
+        factorValuesUsedByExperimentalFactorId:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              $ref: '#/components/schemas/FactorValueValueObject'
+        isSubset:
           type: boolean
     ExperimentalFactorValueObject:
       type: object
@@ -1896,31 +2087,22 @@ components:
           type: string
         name:
           type: string
-        numValues:
-          type: integer
-          format: int32
         type:
           type: string
         values:
           type: array
           items:
             $ref: '#/components/schemas/FactorValueValueObject'
-    ExpressionAnalysisResultSetValueObject:
+    ExternalDatabaseValueObject:
       type: object
       properties:
         id:
           type: integer
           format: int64
-        analysis:
-          $ref: '#/components/schemas/DifferentialExpressionAnalysisValueObject'
-        experimentalFactors:
-          type: array
-          items:
-            $ref: '#/components/schemas/ExperimentalFactorValueObject'
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/DifferentialExpressionAnalysisResultValueObject'
+        name:
+          type: string
+        uri:
+          type: string
     FactorValueBasicValueObject:
       type: object
       properties:
@@ -1935,14 +2117,14 @@ components:
           $ref: '#/components/schemas/CharacteristicBasicValueObject'
         measurement:
           $ref: '#/components/schemas/MeasurementValueObject'
-        fvValue:
+        value:
           type: string
-        fvSummary:
+        summary:
           type: string
         experimentalFactorId:
           type: integer
           format: int64
-        baseline:
+        isBaseline:
           type: boolean
     FactorValueValueObject:
       type: object
@@ -1966,42 +2148,11 @@ components:
         factorId:
           type: integer
           format: int64
-        isBaseline:
-          type: boolean
-        measurement:
-          type: boolean
         factorValue:
           type: string
-    GeneSetValueObject:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        description:
-          type: string
-        geneIds:
-          type: array
-          items:
-            type: integer
-            format: int64
-        isPublic:
+        isBaseline:
           type: boolean
-        isShared:
-          type: boolean
-        name:
-          type: string
-        size:
-          type: integer
-          format: int32
-        taxonId:
-          type: integer
-          format: int64
-        taxonName:
-          type: string
-        userOwned:
-          type: boolean
-        userCanWrite:
+        isMeasurement:
           type: boolean
     GeneValueObject:
       type: object
@@ -2010,25 +2161,10 @@ components:
           type: integer
           format: int64
         aliases:
+          uniqueItems: true
           type: array
           items:
             type: string
-        associatedExperimentCount:
-          type: integer
-          format: int32
-        compositeSequenceCount:
-          type: integer
-          format: int32
-        geneSets:
-          type: array
-          items:
-            $ref: '#/components/schemas/GeneSetValueObject'
-        homologues:
-          type: array
-          items:
-            $ref: '#/components/schemas/GeneValueObject'
-        isQuery:
-          type: boolean
         multifunctionalityRank:
           type: number
           format: double
@@ -2037,50 +2173,12 @@ components:
           format: int32
         ensemblId:
           type: string
-        nodeDegreeNegRanks:
-          type: array
-          items:
-            type: number
-            format: double
-        nodeDegreePosRanks:
-          type: array
-          items:
-            type: number
-            format: double
-        nodeDegreesNeg:
-          type: array
-          items:
-            type: integer
-            format: int32
-        nodeDegreesPos:
-          type: array
-          items:
-            type: integer
-            format: int32
-        numGoTerms:
-          type: integer
-          format: int32
         officialName:
           type: string
         officialSymbol:
           type: string
-        phenotypes:
-          type: array
-          items:
-            $ref: '#/components/schemas/CharacteristicValueObject'
-        platformCount:
-          type: integer
-          format: int32
-        score:
-          type: number
-          format: double
-        taxonCommonName:
-          type: string
-        taxonId:
-          type: integer
-          format: int64
-        taxonScientificName:
-          type: string
+        taxon:
+          $ref: '#/components/schemas/TaxonValueObject'
     MeasurementValueObject:
       type: object
       properties:
@@ -2091,25 +2189,37 @@ components:
           type: string
         unit:
           type: string
-        unitId:
-          type: integer
-          format: int64
         type:
           type: string
         representation:
           type: string
-    ResponseDataObjectExpressionAnalysisResultSetValueObject:
+    ResponseDataObjectDifferentialExpressionAnalysisResultSetValueObject:
       type: object
       properties:
         data:
-          $ref: '#/components/schemas/ExpressionAnalysisResultSetValueObject'
-    PaginatedResponseDataObjectExpressionAnalysisResultSetValueObject:
+          $ref: '#/components/schemas/DifferentialExpressionAnalysisResultSetValueObject'
+    TaxonValueObject:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        scientificName:
+          type: string
+        commonName:
+          type: string
+        ncbiId:
+          type: integer
+          format: int32
+        externalDatabase:
+          $ref: '#/components/schemas/ExternalDatabaseValueObject'
+    PaginatedResponseDataObjectDifferentialExpressionAnalysisResultSetValueObject:
       type: object
       properties:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/ExpressionAnalysisResultSetValueObject'
+            $ref: '#/components/schemas/DifferentialExpressionAnalysisResultSetValueObject'
         offset:
           type: integer
           format: int32
@@ -2160,12 +2270,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/AnnotationSearchResultValueObject'
-    AuditEventType:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
     AuditEventValueObject:
       type: object
       properties:
@@ -2183,8 +2287,6 @@ components:
           type: string
         detail:
           type: string
-        eventType:
-          $ref: '#/components/schemas/AuditEventType'
         eventTypeName:
           type: string
         actionName:
@@ -2210,7 +2312,7 @@ components:
           type: string
         lastNoteUpdateEvent:
           $ref: '#/components/schemas/AuditEventValueObject'
-        bioAssayCount:
+        numberOfBioAssays:
           type: integer
           format: int32
         description:
@@ -2219,57 +2321,40 @@ components:
           type: string
         accession:
           type: string
-        arrayDesignCount:
-          type: integer
-          format: int32
         batchConfound:
           type: string
         batchEffect:
           type: string
-        bioMaterialCount:
-          type: integer
-          format: int32
-        currentUserHasWritePermission:
-          type: boolean
-        currentUserIsOwner:
-          type: boolean
-        experimentalDesign:
-          type: integer
-          format: int64
         externalDatabase:
           type: string
         externalUri:
           type: string
         geeq:
           $ref: '#/components/schemas/GeeqValueObject'
-        isPublic:
-          type: boolean
-        isShared:
-          type: boolean
         metadata:
           type: string
-        processedExpressionVectorCount:
-          type: integer
-          format: int32
         shortName:
           type: string
         source:
           type: string
-        suitableForDEA:
-          type: boolean
-        taxon:
+        technologyType:
           type: string
         taxonId:
           type: integer
           format: int64
-        technologyType:
-          type: string
-        userOwned:
-          type: boolean
-        userCanWrite:
-          type: boolean
+        bioAssayCount:
+          type: integer
+          format: int32
         troubleDetails:
           type: string
+        numberOfArrayDesigns:
+          type: integer
+          format: int64
+        numberOfProcessedExpressionVectors:
+          type: integer
+          format: int32
+        taxon:
+          $ref: '#/components/schemas/TaxonValueObject'
     GeeqValueObject:
       type: object
       properties:
@@ -2282,57 +2367,6 @@ components:
         publicSuitabilityScore:
           type: number
           format: double
-        getsScorePublication:
-          type: number
-          format: double
-        getsScorePlatformAmount:
-          type: number
-          format: double
-        getsScorePlatformsTechMulti:
-          type: number
-          format: double
-        getsScoreAvgPlatformPopularity:
-          type: number
-          format: double
-        getsScoreAvgPlatformSize:
-          type: number
-          format: double
-        getsScoreSampleSize:
-          type: number
-          format: double
-        getsScoreRawData:
-          type: number
-          format: double
-        getsScoreMissingValues:
-          type: number
-          format: double
-        getqScoreOutliers:
-          type: number
-          format: double
-        getqScoreSampleMeanCorrelation:
-          type: number
-          format: double
-        getqScoreSampleMedianCorrelation:
-          type: number
-          format: double
-        getqScoreSampleCorrelationVariance:
-          type: number
-          format: double
-        getqScorePlatformsTech:
-          type: number
-          format: double
-        getqScoreReplicates:
-          type: number
-          format: double
-        getqScoreBatchInfo:
-          type: number
-          format: double
-        getqScorePublicBatchEffect:
-          type: number
-          format: double
-        getqScorePublicBatchConfound:
-          type: number
-          format: double
         noVectors:
           type: boolean
         corrMatIssues:
@@ -2343,6 +2377,57 @@ components:
           format: byte
         batchCorrected:
           type: boolean
+        sScorePublication:
+          type: number
+          format: double
+        sScorePlatformAmount:
+          type: number
+          format: double
+        sScorePlatformTechMulti:
+          type: number
+          format: double
+        sScoreAvgPlatformPopularity:
+          type: number
+          format: double
+        sScoreAvgPlatformSize:
+          type: number
+          format: double
+        sScoreSampleSize:
+          type: number
+          format: double
+        sScoreRawData:
+          type: number
+          format: double
+        sScoreMissingValues:
+          type: number
+          format: double
+        qScoreOutliers:
+          type: number
+          format: double
+        qScoreSampleMeanCorrelation:
+          type: number
+          format: double
+        qScoreSampleMedianCorrelation:
+          type: number
+          format: double
+        qScoreSampleCorrelationVariance:
+          type: number
+          format: double
+        qScorePlatformsTech:
+          type: number
+          format: double
+        qScoreReplicates:
+          type: number
+          format: double
+        qScoreBatchInfo:
+          type: number
+          format: double
+        qScorePublicBatchEffect:
+          type: number
+          format: double
+        qScorePublicBatchConfound:
+          type: number
+          format: double
     PaginatedResponseDataObjectExpressionExperimentValueObject:
       type: object
       properties:
@@ -2387,18 +2472,6 @@ components:
         termUri:
           type: string
         termName:
-          type: string
-        parentName:
-          type: string
-        parentDescription:
-          type: string
-        parentLink:
-          type: string
-        parentOfParentName:
-          type: string
-        parentOfParentDescription:
-          type: string
-        parentOfParentLink:
           type: string
         description:
           type: string
@@ -2495,72 +2568,36 @@ components:
           type: string
         lastNoteUpdateEvent:
           $ref: '#/components/schemas/AuditEventValueObject'
-        blackListed:
-          type: boolean
         color:
-          type: string
-        dateCached:
           type: string
         description:
           type: string
-        designElementCount:
-          type: integer
-          format: int32
         expressionExperimentCount:
           type: integer
-          format: int32
-        hasBlatAssociations:
-          type: boolean
-        hasGeneAssociations:
-          type: boolean
-        hasSequenceAssociations:
-          type: boolean
-        isAffymetrixAltCdf:
-          type: boolean
+          format: int64
         isMerged:
           type: boolean
         isMergee:
           type: boolean
-        isSubsumed:
-          type: boolean
-        isSubsumer:
-          type: boolean
-        lastGeneMapping:
-          type: string
-          format: date-time
-        lastRepeatMask:
-          type: string
-          format: date-time
-        lastSequenceAnalysis:
-          type: string
-          format: date-time
-        lastSequenceUpdate:
-          type: string
-          format: date-time
         name:
-          type: string
-        numGenes:
-          type: string
-        numProbeAlignments:
-          type: string
-        numProbeSequences:
-          type: string
-        numProbesToGenes:
           type: string
         shortName:
           type: string
-        switchedExpressionExperimentCount:
-          type: integer
-          format: int32
-        taxon:
+        technologyType:
           type: string
+        numberOfExpressionExperiments:
+          type: integer
+          format: int64
         taxonID:
           type: integer
           format: int64
-        technologyType:
-          type: string
         troubleDetails:
           type: string
+        numberOfSwitchedExpressionExperiments:
+          type: integer
+          format: int64
+        taxon:
+          $ref: '#/components/schemas/TaxonValueObject'
     ResponseDataObjectListArrayDesignValueObject:
       type: object
       properties:
@@ -2595,14 +2632,6 @@ components:
           format: date-time
         sample:
           $ref: '#/components/schemas/BioMaterialValueObject'
-        sequencePairedReads:
-          type: boolean
-        sequenceReadCount:
-          type: integer
-          format: int32
-        sequenceReadLength:
-          type: integer
-          format: int32
         userFlaggedOutlier:
           type: boolean
     BioMaterialValueObject:
@@ -2611,11 +2640,11 @@ components:
         id:
           type: integer
           format: int64
-        assayDescription:
+        name:
           type: string
-        assayName:
+        description:
           type: string
-        bioAssays:
+        bioAssayIds:
           type: array
           items:
             type: integer
@@ -2624,33 +2653,30 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/CharacteristicValueObject'
-        description:
-          type: string
-        factorIdToFactorValueId:
-          type: object
-          additionalProperties:
-            type: string
-        factors:
-          type: object
-          additionalProperties:
-            type: string
         factorValueObjects:
           type: array
           items:
             $ref: '#/components/schemas/IdentifiableValueObject'
         factorValues:
-          type: object
-          additionalProperties:
-            type: string
-        name:
+          type: array
+          items:
+            $ref: '#/components/schemas/IdentifiableValueObject'
+    CharacteristicValueObject:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        category:
           type: string
-        assayProcessingDate:
+        categoryUri:
           type: string
-          format: date-time
-        characteristicValues:
-          type: object
-          additionalProperties:
-            type: string
+        ontologyUsed:
+          type: string
+        value:
+          type: string
+        valueUri:
+          type: string
     DatabaseEntryValueObject:
       type: object
       properties:
@@ -2661,16 +2687,6 @@ components:
           type: string
         externalDatabase:
           $ref: '#/components/schemas/ExternalDatabaseValueObject'
-    ExternalDatabaseValueObject:
-      type: object
-      properties:
-        name:
-          type: string
-        id:
-          type: integer
-          format: int64
-        checked:
-          type: boolean
     IdentifiableValueObject:
       type: object
       properties:
@@ -2684,34 +2700,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/BioAssayValueObject'
-    DoubleMatrixLongInteger:
-      type: object
-      properties:
-        colNames:
-          type: array
-          items:
-            type: integer
-            format: int32
-        rowNames:
-          type: array
-          items:
-            type: integer
-            format: int64
-        rawMatrix:
-          type: array
-          items:
-            type: array
-            items:
-              type: number
-              format: double
-        rowNameMapIterator:
-          type: object
-        columnNames:
-          type: array
-          writeOnly: true
-          items:
-            type: integer
-            format: int32
     ResponseDataObjectSimpleSVDValueObject:
       type: object
       properties:
@@ -2730,55 +2718,13 @@ components:
           items:
             type: number
             format: double
-        getvMatrix:
-          $ref: '#/components/schemas/DoubleMatrixLongInteger'
-    CoexpressionValueObjectExt:
-      type: object
-      properties:
-        containsMyData:
-          type: boolean
-        foundGene:
-          $ref: '#/components/schemas/GeneValueObject'
-        foundGeneNodeDegree:
-          type: integer
-          format: int32
-        foundGeneNodeDegreeRank:
-          type: number
-          format: double
-        negSupp:
-          type: integer
-          format: int32
-        numTestedIn:
-          type: integer
-          format: int32
-        posSupp:
-          type: integer
-          format: int32
-        queryGene:
-          $ref: '#/components/schemas/GeneValueObject'
-        queryGeneNodeDegree:
-          type: integer
-          format: int32
-        queryGeneNodeDegreeRank:
-          type: number
-          format: double
-        sortKey:
-          type: string
-        supportingExperiments:
+        vmatrix:
           type: array
           items:
-            type: integer
-            format: int64
-        support:
-          type: integer
-          format: int32
-    ResponseDataObjectListCoexpressionValueObjectExt:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/CoexpressionValueObjectExt'
+            type: array
+            items:
+              type: number
+              format: double
     GeneOntologyTermValueObject:
       type: object
       properties:
@@ -2831,116 +2777,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/PhysicalLocationValueObject'
-    TaxonValueObject:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        scientificName:
-          type: string
-        commonName:
-          type: string
-        ncbiId:
-          type: integer
-          format: int32
-        isSpecies:
-          type: boolean
-        isGenesUsable:
-          type: boolean
-        externalDatabase:
-          $ref: '#/components/schemas/ExternalDatabaseValueObject'
-    BioSequenceValueObject:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        description:
-          type: string
-        fractionRepeats:
-          type: number
-          format: double
-        length:
-          type: integer
-          format: int64
-        name:
-          type: string
-        sequence:
-          type: string
-        sequenceDatabaseEntry:
-          $ref: '#/components/schemas/DatabaseEntryValueObject'
-        taxon:
-          $ref: '#/components/schemas/TaxonValueObject'
-        type:
-          $ref: '#/components/schemas/SequenceType'
-    BlatResultValueObject:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        blockCount:
-          type: integer
-          format: int32
-        blockSizes:
-          type: string
-        identity:
-          type: number
-          format: double
-        matches:
-          type: integer
-          format: int32
-        mismatches:
-          type: integer
-          format: int32
-        ns:
-          type: integer
-          format: int32
-        queryEnd:
-          type: integer
-          format: int32
-        queryGapBases:
-          type: integer
-          format: int32
-        queryGapCount:
-          type: integer
-          format: int32
-        querySequence:
-          $ref: '#/components/schemas/BioSequenceValueObject'
-        queryStart:
-          type: integer
-          format: int32
-        queryStarts:
-          type: string
-        repMatches:
-          type: integer
-          format: int32
-        score:
-          type: number
-          format: double
-        strand:
-          type: string
-        targetChromosomeName:
-          type: string
-        targetDatabase:
-          type: string
-        taxon:
-          $ref: '#/components/schemas/TaxonValueObject'
-        targetEnd:
-          type: integer
-          format: int64
-        targetGapBases:
-          type: integer
-          format: int32
-        targetGapCount:
-          type: integer
-          format: int32
-        targetStart:
-          type: integer
-          format: int64
-        targetStarts:
-          type: string
     CompositeSequenceValueObject:
       type: object
       properties:
@@ -2953,64 +2789,6 @@ components:
           type: string
         arrayDesign:
           $ref: '#/components/schemas/ArrayDesignValueObject'
-        geneMappingSummaries:
-          type: array
-          items:
-            $ref: '#/components/schemas/GeneMappingSummary'
-    GeneMappingSummary:
-      type: object
-      properties:
-        geneProductIdMap:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/GeneProductValueObject'
-        geneProductIdGeneMap:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/GeneValueObject'
-        blatResult:
-          $ref: '#/components/schemas/BlatResultValueObject'
-        geneProductMap:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/GeneValueObject'
-        compositeSequence:
-          $ref: '#/components/schemas/CompositeSequenceValueObject'
-        identity:
-          type: number
-          format: double
-        score:
-          type: number
-          format: double
-        blatResultId:
-          type: string
-        geneProducts:
-          type: array
-          items:
-            $ref: '#/components/schemas/GeneProductValueObject'
-    GeneProductValueObject:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        ncbiId:
-          type: string
-        name:
-          type: string
-        geneId:
-          type: integer
-          format: int64
-        chromosome:
-          type: string
-        strand:
-          type: string
-        nucleotideStart:
-          type: integer
-          format: int64
-        nucleotideEnd:
-          type: integer
-          format: int64
     PaginatedResponseDataObjectCompositeSequenceValueObject:
       type: object
       properties:
@@ -3029,11 +2807,6 @@ components:
         totalElements:
           type: integer
           format: int64
-    SequenceType:
-      type: object
-      properties:
-        value:
-          type: string
     ResponseDataObjectListGeneValueObject:
       type: object
       properties:
@@ -3048,292 +2821,6 @@ components:
         format: int64
       - type: string
         description: A platform short name.
-    AlternateName:
-      type: object
-      properties:
-        name:
-          type: string
-        id:
-          type: integer
-          format: int64
-    Analysis:
-      type: object
-      properties:
-        name:
-          type: string
-        description:
-          type: string
-        id:
-          type: integer
-          format: int64
-        protocol:
-          $ref: '#/components/schemas/Protocol'
-    ArrayDesign:
-      type: object
-      properties:
-        name:
-          type: string
-        description:
-          type: string
-        id:
-          type: integer
-          format: int64
-        auditTrail:
-          $ref: '#/components/schemas/AuditTrail'
-        advertisedNumberOfDesignElements:
-          type: integer
-          format: int32
-        alternateNames:
-          uniqueItems: true
-          type: array
-          items:
-            $ref: '#/components/schemas/AlternateName'
-        alternativeTo:
-          $ref: '#/components/schemas/ArrayDesign'
-        compositeSequences:
-          uniqueItems: true
-          type: array
-          items:
-            $ref: '#/components/schemas/CompositeSequence'
-        curationDetails:
-          $ref: '#/components/schemas/CurationDetails'
-        designProvider:
-          $ref: '#/components/schemas/Contact'
-        externalReferences:
-          uniqueItems: true
-          type: array
-          items:
-            $ref: '#/components/schemas/DatabaseEntry'
-        mergedInto:
-          $ref: '#/components/schemas/ArrayDesign'
-        mergees:
-          uniqueItems: true
-          type: array
-          items:
-            $ref: '#/components/schemas/ArrayDesign'
-        primaryTaxon:
-          $ref: '#/components/schemas/Taxon'
-        shortName:
-          type: string
-        subsumedArrayDesigns:
-          uniqueItems: true
-          type: array
-          items:
-            $ref: '#/components/schemas/ArrayDesign'
-        subsumingArrayDesign:
-          $ref: '#/components/schemas/ArrayDesign'
-        technologyType:
-          $ref: '#/components/schemas/TechnologyType'
-    AuditAction:
-      type: object
-      properties:
-        value:
-          type: string
-    AuditEvent:
-      type: object
-      properties:
-        action:
-          $ref: '#/components/schemas/AuditAction'
-        date:
-          type: string
-          format: date-time
-        detail:
-          type: string
-        eventType:
-          $ref: '#/components/schemas/AuditEventType'
-        id:
-          type: integer
-          format: int64
-        note:
-          type: string
-        performer:
-          $ref: '#/components/schemas/User'
-    AuditTrail:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        events:
-          type: array
-          items:
-            $ref: '#/components/schemas/AuditEvent'
-        creationEvent:
-          $ref: '#/components/schemas/AuditEvent'
-        last:
-          $ref: '#/components/schemas/AuditEvent'
-    BibliographicReference:
-      type: object
-      properties:
-        name:
-          type: string
-        description:
-          type: string
-        id:
-          type: integer
-          format: int64
-        authorList:
-          type: string
-        title:
-          type: string
-        publisher:
-          type: string
-        editor:
-          type: string
-        volume:
-          type: string
-        issue:
-          type: string
-        pages:
-          type: string
-        publication:
-          type: string
-        fullTextUri:
-          type: string
-        abstractText:
-          type: string
-        citation:
-          type: string
-        publicationDate:
-          type: string
-          format: date-time
-        annotatedAbstract:
-          type: string
-        pubAccession:
-          $ref: '#/components/schemas/DatabaseEntry'
-        retracted:
-          type: boolean
-        annotations:
-          uniqueItems: true
-          type: array
-          items:
-            $ref: '#/components/schemas/Characteristic'
-        meshTerms:
-          uniqueItems: true
-          type: array
-          items:
-            $ref: '#/components/schemas/MedicalSubjectHeading'
-        keywords:
-          uniqueItems: true
-          type: array
-          items:
-            $ref: '#/components/schemas/Keyword'
-        chemicals:
-          uniqueItems: true
-          type: array
-          items:
-            $ref: '#/components/schemas/Compound'
-    BioSequence:
-      type: object
-      properties:
-        name:
-          type: string
-        description:
-          type: string
-        id:
-          type: integer
-          format: int64
-        length:
-          type: integer
-          format: int64
-        sequence:
-          type: string
-        isApproximateLength:
-          type: boolean
-        isCircular:
-          type: boolean
-        polymerType:
-          $ref: '#/components/schemas/PolymerType'
-        type:
-          $ref: '#/components/schemas/SequenceType'
-        fractionRepeats:
-          type: number
-          format: double
-        sequenceDatabaseEntry:
-          $ref: '#/components/schemas/DatabaseEntry'
-        taxon:
-          $ref: '#/components/schemas/Taxon'
-        bioSequence2GeneProduct:
-          uniqueItems: true
-          type: array
-          items:
-            $ref: '#/components/schemas/BioSequence2GeneProduct'
-    BioSequence2GeneProduct:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        sourceAnalysis:
-          $ref: '#/components/schemas/Analysis'
-        overlap:
-          type: integer
-          format: int32
-        score:
-          type: number
-          format: double
-        threePrimeDistance:
-          type: integer
-          format: int64
-        threePrimeDistanceMeasurementMethod:
-          $ref: '#/components/schemas/ThreePrimeDistanceMethod'
-        specificity:
-          type: number
-          format: double
-        bioSequence:
-          $ref: '#/components/schemas/BioSequence'
-        geneProduct:
-          $ref: '#/components/schemas/GeneProduct'
-    Characteristic:
-      type: object
-      properties:
-        name:
-          type: string
-        description:
-          type: string
-        id:
-          type: integer
-          format: int64
-        category:
-          type: string
-        categoryUri:
-          type: string
-        evidenceCode:
-          $ref: '#/components/schemas/GOEvidenceCode'
-        originalValue:
-          type: string
-        value:
-          type: string
-        valueUri:
-          type: string
-    Chromosome:
-      type: object
-      properties:
-        name:
-          type: string
-        assemblyDatabase:
-          $ref: '#/components/schemas/ExternalDatabase'
-        sequence:
-          $ref: '#/components/schemas/BioSequence'
-        taxon:
-          $ref: '#/components/schemas/Taxon'
-        id:
-          type: integer
-          format: int64
-    CompositeSequence:
-      type: object
-      properties:
-        name:
-          type: string
-        description:
-          type: string
-        id:
-          type: integer
-          format: int64
-        biologicalCharacteristic:
-          $ref: '#/components/schemas/BioSequence'
-        arrayDesign:
-          $ref: '#/components/schemas/ArrayDesign'
     CompositeSequenceArg:
       oneOf:
       - type: integer
@@ -3341,457 +2828,6 @@ components:
         format: int64
       - type: string
         description: A composite sequence name.
-    Compound:
-      type: object
-      properties:
-        name:
-          type: string
-        description:
-          type: string
-        id:
-          type: integer
-          format: int64
-        registryNumber:
-          type: string
-    Contact:
-      type: object
-      properties:
-        name:
-          type: string
-        description:
-          type: string
-        id:
-          type: integer
-          format: int64
-        email:
-          type: string
-    CurationDetails:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        lastUpdated:
-          type: string
-          format: date-time
-        lastNeedsAttentionEvent:
-          $ref: '#/components/schemas/AuditEvent'
-        needsAttention:
-          type: boolean
-        lastTroubledEvent:
-          $ref: '#/components/schemas/AuditEvent'
-        troubled:
-          type: boolean
-        lastNoteUpdateEvent:
-          $ref: '#/components/schemas/AuditEvent'
-        curationNote:
-          type: string
-    DatabaseEntry:
-      type: object
-      properties:
-        accession:
-          type: string
-        accessionVersion:
-          type: string
-        id:
-          type: integer
-          format: int64
-        externalDatabase:
-          $ref: '#/components/schemas/ExternalDatabase'
-        uri:
-          type: string
-    DatabaseType:
-      type: object
-      properties:
-        value:
-          type: string
-    ExternalDatabase:
-      type: object
-      properties:
-        name:
-          type: string
-        description:
-          type: string
-        id:
-          type: integer
-          format: int64
-        localInstallDbName:
-          type: string
-        webUri:
-          type: string
-        ftpUri:
-          type: string
-        type:
-          $ref: '#/components/schemas/DatabaseType'
-        databaseSupplier:
-          $ref: '#/components/schemas/Contact'
-    GOEvidenceCode:
-      type: object
-      properties:
-        value:
-          type: string
-    Gene:
-      type: object
-      properties:
-        name:
-          type: string
-        description:
-          type: string
-        id:
-          type: integer
-          format: int64
-        previousNcbiId:
-          type: string
-        physicalLocation:
-          $ref: '#/components/schemas/PhysicalLocation'
-        officialSymbol:
-          type: string
-        officialName:
-          type: string
-        ncbiGeneId:
-          type: integer
-          format: int32
-        ensemblId:
-          type: string
-        products:
-          uniqueItems: true
-          type: array
-          items:
-            $ref: '#/components/schemas/GeneProduct'
-        aliases:
-          uniqueItems: true
-          type: array
-          items:
-            $ref: '#/components/schemas/GeneAlias'
-        taxon:
-          $ref: '#/components/schemas/Taxon'
-        accessions:
-          uniqueItems: true
-          type: array
-          items:
-            $ref: '#/components/schemas/DatabaseEntry'
-        multifunctionality:
-          $ref: '#/components/schemas/Multifunctionality'
-        phenotypeAssociations:
-          uniqueItems: true
-          type: array
-          items:
-            $ref: '#/components/schemas/PhenotypeAssociation'
-    GeneAlias:
-      type: object
-      properties:
-        alias:
-          type: string
-        id:
-          type: integer
-          format: int64
-    GeneProduct:
-      type: object
-      properties:
-        name:
-          type: string
-        description:
-          type: string
-        id:
-          type: integer
-          format: int64
-        previousNcbiId:
-          type: string
-        physicalLocation:
-          $ref: '#/components/schemas/PhysicalLocation'
-        ncbiGi:
-          type: string
-        accessions:
-          uniqueItems: true
-          type: array
-          items:
-            $ref: '#/components/schemas/DatabaseEntry'
-        exons:
-          uniqueItems: true
-          type: array
-          items:
-            $ref: '#/components/schemas/PhysicalLocation'
-        gene:
-          $ref: '#/components/schemas/Gene'
-    GeneralType:
-      type: object
-      properties:
-        value:
-          type: string
-    JobInfo:
-      type: object
-      properties:
-        runningStatus:
-          type: boolean
-        failedMessage:
-          type: string
-        startTime:
-          type: string
-          format: date-time
-        endTime:
-          type: string
-          format: date-time
-        phases:
-          type: integer
-          format: int32
-        description:
-          type: string
-        messages:
-          type: string
-        taskId:
-          type: string
-        id:
-          type: integer
-          format: int64
-        user:
-          $ref: '#/components/schemas/User'
-    Keyword:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        isMajorTopic:
-          type: boolean
-        term:
-          type: string
-    MedicalSubjectHeading:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        isMajorTopic:
-          type: boolean
-        term:
-          type: string
-    Multifunctionality:
-      type: object
-      properties:
-        score:
-          type: number
-          format: double
-        rank:
-          type: number
-          format: double
-        numGoTerms:
-          type: integer
-          format: int32
-        id:
-          type: integer
-          format: int64
-    PhenotypeAssociation:
-      type: object
-      properties:
-        name:
-          type: string
-        description:
-          type: string
-        id:
-          type: integer
-          format: int64
-        auditTrail:
-          $ref: '#/components/schemas/AuditTrail'
-        evidenceCode:
-          $ref: '#/components/schemas/GOEvidenceCode'
-        isNegativeEvidence:
-          type: boolean
-        score:
-          type: string
-        strength:
-          type: number
-          format: double
-        gene:
-          $ref: '#/components/schemas/Gene'
-        phenotypes:
-          uniqueItems: true
-          type: array
-          items:
-            $ref: '#/components/schemas/Characteristic'
-        associationType:
-          $ref: '#/components/schemas/Characteristic'
-        evidenceSource:
-          $ref: '#/components/schemas/DatabaseEntry'
-        scoreType:
-          $ref: '#/components/schemas/QuantitationType'
-        phenotypeAssociationPublications:
-          uniqueItems: true
-          type: array
-          items:
-            $ref: '#/components/schemas/PhenotypeAssociationPublication'
-        mappingType:
-          $ref: '#/components/schemas/PhenotypeMappingType'
-        originalPhenotype:
-          type: string
-        relationship:
-          type: string
-        lastUpdated:
-          type: string
-          format: date-time
-    PhenotypeAssociationPublication:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        type:
-          type: string
-        citation:
-          $ref: '#/components/schemas/BibliographicReference'
-    PhenotypeMappingType:
-      type: object
-      properties:
-        value:
-          type: string
-        mutable:
-          type: boolean
-    PhysicalLocation:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        chromosome:
-          $ref: '#/components/schemas/Chromosome'
-        nucleotide:
-          type: integer
-          format: int64
-        nucleotideLength:
-          type: integer
-          format: int32
-        strand:
-          type: string
-        bin:
-          type: integer
-          format: int32
-    PolymerType:
-      type: object
-      properties:
-        value:
-          type: string
-    PrimitiveType:
-      type: object
-      properties:
-        value:
-          type: string
-    Protocol:
-      type: object
-      properties:
-        name:
-          type: string
-        description:
-          type: string
-        id:
-          type: integer
-          format: int64
-    QuantitationType:
-      type: object
-      properties:
-        name:
-          type: string
-        description:
-          type: string
-        id:
-          type: integer
-          format: int64
-        isBackground:
-          type: boolean
-        isBackgroundSubtracted:
-          type: boolean
-        isBatchCorrected:
-          type: boolean
-        isMaskedPreferred:
-          type: boolean
-        isNormalized:
-          type: boolean
-        isPreferred:
-          type: boolean
-        isRecomputedFromRawData:
-          type: boolean
-        isRatio:
-          type: boolean
-        generalType:
-          $ref: '#/components/schemas/GeneralType'
-        representation:
-          $ref: '#/components/schemas/PrimitiveType'
-        scale:
-          $ref: '#/components/schemas/ScaleType'
-        type:
-          $ref: '#/components/schemas/StandardQuantitationType'
-    ScaleType:
-      type: object
-      properties:
-        value:
-          type: string
-    StandardQuantitationType:
-      type: object
-      properties:
-        value:
-          type: string
-    Taxon:
-      type: object
-      properties:
-        scientificName:
-          type: string
-        commonName:
-          type: string
-        ncbiId:
-          type: integer
-          format: int32
-        isGenesUsable:
-          type: boolean
-        secondaryNcbiId:
-          type: integer
-          format: int32
-        id:
-          type: integer
-          format: int64
-        externalDatabase:
-          $ref: '#/components/schemas/ExternalDatabase'
-    TechnologyType:
-      type: object
-      properties:
-        value:
-          type: string
-    ThreePrimeDistanceMethod:
-      type: object
-      properties:
-        value:
-          type: string
-    User:
-      type: object
-      properties:
-        name:
-          type: string
-        description:
-          type: string
-        id:
-          type: integer
-          format: int64
-        email:
-          type: string
-        lastName:
-          type: string
-        userName:
-          type: string
-        password:
-          type: string
-        passwordHint:
-          type: string
-        enabled:
-          type: boolean
-        signupToken:
-          type: string
-        signupTokenDatestamp:
-          type: string
-          format: date-time
-        jobs:
-          uniqueItems: true
-          type: array
-          items:
-            $ref: '#/components/schemas/JobInfo'
-        fullName:
-          type: string
     PaginatedResponseDataObjectGeneValueObject:
       type: object
       properties:
@@ -3842,12 +2878,6 @@ components:
       properties:
         data:
           $ref: '#/components/schemas/ApiInfoValueObject'
-    IdentifiableValueObjectIdentifiable:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
     SearchResultValueObject:
       type: object
       properties:
@@ -3855,12 +2885,12 @@ components:
           type: integer
           format: int64
         resultType:
-          type: string
+          $ref: '#/components/schemas/SearchResultType'
         score:
           type: number
           format: double
         resultObject:
-          $ref: '#/components/schemas/IdentifiableValueObjectIdentifiable'
+          $ref: '#/components/schemas/IdentifiableValueObject'
     SearchResultsResponseDataObject:
       type: object
       properties:
@@ -3876,10 +2906,9 @@ components:
         query:
           type: string
         resultTypes:
-          uniqueItems: true
           type: array
           items:
-            type: string
+            $ref: '#/components/schemas/SearchResultType'
         taxon:
           $ref: '#/components/schemas/TaxonValueObject'
         platform:
@@ -3892,15 +2921,15 @@ components:
       items:
         type: string
         enum:
-        - ubic.gemma.model.analysis.expression.ExpressionExperimentSet
-        - ubic.gemma.model.common.description.BibliographicReference
-        - ubic.gemma.model.expression.arrayDesign.ArrayDesign
-        - ubic.gemma.model.association.phenotype.PhenotypeAssociation
-        - ubic.gemma.model.expression.experiment.ExpressionExperiment
         - ubic.gemma.model.expression.designElement.CompositeSequence
-        - ubic.gemma.model.genome.Gene
-        - ubic.gemma.model.genome.biosequence.BioSequence
+        - ubic.gemma.model.common.description.BibliographicReference
+        - ubic.gemma.model.expression.experiment.ExpressionExperiment
+        - ubic.gemma.model.analysis.expression.ExpressionExperimentSet
+        - ubic.gemma.model.association.phenotype.PhenotypeAssociation
         - ubic.gemma.model.genome.gene.GeneSet
+        - ubic.gemma.model.genome.biosequence.BioSequence
+        - ubic.gemma.model.expression.arrayDesign.ArrayDesign
+        - ubic.gemma.model.genome.Gene
     ResponseDataObjectListTaxonValueObject:
       type: object
       properties:

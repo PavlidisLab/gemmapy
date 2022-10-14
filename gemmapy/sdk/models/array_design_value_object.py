@@ -3,9 +3,9 @@
 """
     Gemma RESTful API
 
-    This website documents the usage of the [Gemma REST API](https://gemma.msl.ubc.ca/rest/v2/). Here you can find example script usage of the API, as well as graphical interface for each endpoint, with description of its parameters and the endpoint URL.  The documentation of the underlying java code can be found [here](https://gemma.msl.ubc.ca/resources/apidocs/ubic/gemma/web/services/rest/package-summary.html). See the [links section](https://gemma.msl.ubc.ca/resources/restapidocs/#footer) in the footer of this page for other relevant links.  Use of this webpage and Gemma web services, including the REST API, is subject to [these terms and conditions](https://pavlidislab.github.io/Gemma/terms.html). Please read these in full before continuing to use this webpage or any other part of the Gemma system.   # noqa: E501
+    This website documents the usage of the [Gemma RESTful API](https://gemma.msl.ubc.ca/rest/v2/). Here you can find example script usage of the API, as well as graphical interface for each endpoint, with description of its parameters and the endpoint URL.  Use of this webpage and the Gemma Web services, including the REST API, is subject to [these terms and conditions](https://pavlidislab.github.io/Gemma/terms.html). Please read these in full before continuing to use this webpage or any other part of the Gemma system.  Fix return type for `getResultSets` which was incorrectly referring to a renamed VO.  Remove the `security` requirements by default from the specification, which forced the Python package to supply empty credentials. There is currently no privileged endpoints, although some can return additional results.  ## Updates  ### Update 2.5.1  Restore `objectClass` visibility in `AnnotationValueObject`.  Fix incorrect response types for annotations search endpoints returning datasets.  ### Update 2.5.0  Major cleanups were performed in this release in order to stabilize the specification. Numerous properties from Gemma Web that were never intended to be exposed in Gemma REST have been hidden. It's a bit too much to describe in here, but you can navigate to the schemas section below to get a good glance at the models.  Favour `numberOfSomething` instead of `somethingCount` which is clearer. The older names are kept for backward-compatibility, but should be considered deprecated.  Gene aliases and multifunctionality rank are now filled in `GeneValueObject`.  Uniformly use `TaxonValueObject` to represent taxon. This is breaking change for the `ExpressionExperimentValueObject` and `ArrayDesignValueObject` as their `taxon` property will be an `object` instead of a `string`. Properties such as `taxonId` are now deprecated and `taxon.id` should be used instead.  Entities that have IDs now all inherit from `IdentifiableValueObject`. This implies that you can assume the presence of an `id` in a search result `resultObject` attribute for example.  New `/search` endpoint! for an unified search experience. Annotation-based search endpoints under `/annotations` are now deprecated.  New API docs! While not as nice looking, the previous theme will be gradually ported to Swagger UI as we focused on functionality over prettiness for this release.  ### Update 2.4.0 through 2.4.1  Release notes for the 2.4 series were not written down, so I'll try to do my best to recall features that were introduced at that time.  An [OpenAPI](https://www.openapis.org/) specification was introduced and available under `/rest/v2/openapi.json`, although not fully stabilized.  Add a `/resultSets` endpoint to navigate result sets directly, by ID or by dataset.  Add a `/resultSets/{resultSetId}` endpoint to retrieve a specific result set by its ID. This endpoint can be negotiated with an `Accept: text/tab-separated-values` header to obtain a TSV representation.  Add a `/datasets/{dataset}/analyses/differential/resultSets` endpoint that essentially redirect to a specific `/resultSet` endpoint by dataset ID.  Add an endpoint to retrieve preferred raw expression vectors.  ### Update 2.3.4  November 6th, 2018  November 6th [2.3.4] Bug fixes in the dataset search endpoint.  November 5th [2.3.3] Added filtering parameters to dataset search.  October 25th [2.3.2] Changed behavior of the dataset search endpoint to more closely match the Gemma web interface.  October 2nd [2.3.1] Added group information to the User value object.  September 27th [2.3.0] Breaking change in Taxa: Abbreviation property has been removed and is therefore no longer an accepted identifier.  ### Update 2.2.6  June 7th, 2018  Code maintenance, bug fixes. Geeq scores stable and made public.  June 7th [2.2.6] Added: User authentication endpoint.  May 2nd [2.2.5] Fixed: Cleaned up and optimized platforms/elements endpoint, removed redundant information (recursive properties nesting).  April 12th [2.2.3] Fixed: Array arguments not handling non-string properties properly, e.g. `ncbiIds` of genes.  April 9th [2.2.1] Fixed: Filter argument not working when the filtered field was a primitive type. This most significantly allows filtering by geeq boolean and double properties.  ### Update 2.2.0  February 8th, 2018  Breaking change in the 'Dataset differential analysis' endpoint: - No longer using `qValueThreshold` parameter. - Response format changed, now using `DifferentialExpressionAnalysisValueObject` instead of `DifferentialExpressionValueObject` - [Experimental] Added Geeq (Gene Expression Experiment Quality) scores to the dataset value objects   # noqa: E501
 
-    OpenAPI spec version: 2.4.1
+    OpenAPI spec version: 2.5.1
     Contact: pavlab-support@msl.ubc.ca
     Generated by: https://github.com/swagger-api/swagger-codegen.git
 """
@@ -36,35 +36,19 @@ class ArrayDesignValueObject(object):
         'last_needs_attention_event': 'AuditEventValueObject',
         'curation_note': 'str',
         'last_note_update_event': 'AuditEventValueObject',
-        'black_listed': 'bool',
         'color': 'str',
-        'date_cached': 'str',
         'description': 'str',
-        'design_element_count': 'int',
         'expression_experiment_count': 'int',
-        'has_blat_associations': 'bool',
-        'has_gene_associations': 'bool',
-        'has_sequence_associations': 'bool',
-        'is_affymetrix_alt_cdf': 'bool',
         'is_merged': 'bool',
         'is_mergee': 'bool',
-        'is_subsumed': 'bool',
-        'is_subsumer': 'bool',
-        'last_gene_mapping': 'datetime',
-        'last_repeat_mask': 'datetime',
-        'last_sequence_analysis': 'datetime',
-        'last_sequence_update': 'datetime',
         'name': 'str',
-        'num_genes': 'str',
-        'num_probe_alignments': 'str',
-        'num_probe_sequences': 'str',
-        'num_probes_to_genes': 'str',
         'short_name': 'str',
-        'switched_expression_experiment_count': 'int',
-        'taxon': 'str',
-        'taxon_id': 'int',
         'technology_type': 'str',
-        'trouble_details': 'str'
+        'number_of_expression_experiments': 'int',
+        'taxon_id': 'int',
+        'trouble_details': 'str',
+        'number_of_switched_expression_experiments': 'int',
+        'taxon': 'TaxonValueObject'
     }
 
     attribute_map = {
@@ -76,38 +60,22 @@ class ArrayDesignValueObject(object):
         'last_needs_attention_event': 'lastNeedsAttentionEvent',
         'curation_note': 'curationNote',
         'last_note_update_event': 'lastNoteUpdateEvent',
-        'black_listed': 'blackListed',
         'color': 'color',
-        'date_cached': 'dateCached',
         'description': 'description',
-        'design_element_count': 'designElementCount',
         'expression_experiment_count': 'expressionExperimentCount',
-        'has_blat_associations': 'hasBlatAssociations',
-        'has_gene_associations': 'hasGeneAssociations',
-        'has_sequence_associations': 'hasSequenceAssociations',
-        'is_affymetrix_alt_cdf': 'isAffymetrixAltCdf',
         'is_merged': 'isMerged',
         'is_mergee': 'isMergee',
-        'is_subsumed': 'isSubsumed',
-        'is_subsumer': 'isSubsumer',
-        'last_gene_mapping': 'lastGeneMapping',
-        'last_repeat_mask': 'lastRepeatMask',
-        'last_sequence_analysis': 'lastSequenceAnalysis',
-        'last_sequence_update': 'lastSequenceUpdate',
         'name': 'name',
-        'num_genes': 'numGenes',
-        'num_probe_alignments': 'numProbeAlignments',
-        'num_probe_sequences': 'numProbeSequences',
-        'num_probes_to_genes': 'numProbesToGenes',
         'short_name': 'shortName',
-        'switched_expression_experiment_count': 'switchedExpressionExperimentCount',
-        'taxon': 'taxon',
-        'taxon_id': 'taxonID',
         'technology_type': 'technologyType',
-        'trouble_details': 'troubleDetails'
+        'number_of_expression_experiments': 'numberOfExpressionExperiments',
+        'taxon_id': 'taxonID',
+        'trouble_details': 'troubleDetails',
+        'number_of_switched_expression_experiments': 'numberOfSwitchedExpressionExperiments',
+        'taxon': 'taxon'
     }
 
-    def __init__(self, id=None, last_updated=None, troubled=None, last_troubled_event=None, needs_attention=None, last_needs_attention_event=None, curation_note=None, last_note_update_event=None, black_listed=None, color=None, date_cached=None, description=None, design_element_count=None, expression_experiment_count=None, has_blat_associations=None, has_gene_associations=None, has_sequence_associations=None, is_affymetrix_alt_cdf=None, is_merged=None, is_mergee=None, is_subsumed=None, is_subsumer=None, last_gene_mapping=None, last_repeat_mask=None, last_sequence_analysis=None, last_sequence_update=None, name=None, num_genes=None, num_probe_alignments=None, num_probe_sequences=None, num_probes_to_genes=None, short_name=None, switched_expression_experiment_count=None, taxon=None, taxon_id=None, technology_type=None, trouble_details=None):  # noqa: E501
+    def __init__(self, id=None, last_updated=None, troubled=None, last_troubled_event=None, needs_attention=None, last_needs_attention_event=None, curation_note=None, last_note_update_event=None, color=None, description=None, expression_experiment_count=None, is_merged=None, is_mergee=None, name=None, short_name=None, technology_type=None, number_of_expression_experiments=None, taxon_id=None, trouble_details=None, number_of_switched_expression_experiments=None, taxon=None):  # noqa: E501
         """ArrayDesignValueObject - a model defined in Swagger"""  # noqa: E501
         self._id = None
         self._last_updated = None
@@ -117,35 +85,19 @@ class ArrayDesignValueObject(object):
         self._last_needs_attention_event = None
         self._curation_note = None
         self._last_note_update_event = None
-        self._black_listed = None
         self._color = None
-        self._date_cached = None
         self._description = None
-        self._design_element_count = None
         self._expression_experiment_count = None
-        self._has_blat_associations = None
-        self._has_gene_associations = None
-        self._has_sequence_associations = None
-        self._is_affymetrix_alt_cdf = None
         self._is_merged = None
         self._is_mergee = None
-        self._is_subsumed = None
-        self._is_subsumer = None
-        self._last_gene_mapping = None
-        self._last_repeat_mask = None
-        self._last_sequence_analysis = None
-        self._last_sequence_update = None
         self._name = None
-        self._num_genes = None
-        self._num_probe_alignments = None
-        self._num_probe_sequences = None
-        self._num_probes_to_genes = None
         self._short_name = None
-        self._switched_expression_experiment_count = None
-        self._taxon = None
-        self._taxon_id = None
         self._technology_type = None
+        self._number_of_expression_experiments = None
+        self._taxon_id = None
         self._trouble_details = None
+        self._number_of_switched_expression_experiments = None
+        self._taxon = None
         self.discriminator = None
         if id is not None:
             self.id = id
@@ -163,64 +115,32 @@ class ArrayDesignValueObject(object):
             self.curation_note = curation_note
         if last_note_update_event is not None:
             self.last_note_update_event = last_note_update_event
-        if black_listed is not None:
-            self.black_listed = black_listed
         if color is not None:
             self.color = color
-        if date_cached is not None:
-            self.date_cached = date_cached
         if description is not None:
             self.description = description
-        if design_element_count is not None:
-            self.design_element_count = design_element_count
         if expression_experiment_count is not None:
             self.expression_experiment_count = expression_experiment_count
-        if has_blat_associations is not None:
-            self.has_blat_associations = has_blat_associations
-        if has_gene_associations is not None:
-            self.has_gene_associations = has_gene_associations
-        if has_sequence_associations is not None:
-            self.has_sequence_associations = has_sequence_associations
-        if is_affymetrix_alt_cdf is not None:
-            self.is_affymetrix_alt_cdf = is_affymetrix_alt_cdf
         if is_merged is not None:
             self.is_merged = is_merged
         if is_mergee is not None:
             self.is_mergee = is_mergee
-        if is_subsumed is not None:
-            self.is_subsumed = is_subsumed
-        if is_subsumer is not None:
-            self.is_subsumer = is_subsumer
-        if last_gene_mapping is not None:
-            self.last_gene_mapping = last_gene_mapping
-        if last_repeat_mask is not None:
-            self.last_repeat_mask = last_repeat_mask
-        if last_sequence_analysis is not None:
-            self.last_sequence_analysis = last_sequence_analysis
-        if last_sequence_update is not None:
-            self.last_sequence_update = last_sequence_update
         if name is not None:
             self.name = name
-        if num_genes is not None:
-            self.num_genes = num_genes
-        if num_probe_alignments is not None:
-            self.num_probe_alignments = num_probe_alignments
-        if num_probe_sequences is not None:
-            self.num_probe_sequences = num_probe_sequences
-        if num_probes_to_genes is not None:
-            self.num_probes_to_genes = num_probes_to_genes
         if short_name is not None:
             self.short_name = short_name
-        if switched_expression_experiment_count is not None:
-            self.switched_expression_experiment_count = switched_expression_experiment_count
-        if taxon is not None:
-            self.taxon = taxon
-        if taxon_id is not None:
-            self.taxon_id = taxon_id
         if technology_type is not None:
             self.technology_type = technology_type
+        if number_of_expression_experiments is not None:
+            self.number_of_expression_experiments = number_of_expression_experiments
+        if taxon_id is not None:
+            self.taxon_id = taxon_id
         if trouble_details is not None:
             self.trouble_details = trouble_details
+        if number_of_switched_expression_experiments is not None:
+            self.number_of_switched_expression_experiments = number_of_switched_expression_experiments
+        if taxon is not None:
+            self.taxon = taxon
 
     @property
     def id(self):
@@ -391,27 +311,6 @@ class ArrayDesignValueObject(object):
         self._last_note_update_event = last_note_update_event
 
     @property
-    def black_listed(self):
-        """Gets the black_listed of this ArrayDesignValueObject.  # noqa: E501
-
-
-        :return: The black_listed of this ArrayDesignValueObject.  # noqa: E501
-        :rtype: bool
-        """
-        return self._black_listed
-
-    @black_listed.setter
-    def black_listed(self, black_listed):
-        """Sets the black_listed of this ArrayDesignValueObject.
-
-
-        :param black_listed: The black_listed of this ArrayDesignValueObject.  # noqa: E501
-        :type: bool
-        """
-
-        self._black_listed = black_listed
-
-    @property
     def color(self):
         """Gets the color of this ArrayDesignValueObject.  # noqa: E501
 
@@ -431,27 +330,6 @@ class ArrayDesignValueObject(object):
         """
 
         self._color = color
-
-    @property
-    def date_cached(self):
-        """Gets the date_cached of this ArrayDesignValueObject.  # noqa: E501
-
-
-        :return: The date_cached of this ArrayDesignValueObject.  # noqa: E501
-        :rtype: str
-        """
-        return self._date_cached
-
-    @date_cached.setter
-    def date_cached(self, date_cached):
-        """Sets the date_cached of this ArrayDesignValueObject.
-
-
-        :param date_cached: The date_cached of this ArrayDesignValueObject.  # noqa: E501
-        :type: str
-        """
-
-        self._date_cached = date_cached
 
     @property
     def description(self):
@@ -475,27 +353,6 @@ class ArrayDesignValueObject(object):
         self._description = description
 
     @property
-    def design_element_count(self):
-        """Gets the design_element_count of this ArrayDesignValueObject.  # noqa: E501
-
-
-        :return: The design_element_count of this ArrayDesignValueObject.  # noqa: E501
-        :rtype: int
-        """
-        return self._design_element_count
-
-    @design_element_count.setter
-    def design_element_count(self, design_element_count):
-        """Sets the design_element_count of this ArrayDesignValueObject.
-
-
-        :param design_element_count: The design_element_count of this ArrayDesignValueObject.  # noqa: E501
-        :type: int
-        """
-
-        self._design_element_count = design_element_count
-
-    @property
     def expression_experiment_count(self):
         """Gets the expression_experiment_count of this ArrayDesignValueObject.  # noqa: E501
 
@@ -515,90 +372,6 @@ class ArrayDesignValueObject(object):
         """
 
         self._expression_experiment_count = expression_experiment_count
-
-    @property
-    def has_blat_associations(self):
-        """Gets the has_blat_associations of this ArrayDesignValueObject.  # noqa: E501
-
-
-        :return: The has_blat_associations of this ArrayDesignValueObject.  # noqa: E501
-        :rtype: bool
-        """
-        return self._has_blat_associations
-
-    @has_blat_associations.setter
-    def has_blat_associations(self, has_blat_associations):
-        """Sets the has_blat_associations of this ArrayDesignValueObject.
-
-
-        :param has_blat_associations: The has_blat_associations of this ArrayDesignValueObject.  # noqa: E501
-        :type: bool
-        """
-
-        self._has_blat_associations = has_blat_associations
-
-    @property
-    def has_gene_associations(self):
-        """Gets the has_gene_associations of this ArrayDesignValueObject.  # noqa: E501
-
-
-        :return: The has_gene_associations of this ArrayDesignValueObject.  # noqa: E501
-        :rtype: bool
-        """
-        return self._has_gene_associations
-
-    @has_gene_associations.setter
-    def has_gene_associations(self, has_gene_associations):
-        """Sets the has_gene_associations of this ArrayDesignValueObject.
-
-
-        :param has_gene_associations: The has_gene_associations of this ArrayDesignValueObject.  # noqa: E501
-        :type: bool
-        """
-
-        self._has_gene_associations = has_gene_associations
-
-    @property
-    def has_sequence_associations(self):
-        """Gets the has_sequence_associations of this ArrayDesignValueObject.  # noqa: E501
-
-
-        :return: The has_sequence_associations of this ArrayDesignValueObject.  # noqa: E501
-        :rtype: bool
-        """
-        return self._has_sequence_associations
-
-    @has_sequence_associations.setter
-    def has_sequence_associations(self, has_sequence_associations):
-        """Sets the has_sequence_associations of this ArrayDesignValueObject.
-
-
-        :param has_sequence_associations: The has_sequence_associations of this ArrayDesignValueObject.  # noqa: E501
-        :type: bool
-        """
-
-        self._has_sequence_associations = has_sequence_associations
-
-    @property
-    def is_affymetrix_alt_cdf(self):
-        """Gets the is_affymetrix_alt_cdf of this ArrayDesignValueObject.  # noqa: E501
-
-
-        :return: The is_affymetrix_alt_cdf of this ArrayDesignValueObject.  # noqa: E501
-        :rtype: bool
-        """
-        return self._is_affymetrix_alt_cdf
-
-    @is_affymetrix_alt_cdf.setter
-    def is_affymetrix_alt_cdf(self, is_affymetrix_alt_cdf):
-        """Sets the is_affymetrix_alt_cdf of this ArrayDesignValueObject.
-
-
-        :param is_affymetrix_alt_cdf: The is_affymetrix_alt_cdf of this ArrayDesignValueObject.  # noqa: E501
-        :type: bool
-        """
-
-        self._is_affymetrix_alt_cdf = is_affymetrix_alt_cdf
 
     @property
     def is_merged(self):
@@ -643,132 +416,6 @@ class ArrayDesignValueObject(object):
         self._is_mergee = is_mergee
 
     @property
-    def is_subsumed(self):
-        """Gets the is_subsumed of this ArrayDesignValueObject.  # noqa: E501
-
-
-        :return: The is_subsumed of this ArrayDesignValueObject.  # noqa: E501
-        :rtype: bool
-        """
-        return self._is_subsumed
-
-    @is_subsumed.setter
-    def is_subsumed(self, is_subsumed):
-        """Sets the is_subsumed of this ArrayDesignValueObject.
-
-
-        :param is_subsumed: The is_subsumed of this ArrayDesignValueObject.  # noqa: E501
-        :type: bool
-        """
-
-        self._is_subsumed = is_subsumed
-
-    @property
-    def is_subsumer(self):
-        """Gets the is_subsumer of this ArrayDesignValueObject.  # noqa: E501
-
-
-        :return: The is_subsumer of this ArrayDesignValueObject.  # noqa: E501
-        :rtype: bool
-        """
-        return self._is_subsumer
-
-    @is_subsumer.setter
-    def is_subsumer(self, is_subsumer):
-        """Sets the is_subsumer of this ArrayDesignValueObject.
-
-
-        :param is_subsumer: The is_subsumer of this ArrayDesignValueObject.  # noqa: E501
-        :type: bool
-        """
-
-        self._is_subsumer = is_subsumer
-
-    @property
-    def last_gene_mapping(self):
-        """Gets the last_gene_mapping of this ArrayDesignValueObject.  # noqa: E501
-
-
-        :return: The last_gene_mapping of this ArrayDesignValueObject.  # noqa: E501
-        :rtype: datetime
-        """
-        return self._last_gene_mapping
-
-    @last_gene_mapping.setter
-    def last_gene_mapping(self, last_gene_mapping):
-        """Sets the last_gene_mapping of this ArrayDesignValueObject.
-
-
-        :param last_gene_mapping: The last_gene_mapping of this ArrayDesignValueObject.  # noqa: E501
-        :type: datetime
-        """
-
-        self._last_gene_mapping = last_gene_mapping
-
-    @property
-    def last_repeat_mask(self):
-        """Gets the last_repeat_mask of this ArrayDesignValueObject.  # noqa: E501
-
-
-        :return: The last_repeat_mask of this ArrayDesignValueObject.  # noqa: E501
-        :rtype: datetime
-        """
-        return self._last_repeat_mask
-
-    @last_repeat_mask.setter
-    def last_repeat_mask(self, last_repeat_mask):
-        """Sets the last_repeat_mask of this ArrayDesignValueObject.
-
-
-        :param last_repeat_mask: The last_repeat_mask of this ArrayDesignValueObject.  # noqa: E501
-        :type: datetime
-        """
-
-        self._last_repeat_mask = last_repeat_mask
-
-    @property
-    def last_sequence_analysis(self):
-        """Gets the last_sequence_analysis of this ArrayDesignValueObject.  # noqa: E501
-
-
-        :return: The last_sequence_analysis of this ArrayDesignValueObject.  # noqa: E501
-        :rtype: datetime
-        """
-        return self._last_sequence_analysis
-
-    @last_sequence_analysis.setter
-    def last_sequence_analysis(self, last_sequence_analysis):
-        """Sets the last_sequence_analysis of this ArrayDesignValueObject.
-
-
-        :param last_sequence_analysis: The last_sequence_analysis of this ArrayDesignValueObject.  # noqa: E501
-        :type: datetime
-        """
-
-        self._last_sequence_analysis = last_sequence_analysis
-
-    @property
-    def last_sequence_update(self):
-        """Gets the last_sequence_update of this ArrayDesignValueObject.  # noqa: E501
-
-
-        :return: The last_sequence_update of this ArrayDesignValueObject.  # noqa: E501
-        :rtype: datetime
-        """
-        return self._last_sequence_update
-
-    @last_sequence_update.setter
-    def last_sequence_update(self, last_sequence_update):
-        """Sets the last_sequence_update of this ArrayDesignValueObject.
-
-
-        :param last_sequence_update: The last_sequence_update of this ArrayDesignValueObject.  # noqa: E501
-        :type: datetime
-        """
-
-        self._last_sequence_update = last_sequence_update
-
-    @property
     def name(self):
         """Gets the name of this ArrayDesignValueObject.  # noqa: E501
 
@@ -788,90 +435,6 @@ class ArrayDesignValueObject(object):
         """
 
         self._name = name
-
-    @property
-    def num_genes(self):
-        """Gets the num_genes of this ArrayDesignValueObject.  # noqa: E501
-
-
-        :return: The num_genes of this ArrayDesignValueObject.  # noqa: E501
-        :rtype: str
-        """
-        return self._num_genes
-
-    @num_genes.setter
-    def num_genes(self, num_genes):
-        """Sets the num_genes of this ArrayDesignValueObject.
-
-
-        :param num_genes: The num_genes of this ArrayDesignValueObject.  # noqa: E501
-        :type: str
-        """
-
-        self._num_genes = num_genes
-
-    @property
-    def num_probe_alignments(self):
-        """Gets the num_probe_alignments of this ArrayDesignValueObject.  # noqa: E501
-
-
-        :return: The num_probe_alignments of this ArrayDesignValueObject.  # noqa: E501
-        :rtype: str
-        """
-        return self._num_probe_alignments
-
-    @num_probe_alignments.setter
-    def num_probe_alignments(self, num_probe_alignments):
-        """Sets the num_probe_alignments of this ArrayDesignValueObject.
-
-
-        :param num_probe_alignments: The num_probe_alignments of this ArrayDesignValueObject.  # noqa: E501
-        :type: str
-        """
-
-        self._num_probe_alignments = num_probe_alignments
-
-    @property
-    def num_probe_sequences(self):
-        """Gets the num_probe_sequences of this ArrayDesignValueObject.  # noqa: E501
-
-
-        :return: The num_probe_sequences of this ArrayDesignValueObject.  # noqa: E501
-        :rtype: str
-        """
-        return self._num_probe_sequences
-
-    @num_probe_sequences.setter
-    def num_probe_sequences(self, num_probe_sequences):
-        """Sets the num_probe_sequences of this ArrayDesignValueObject.
-
-
-        :param num_probe_sequences: The num_probe_sequences of this ArrayDesignValueObject.  # noqa: E501
-        :type: str
-        """
-
-        self._num_probe_sequences = num_probe_sequences
-
-    @property
-    def num_probes_to_genes(self):
-        """Gets the num_probes_to_genes of this ArrayDesignValueObject.  # noqa: E501
-
-
-        :return: The num_probes_to_genes of this ArrayDesignValueObject.  # noqa: E501
-        :rtype: str
-        """
-        return self._num_probes_to_genes
-
-    @num_probes_to_genes.setter
-    def num_probes_to_genes(self, num_probes_to_genes):
-        """Sets the num_probes_to_genes of this ArrayDesignValueObject.
-
-
-        :param num_probes_to_genes: The num_probes_to_genes of this ArrayDesignValueObject.  # noqa: E501
-        :type: str
-        """
-
-        self._num_probes_to_genes = num_probes_to_genes
 
     @property
     def short_name(self):
@@ -895,46 +458,46 @@ class ArrayDesignValueObject(object):
         self._short_name = short_name
 
     @property
-    def switched_expression_experiment_count(self):
-        """Gets the switched_expression_experiment_count of this ArrayDesignValueObject.  # noqa: E501
+    def technology_type(self):
+        """Gets the technology_type of this ArrayDesignValueObject.  # noqa: E501
 
 
-        :return: The switched_expression_experiment_count of this ArrayDesignValueObject.  # noqa: E501
-        :rtype: int
-        """
-        return self._switched_expression_experiment_count
-
-    @switched_expression_experiment_count.setter
-    def switched_expression_experiment_count(self, switched_expression_experiment_count):
-        """Sets the switched_expression_experiment_count of this ArrayDesignValueObject.
-
-
-        :param switched_expression_experiment_count: The switched_expression_experiment_count of this ArrayDesignValueObject.  # noqa: E501
-        :type: int
-        """
-
-        self._switched_expression_experiment_count = switched_expression_experiment_count
-
-    @property
-    def taxon(self):
-        """Gets the taxon of this ArrayDesignValueObject.  # noqa: E501
-
-
-        :return: The taxon of this ArrayDesignValueObject.  # noqa: E501
+        :return: The technology_type of this ArrayDesignValueObject.  # noqa: E501
         :rtype: str
         """
-        return self._taxon
+        return self._technology_type
 
-    @taxon.setter
-    def taxon(self, taxon):
-        """Sets the taxon of this ArrayDesignValueObject.
+    @technology_type.setter
+    def technology_type(self, technology_type):
+        """Sets the technology_type of this ArrayDesignValueObject.
 
 
-        :param taxon: The taxon of this ArrayDesignValueObject.  # noqa: E501
+        :param technology_type: The technology_type of this ArrayDesignValueObject.  # noqa: E501
         :type: str
         """
 
-        self._taxon = taxon
+        self._technology_type = technology_type
+
+    @property
+    def number_of_expression_experiments(self):
+        """Gets the number_of_expression_experiments of this ArrayDesignValueObject.  # noqa: E501
+
+
+        :return: The number_of_expression_experiments of this ArrayDesignValueObject.  # noqa: E501
+        :rtype: int
+        """
+        return self._number_of_expression_experiments
+
+    @number_of_expression_experiments.setter
+    def number_of_expression_experiments(self, number_of_expression_experiments):
+        """Sets the number_of_expression_experiments of this ArrayDesignValueObject.
+
+
+        :param number_of_expression_experiments: The number_of_expression_experiments of this ArrayDesignValueObject.  # noqa: E501
+        :type: int
+        """
+
+        self._number_of_expression_experiments = number_of_expression_experiments
 
     @property
     def taxon_id(self):
@@ -958,27 +521,6 @@ class ArrayDesignValueObject(object):
         self._taxon_id = taxon_id
 
     @property
-    def technology_type(self):
-        """Gets the technology_type of this ArrayDesignValueObject.  # noqa: E501
-
-
-        :return: The technology_type of this ArrayDesignValueObject.  # noqa: E501
-        :rtype: str
-        """
-        return self._technology_type
-
-    @technology_type.setter
-    def technology_type(self, technology_type):
-        """Sets the technology_type of this ArrayDesignValueObject.
-
-
-        :param technology_type: The technology_type of this ArrayDesignValueObject.  # noqa: E501
-        :type: str
-        """
-
-        self._technology_type = technology_type
-
-    @property
     def trouble_details(self):
         """Gets the trouble_details of this ArrayDesignValueObject.  # noqa: E501
 
@@ -998,6 +540,48 @@ class ArrayDesignValueObject(object):
         """
 
         self._trouble_details = trouble_details
+
+    @property
+    def number_of_switched_expression_experiments(self):
+        """Gets the number_of_switched_expression_experiments of this ArrayDesignValueObject.  # noqa: E501
+
+
+        :return: The number_of_switched_expression_experiments of this ArrayDesignValueObject.  # noqa: E501
+        :rtype: int
+        """
+        return self._number_of_switched_expression_experiments
+
+    @number_of_switched_expression_experiments.setter
+    def number_of_switched_expression_experiments(self, number_of_switched_expression_experiments):
+        """Sets the number_of_switched_expression_experiments of this ArrayDesignValueObject.
+
+
+        :param number_of_switched_expression_experiments: The number_of_switched_expression_experiments of this ArrayDesignValueObject.  # noqa: E501
+        :type: int
+        """
+
+        self._number_of_switched_expression_experiments = number_of_switched_expression_experiments
+
+    @property
+    def taxon(self):
+        """Gets the taxon of this ArrayDesignValueObject.  # noqa: E501
+
+
+        :return: The taxon of this ArrayDesignValueObject.  # noqa: E501
+        :rtype: TaxonValueObject
+        """
+        return self._taxon
+
+    @taxon.setter
+    def taxon(self, taxon):
+        """Sets the taxon of this ArrayDesignValueObject.
+
+
+        :param taxon: The taxon of this ArrayDesignValueObject.  # noqa: E501
+        :type: TaxonValueObject
+        """
+
+        self._taxon = taxon
 
     def to_dict(self):
         """Returns the model properties as a dict"""

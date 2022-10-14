@@ -3,9 +3,9 @@
 """
     Gemma RESTful API
 
-    This website documents the usage of the [Gemma REST API](https://gemma.msl.ubc.ca/rest/v2/). Here you can find example script usage of the API, as well as graphical interface for each endpoint, with description of its parameters and the endpoint URL.  The documentation of the underlying java code can be found [here](https://gemma.msl.ubc.ca/resources/apidocs/ubic/gemma/web/services/rest/package-summary.html). See the [links section](https://gemma.msl.ubc.ca/resources/restapidocs/#footer) in the footer of this page for other relevant links.  Use of this webpage and Gemma web services, including the REST API, is subject to [these terms and conditions](https://pavlidislab.github.io/Gemma/terms.html). Please read these in full before continuing to use this webpage or any other part of the Gemma system.   # noqa: E501
+    This website documents the usage of the [Gemma RESTful API](https://gemma.msl.ubc.ca/rest/v2/). Here you can find example script usage of the API, as well as graphical interface for each endpoint, with description of its parameters and the endpoint URL.  Use of this webpage and the Gemma Web services, including the REST API, is subject to [these terms and conditions](https://pavlidislab.github.io/Gemma/terms.html). Please read these in full before continuing to use this webpage or any other part of the Gemma system.  Fix return type for `getResultSets` which was incorrectly referring to a renamed VO.  Remove the `security` requirements by default from the specification, which forced the Python package to supply empty credentials. There is currently no privileged endpoints, although some can return additional results.  ## Updates  ### Update 2.5.1  Restore `objectClass` visibility in `AnnotationValueObject`.  Fix incorrect response types for annotations search endpoints returning datasets.  ### Update 2.5.0  Major cleanups were performed in this release in order to stabilize the specification. Numerous properties from Gemma Web that were never intended to be exposed in Gemma REST have been hidden. It's a bit too much to describe in here, but you can navigate to the schemas section below to get a good glance at the models.  Favour `numberOfSomething` instead of `somethingCount` which is clearer. The older names are kept for backward-compatibility, but should be considered deprecated.  Gene aliases and multifunctionality rank are now filled in `GeneValueObject`.  Uniformly use `TaxonValueObject` to represent taxon. This is breaking change for the `ExpressionExperimentValueObject` and `ArrayDesignValueObject` as their `taxon` property will be an `object` instead of a `string`. Properties such as `taxonId` are now deprecated and `taxon.id` should be used instead.  Entities that have IDs now all inherit from `IdentifiableValueObject`. This implies that you can assume the presence of an `id` in a search result `resultObject` attribute for example.  New `/search` endpoint! for an unified search experience. Annotation-based search endpoints under `/annotations` are now deprecated.  New API docs! While not as nice looking, the previous theme will be gradually ported to Swagger UI as we focused on functionality over prettiness for this release.  ### Update 2.4.0 through 2.4.1  Release notes for the 2.4 series were not written down, so I'll try to do my best to recall features that were introduced at that time.  An [OpenAPI](https://www.openapis.org/) specification was introduced and available under `/rest/v2/openapi.json`, although not fully stabilized.  Add a `/resultSets` endpoint to navigate result sets directly, by ID or by dataset.  Add a `/resultSets/{resultSetId}` endpoint to retrieve a specific result set by its ID. This endpoint can be negotiated with an `Accept: text/tab-separated-values` header to obtain a TSV representation.  Add a `/datasets/{dataset}/analyses/differential/resultSets` endpoint that essentially redirect to a specific `/resultSet` endpoint by dataset ID.  Add an endpoint to retrieve preferred raw expression vectors.  ### Update 2.3.4  November 6th, 2018  November 6th [2.3.4] Bug fixes in the dataset search endpoint.  November 5th [2.3.3] Added filtering parameters to dataset search.  October 25th [2.3.2] Changed behavior of the dataset search endpoint to more closely match the Gemma web interface.  October 2nd [2.3.1] Added group information to the User value object.  September 27th [2.3.0] Breaking change in Taxa: Abbreviation property has been removed and is therefore no longer an accepted identifier.  ### Update 2.2.6  June 7th, 2018  Code maintenance, bug fixes. Geeq scores stable and made public.  June 7th [2.2.6] Added: User authentication endpoint.  May 2nd [2.2.5] Fixed: Cleaned up and optimized platforms/elements endpoint, removed redundant information (recursive properties nesting).  April 12th [2.2.3] Fixed: Array arguments not handling non-string properties properly, e.g. `ncbiIds` of genes.  April 9th [2.2.1] Fixed: Filter argument not working when the filtered field was a primitive type. This most significantly allows filtering by geeq boolean and double properties.  ### Update 2.2.0  February 8th, 2018  Breaking change in the 'Dataset differential analysis' endpoint: - No longer using `qValueThreshold` parameter. - Response format changed, now using `DifferentialExpressionAnalysisValueObject` instead of `DifferentialExpressionValueObject` - [Experimental] Added Geeq (Gene Expression Experiment Quality) scores to the dataset value objects   # noqa: E501
 
-    OpenAPI spec version: 2.4.1
+    OpenAPI spec version: 2.5.1
     Contact: pavlab-support@msl.ubc.ca
     Generated by: https://github.com/swagger-api/swagger-codegen.git
 """
@@ -32,8 +32,6 @@ class TaxonValueObject(object):
         'scientific_name': 'str',
         'common_name': 'str',
         'ncbi_id': 'int',
-        'is_species': 'bool',
-        'is_genes_usable': 'bool',
         'external_database': 'ExternalDatabaseValueObject'
     }
 
@@ -42,19 +40,15 @@ class TaxonValueObject(object):
         'scientific_name': 'scientificName',
         'common_name': 'commonName',
         'ncbi_id': 'ncbiId',
-        'is_species': 'isSpecies',
-        'is_genes_usable': 'isGenesUsable',
         'external_database': 'externalDatabase'
     }
 
-    def __init__(self, id=None, scientific_name=None, common_name=None, ncbi_id=None, is_species=None, is_genes_usable=None, external_database=None):  # noqa: E501
+    def __init__(self, id=None, scientific_name=None, common_name=None, ncbi_id=None, external_database=None):  # noqa: E501
         """TaxonValueObject - a model defined in Swagger"""  # noqa: E501
         self._id = None
         self._scientific_name = None
         self._common_name = None
         self._ncbi_id = None
-        self._is_species = None
-        self._is_genes_usable = None
         self._external_database = None
         self.discriminator = None
         if id is not None:
@@ -65,10 +59,6 @@ class TaxonValueObject(object):
             self.common_name = common_name
         if ncbi_id is not None:
             self.ncbi_id = ncbi_id
-        if is_species is not None:
-            self.is_species = is_species
-        if is_genes_usable is not None:
-            self.is_genes_usable = is_genes_usable
         if external_database is not None:
             self.external_database = external_database
 
@@ -155,48 +145,6 @@ class TaxonValueObject(object):
         """
 
         self._ncbi_id = ncbi_id
-
-    @property
-    def is_species(self):
-        """Gets the is_species of this TaxonValueObject.  # noqa: E501
-
-
-        :return: The is_species of this TaxonValueObject.  # noqa: E501
-        :rtype: bool
-        """
-        return self._is_species
-
-    @is_species.setter
-    def is_species(self, is_species):
-        """Sets the is_species of this TaxonValueObject.
-
-
-        :param is_species: The is_species of this TaxonValueObject.  # noqa: E501
-        :type: bool
-        """
-
-        self._is_species = is_species
-
-    @property
-    def is_genes_usable(self):
-        """Gets the is_genes_usable of this TaxonValueObject.  # noqa: E501
-
-
-        :return: The is_genes_usable of this TaxonValueObject.  # noqa: E501
-        :rtype: bool
-        """
-        return self._is_genes_usable
-
-    @is_genes_usable.setter
-    def is_genes_usable(self, is_genes_usable):
-        """Sets the is_genes_usable of this TaxonValueObject.
-
-
-        :param is_genes_usable: The is_genes_usable of this TaxonValueObject.  # noqa: E501
-        :type: bool
-        """
-
-        self._is_genes_usable = is_genes_usable
 
     @property
     def external_database(self):
