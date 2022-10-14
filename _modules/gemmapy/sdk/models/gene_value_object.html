@@ -37,9 +37,9 @@
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Gemma RESTful API</span>
 
-<span class="sd">    This website documents the usage of the [Gemma REST API](https://gemma.msl.ubc.ca/rest/v2/). Here you can find example script usage of the API, as well as graphical interface for each endpoint, with description of its parameters and the endpoint URL.  The documentation of the underlying java code can be found [here](https://gemma.msl.ubc.ca/resources/apidocs/ubic/gemma/web/services/rest/package-summary.html). See the [links section](https://gemma.msl.ubc.ca/resources/restapidocs/#footer) in the footer of this page for other relevant links.  Use of this webpage and Gemma web services, including the REST API, is subject to [these terms and conditions](https://pavlidislab.github.io/Gemma/terms.html). Please read these in full before continuing to use this webpage or any other part of the Gemma system.   # noqa: E501</span>
+<span class="sd">    This website documents the usage of the [Gemma RESTful API](https://gemma.msl.ubc.ca/rest/v2/). Here you can find example script usage of the API, as well as graphical interface for each endpoint, with description of its parameters and the endpoint URL.  Use of this webpage and the Gemma Web services, including the REST API, is subject to [these terms and conditions](https://pavlidislab.github.io/Gemma/terms.html). Please read these in full before continuing to use this webpage or any other part of the Gemma system.  Fix return type for `getResultSets` which was incorrectly referring to a renamed VO.  Remove the `security` requirements by default from the specification, which forced the Python package to supply empty credentials. There is currently no privileged endpoints, although some can return additional results.  ## Updates  ### Update 2.5.1  Restore `objectClass` visibility in `AnnotationValueObject`.  Fix incorrect response types for annotations search endpoints returning datasets.  ### Update 2.5.0  Major cleanups were performed in this release in order to stabilize the specification. Numerous properties from Gemma Web that were never intended to be exposed in Gemma REST have been hidden. It&#39;s a bit too much to describe in here, but you can navigate to the schemas section below to get a good glance at the models.  Favour `numberOfSomething` instead of `somethingCount` which is clearer. The older names are kept for backward-compatibility, but should be considered deprecated.  Gene aliases and multifunctionality rank are now filled in `GeneValueObject`.  Uniformly use `TaxonValueObject` to represent taxon. This is breaking change for the `ExpressionExperimentValueObject` and `ArrayDesignValueObject` as their `taxon` property will be an `object` instead of a `string`. Properties such as `taxonId` are now deprecated and `taxon.id` should be used instead.  Entities that have IDs now all inherit from `IdentifiableValueObject`. This implies that you can assume the presence of an `id` in a search result `resultObject` attribute for example.  New `/search` endpoint! for an unified search experience. Annotation-based search endpoints under `/annotations` are now deprecated.  New API docs! While not as nice looking, the previous theme will be gradually ported to Swagger UI as we focused on functionality over prettiness for this release.  ### Update 2.4.0 through 2.4.1  Release notes for the 2.4 series were not written down, so I&#39;ll try to do my best to recall features that were introduced at that time.  An [OpenAPI](https://www.openapis.org/) specification was introduced and available under `/rest/v2/openapi.json`, although not fully stabilized.  Add a `/resultSets` endpoint to navigate result sets directly, by ID or by dataset.  Add a `/resultSets/{resultSetId}` endpoint to retrieve a specific result set by its ID. This endpoint can be negotiated with an `Accept: text/tab-separated-values` header to obtain a TSV representation.  Add a `/datasets/{dataset}/analyses/differential/resultSets` endpoint that essentially redirect to a specific `/resultSet` endpoint by dataset ID.  Add an endpoint to retrieve preferred raw expression vectors.  ### Update 2.3.4  November 6th, 2018  November 6th [2.3.4] Bug fixes in the dataset search endpoint.  November 5th [2.3.3] Added filtering parameters to dataset search.  October 25th [2.3.2] Changed behavior of the dataset search endpoint to more closely match the Gemma web interface.  October 2nd [2.3.1] Added group information to the User value object.  September 27th [2.3.0] Breaking change in Taxa: Abbreviation property has been removed and is therefore no longer an accepted identifier.  ### Update 2.2.6  June 7th, 2018  Code maintenance, bug fixes. Geeq scores stable and made public.  June 7th [2.2.6] Added: User authentication endpoint.  May 2nd [2.2.5] Fixed: Cleaned up and optimized platforms/elements endpoint, removed redundant information (recursive properties nesting).  April 12th [2.2.3] Fixed: Array arguments not handling non-string properties properly, e.g. `ncbiIds` of genes.  April 9th [2.2.1] Fixed: Filter argument not working when the filtered field was a primitive type. This most significantly allows filtering by geeq boolean and double properties.  ### Update 2.2.0  February 8th, 2018  Breaking change in the &#39;Dataset differential analysis&#39; endpoint: - No longer using `qValueThreshold` parameter. - Response format changed, now using `DifferentialExpressionAnalysisValueObject` instead of `DifferentialExpressionValueObject` - [Experimental] Added Geeq (Gene Expression Experiment Quality) scores to the dataset value objects   # noqa: E501</span>
 
-<span class="sd">    OpenAPI spec version: 2.4.1</span>
+<span class="sd">    OpenAPI spec version: 2.5.1</span>
 <span class="sd">    Contact: pavlab-support@msl.ubc.ca</span>
 <span class="sd">    Generated by: https://github.com/swagger-api/swagger-codegen.git</span>
 <span class="sd">&quot;&quot;&quot;</span>
@@ -64,127 +64,52 @@
     <span class="n">swagger_types</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="s1">&#39;int&#39;</span><span class="p">,</span>
         <span class="s1">&#39;aliases&#39;</span><span class="p">:</span> <span class="s1">&#39;list[str]&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;associated_experiment_count&#39;</span><span class="p">:</span> <span class="s1">&#39;int&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;composite_sequence_count&#39;</span><span class="p">:</span> <span class="s1">&#39;int&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;gene_sets&#39;</span><span class="p">:</span> <span class="s1">&#39;list[GeneSetValueObject]&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;homologues&#39;</span><span class="p">:</span> <span class="s1">&#39;list[GeneValueObject]&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;is_query&#39;</span><span class="p">:</span> <span class="s1">&#39;bool&#39;</span><span class="p">,</span>
         <span class="s1">&#39;multifunctionality_rank&#39;</span><span class="p">:</span> <span class="s1">&#39;float&#39;</span><span class="p">,</span>
         <span class="s1">&#39;ncbi_id&#39;</span><span class="p">:</span> <span class="s1">&#39;int&#39;</span><span class="p">,</span>
         <span class="s1">&#39;ensembl_id&#39;</span><span class="p">:</span> <span class="s1">&#39;str&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;node_degree_neg_ranks&#39;</span><span class="p">:</span> <span class="s1">&#39;list[float]&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;node_degree_pos_ranks&#39;</span><span class="p">:</span> <span class="s1">&#39;list[float]&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;node_degrees_neg&#39;</span><span class="p">:</span> <span class="s1">&#39;list[int]&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;node_degrees_pos&#39;</span><span class="p">:</span> <span class="s1">&#39;list[int]&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;num_go_terms&#39;</span><span class="p">:</span> <span class="s1">&#39;int&#39;</span><span class="p">,</span>
         <span class="s1">&#39;official_name&#39;</span><span class="p">:</span> <span class="s1">&#39;str&#39;</span><span class="p">,</span>
         <span class="s1">&#39;official_symbol&#39;</span><span class="p">:</span> <span class="s1">&#39;str&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;phenotypes&#39;</span><span class="p">:</span> <span class="s1">&#39;list[CharacteristicValueObject]&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;platform_count&#39;</span><span class="p">:</span> <span class="s1">&#39;int&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;score&#39;</span><span class="p">:</span> <span class="s1">&#39;float&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;taxon_common_name&#39;</span><span class="p">:</span> <span class="s1">&#39;str&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;taxon_id&#39;</span><span class="p">:</span> <span class="s1">&#39;int&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;taxon_scientific_name&#39;</span><span class="p">:</span> <span class="s1">&#39;str&#39;</span>
+        <span class="s1">&#39;taxon&#39;</span><span class="p">:</span> <span class="s1">&#39;TaxonValueObject&#39;</span>
     <span class="p">}</span>
 
     <span class="n">attribute_map</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="s1">&#39;id&#39;</span><span class="p">,</span>
         <span class="s1">&#39;aliases&#39;</span><span class="p">:</span> <span class="s1">&#39;aliases&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;associated_experiment_count&#39;</span><span class="p">:</span> <span class="s1">&#39;associatedExperimentCount&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;composite_sequence_count&#39;</span><span class="p">:</span> <span class="s1">&#39;compositeSequenceCount&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;gene_sets&#39;</span><span class="p">:</span> <span class="s1">&#39;geneSets&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;homologues&#39;</span><span class="p">:</span> <span class="s1">&#39;homologues&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;is_query&#39;</span><span class="p">:</span> <span class="s1">&#39;isQuery&#39;</span><span class="p">,</span>
         <span class="s1">&#39;multifunctionality_rank&#39;</span><span class="p">:</span> <span class="s1">&#39;multifunctionalityRank&#39;</span><span class="p">,</span>
         <span class="s1">&#39;ncbi_id&#39;</span><span class="p">:</span> <span class="s1">&#39;ncbiId&#39;</span><span class="p">,</span>
         <span class="s1">&#39;ensembl_id&#39;</span><span class="p">:</span> <span class="s1">&#39;ensemblId&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;node_degree_neg_ranks&#39;</span><span class="p">:</span> <span class="s1">&#39;nodeDegreeNegRanks&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;node_degree_pos_ranks&#39;</span><span class="p">:</span> <span class="s1">&#39;nodeDegreePosRanks&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;node_degrees_neg&#39;</span><span class="p">:</span> <span class="s1">&#39;nodeDegreesNeg&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;node_degrees_pos&#39;</span><span class="p">:</span> <span class="s1">&#39;nodeDegreesPos&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;num_go_terms&#39;</span><span class="p">:</span> <span class="s1">&#39;numGoTerms&#39;</span><span class="p">,</span>
         <span class="s1">&#39;official_name&#39;</span><span class="p">:</span> <span class="s1">&#39;officialName&#39;</span><span class="p">,</span>
         <span class="s1">&#39;official_symbol&#39;</span><span class="p">:</span> <span class="s1">&#39;officialSymbol&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;phenotypes&#39;</span><span class="p">:</span> <span class="s1">&#39;phenotypes&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;platform_count&#39;</span><span class="p">:</span> <span class="s1">&#39;platformCount&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;score&#39;</span><span class="p">:</span> <span class="s1">&#39;score&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;taxon_common_name&#39;</span><span class="p">:</span> <span class="s1">&#39;taxonCommonName&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;taxon_id&#39;</span><span class="p">:</span> <span class="s1">&#39;taxonId&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;taxon_scientific_name&#39;</span><span class="p">:</span> <span class="s1">&#39;taxonScientificName&#39;</span>
+        <span class="s1">&#39;taxon&#39;</span><span class="p">:</span> <span class="s1">&#39;taxon&#39;</span>
     <span class="p">}</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">aliases</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">associated_experiment_count</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">composite_sequence_count</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">gene_sets</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">homologues</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">is_query</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">multifunctionality_rank</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ncbi_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ensembl_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">node_degree_neg_ranks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">node_degree_pos_ranks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">node_degrees_neg</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">node_degrees_pos</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">num_go_terms</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">official_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">official_symbol</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">phenotypes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">platform_count</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">score</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">taxon_common_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">taxon_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">taxon_scientific_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>  <span class="c1"># noqa: E501</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">aliases</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">multifunctionality_rank</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ncbi_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ensembl_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">official_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">official_symbol</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">taxon</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>  <span class="c1"># noqa: E501</span>
         <span class="sd">&quot;&quot;&quot;GeneValueObject - a model defined in Swagger&quot;&quot;&quot;</span>  <span class="c1"># noqa: E501</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_id</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_aliases</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_associated_experiment_count</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_composite_sequence_count</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_gene_sets</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_homologues</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_is_query</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_multifunctionality_rank</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_ncbi_id</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_ensembl_id</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_node_degree_neg_ranks</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_node_degree_pos_ranks</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_node_degrees_neg</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_node_degrees_pos</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_num_go_terms</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_official_name</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_official_symbol</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_phenotypes</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_platform_count</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_score</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_taxon_common_name</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_taxon_id</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_taxon_scientific_name</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_taxon</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">discriminator</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="nb">id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
         <span class="k">if</span> <span class="n">aliases</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">aliases</span> <span class="o">=</span> <span class="n">aliases</span>
-        <span class="k">if</span> <span class="n">associated_experiment_count</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">associated_experiment_count</span> <span class="o">=</span> <span class="n">associated_experiment_count</span>
-        <span class="k">if</span> <span class="n">composite_sequence_count</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">composite_sequence_count</span> <span class="o">=</span> <span class="n">composite_sequence_count</span>
-        <span class="k">if</span> <span class="n">gene_sets</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">gene_sets</span> <span class="o">=</span> <span class="n">gene_sets</span>
-        <span class="k">if</span> <span class="n">homologues</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">homologues</span> <span class="o">=</span> <span class="n">homologues</span>
-        <span class="k">if</span> <span class="n">is_query</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">is_query</span> <span class="o">=</span> <span class="n">is_query</span>
         <span class="k">if</span> <span class="n">multifunctionality_rank</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">multifunctionality_rank</span> <span class="o">=</span> <span class="n">multifunctionality_rank</span>
         <span class="k">if</span> <span class="n">ncbi_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">ncbi_id</span> <span class="o">=</span> <span class="n">ncbi_id</span>
         <span class="k">if</span> <span class="n">ensembl_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">ensembl_id</span> <span class="o">=</span> <span class="n">ensembl_id</span>
-        <span class="k">if</span> <span class="n">node_degree_neg_ranks</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">node_degree_neg_ranks</span> <span class="o">=</span> <span class="n">node_degree_neg_ranks</span>
-        <span class="k">if</span> <span class="n">node_degree_pos_ranks</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">node_degree_pos_ranks</span> <span class="o">=</span> <span class="n">node_degree_pos_ranks</span>
-        <span class="k">if</span> <span class="n">node_degrees_neg</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">node_degrees_neg</span> <span class="o">=</span> <span class="n">node_degrees_neg</span>
-        <span class="k">if</span> <span class="n">node_degrees_pos</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">node_degrees_pos</span> <span class="o">=</span> <span class="n">node_degrees_pos</span>
-        <span class="k">if</span> <span class="n">num_go_terms</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">num_go_terms</span> <span class="o">=</span> <span class="n">num_go_terms</span>
         <span class="k">if</span> <span class="n">official_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">official_name</span> <span class="o">=</span> <span class="n">official_name</span>
         <span class="k">if</span> <span class="n">official_symbol</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">official_symbol</span> <span class="o">=</span> <span class="n">official_symbol</span>
-        <span class="k">if</span> <span class="n">phenotypes</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">phenotypes</span> <span class="o">=</span> <span class="n">phenotypes</span>
-        <span class="k">if</span> <span class="n">platform_count</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">platform_count</span> <span class="o">=</span> <span class="n">platform_count</span>
-        <span class="k">if</span> <span class="n">score</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">score</span> <span class="o">=</span> <span class="n">score</span>
-        <span class="k">if</span> <span class="n">taxon_common_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">taxon_common_name</span> <span class="o">=</span> <span class="n">taxon_common_name</span>
-        <span class="k">if</span> <span class="n">taxon_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">taxon_id</span> <span class="o">=</span> <span class="n">taxon_id</span>
-        <span class="k">if</span> <span class="n">taxon_scientific_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">taxon_scientific_name</span> <span class="o">=</span> <span class="n">taxon_scientific_name</span>
+        <span class="k">if</span> <span class="n">taxon</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">taxon</span> <span class="o">=</span> <span class="n">taxon</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -227,111 +152,6 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_aliases</span> <span class="o">=</span> <span class="n">aliases</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">associated_experiment_count</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Gets the associated_experiment_count of this GeneValueObject.  # noqa: E501</span>
-
-
-<span class="sd">        :return: The associated_experiment_count of this GeneValueObject.  # noqa: E501</span>
-<span class="sd">        :rtype: int</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_associated_experiment_count</span>
-
-    <span class="nd">@associated_experiment_count</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">associated_experiment_count</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">associated_experiment_count</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Sets the associated_experiment_count of this GeneValueObject.</span>
-
-
-<span class="sd">        :param associated_experiment_count: The associated_experiment_count of this GeneValueObject.  # noqa: E501</span>
-<span class="sd">        :type: int</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">_associated_experiment_count</span> <span class="o">=</span> <span class="n">associated_experiment_count</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">composite_sequence_count</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Gets the composite_sequence_count of this GeneValueObject.  # noqa: E501</span>
-
-
-<span class="sd">        :return: The composite_sequence_count of this GeneValueObject.  # noqa: E501</span>
-<span class="sd">        :rtype: int</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_composite_sequence_count</span>
-
-    <span class="nd">@composite_sequence_count</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">composite_sequence_count</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">composite_sequence_count</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Sets the composite_sequence_count of this GeneValueObject.</span>
-
-
-<span class="sd">        :param composite_sequence_count: The composite_sequence_count of this GeneValueObject.  # noqa: E501</span>
-<span class="sd">        :type: int</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">_composite_sequence_count</span> <span class="o">=</span> <span class="n">composite_sequence_count</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">gene_sets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Gets the gene_sets of this GeneValueObject.  # noqa: E501</span>
-
-
-<span class="sd">        :return: The gene_sets of this GeneValueObject.  # noqa: E501</span>
-<span class="sd">        :rtype: list[GeneSetValueObject]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gene_sets</span>
-
-    <span class="nd">@gene_sets</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">gene_sets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gene_sets</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Sets the gene_sets of this GeneValueObject.</span>
-
-
-<span class="sd">        :param gene_sets: The gene_sets of this GeneValueObject.  # noqa: E501</span>
-<span class="sd">        :type: list[GeneSetValueObject]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">_gene_sets</span> <span class="o">=</span> <span class="n">gene_sets</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">homologues</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Gets the homologues of this GeneValueObject.  # noqa: E501</span>
-
-
-<span class="sd">        :return: The homologues of this GeneValueObject.  # noqa: E501</span>
-<span class="sd">        :rtype: list[GeneValueObject]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_homologues</span>
-
-    <span class="nd">@homologues</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">homologues</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">homologues</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Sets the homologues of this GeneValueObject.</span>
-
-
-<span class="sd">        :param homologues: The homologues of this GeneValueObject.  # noqa: E501</span>
-<span class="sd">        :type: list[GeneValueObject]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">_homologues</span> <span class="o">=</span> <span class="n">homologues</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">is_query</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Gets the is_query of this GeneValueObject.  # noqa: E501</span>
-
-
-<span class="sd">        :return: The is_query of this GeneValueObject.  # noqa: E501</span>
-<span class="sd">        :rtype: bool</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_query</span>
-
-    <span class="nd">@is_query</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">is_query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_query</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Sets the is_query of this GeneValueObject.</span>
-
-
-<span class="sd">        :param is_query: The is_query of this GeneValueObject.  # noqa: E501</span>
-<span class="sd">        :type: bool</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">_is_query</span> <span class="o">=</span> <span class="n">is_query</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">multifunctionality_rank</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -397,111 +217,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_ensembl_id</span> <span class="o">=</span> <span class="n">ensembl_id</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">node_degree_neg_ranks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Gets the node_degree_neg_ranks of this GeneValueObject.  # noqa: E501</span>
-
-
-<span class="sd">        :return: The node_degree_neg_ranks of this GeneValueObject.  # noqa: E501</span>
-<span class="sd">        :rtype: list[float]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_node_degree_neg_ranks</span>
-
-    <span class="nd">@node_degree_neg_ranks</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">node_degree_neg_ranks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_degree_neg_ranks</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Sets the node_degree_neg_ranks of this GeneValueObject.</span>
-
-
-<span class="sd">        :param node_degree_neg_ranks: The node_degree_neg_ranks of this GeneValueObject.  # noqa: E501</span>
-<span class="sd">        :type: list[float]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">_node_degree_neg_ranks</span> <span class="o">=</span> <span class="n">node_degree_neg_ranks</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">node_degree_pos_ranks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Gets the node_degree_pos_ranks of this GeneValueObject.  # noqa: E501</span>
-
-
-<span class="sd">        :return: The node_degree_pos_ranks of this GeneValueObject.  # noqa: E501</span>
-<span class="sd">        :rtype: list[float]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_node_degree_pos_ranks</span>
-
-    <span class="nd">@node_degree_pos_ranks</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">node_degree_pos_ranks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_degree_pos_ranks</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Sets the node_degree_pos_ranks of this GeneValueObject.</span>
-
-
-<span class="sd">        :param node_degree_pos_ranks: The node_degree_pos_ranks of this GeneValueObject.  # noqa: E501</span>
-<span class="sd">        :type: list[float]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">_node_degree_pos_ranks</span> <span class="o">=</span> <span class="n">node_degree_pos_ranks</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">node_degrees_neg</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Gets the node_degrees_neg of this GeneValueObject.  # noqa: E501</span>
-
-
-<span class="sd">        :return: The node_degrees_neg of this GeneValueObject.  # noqa: E501</span>
-<span class="sd">        :rtype: list[int]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_node_degrees_neg</span>
-
-    <span class="nd">@node_degrees_neg</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">node_degrees_neg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_degrees_neg</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Sets the node_degrees_neg of this GeneValueObject.</span>
-
-
-<span class="sd">        :param node_degrees_neg: The node_degrees_neg of this GeneValueObject.  # noqa: E501</span>
-<span class="sd">        :type: list[int]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">_node_degrees_neg</span> <span class="o">=</span> <span class="n">node_degrees_neg</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">node_degrees_pos</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Gets the node_degrees_pos of this GeneValueObject.  # noqa: E501</span>
-
-
-<span class="sd">        :return: The node_degrees_pos of this GeneValueObject.  # noqa: E501</span>
-<span class="sd">        :rtype: list[int]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_node_degrees_pos</span>
-
-    <span class="nd">@node_degrees_pos</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">node_degrees_pos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_degrees_pos</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Sets the node_degrees_pos of this GeneValueObject.</span>
-
-
-<span class="sd">        :param node_degrees_pos: The node_degrees_pos of this GeneValueObject.  # noqa: E501</span>
-<span class="sd">        :type: list[int]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">_node_degrees_pos</span> <span class="o">=</span> <span class="n">node_degrees_pos</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">num_go_terms</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Gets the num_go_terms of this GeneValueObject.  # noqa: E501</span>
-
-
-<span class="sd">        :return: The num_go_terms of this GeneValueObject.  # noqa: E501</span>
-<span class="sd">        :rtype: int</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_go_terms</span>
-
-    <span class="nd">@num_go_terms</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">num_go_terms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_go_terms</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Sets the num_go_terms of this GeneValueObject.</span>
-
-
-<span class="sd">        :param num_go_terms: The num_go_terms of this GeneValueObject.  # noqa: E501</span>
-<span class="sd">        :type: int</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">_num_go_terms</span> <span class="o">=</span> <span class="n">num_go_terms</span>
-
-    <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">official_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Gets the official_name of this GeneValueObject.  # noqa: E501</span>
 
@@ -544,130 +259,25 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_official_symbol</span> <span class="o">=</span> <span class="n">official_symbol</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">phenotypes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Gets the phenotypes of this GeneValueObject.  # noqa: E501</span>
+    <span class="k">def</span> <span class="nf">taxon</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Gets the taxon of this GeneValueObject.  # noqa: E501</span>
 
 
-<span class="sd">        :return: The phenotypes of this GeneValueObject.  # noqa: E501</span>
-<span class="sd">        :rtype: list[CharacteristicValueObject]</span>
+<span class="sd">        :return: The taxon of this GeneValueObject.  # noqa: E501</span>
+<span class="sd">        :rtype: TaxonValueObject</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_phenotypes</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_taxon</span>
 
-    <span class="nd">@phenotypes</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">phenotypes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">phenotypes</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Sets the phenotypes of this GeneValueObject.</span>
-
-
-<span class="sd">        :param phenotypes: The phenotypes of this GeneValueObject.  # noqa: E501</span>
-<span class="sd">        :type: list[CharacteristicValueObject]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">_phenotypes</span> <span class="o">=</span> <span class="n">phenotypes</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">platform_count</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Gets the platform_count of this GeneValueObject.  # noqa: E501</span>
+    <span class="nd">@taxon</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">taxon</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">taxon</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Sets the taxon of this GeneValueObject.</span>
 
 
-<span class="sd">        :return: The platform_count of this GeneValueObject.  # noqa: E501</span>
-<span class="sd">        :rtype: int</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_platform_count</span>
-
-    <span class="nd">@platform_count</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">platform_count</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">platform_count</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Sets the platform_count of this GeneValueObject.</span>
-
-
-<span class="sd">        :param platform_count: The platform_count of this GeneValueObject.  # noqa: E501</span>
-<span class="sd">        :type: int</span>
+<span class="sd">        :param taxon: The taxon of this GeneValueObject.  # noqa: E501</span>
+<span class="sd">        :type: TaxonValueObject</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_platform_count</span> <span class="o">=</span> <span class="n">platform_count</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">score</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Gets the score of this GeneValueObject.  # noqa: E501</span>
-
-
-<span class="sd">        :return: The score of this GeneValueObject.  # noqa: E501</span>
-<span class="sd">        :rtype: float</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_score</span>
-
-    <span class="nd">@score</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">score</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Sets the score of this GeneValueObject.</span>
-
-
-<span class="sd">        :param score: The score of this GeneValueObject.  # noqa: E501</span>
-<span class="sd">        :type: float</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">_score</span> <span class="o">=</span> <span class="n">score</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">taxon_common_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Gets the taxon_common_name of this GeneValueObject.  # noqa: E501</span>
-
-
-<span class="sd">        :return: The taxon_common_name of this GeneValueObject.  # noqa: E501</span>
-<span class="sd">        :rtype: str</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_taxon_common_name</span>
-
-    <span class="nd">@taxon_common_name</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">taxon_common_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">taxon_common_name</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Sets the taxon_common_name of this GeneValueObject.</span>
-
-
-<span class="sd">        :param taxon_common_name: The taxon_common_name of this GeneValueObject.  # noqa: E501</span>
-<span class="sd">        :type: str</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">_taxon_common_name</span> <span class="o">=</span> <span class="n">taxon_common_name</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">taxon_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Gets the taxon_id of this GeneValueObject.  # noqa: E501</span>
-
-
-<span class="sd">        :return: The taxon_id of this GeneValueObject.  # noqa: E501</span>
-<span class="sd">        :rtype: int</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_taxon_id</span>
-
-    <span class="nd">@taxon_id</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">taxon_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">taxon_id</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Sets the taxon_id of this GeneValueObject.</span>
-
-
-<span class="sd">        :param taxon_id: The taxon_id of this GeneValueObject.  # noqa: E501</span>
-<span class="sd">        :type: int</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">_taxon_id</span> <span class="o">=</span> <span class="n">taxon_id</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">taxon_scientific_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Gets the taxon_scientific_name of this GeneValueObject.  # noqa: E501</span>
-
-
-<span class="sd">        :return: The taxon_scientific_name of this GeneValueObject.  # noqa: E501</span>
-<span class="sd">        :rtype: str</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_taxon_scientific_name</span>
-
-    <span class="nd">@taxon_scientific_name</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">taxon_scientific_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">taxon_scientific_name</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Sets the taxon_scientific_name of this GeneValueObject.</span>
-
-
-<span class="sd">        :param taxon_scientific_name: The taxon_scientific_name of this GeneValueObject.  # noqa: E501</span>
-<span class="sd">        :type: str</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">_taxon_scientific_name</span> <span class="o">=</span> <span class="n">taxon_scientific_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_taxon</span> <span class="o">=</span> <span class="n">taxon</span>
 
 <div class="viewcode-block" id="GeneValueObject.to_dict"><a class="viewcode-back" href="../../../../api.html#gemmapy.sdk.models.GeneValueObject.to_dict">[docs]</a>    <span class="k">def</span> <span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Returns the model properties as a dict&quot;&quot;&quot;</span>

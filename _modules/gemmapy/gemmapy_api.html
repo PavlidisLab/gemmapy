@@ -51,17 +51,17 @@
 <span class="sd">    Main API class</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">devel</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">devel</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        :param list auth: (optional) A list or tuple of credential strings, e.g.</span>
 <span class="sd">          (your_username, your_password)</span>
 <span class="sd">        :param bool devel: (optional) If True development version of Gemma API will be</span>
-<span class="sd">          used. Default is True.</span>
+<span class="sd">          used. Default is False.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        
+
         <span class="n">configuration</span> <span class="o">=</span> <span class="n">sdk</span><span class="o">.</span><span class="n">Configuration</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">devel</span><span class="p">:</span>
-            <span class="n">configuration</span><span class="o">.</span><span class="n">host</span> <span class="o">=</span> <span class="s1">&#39;dev.gemma.msl.ubc.ca/rest/v2&#39;</span>
+            <span class="n">configuration</span><span class="o">.</span><span class="n">host</span> <span class="o">=</span> <span class="s1">&#39;https://dev.gemma.msl.ubc.ca/rest/v2&#39;</span>
 
         <span class="k">if</span> <span class="n">auth</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">configuration</span><span class="o">.</span><span class="n">username</span> <span class="o">=</span> <span class="n">auth</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -266,7 +266,7 @@
 <span class="sd">        :param list[str] query: (required)</span>
 <span class="sd">        :rtype: ResponseDataObjectListAnnotationSearchResultValueObject</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">search_annotations</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">search_annotations</span><span class="p">(</span><span class="n">query</span><span class="o">=</span><span class="n">query</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="GemmaPy.search_datasets"><a class="viewcode-back" href="../../api.html#gemmapy.GemmaPy.search_datasets">[docs]</a>    <span class="k">def</span> <span class="nf">search_datasets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">taxon</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Retrieve datasets within a given taxa associated to an annotation tags search</span>
@@ -280,7 +280,7 @@
 <span class="sd">          sign indicate ascending order whereas the &#39;-&#39; indicate descending.</span>
 <span class="sd">        :rtype: PaginatedResponseDataObjectExpressionExperimentValueObject</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">search_taxon_datasets</span><span class="p">(</span><span class="n">taxon</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">search_taxon_datasets</span><span class="p">(</span><span class="n">taxon</span><span class="p">,</span> <span class="n">query</span><span class="o">=</span><span class="n">query</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 <span class="c1"># Below are &quot;Convenience&quot; (combination) functions</span>
 <div class="viewcode-block" id="GemmaPy.get_dataset_object"><a class="viewcode-back" href="../../api.html#gemmapy.GemmaPy.get_dataset_object">[docs]</a>    <span class="k">def</span> <span class="nf">get_dataset_object</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -535,15 +535,6 @@
             <span class="c1">#print(&quot;Calling&quot;,fname)</span>
             <span class="n">func</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">[</span><span class="n">fname</span><span class="p">]</span>
             <span class="n">func</span><span class="p">()</span>
-
-    <span class="c1">#df2 = api_instance.get_result_set(423177)</span>
-    <span class="c1">#df2 = api_instance.get_result_set_factors(423177)</span>
-    <span class="c1">#df2 = api_instance.get_differential_expression_values(None,423177)</span>
-    <span class="c1">#df2 = api_instance.get_differential_expression_values(None,485406)</span>
-    <span class="c1">#obj = api_instance.api.get_platforms_by_ids([&#39;GPL96&#39;])</span>
-    <span class="c1">#df2 = api_instance.get_platform_annotations(&#39;GPL96&#39;)</span>
-    <span class="c1">#df2 = api_instance.get_platforms_by_ids([&#39;GPL96&#39;])</span>
-    <span class="c1">#print(df2)</span>
 </pre></div>
 
           </div>
