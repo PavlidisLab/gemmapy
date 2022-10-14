@@ -23,17 +23,12 @@ The package requires Python3.6+.
       cd gemmapy
       pip install .
 
-#. Install it from TestPyPI (temporary method) 
+#. Install it from PyPI 
 
    .. code-block:: bash
 
-      pip install -i https://test.pypi.org/simple/ --no-deps gemmapy
-      # install dependencies
-      pip install urllib3 setuptools certifi anndata six python-dateutil pandas numpy
+      pip install gemmapy
 
-   .. warning::
-      This installation command will change as the first release of the package
-      is uploaded to the PyPI repository (vs TestPyPI now).
 
 Usage
 -----

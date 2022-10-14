@@ -17,12 +17,12 @@ class GemmaPy(object):
     Main API class
     """
 
-    def __init__(self, auth=None, devel=True):
+    def __init__(self, auth=None, devel=False):
         """
         :param list auth: (optional) A list or tuple of credential strings, e.g.
           (your_username, your_password)
         :param bool devel: (optional) If True development version of Gemma API will be
-          used. Default is True.
+          used. Default is False.
         """
 
         configuration = sdk.Configuration()
@@ -501,12 +501,3 @@ if __name__ == '__main__':
             #print("Calling",fname)
             func = dict[fname]
             func()
-
-    #df2 = api_instance.get_result_set(423177)
-    #df2 = api_instance.get_result_set_factors(423177)
-    #df2 = api_instance.get_differential_expression_values(None,423177)
-    #df2 = api_instance.get_differential_expression_values(None,485406)
-    #obj = api_instance.api.get_platforms_by_ids(['GPL96'])
-    #df2 = api_instance.get_platform_annotations('GPL96')
-    #df2 = api_instance.get_platforms_by_ids(['GPL96'])
-    #print(df2)
