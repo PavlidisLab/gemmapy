@@ -9,7 +9,7 @@ import re  # noqa: F401
 # python 2 and python 3 compatibility library
 import six
 
-from gemmapy.{{packageName}}.api_client import ApiClient
+from {{packageName}}.api_client import ApiClient
 
 
 {{#operations}}
@@ -35,7 +35,6 @@ class {{classname}}(object):
 {{/notes}}
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
 {{#sortParamsByRequiredFlag}}
         >>> thread = api.{{operationId}}({{#parameters}}{{#required}}{{paramName}}, {{/required}}{{/parameters}}async_req=True)
 {{/sortParamsByRequiredFlag}}
@@ -44,7 +43,7 @@ class {{classname}}(object):
 {{/sortParamsByRequiredFlag}}
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
 {{#parameters}}
         :param {{dataType}} {{paramName}}:{{#description}} {{{description}}}{{/description}}{{#required}} (required){{/required}}{{#optional}}(optional){{/optional}}
 {{/parameters}}
@@ -67,7 +66,6 @@ class {{classname}}(object):
 {{/notes}}
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
 {{#sortParamsByRequiredFlag}}
         >>> thread = api.{{operationId}}_with_http_info({{#parameters}}{{#required}}{{paramName}}, {{/required}}{{/parameters}}async_req=True)
 {{/sortParamsByRequiredFlag}}
@@ -76,7 +74,7 @@ class {{classname}}(object):
 {{/sortParamsByRequiredFlag}}
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
 {{#parameters}}
         :param {{dataType}} {{paramName}}:{{#description}} {{{description}}}{{/description}}{{#required}} (required){{/required}}{{#optional}}(optional{{#defaultValue}}, default to {{{.}}}{{/defaultValue}}){{/optional}}
 {{/parameters}}
