@@ -25,4 +25,4 @@ Code generation sources
        ./generate-sdk.sh
 
 The current `gemmapy/sdk` was generated with Swagger Codegen 3.0.35 and
-openapi.yaml (of 2022-06-23), templ/ presented in here.
+openapi.yaml (of 2022-10-14, REST API v.2.5.1), templ/ presented in here.
