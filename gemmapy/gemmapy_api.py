@@ -328,7 +328,7 @@ class GemmaPy(object):
             print("stop")
             return
 
-        rss = []
+        rss = {}
         for rs in resultSet:
             df = self.get_result_set(rs)
             if readableContrasts:
@@ -337,7 +337,7 @@ class GemmaPy(object):
                 for i in range(fact.shape[0]):
                     cols = [s.replace(str(fact.loc[i,'id']),fact.loc[i,'factorValue']) for s in cols]
                 df.columns = cols
-            rss.append(df)
+            rss[rs] = df
 
         return rss
 
