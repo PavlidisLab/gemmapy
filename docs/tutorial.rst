@@ -89,7 +89,7 @@ stanley_feinberg Stanley consortium collection Cerebellum - Feinberg human
 
 Note that a single call of these functions will only return 20 results by default and a 100 results maximum, controlled by the limit argument. In order to get all available results, offset argument should be used to make multiple calls.
 
-To see how many available results are there, you can look at the attributes of the output objects where additional information from the API response is appended.
+To see how many available results are there, you can look at the output objects where apart from the data, additional information from the API response is appended.
 
 >>> # a quick call with a limit of 1 to get the result count
 >>> api_response = api_instance.get_taxon_datasets(taxon = 'human', limit = 1)
@@ -101,9 +101,8 @@ Since the maximum limit is 100 getting all results available will require multip
 >>> count = api_response.total_elements
 >>> data = []
 >>> for ofs in range(0,count,100):
-...     print(ofs)
 ...     api_response = api_instance.get_taxon_datasets(taxon = 'human',offset = ofs, limit = 100)
-....     data += api_response.data
+....    data += api_response.data
 >>> print(len(data))
 5766
 >>> for d in data[0:6]:
@@ -193,6 +192,8 @@ queried dataset for downstream analyses. They include the expression
 matrix along with the experimental design, and ensure the sample names
 match between both when transforming/subsetting data.
 
+>>> import gemmapy
+>>> api_instance = gemmapy.GemmaPy()
 >>> adata = api_instance.get_dataset_object("GSE46416")
 >>> print(adata)
 AnnData object with n_obs × n_vars = 21986 × 32
@@ -478,53 +479,37 @@ Differentially-expressed genes in bipolar patients during manic phase versus con
 Larger queries
 --------------
 
-Some endpoints accept multiple identifiers in a single
-function call. For example, getting information on 2 datasets at the
-same time.
+To query large amounts of data, the API has a pagination system which uses the limit and offset parameters. To avoid overloading the server, calls are limited to a maximum of 100 entries, so the offset allows you to get the next batch of entries in the next call(s).
+
+The output of these functions include how many results are available in total.
 
 >>> import gemmapy
 >>> api_instance = gemmapy.GemmaPy()
->>> api_response = api_instance.get_datasets_by_ids(["GSE35974","GSE46416"])
->>> api_response.data[0]  # view the object structure
->>> for d in api_response.data:
-...   print(d.short_name, d.name, d.id, d.accession, d.bio_assay_count, d.taxon.common_name)
-... 
-GSE35974 Expression data from the human cerebellum brain 5939 GSE35974 144 human
-GSE46416 State- and trait-specific gene expression in euthymia and mania 8997 GSE46416 32 human
+>>> api_response = api_instance.get_taxon_datasets(taxon = 'human', limit = 1)
+>>> print(api_response.total_elements)
+5766
 
-To query large amounts of data, the API has a pagination system which
-uses the :code:`limit` and :code:`offset` parameters. To avoid overloading the server,
-calls are limited to a maximum of 100 entries, so the offset allows
-you to get the next batch of entries in the next call(s). For
-simplicity, this example shows how pagination works with 5 entries per
-query.
+After which you can use offset to access all available platforms.
 
->>> for ofs in [0,5,10]:
-...     api_response=api_instance.get_platforms_by_ids([],offset=ofs,limit=5)
-...     for d in api_response.data:
-...         print(d.id, d.short_name, d.taxon.common_name)
-...     print('--')
-... 
-1 GPL96 human
-2 GPL1355 rat
-3 GPL1261 mouse
-4 GPL570 human
-5 GPL81 mouse
---
-6 GPL85 rat
-7 GPL339 mouse
-8 GPL91 human
-9 GPL890 rat
-10 GPL1406 mouse
---
-11 GPL891 mouse
-12 GPL82 mouse
-13 GPL560 mouse
-14 GPL1073 mouse
-16 GPL369 mouse
---
+>>> count = api_response.total_elements
+>>> data = []
+>>> for ofs in range(0,count,100):
+...     api_response = api_instance.get_taxon_datasets(taxon = 'human',offset = ofs, limit = 100)
+....    data += api_response.data
+>>> print(len(data))
+5766
+>>> for d in data[0:6]:
+...     print(d.short_name, d.name, d.taxon.common_name)
+GSE2018 Human Lung Transplant - BAL human
+GSE4036 perro-affy-human-186940 human
+GSE3489 Patterns of gene dysregulation in the frontal cortex of patients with HIV encephalitis human
+GSE1923 Identification of PDGF-dependent patterns of gene expression in U87 glioblastoma cells human
+GSE361 Mammary epithelial cell transduction human
+GSE492 Effect of prostaglandin analogs on aqueous humor outflow human
 
-The rest of the endpoints only support a single identifier:
+
+Many endpoints only support a single identifier:
+
 
 >>> api_response = api_instance.get_dataset_annotations(["GSE35974","GSE12649"])
 ...Error Traceback...
