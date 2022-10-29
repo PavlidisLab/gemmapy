@@ -24,6 +24,11 @@ For detailed information on the curation process, read this `page
 `publication
 <https://academic.oup.com/database/article/doi/10.1093/database/baab006/6143045>`_.
 
+Package cheat sheet
+-----------------------
+.. image:: _static/cheat_sheet.png
+   :align: left
+   :width: 100%
 
 Installation instructions
 -------------------------
@@ -35,44 +40,150 @@ Additional packages
 -------------------
 
 For the purpose of making plots in this tutorial the following packages should be installed
-and imported: :code:`matplotlib`, :code:`plotnine`.
+and imported: :code:`matplotlib`, :code:`plotnine`, :code:`pandas`, :code:`seaborn`
 
+
+Searching for datasets of interest in Gemma
+-------------------------------------------
+
+The package includes various functions to search for datasets fitting desired criteria.
+
+All datasets belonging to a taxon of interest can be accessed by using :py:func:`~gemmapy.GemmaPy.get_taxon_datasets` while the function :py:func:`~gemmapy.GemmaPy.search_datasets` can be used to further limit the results by a specified query containing key words, experiment names or ontology term URIs
+
+>>> import gemmapy
+>>> api_instance = gemmapy.GemmaPy()
+>>> # all human datasets 
+>>> api_response = api_instance.get_taxon_datasets(taxon = 'human')
+>>> api_response.data[0] # view the object structure
+>>> for d in api_response.data[0:6]:
+...     print(d.short_name, d.name, d.taxon.common_name)
+GSE2018 Human Lung Transplant - BAL human
+GSE4036 perro-affy-human-186940 human
+GSE3489 Patterns of gene dysregulation in the frontal cortex of patients with HIV encephalitis human
+GSE1923 Identification of PDGF-dependent patterns of gene expression in U87 glioblastoma cells human
+GSE361 Mammary epithelial cell transduction human
+GSE492 Effect of prostaglandin analogs on aqueous humor outflow human
+
+>>> # human datasets mentioning bipolar
+>>> api_response = api_instance.search_datasets(['bipolar'],taxon = 'human')
+>>> for d in api_response.data[0:6]:
+...     print(d.short_name, d.name, d.taxon.common_name)
+GSE5389 Adult postmortem brain tissue (orbitofrontal cortex) from subjects with bipolar disorder and healthy controls human
+GSE4030 bunge-affy-arabi-162779 human
+GSE5388 Adult postmortem brain tissue (dorsolateral prefrontal cortex) from subjects with bipolar disorder and healthy controls human
+GSE7036 Expression profiling in monozygotic twins discordant for bipolar disorder human
+McLean Hippocampus McLean Hippocampus human
+McLean_PFC McLean_PFC human
+
+>>> 
+>>> api_response = api_instance.search_datasets(['http://purl.obolibrary.org/obo/DOID_3312'], # ontology term URI for the bipolar disorder
+... taxon = 'human')
+>>> for d in api_response.data[0:6]:
+...     print(d.short_name, d.name, d.taxon.common_name)
+GSE5389 Adult postmortem brain tissue (orbitofrontal cortex) from subjects with bipolar disorder and healthy controls human
+GSE5388 Adult postmortem brain tissue (dorsolateral prefrontal cortex) from subjects with bipolar disorder and healthy controls human
+GSE7036 Expression profiling in monozygotic twins discordant for bipolar disorder human
+McLean Hippocampus McLean Hippocampus human
+McLean_PFC McLean_PFC human
+stanley_feinberg Stanley consortium collection Cerebellum - Feinberg human
+
+Note that a single call of these functions will only return 20 results by default and a 100 results maximum, controlled by the limit argument. In order to get all available results, offset argument should be used to make multiple calls.
+
+To see how many available results are there, you can look at the attributes of the output objects where additional information from the API response is appended.
+
+>>> # a quick call with a limit of 1 to get the result count
+>>> api_response = api_instance.get_taxon_datasets(taxon = 'human', limit = 1)
+>>> print(api_response.total_elements)
+5766
+
+Since the maximum limit is 100 getting all results available will require multiple calls.
+
+>>> count = api_response.total_elements
+>>> data = []
+>>> for ofs in range(0,count,100):
+...     print(ofs)
+...     api_response = api_instance.get_taxon_datasets(taxon = 'human',offset = ofs, limit = 100)
+....     data += api_response.data
+>>> print(len(data))
+5766
+>>> for d in data[0:6]:
+...     print(d.short_name, d.name, d.taxon.common_name)
+GSE2018 Human Lung Transplant - BAL human
+GSE4036 perro-affy-human-186940 human
+GSE3489 Patterns of gene dysregulation in the frontal cortex of patients with HIV encephalitis human
+GSE1923 Identification of PDGF-dependent patterns of gene expression in U87 glioblastoma cells human
+GSE361 Mammary epithelial cell transduction human
+GSE492 Effect of prostaglandin analogs on aqueous humor outflow human
+
+See larger queries section for more details. To keep this vignette simpler we will keep using the first 20 results returned by default in examples below.
+
+Information provided about the datasets by these functions include details about the quality and design of the study that can be used to judge if it is suitable for your use case. For instance `geeq.q_score_public_batch_effect` field will be set to -1 if Gemma’s preprocessing has detected batch effects that were unable to be resolved by batch correction and `bio_assay_count` field will include the number of samples used in the experiment.
+
+>>> api_response = api_instance.get_taxon_datasets(taxon = 'human')
+>>> for d in api_response.data:
+...     if(d.geeq is not None and d.geeq.q_score_public_batch_effect != -1 and d.bio_assay_count>4):
+...         print(d.short_name, d.name, d.taxon.common_name)
+GSE2018 Human Lung Transplant - BAL human
+GSE4036 perro-affy-human-186940 human
+GSE3489 Patterns of gene dysregulation in the frontal cortex of patients with HIV encephalitis human
+GSE1923 Identification of PDGF-dependent patterns of gene expression in U87 glioblastoma cells human
+GSE361 Mammary epithelial cell transduction human
+GSE492 Effect of prostaglandin analogs on aqueous humor outflow human
+GSE713 UV radiation-induced DNA damage human
+GSE833 Amyotrophic lateral sclerosis human
+GSE420 Aortic stiffness human
+GSE430 Effect of left ventricular assist device support on congestive heart failure patients human
+GSE675 Time course analysis of response to HCMV infection human
+GSE712 CVB3-infected HeLa cells (multiple time points) human
+GSE701 Transcriptional response of lymphoblastoid cells to ionizing radiation human
+GSE685 DACH1 inhibits TGF-beta signaling through binding Smad4 human
+GSE593 Uterine Fibroid and Normal Myometrial Expression Profiles- U133 Arrays human
+GSE837 angiogenesis human
+GSE590 USF1 haplotype comparison human
+GSE755 MRI lytic and no lytic lesions human
+GSE994 Effects of cigarette smoke on the human airway epithelial cell transcriptome human
+GSE846 Conversion human
+
+
+Gemma uses multiple ontologies when annotating datasets and using the term URIs instead of free text to search can lead to more specific results. :py:func:`~gemmapy.GemmaPy.search_annotations` function allows searching for annotation terms that might be relevant to your query.
+
+>>> api_response = api_instance.search_annotations(['bipolar'])
+>>> for d in api_response.data[0:6]:
+...     print(d)
+{'category': None, 'category_uri': None, 'value': 'Bipolar', 'value_uri': None}
+{'category': 'disease',
+ 'category_uri': 'http://www.ebi.ac.uk/efo/EFO_0000408',
+ 'value': 'bipolar I disorder',
+ 'value_uri': 'http://purl.obolibrary.org/obo/DOID_14042'}
+{'category': 'disease',
+ 'category_uri': 'http://www.ebi.ac.uk/efo/EFO_0000408',
+ 'value': 'Bipolar Disorder',
+ 'value_uri': 'http://purl.obolibrary.org/obo/DOID_3312'}
+{'category': 'disease',
+ 'category_uri': 'http://www.ebi.ac.uk/efo/EFO_0000408',
+ 'value': 'bipolar II disoder',
+ 'value_uri': 'http://www.ebi.ac.uk/efo/EFO_0009964'}
+{'category': 'disease',
+ 'category_uri': 'http://www.ebi.ac.uk/efo/EFO_0000408',
+ 'value': 'Bipolar depressed',
+ 'value_uri': None}
+{'category': 'disease',
+ 'category_uri': 'http://www.ebi.ac.uk/efo/EFO_0000408',
+ 'value': 'bipolar disorder not otherwise specified ',
+ 'value_uri': ''}
 
 Downloading expression data
 ---------------------------
 
-The main goal of this wrapper is to enable easy access to Gemma's curated
-datasets for downstream analyses or meta-analyses combining multiple
-datasets.  In this example, we want to find datasets that are associated
-with bipolar disorder, and we are only interested in human data.  In
-addition, we will subset our results to datasets that have been batch
-corrected.
+Upon identifying datasets of interest, more information about specific ones can be requested. In this example we will be using GSE46416 which includes samples taken from healthy donors along with manic/euthymic phase bipolar disorder patients.
 
->>> import gemmapy
->>> api_instance = gemmapy.GemmaPy()
->>> api_response = api_instance.search_datasets(["bipolar"], taxon="human", limit=100)
->>> api_response.data[0]  # view the object structure
->>> for d in api_response.data:
-...   if d.geeq is not None and  d.geeq.batch_corrected:
-...     print(d.short_name, d.name, d.bio_assay_count)
-... 
-GSE35974 Expression data from the human cerebellum brain 144
-GSE46416 State- and trait-specific gene expression in euthymia and mania 32
+The data associated with specific experiments can be accessed by using :py:func:`~gemmapy.GemmaPy.get_datasets_by_ids`
 
-We are left with two datasets. For simplicity, we'll pick 
-`GSE46416 <https://gemma.msl.ubc.ca/expressionExperiment/showExpressionExperiment.html?id=8997>`_
-since it has the smaller number of samples. Now that we have the ID
-for our experiment, we can fetch the data associated with it.
 
->>> api_response = api_instance.get_datasets_by_ids(["GSE46416"])
->>> for d in api_response.data:
-...   print(d.short_name, d.name, d.id)
-... 
-GSE46416 State- and trait-specific gene expression in euthymia and mania 8997 
->>> print(d.description)
-Gene expression profiles of bipolar disorder (BD) patients were assessed during both a manic and a euthymic phase and compared both intra-individually, and with the gene expression profiles of controls.
-Last Updated (by provider): Sep 05 2014
-Contributors:  Christian C Witt Benedikt Brors Dilafruz Juraeva Jens Treutlein Carsten Sticht Stephanie H Witt Jana Strohmaier Helene Dukal Josef Frank Franziska Degenhardt Markus M Nöthen Sven Cichon Maren Lang Marcella Rietschel Sandra Meier Manuel Mattheisen
+>>> data = api_instance.get_datasets_by_ids(['GSE46416']).data[0]
+>>> print(data.short_name,data.name, data.id)
+GSE46416 State- and trait-specific gene expression in euthymia and mania 8997
+
 
 To access the expression data in a convenient form, you can use
 :py:func:`~gemmapy.GemmaPy.get_dataset_object`. It is a high-level wrapper
@@ -130,22 +241,23 @@ Bipolardisorderpatientmanicphase,23  Batch_03_27/11/09  bipolar_disorder_|_manic
 Bipolardisorderpatientmanicphase,16  Batch_02_26/11/09  bipolar_disorder_|_manic_phase_|
 Bipolardisorderpatientmanicphase,21  Batch_03_27/11/09  bipolar_disorder_|_manic_phase_|
 
-Let's check the expression for every sample to make sure they look OK:
+Let’s take a look at sample to sample correlation in our subset.
 
->>> # Plot Expression matrix
->>> import matplotlib.pyplot as plt
->>> plt.figure(figsize=(10,6))
->>> plt.boxplot(manic.X, sym='.')
->>> plt.xticks([])
->>> plt.xlabel('Samples')
->>> plt.ylabel('Expression')
+>>> # get expression data frame
+>>> import pandas as pd
+>>> import seaborn as sns
+>>> df = pd.DataFrame(manic.X)
+>>> df.columns = manic.var.index
+>>> corrs = df.corr()
+>>> sns.clustermap(corrs)
 >>> plt.savefig('ded.png')
 
 .. image:: _static/ded.png
    :align: left
    :width: 100%
 
-Gene expression distributions of bipolar patients during manic phase and controls.
+Sample to sample correlations of bipolar patients during manic phase and controls.
+
 
 You can also use :py:func:`~gemmapy.GemmaPy.get_dataset_expression` to only get the expression 
 matrix, and :py:func:`~gemmapy.GemmaPy.get_dataset_design` to get the experimental design matrix.
