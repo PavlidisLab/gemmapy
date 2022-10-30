@@ -40,7 +40,7 @@ Additional packages
 -------------------
 
 For the purpose of making plots in this tutorial the following packages should be installed
-and imported: :code:`matplotlib`, :code:`plotnine`, :code:`pandas`, :code:`seaborn`
+and imported: :code:`matplotlib`, :code:`plotnine`, :code:`pandas`, :code:`seaborn`, :code:`statsmodels`
 
 
 Searching for datasets of interest in Gemma
@@ -371,22 +371,89 @@ results are stored as resultSets, each corresponding to one factor (or
 their interaction). You can access them using
 :py:func:`~gemmapy.GemmaPy.get_differential_expression_values`. From here on, we can
 explore and visualize the data to find the most
-differentially-expressed genes:
+differentially-expressed genes.
+
+Note that get_differential_expression_values can return multiple differentials per study if a study has multiple factors to contrast. Since GSE46416 only has one extracting the first element of the returned list is all we need.
 
 >>> import gemmapy
 >>> import pandas
 >>> import numpy as np
 >>> api_instance = gemmapy.GemmaPy()
->>> de = api_instance.get_differential_expression_values('GSE46416', readableContrasts=True)
->>> de = de[0]
+>>> de = api_instance.get_differential_expression_values('GSE46416')
+>>> print(de.keys()) # keys correspond to the id of the differential
+dict_keys([550248])
+>>> de[list(de.keys())[0]]
+         Probe     NCBIid  ... contrast_113005_tstat contrast_113005_pvalue
+0      2982730       4018  ...               -0.3622               0.719600
+1      2787851     166752  ...                0.7495               0.459000
+2      2477558        NaN  ...                1.2600               0.216600
+3      2910917        NaN  ...                0.9032               0.373100
+4      3983537     140886  ...                1.7660               0.086940
+...        ...        ...  ...                   ...                    ...
+21956  3301011      64318  ...               -1.6210               0.114800
+21957  2461654  100130249  ...               -0.2045               0.839300
+21958  2360346       1141  ...                3.1280               0.003721
+21959  2391172       7293  ...                1.7370               0.091960
+21960  2525718        NaN  ...               -0.7101               0.482700
+
+[21961 rows x 13 columns]
+
+By default the columns names of the output correspond to contrast IDs. To see what conditions these IDs correspond to we can either use :py:func:`~gemmapy.GemmaPy.get_dataset_differential_expression_analyses` to get the metadata about differentials of a given dataset, or `setreadableContrasts` argument of :py:func:`~gemmapy.GemmaPy.get_differential_expression_values` to `true`. The former approach is usually better for a large scale systematic analysis while the latter is easier to read in an interactive session.
+
+:py:func:`~gemmapy.GemmaPy.get_dataset_differential_expression_analyses` function returns metadata about the differentials.
+
+>>> contrasts = api_instance.get_dataset_differential_expression_analyses("GSE46416")
+>>> for d in contrasts.data:
+>>>     for r in d.result_sets:
+>>>         for f in r.experimental_factors:
+>>>             for v in f.values:
+>>>                 print(r.id, v.id, v.factor_value)
+550248 113004 bipolar disorder, manic phase
+550248 113006 reference subject role
+550248 113005 euthymic phase, Bipolar Disorder
+
+`id` of the `values` field in the `experimental_factos` corresponds to the column names in the output
+of :py:func:`~gemmapy.GemmaPy.get_differential_expression_values` while the `id` of the `result_sets` corresponds to the name of the differential in the output dictionary. Using them together will let one to access differentially expressed gene counts for each condition contrast.
+
+>>> import statsmodels.stats.multitest as multi
+>>> for d in contrasts.data:
+...     for r in d.result_sets:
+...         for f in r.experimental_factors:
+...             for v in f.values:
+...                 p_col = "contrast_" + str(v.id) + "_pvalue"
+...                 if p_col in list(de[r.id].columns):
+...                     p_values = de[r.id].loc[:,p_col]
+...                     fdr = multi.multipletests(p_values,method='fdr_bh')
+...                     print(r.id, v.id, v.factor_value, sum(fdr[1]<0.05))
 ...
+550248 113004 bipolar disorder, manic phase 3
+550248 113005 euthymic phase, Bipolar Disorder 1389
+
+Alternatively we, since we are only looking at one dataset and one contrast manually, we can simply use readableContrasts.
+
+>>> de = api_instance.get_differential_expression_values('GSE46416',readableContrasts = True)[[0]]
+>>> de = de[list(de.keys())[0]]
+>>> print(de)
+         Probe  ... contrast_euthymic phase, Bipolar Disorder_pvalue
+0      2982730  ...                                         0.719600
+1      2787851  ...                                         0.459000
+2      2477558  ...                                         0.216600
+3      2910917  ...                                         0.373100
+4      3983537  ...                                         0.086940
+...        ...  ...                                              ...
+21956  3301011  ...                                         0.114800
+21957  2461654  ...                                         0.839300
+21958  2360346  ...                                         0.003721
+21959  2391172  ...                                         0.091960
+21960  2525718  ...                                         0.482700
+
+[21961 rows x 13 columns]
 >>> # Classify probes for plotting
 >>> de['diffexpr'] = 'No'   # add extra column
 >>> de.loc[(de['contrast_bipolar disorder, manic phase_logFoldChange'] > 1.0) &
 ...        (de['contrast_bipolar disorder, manic phase_pvalue'] < 0.05),'diffexpr'] = 'Up'
 >>> de.loc[(de['contrast_bipolar disorder, manic phase_logFoldChange'] < -1.0) &
 ...        (de['contrast_bipolar disorder, manic phase_pvalue'] < 0.05),'diffexpr'] = 'Down'
-...
 >>> # Upregulated probes
 >>> de_up = de[de['diffexpr']=='Up']
 >>> de_up = de_up[['Probe','GeneSymbol', 'contrast_bipolar disorder, manic phase_pvalue',
