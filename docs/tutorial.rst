@@ -395,7 +395,6 @@ dict_keys([550248])
 21958  2360346       1141  ...                3.1280               0.003721
 21959  2391172       7293  ...                1.7370               0.091960
 21960  2525718        NaN  ...               -0.7101               0.482700
-
 [21961 rows x 13 columns]
 
 By default the columns names of the output correspond to contrast IDs. To see what conditions these IDs correspond to we can either use :py:func:`~gemmapy.GemmaPy.get_dataset_differential_expression_analyses` to get the metadata about differentials of a given dataset, or `setreadableContrasts` argument of :py:func:`~gemmapy.GemmaPy.get_differential_expression_values` to `true`. The former approach is usually better for a large scale systematic analysis while the latter is easier to read in an interactive session.
@@ -446,7 +445,6 @@ Alternatively we, since we are only looking at one dataset and one contrast manu
 21958  2360346  ...                                         0.003721
 21959  2391172  ...                                         0.091960
 21960  2525718  ...                                         0.482700
-
 [21961 rows x 13 columns]
 >>> # Classify probes for plotting
 >>> de['diffexpr'] = 'No'   # add extra column
