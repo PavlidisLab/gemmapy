@@ -40,7 +40,7 @@ Additional packages
 -------------------
 
 For the purpose of making plots in this tutorial the following packages should be installed
-and imported: :code:`matplotlib`, :code:`plotnine`, :code:`pandas`, :code:`seaborn`, :code:`statsmodels`
+and imported: :code:`matplotlib`, :code:`plotnine`, :code:`pandas`, :code:`seaborn`, :code:`statsmodels`.
 
 
 Searching for datasets of interest in Gemma
@@ -75,7 +75,7 @@ GSE7036 Expression profiling in monozygotic twins discordant for bipolar disorde
 McLean Hippocampus McLean Hippocampus human
 McLean_PFC McLean_PFC human
 
->>> 
+>>> # ontology term URI for the bipolar disorder
 >>> api_response = api_instance.search_datasets(['http://purl.obolibrary.org/obo/DOID_3312'], # ontology term URI for the bipolar disorder
 ... taxon = 'human')
 >>> for d in api_response.data[0:6]:
@@ -102,7 +102,7 @@ Since the maximum limit is 100 getting all results available will require multip
 >>> data = []
 >>> for ofs in range(0,count,100):
 ...     api_response = api_instance.get_taxon_datasets(taxon = 'human',offset = ofs, limit = 100)
-....    data += api_response.data
+...     data += api_response.data
 >>> print(len(data))
 5766
 >>> for d in data[0:6]:
@@ -114,9 +114,9 @@ GSE1923 Identification of PDGF-dependent patterns of gene expression in U87 glio
 GSE361 Mammary epithelial cell transduction human
 GSE492 Effect of prostaglandin analogs on aqueous humor outflow human
 
-See larger queries section for more details. To keep this vignette simpler we will keep using the first 20 results returned by default in examples below.
+See `Larger queries`_ section for more details. To keep this vignette simpler we will keep using the first 20 results returned by default in examples below.
 
-Information provided about the datasets by these functions include details about the quality and design of the study that can be used to judge if it is suitable for your use case. For instance `geeq.q_score_public_batch_effect` field will be set to -1 if Gemma’s preprocessing has detected batch effects that were unable to be resolved by batch correction and `bio_assay_count` field will include the number of samples used in the experiment.
+Information provided about the datasets by these functions include details about the quality and design of the study that can be used to judge if it is suitable for your use case. For instance :code:`geeq.q_score_public_batch_effect` field will be set to -1 if Gemma’s preprocessing has detected batch effects that were unable to be resolved by batch correction and :code:`bio_assay_count` field will include the number of samples used in the experiment.
 
 >>> api_response = api_instance.get_taxon_datasets(taxon = 'human')
 >>> for d in api_response.data:
@@ -144,7 +144,8 @@ GSE994 Effects of cigarette smoke on the human airway epithelial cell transcript
 GSE846 Conversion human
 
 
-Gemma uses multiple ontologies when annotating datasets and using the term URIs instead of free text to search can lead to more specific results. :py:func:`~gemmapy.GemmaPy.search_annotations` function allows searching for annotation terms that might be relevant to your query.
+Gemma uses multiple ontologies when annotating datasets and using the term URIs instead of free text to search can lead to more specific results. 
+The :py:func:`~gemmapy.GemmaPy.search_annotations` function allows searching for annotation terms that might be relevant to your query.
 
 >>> api_response = api_instance.search_annotations(['bipolar'])
 >>> for d in api_response.data[0:6]:
@@ -176,7 +177,7 @@ Downloading expression data
 
 Upon identifying datasets of interest, more information about specific ones can be requested. In this example we will be using GSE46416 which includes samples taken from healthy donors along with manic/euthymic phase bipolar disorder patients.
 
-The data associated with specific experiments can be accessed by using :py:func:`~gemmapy.GemmaPy.get_datasets_by_ids`
+The data associated with specific experiments can be accessed by using :py:func:`~gemmapy.GemmaPy.get_datasets_by_ids`.
 
 
 >>> data = api_instance.get_datasets_by_ids(['GSE46416']).data[0]
@@ -201,7 +202,7 @@ AnnData object with n_obs × n_vars = 21986 × 32
     var: 'batch', 'disease'
     uns: 'title', 'abstract', 'url', 'database', 'accession', 'GemmaQualityScore', 'GemmaSuitabilityScore', 'taxon'
 
-To show how subsetting works, we'll keep the manic phase data and the
+To show how subsetting works, we'll keep the "manic phase" data and the
 :code:`reference_subject_role`\s, which refers to the control samples in Gemma
 datasets.
 
@@ -397,7 +398,7 @@ dict_keys([550248])
 21960  2525718        NaN  ...               -0.7101               0.482700
 [21961 rows x 13 columns]
 
-By default the columns names of the output correspond to contrast IDs. To see what conditions these IDs correspond to we can either use :py:func:`~gemmapy.GemmaPy.get_dataset_differential_expression_analyses` to get the metadata about differentials of a given dataset, or `setreadableContrasts` argument of :py:func:`~gemmapy.GemmaPy.get_differential_expression_values` to `true`. The former approach is usually better for a large scale systematic analysis while the latter is easier to read in an interactive session.
+By default the columns names of the output correspond to contrast IDs. To see what conditions these IDs correspond to we can either use :py:func:`~gemmapy.GemmaPy.get_dataset_differential_expression_analyses` to get the metadata about differentials of a given dataset, or :code:`setreadableContrasts` argument of :py:func:`~gemmapy.GemmaPy.get_differential_expression_values` to :code:`True`. The former approach is usually better for a large scale systematic analysis while the latter is easier to read in an interactive session.
 
 :py:func:`~gemmapy.GemmaPy.get_dataset_differential_expression_analyses` function returns metadata about the differentials.
 
@@ -411,8 +412,8 @@ By default the columns names of the output correspond to contrast IDs. To see wh
 550248 113006 reference subject role
 550248 113005 euthymic phase, Bipolar Disorder
 
-`id` of the `values` field in the `experimental_factos` corresponds to the column names in the output
-of :py:func:`~gemmapy.GemmaPy.get_differential_expression_values` while the `id` of the `result_sets` corresponds to the name of the differential in the output dictionary. Using them together will let one to access differentially expressed gene counts for each condition contrast.
+:code:`id` of the :code:`values` field in the :code:`experimental_factors` corresponds to the column names in the output
+of :py:func:`~gemmapy.GemmaPy.get_differential_expression_values` while the :code:`id` of the :code:`result_sets` corresponds to the name of the differential in the output dictionary. Using them together will let one to access differentially expressed gene counts for each condition contrast.
 
 >>> import statsmodels.stats.multitest as multi
 >>> for d in contrasts.data:
