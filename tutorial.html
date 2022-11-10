@@ -189,7 +189,15 @@ results are stored as resultSets, each corresponding to one factor (or
 their interaction). You can access them using
 <a class="reference internal" href="api.html#gemmapy.GemmaPy.get_differential_expression_values" title="gemmapy.GemmaPy.get_differential_expression_values"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_differential_expression_values()</span></code></a>. From here on, we can
 explore and visualize the data to find the most
-differentially-expressed genes:</p>
+differentially-expressed genes.</p>
+<p>Note that
+<a class="reference internal" href="api.html#gemmapy.GemmaPy.get_differential_expression_values" title="gemmapy.GemmaPy.get_differential_expression_values"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_differential_expression_values()</span></code></a> has the
+argument <code class="code docutils literal notranslate"><span class="pre">readableContrasts</span></code>. By default this is set to <code class="code docutils literal notranslate"><span class="pre">False</span></code>,
+resulting in the output columns being named based on the contrast IDs
+rather the more human readable columns used below. These contrast IDs
+can be used together with
+<a class="reference internal" href="api.html#gemmapy.GemmaPy.get_dataset_differential_expression_analyses" title="gemmapy.GemmaPy.get_dataset_differential_expression_analyses"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_dataset_differential_expression_analyses()</span></code></a>
+during a systematic analysis.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">gemmapy</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -293,6 +301,10 @@ differentially-expressed genes:</p>
 </div>
 <img alt="_images/dea.png" src="_images/dea.png" />
 <p>Differentially-expressed genes in bipolar patients during manic phase versus controls.</p>
+<p>Setting <code class="code docutils literal notranslate"><span class="pre">readableContrasts=FALSE</span></code> (default) will allow easier
+programmatic access to differentials. For instance, lets get the
+number of differentially expressed genes for each contrast returned by
+<a class="reference internal" href="api.html#gemmapy.GemmaPy.get_dataset_differential_expression_analyses" title="gemmapy.GemmaPy.get_dataset_differential_expression_analyses"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_dataset_differential_expression_analyses()</span></code></a> for a study.</p>
 </section>
 <section id="platform-annotations">
 <h2>Platform Annotations<a class="headerlink" href="#platform-annotations" title="Permalink to this heading">¶</a></h2>

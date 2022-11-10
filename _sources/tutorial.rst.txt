@@ -161,7 +161,16 @@ results are stored as resultSets, each corresponding to one factor (or
 their interaction). You can access them using
 :py:func:`~gemmapy.GemmaPy.get_differential_expression_values`. From here on, we can
 explore and visualize the data to find the most
-differentially-expressed genes:
+differentially-expressed genes.
+
+Note that
+:py:func:`~gemmapy.GemmaPy.get_differential_expression_values` has the
+argument :code:`readableContrasts`. By default this is set to :code:`False`,
+resulting in the output columns being named based on the contrast IDs
+rather the more human readable columns used below. These contrast IDs
+can be used together with
+:py:func:`~gemmapy.GemmaPy.get_dataset_differential_expression_analyses`
+during a systematic analysis.
 
 >>> import gemmapy
 >>> import pandas
@@ -264,6 +273,12 @@ differentially-expressed genes:
 .. image:: _static/dea.png
 
 Differentially-expressed genes in bipolar patients during manic phase versus controls.
+
+Setting :code:`readableContrasts=FALSE` (default) will allow easier
+programmatic access to differentials. For instance, lets get the
+number of differentially expressed genes for each contrast returned by
+:py:func:`~gemmapy.GemmaPy.get_dataset_differential_expression_analyses` for a study.
+
 
 Platform Annotations
 --------------------
