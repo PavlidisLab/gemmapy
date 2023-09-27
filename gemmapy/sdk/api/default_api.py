@@ -3,9 +3,9 @@
 """
     Gemma RESTful API
 
-    This website documents the usage of the [Gemma RESTful API](https://gemma.msl.ubc.ca/rest/v2/). Here you can find example script usage of the API, as well as graphical interface for each endpoint, with description of its parameters and the endpoint URL.  Use of this webpage and the Gemma Web services, including the REST API, is subject to [these terms and conditions](https://pavlidislab.github.io/Gemma/terms.html). Please read these in full before continuing to use this webpage or any other part of the Gemma system.  ## Updates  ### Update 2.7.0  New endpoints for counting the number of results: `getNumberOfDatasets`, `getNumberOfPlatforms`, `getNumberOfResultSets`. These endpoints are faster than looking up `totalElements` as no data is retrieved or converted.  Datasets can now be filtered by annotations at the sample, factor value and all levels using the three newly exposed `experimentalDesign.experimentalFactors.factorValues.characteristics`, `bioAssays.sampleUsed.characteristics` and `allCharacteristics` collections. The two useful available properties for filtering are `value` and `valueUri`.  New `getDatasetsAnnotationsUsageStatistics`, `getDatasetsPlatformsUsageStatistics` and `getDatasetsTaxaUsageStatistics` endpoints for retrieving annotations, platforms and taxa used by the matched datasets. The endpoint accepts the same `filter` argument of `getDatasets`, allowing one to easily navigate terms, platforms and taxa available for filtering furthermore.  Properties available for filtering and sorting are enumerated in the description of the corresponding parameter. There's been a number of fixes and additional tests performed to ensure that all advertised properties are working as expected.  The `FilterArg` and `SortArg`-based parameters now have OpenAPI extensions to enumerate available properties in a structured format under the `x-gemma-filterable-properties`key. Possible values are exposed for enumerated types.  ```yaml x-gemma-filterable-properties: - name: technologyType   type: string   allowedValues:   - value: ONECOLOR     label: One Color   - value: SEQUENCING     label: Sequencing   security:     basicAuth: [GROUP_ADMIN]     cookieAuth: [GROUP_ADMIN] ```  Some of the exposed properties such as `geeq.publicSuitabilityScore` require specific authorities to use. This is documented in `x-filterable-properties` by specifying a [Security Requirement Object](https://spec.openapis.org/oas/latest.html#security-requirement-object).  Types that use the `[]` suffix are using sub-queries under the hood. It implies that the entity will be matched if at least one related entity matches the supplied filter. For example, the `characteristics.valueUri = http://purl.obolibrary.org/obo/UBERON_0002107` filter will match datasets with at least one `UBERON:0002107` tag attached.  Filtered endpoints (including paginated and limited ones) now expose a `groupBy` array that enumerates all the properties used to group results. This helps clear confusion about what constitute a business key in the returned response.  ### Update 2.6.1  Add support for filtering platforms by taxon ID, common name, scientific name, etc. for the `/platforms` endpoint.  ### Update 2.6.0  Add a new `externalDatabases` attribute to the main endpoint that displays version of some of the main external databases that we are using. This exposes versions and last updates for genomes, gene annotations, GO terms, and much more!  The `ExternalDatabaseValueObject` now exposes a `description` which provides additional details.  ### Update 2.5.2  Restore `factors` in `BioMaterialValueObject` as it is being still used by our RNA-Seq pipeline. The attribute is deprecated and should not be used and will be removed when we find a suitable alternative.  Introduce a new endpoint to retrieve quantitation types for a given dataset and parameters to retrieve expression data by quantitation type to `getDatasetProcessedExpression` and `getDatasetRawExpression`. As it was too difficult to extends `getDatasetExpression` to also support quantitation type while retaining the filter feature, we decided to deprecate it and reintroduce filtering for both raw and processed expression in the future.  Fix return type for `getResultSets` which was incorrectly referring to a renamed VO.  Annotate all possible types for `SearchResult.resultObject`. This incidentally includes the `GeneSetValueObject` in the specification which is not exposed elsewhere in the API.  ### Update 2.5.1  Restore `objectClass` visibility in `AnnotationValueObject`.  Fix incorrect response types for annotations search endpoints returning datasets.  ### Update 2.5.0  Major cleanups were performed in this release in order to stabilize the specification. Numerous properties from Gemma Web that were never intended to be exposed in Gemma REST have been hidden. It's a bit too much to describe in here, but you can navigate to the schemas section below to get a good glance at the models.  Favour `numberOfSomething` instead of `somethingCount` which is clearer. The older names are kept for backward-compatibility, but should be considered deprecated.  Gene aliases and multifunctionality rank are now filled in `GeneValueObject`.  Uniformly use `TaxonValueObject` to represent taxon. This is breaking change for the `ExpressionExperimentValueObject` and `ArrayDesignValueObject` as their `taxon` property will be an `object` instead of a `string`. Properties such as `taxonId` are now deprecated and `taxon.id` should be used instead.  Entities that have IDs now all inherit from `IdentifiableValueObject`. This implies that you can assume the presence of an `id` in a search result `resultObject` attribute for example.  New `/search` endpoint! for an unified search experience. Annotation-based search endpoints under `/annotations` are now deprecated.  New API docs! While not as nice looking, the previous theme will be gradually ported to Swagger UI as we focused on functionality over prettiness for this release.  ### Update 2.4.0 through 2.4.1  Release notes for the 2.4 series were not written down, so I'll try to do my best to recall features that were introduced at that time.  An [OpenAPI](https://www.openapis.org/) specification was introduced and available under `/rest/v2/openapi.json`, although not fully stabilized.  Add a `/resultSets` endpoint to navigate result sets directly, by ID or by dataset.  Add a `/resultSets/{resultSetId}` endpoint to retrieve a specific result set by its ID. This endpoint can be negotiated with an `Accept: text/tab-separated-values` header to obtain a TSV representation.  Add a `/datasets/{dataset}/analyses/differential/resultSets` endpoint that essentially redirect to a specific `/resultSet` endpoint by dataset ID.  Add an endpoint to retrieve preferred raw expression vectors.  ### Update 2.3.4  November 6th, 2018  November 6th [2.3.4] Bug fixes in the dataset search endpoint.  November 5th [2.3.3] Added filtering parameters to dataset search.  October 25th [2.3.2] Changed behavior of the dataset search endpoint to more closely match the Gemma web interface.  October 2nd [2.3.1] Added group information to the User value object.  September 27th [2.3.0] Breaking change in Taxa: Abbreviation property has been removed and is therefore no longer an accepted identifier.  ### Update 2.2.6  June 7th, 2018  Code maintenance, bug fixes. Geeq scores stable and made public.  June 7th [2.2.6] Added: User authentication endpoint.  May 2nd [2.2.5] Fixed: Cleaned up and optimized platforms/elements endpoint, removed redundant information (recursive properties nesting).  April 12th [2.2.3] Fixed: Array arguments not handling non-string properties properly, e.g. `ncbiIds` of genes.  April 9th [2.2.1] Fixed: Filter argument not working when the filtered field was a primitive type. This most significantly allows filtering by geeq boolean and double properties.  ### Update 2.2.0  February 8th, 2018  Breaking change in the 'Dataset differential analysis' endpoint: - No longer using `qValueThreshold` parameter. - Response format changed, now using `DifferentialExpressionAnalysisValueObject` instead of `DifferentialExpressionValueObject` - [Experimental] Added Geeq (Gene Expression Experiment Quality) scores to the dataset value objects   # noqa: E501
+    This website documents the usage of the [Gemma RESTful API](https://gemma.msl.ubc.ca/rest/v2/). Here you can find example script usage of the API, as well as graphical interface for each endpoint, with description of its parameters and the endpoint URL.  Use of this webpage and the Gemma Web services, including the REST API, is subject to [these terms and conditions](https://pavlidislab.github.io/Gemma/terms.html). Please read these in full before continuing to use this webpage or any other part of the Gemma system.  ## Updates  ### Update 2.7.1  - improved highlights of search results - fix the limit for getDatasetsAnnotations() endpoint to 5000 in the specification - fix missing initialization of datasets retrieved from the cache  Highlights now use Markdown syntax for formatting. Fields for highlighted ontology terms now use complete object path instead of just `term`. Last but not least, highlights from multiple results are merged.  ### Update 2.7.0  New endpoints for counting the number of results: `getNumberOfDatasets`, `getNumberOfPlatforms`, `getNumberOfResultSets`. These endpoints are faster than looking up `totalElements` as no data is retrieved or converted.  Datasets can now be filtered by annotations at the sample, factor value and all levels using the three newly exposed `experimentalDesign.experimentalFactors.factorValues.characteristics`, `bioAssays.sampleUsed.characteristics` and `allCharacteristics` collections. The two useful available properties for filtering are `value` and `valueUri`.  New `getDatasetsAnnotationsUsageStatistics`, `getDatasetsPlatformsUsageStatistics` and `getDatasetsTaxaUsageStatistics` endpoints for retrieving annotations, platforms and taxa used by the matched datasets. The endpoint accepts the same `filter` argument of `getDatasets`, allowing one to easily navigate terms, platforms and taxa available for filtering furthermore.  Properties available for filtering and sorting are enumerated in the description of the corresponding parameter. There's been a number of fixes and additional tests performed to ensure that all advertised properties are working as expected.  The `FilterArg` and `SortArg`-based parameters now have OpenAPI extensions to enumerate available properties in a structured format under the `x-gemma-filterable-properties`key. Possible values are exposed for enumerated types.  ```yaml x-gemma-filterable-properties: - name: technologyType   type: string   allowedValues:   - value: ONECOLOR     label: One Color   - value: SEQUENCING     label: Sequencing   security:     basicAuth: [GROUP_ADMIN]     cookieAuth: [GROUP_ADMIN] ```  Some of the exposed properties such as `geeq.publicSuitabilityScore` require specific authorities to use. This is documented in `x-filterable-properties` by specifying a [Security Requirement Object](https://spec.openapis.org/oas/latest.html#security-requirement-object).  Types that use the `[]` suffix are using sub-queries under the hood. It implies that the entity will be matched if at least one related entity matches the supplied filter. For example, the `characteristics.valueUri = http://purl.obolibrary.org/obo/UBERON_0002107` filter will match datasets with at least one `UBERON:0002107` tag attached.  Filtered endpoints (including paginated and limited ones) now expose a `groupBy` array that enumerates all the properties used to group results. This helps clear confusion about what constitute a business key in the returned response.  ### Update 2.6.1  Add support for filtering platforms by taxon ID, common name, scientific name, etc. for the `/platforms` endpoint.  ### Update 2.6.0  Add a new `externalDatabases` attribute to the main endpoint that displays version of some of the main external databases that we are using. This exposes versions and last updates for genomes, gene annotations, GO terms, and much more!  The `ExternalDatabaseValueObject` now exposes a `description` which provides additional details.  ### Update 2.5.2  Restore `factors` in `BioMaterialValueObject` as it is being still used by our RNA-Seq pipeline. The attribute is deprecated and should not be used and will be removed when we find a suitable alternative.  Introduce a new endpoint to retrieve quantitation types for a given dataset and parameters to retrieve expression data by quantitation type to `getDatasetProcessedExpression` and `getDatasetRawExpression`. As it was too difficult to extends `getDatasetExpression` to also support quantitation type while retaining the filter feature, we decided to deprecate it and reintroduce filtering for both raw and processed expression in the future.  Fix return type for `getResultSets` which was incorrectly referring to a renamed VO.  Annotate all possible types for `SearchResult.resultObject`. This incidentally includes the `GeneSetValueObject` in the specification which is not exposed elsewhere in the API.  ### Update 2.5.1  Restore `objectClass` visibility in `AnnotationValueObject`.  Fix incorrect response types for annotations search endpoints returning datasets.  ### Update 2.5.0  Major cleanups were performed in this release in order to stabilize the specification. Numerous properties from Gemma Web that were never intended to be exposed in Gemma REST have been hidden. It's a bit too much to describe in here, but you can navigate to the schemas section below to get a good glance at the models.  Favour `numberOfSomething` instead of `somethingCount` which is clearer. The older names are kept for backward-compatibility, but should be considered deprecated.  Gene aliases and multifunctionality rank are now filled in `GeneValueObject`.  Uniformly use `TaxonValueObject` to represent taxon. This is breaking change for the `ExpressionExperimentValueObject` and `ArrayDesignValueObject` as their `taxon` property will be an `object` instead of a `string`. Properties such as `taxonId` are now deprecated and `taxon.id` should be used instead.  Entities that have IDs now all inherit from `IdentifiableValueObject`. This implies that you can assume the presence of an `id` in a search result `resultObject` attribute for example.  New `/search` endpoint! for an unified search experience. Annotation-based search endpoints under `/annotations` are now deprecated.  New API docs! While not as nice looking, the previous theme will be gradually ported to Swagger UI as we focused on functionality over prettiness for this release.  ### Update 2.4.0 through 2.4.1  Release notes for the 2.4 series were not written down, so I'll try to do my best to recall features that were introduced at that time.  An [OpenAPI](https://www.openapis.org/) specification was introduced and available under `/rest/v2/openapi.json`, although not fully stabilized.  Add a `/resultSets` endpoint to navigate result sets directly, by ID or by dataset.  Add a `/resultSets/{resultSetId}` endpoint to retrieve a specific result set by its ID. This endpoint can be negotiated with an `Accept: text/tab-separated-values` header to obtain a TSV representation.  Add a `/datasets/{dataset}/analyses/differential/resultSets` endpoint that essentially redirect to a specific `/resultSet` endpoint by dataset ID.  Add an endpoint to retrieve preferred raw expression vectors.  ### Update 2.3.4  November 6th, 2018  November 6th [2.3.4] Bug fixes in the dataset search endpoint.  November 5th [2.3.3] Added filtering parameters to dataset search.  October 25th [2.3.2] Changed behavior of the dataset search endpoint to more closely match the Gemma web interface.  October 2nd [2.3.1] Added group information to the User value object.  September 27th [2.3.0] Breaking change in Taxa: Abbreviation property has been removed and is therefore no longer an accepted identifier.  ### Update 2.2.6  June 7th, 2018  Code maintenance, bug fixes. Geeq scores stable and made public.  June 7th [2.2.6] Added: User authentication endpoint.  May 2nd [2.2.5] Fixed: Cleaned up and optimized platforms/elements endpoint, removed redundant information (recursive properties nesting).  April 12th [2.2.3] Fixed: Array arguments not handling non-string properties properly, e.g. `ncbiIds` of genes.  April 9th [2.2.1] Fixed: Filter argument not working when the filtered field was a primitive type. This most significantly allows filtering by geeq boolean and double properties.  ### Update 2.2.0  February 8th, 2018  Breaking change in the 'Dataset differential analysis' endpoint: - No longer using `qValueThreshold` parameter. - Response format changed, now using `DifferentialExpressionAnalysisValueObject` instead of `DifferentialExpressionValueObject` - [Experimental] Added Geeq (Gene Expression Experiment Quality) scores to the dataset value objects   # noqa: E501
 
-    OpenAPI spec version: 2.7.0
+    OpenAPI spec version: 2.7.1
     Contact: pavlab-support@msl.ubc.ca
     Generated by: https://github.com/swagger-api/swagger-codegen.git
 """
@@ -35,6 +35,7 @@ class DefaultApi(object):
     def get_api_info(self, **kwargs):  # noqa: E501
         """Retrieve an object with basic API information  # noqa: E501
 
+        The payload contains a list of featured external databases that Gemma uses under the `externalDatabases` field. Those are mainly genomic references and sources of gene annotations.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -56,6 +57,7 @@ class DefaultApi(object):
     def get_api_info_with_http_info(self, **kwargs):  # noqa: E501
         """Retrieve an object with basic API information  # noqa: E501
 
+        The payload contains a list of featured external databases that Gemma uses under the `externalDatabases` field. Those are mainly genomic references and sources of gene annotations.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -1538,7 +1540,7 @@ class DefaultApi(object):
         :param int offset:
         :param int limit:
         :param SortArgExpressionExperiment sort:
-        :return: QueriedAndPaginatedResponseDataObjectExpressionExperimentWithSearchResultValueObject
+        :return: QueriedAndFilteredAndPaginatedResponseDataObjectExpressionExperimentWithSearchResultValueObject
                  If the method is called asynchronously,
                  returns the request thread.
         """
@@ -1564,7 +1566,7 @@ class DefaultApi(object):
         :param int offset:
         :param int limit:
         :param SortArgExpressionExperiment sort:
-        :return: QueriedAndPaginatedResponseDataObjectExpressionExperimentWithSearchResultValueObject
+        :return: QueriedAndFilteredAndPaginatedResponseDataObjectExpressionExperimentWithSearchResultValueObject
                  If the method is called asynchronously,
                  returns the request thread.
         """
@@ -1622,7 +1624,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='QueriedAndPaginatedResponseDataObjectExpressionExperimentWithSearchResultValueObject',  # noqa: E501
+            response_type='QueriedAndFilteredAndPaginatedResponseDataObjectExpressionExperimentWithSearchResultValueObject',  # noqa: E501
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -1631,7 +1633,7 @@ class DefaultApi(object):
             collection_formats=collection_formats)
 
     def get_datasets_annotations_usage_statistics(self, **kwargs):  # noqa: E501
-        """Retrieve usage statistics of annotations among datasets matching the provided filter  # noqa: E501
+        """Retrieve usage statistics of annotations among datasets matching the provided query and filter  # noqa: E501
 
         Usage statistics are aggregated across experiment tags, samples and factor values mentioned in the experimental design.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
@@ -1643,9 +1645,10 @@ class DefaultApi(object):
         :param bool async_req:
         :param str query:
         :param FilterArgExpressionExperiment filter:
-        :param list[str] exclude: List of fields to exclude from the payload. Only 'parentTerms' can be excluded.
+        :param list[str] exclude: List of fields to exclude from the payload. Only `parentTerms` can be excluded.
         :param int limit: Maximum number of annotations to returned; capped at 5000.
-        :param int min_frequency: Minimum number of associated datasets to report an annotation.
+        :param int min_frequency: Minimum number of associated datasets to report an annotation. If used, the limit will default to 5000.
+        :param str category: A category URI to restrict reported annotations. If unspecified, annotations from all categories are reported. If empty, uncategorized terms are reported.
         :return: LimitedResponseDataObjectAnnotationWithUsageStatisticsValueObject
                  If the method is called asynchronously,
                  returns the request thread.
@@ -1658,7 +1661,7 @@ class DefaultApi(object):
             return data
 
     def get_datasets_annotations_usage_statistics_with_http_info(self, **kwargs):  # noqa: E501
-        """Retrieve usage statistics of annotations among datasets matching the provided filter  # noqa: E501
+        """Retrieve usage statistics of annotations among datasets matching the provided query and filter  # noqa: E501
 
         Usage statistics are aggregated across experiment tags, samples and factor values mentioned in the experimental design.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
@@ -1670,15 +1673,16 @@ class DefaultApi(object):
         :param bool async_req:
         :param str query:
         :param FilterArgExpressionExperiment filter:
-        :param list[str] exclude: List of fields to exclude from the payload. Only 'parentTerms' can be excluded.
+        :param list[str] exclude: List of fields to exclude from the payload. Only `parentTerms` can be excluded.
         :param int limit: Maximum number of annotations to returned; capped at 5000.
-        :param int min_frequency: Minimum number of associated datasets to report an annotation.
+        :param int min_frequency: Minimum number of associated datasets to report an annotation. If used, the limit will default to 5000.
+        :param str category: A category URI to restrict reported annotations. If unspecified, annotations from all categories are reported. If empty, uncategorized terms are reported.
         :return: LimitedResponseDataObjectAnnotationWithUsageStatisticsValueObject
                  If the method is called asynchronously,
                  returns the request thread.
         """
 
-        all_params = ['query', 'filter', 'exclude', 'limit', 'min_frequency']  # noqa: E501
+        all_params = ['query', 'filter', 'exclude', 'limit', 'min_frequency', 'category']  # noqa: E501
         all_params.append('async_req')
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
@@ -1710,6 +1714,8 @@ class DefaultApi(object):
             query_params.append(('limit', params['limit']))  # noqa: E501
         if 'min_frequency' in params:
             query_params.append(('minFrequency', params['min_frequency']))  # noqa: E501
+        if 'category' in params:
+            query_params.append(('category', params['category']))  # noqa: E501
 
         header_params = {}
 
@@ -1755,7 +1761,7 @@ class DefaultApi(object):
         :param int offset:
         :param int limit:
         :param SortArgExpressionExperiment sort:
-        :return: FilteringAndPaginatedResponseDataObjectExpressionExperimentValueObject
+        :return: FilteredAndPaginatedResponseDataObjectExpressionExperimentValueObject
                  If the method is called asynchronously,
                  returns the request thread.
         """
@@ -1781,7 +1787,7 @@ class DefaultApi(object):
         :param int offset:
         :param int limit:
         :param SortArgExpressionExperiment sort:
-        :return: FilteringAndPaginatedResponseDataObjectExpressionExperimentValueObject
+        :return: FilteredAndPaginatedResponseDataObjectExpressionExperimentValueObject
                  If the method is called asynchronously,
                  returns the request thread.
         """
@@ -1844,7 +1850,104 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='FilteringAndPaginatedResponseDataObjectExpressionExperimentValueObject',  # noqa: E501
+            response_type='FilteredAndPaginatedResponseDataObjectExpressionExperimentValueObject',  # noqa: E501
+            auth_settings=auth_settings,
+            async_req=params.get('async_req'),
+            _return_http_data_only=params.get('_return_http_data_only'),
+            _preload_content=params.get('_preload_content', True),
+            _request_timeout=params.get('_request_timeout'),
+            collection_formats=collection_formats)
+
+    def get_datasets_categories_usage_statistics(self, **kwargs):  # noqa: E501
+        """Retrieve usage statistics of categories among datasets matching the provided query and filter  # noqa: E501
+
+        Usage statistics are aggregated across experiment tags, samples and factor values mentioned in the experimental design.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.get_datasets_categories_usage_statistics(async_req=True)
+        >>> result = thread.get()
+
+        :param bool async_req:
+        :param str query:
+        :param FilterArgExpressionExperiment filter:
+        :return: QueriedAndFilteredResponseDataObjectCategoryWithUsageStatisticsValueObject
+                 If the method is called asynchronously,
+                 returns the request thread.
+        """
+        kwargs['_return_http_data_only'] = True
+        if kwargs.get('async_req'):
+            return self.get_datasets_categories_usage_statistics_with_http_info(**kwargs)  # noqa: E501
+        else:
+            (data) = self.get_datasets_categories_usage_statistics_with_http_info(**kwargs)  # noqa: E501
+            return data
+
+    def get_datasets_categories_usage_statistics_with_http_info(self, **kwargs):  # noqa: E501
+        """Retrieve usage statistics of categories among datasets matching the provided query and filter  # noqa: E501
+
+        Usage statistics are aggregated across experiment tags, samples and factor values mentioned in the experimental design.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.get_datasets_categories_usage_statistics_with_http_info(async_req=True)
+        >>> result = thread.get()
+
+        :param bool async_req:
+        :param str query:
+        :param FilterArgExpressionExperiment filter:
+        :return: QueriedAndFilteredResponseDataObjectCategoryWithUsageStatisticsValueObject
+                 If the method is called asynchronously,
+                 returns the request thread.
+        """
+
+        all_params = ['query', 'filter']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
+
+        params = locals()
+        for key, val in six.iteritems(params['kwargs']):
+            if key not in all_params:
+                raise TypeError(
+                    "Got an unexpected keyword argument '%s'"
+                    " to method get_datasets_categories_usage_statistics" % key
+                )
+            params[key] = val
+        del params['kwargs']
+
+        collection_formats = {}
+
+        path_params = {}
+
+        query_params = []
+        if 'query' in params:
+            query_params.append(('query', params['query']))  # noqa: E501
+        if 'filter' in params:
+            query_params.append(('filter', params['filter']))  # noqa: E501
+
+        header_params = {}
+
+        form_params = []
+        local_var_files = {}
+
+        body_params = None
+        # HTTP header `Accept`
+        header_params['Accept'] = self.api_client.select_header_accept(
+            ['application/json'])  # noqa: E501
+
+        # Authentication setting
+        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
+
+        return self.api_client.call_api(
+            '/datasets/categories', 'GET',
+            path_params,
+            query_params,
+            header_params,
+            body=body_params,
+            post_params=form_params,
+            files=local_var_files,
+            response_type='QueriedAndFilteredResponseDataObjectCategoryWithUsageStatisticsValueObject',  # noqa: E501
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -1853,7 +1956,7 @@ class DefaultApi(object):
             collection_formats=collection_formats)
 
     def get_datasets_platforms_usage_statistics(self, **kwargs):  # noqa: E501
-        """Retrieve usage statistics of platforms among datasets matching the provided filterArg  # noqa: E501
+        """Retrieve usage statistics of platforms among datasets matching the provided query and filter  # noqa: E501
 
         Usage statistics are aggregated across experiment tags, samples and factor values mentioned in the experimental design.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
@@ -1878,7 +1981,7 @@ class DefaultApi(object):
             return data
 
     def get_datasets_platforms_usage_statistics_with_http_info(self, **kwargs):  # noqa: E501
-        """Retrieve usage statistics of platforms among datasets matching the provided filterArg  # noqa: E501
+        """Retrieve usage statistics of platforms among datasets matching the provided query and filter  # noqa: E501
 
         Usage statistics are aggregated across experiment tags, samples and factor values mentioned in the experimental design.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
@@ -1954,7 +2057,7 @@ class DefaultApi(object):
             collection_formats=collection_formats)
 
     def get_datasets_taxa_usage_statistics(self, **kwargs):  # noqa: E501
-        """Retrieve taxa usage statistics for datasets matching the provided filter  # noqa: E501
+        """Retrieve taxa usage statistics for datasets matching the provided query and filter  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -1965,7 +2068,7 @@ class DefaultApi(object):
         :param bool async_req:
         :param str query:
         :param FilterArgExpressionExperiment filter:
-        :return: FilteringResponseDataObjectTaxonWithUsageStatisticsValueObject
+        :return: QueriedAndFilteredResponseDataObjectTaxonWithUsageStatisticsValueObject
                  If the method is called asynchronously,
                  returns the request thread.
         """
@@ -1977,7 +2080,7 @@ class DefaultApi(object):
             return data
 
     def get_datasets_taxa_usage_statistics_with_http_info(self, **kwargs):  # noqa: E501
-        """Retrieve taxa usage statistics for datasets matching the provided filter  # noqa: E501
+        """Retrieve taxa usage statistics for datasets matching the provided query and filter  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -1988,7 +2091,7 @@ class DefaultApi(object):
         :param bool async_req:
         :param str query:
         :param FilterArgExpressionExperiment filter:
-        :return: FilteringResponseDataObjectTaxonWithUsageStatisticsValueObject
+        :return: QueriedAndFilteredResponseDataObjectTaxonWithUsageStatisticsValueObject
                  If the method is called asynchronously,
                  returns the request thread.
         """
@@ -2040,7 +2143,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='FilteringResponseDataObjectTaxonWithUsageStatisticsValueObject',  # noqa: E501
+            response_type='QueriedAndFilteredResponseDataObjectTaxonWithUsageStatisticsValueObject',  # noqa: E501
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -2354,7 +2457,7 @@ class DefaultApi(object):
         :param Gene2 gene: (required)
         :param int offset:
         :param int limit:
-        :return: FilteringAndPaginatedResponseDataObjectCompositeSequenceValueObject
+        :return: FilteredAndPaginatedResponseDataObjectCompositeSequenceValueObject
                  If the method is called asynchronously,
                  returns the request thread.
         """
@@ -2378,7 +2481,7 @@ class DefaultApi(object):
         :param Gene2 gene: (required)
         :param int offset:
         :param int limit:
-        :return: FilteringAndPaginatedResponseDataObjectCompositeSequenceValueObject
+        :return: FilteredAndPaginatedResponseDataObjectCompositeSequenceValueObject
                  If the method is called asynchronously,
                  returns the request thread.
         """
@@ -2436,7 +2539,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='FilteringAndPaginatedResponseDataObjectCompositeSequenceValueObject',  # noqa: E501
+            response_type='FilteredAndPaginatedResponseDataObjectCompositeSequenceValueObject',  # noqa: E501
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -2541,7 +2644,7 @@ class DefaultApi(object):
             collection_formats=collection_formats)
 
     def get_number_of_datasets(self, **kwargs):  # noqa: E501
-        """Count datasets matching the provided filters  # noqa: E501
+        """Count datasets matching the provided query and  filter  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -2564,7 +2667,7 @@ class DefaultApi(object):
             return data
 
     def get_number_of_datasets_with_http_info(self, **kwargs):  # noqa: E501
-        """Count datasets matching the provided filters  # noqa: E501
+        """Count datasets matching the provided query and  filter  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -2636,7 +2739,7 @@ class DefaultApi(object):
             collection_formats=collection_formats)
 
     def get_number_of_platforms(self, **kwargs):  # noqa: E501
-        """Count platforms matching a given set of filters  # noqa: E501
+        """Count platforms matching the provided filter  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -2658,7 +2761,7 @@ class DefaultApi(object):
             return data
 
     def get_number_of_platforms_with_http_info(self, **kwargs):  # noqa: E501
-        """Count platforms matching a given set of filters  # noqa: E501
+        """Count platforms matching the provided filter  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -2727,7 +2830,7 @@ class DefaultApi(object):
             collection_formats=collection_formats)
 
     def get_number_of_result_sets(self, **kwargs):  # noqa: E501
-        """Count result sets matching a given set of filters  # noqa: E501
+        """Count result sets matching the provided filter  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -2749,7 +2852,7 @@ class DefaultApi(object):
             return data
 
     def get_number_of_result_sets_with_http_info(self, **kwargs):  # noqa: E501
-        """Count result sets matching a given set of filters  # noqa: E501
+        """Count result sets matching the provided filter  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -3016,7 +3119,7 @@ class DefaultApi(object):
             collection_formats=collection_formats)
 
     def get_platform_element(self, platform, probes, **kwargs):  # noqa: E501
-        """Retrieve the selected composite sequences for a given platform  # noqa: E501
+        """Retrieve the selected probes for a given platform  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -3029,7 +3132,7 @@ class DefaultApi(object):
         :param list[object] probes: (required)
         :param int offset:
         :param int limit:
-        :return: FilteringAndPaginatedResponseDataObjectCompositeSequenceValueObject
+        :return: FilteredAndPaginatedResponseDataObjectCompositeSequenceValueObject
                  If the method is called asynchronously,
                  returns the request thread.
         """
@@ -3041,7 +3144,7 @@ class DefaultApi(object):
             return data
 
     def get_platform_element_with_http_info(self, platform, probes, **kwargs):  # noqa: E501
-        """Retrieve the selected composite sequences for a given platform  # noqa: E501
+        """Retrieve the selected probes for a given platform  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -3054,7 +3157,7 @@ class DefaultApi(object):
         :param list[object] probes: (required)
         :param int offset:
         :param int limit:
-        :return: FilteringAndPaginatedResponseDataObjectCompositeSequenceValueObject
+        :return: FilteredAndPaginatedResponseDataObjectCompositeSequenceValueObject
                  If the method is called asynchronously,
                  returns the request thread.
         """
@@ -3119,7 +3222,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='FilteringAndPaginatedResponseDataObjectCompositeSequenceValueObject',  # noqa: E501
+            response_type='FilteredAndPaginatedResponseDataObjectCompositeSequenceValueObject',  # noqa: E501
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -3141,7 +3244,7 @@ class DefaultApi(object):
         :param Probe probe: (required)
         :param int offset:
         :param int limit:
-        :return: FilteringAndPaginatedResponseDataObjectGeneValueObject
+        :return: FilteredAndPaginatedResponseDataObjectGeneValueObject
                  If the method is called asynchronously,
                  returns the request thread.
         """
@@ -3166,7 +3269,7 @@ class DefaultApi(object):
         :param Probe probe: (required)
         :param int offset:
         :param int limit:
-        :return: FilteringAndPaginatedResponseDataObjectGeneValueObject
+        :return: FilteredAndPaginatedResponseDataObjectGeneValueObject
                  If the method is called asynchronously,
                  returns the request thread.
         """
@@ -3230,7 +3333,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='FilteringAndPaginatedResponseDataObjectGeneValueObject',  # noqa: E501
+            response_type='FilteredAndPaginatedResponseDataObjectGeneValueObject',  # noqa: E501
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -3239,7 +3342,7 @@ class DefaultApi(object):
             collection_formats=collection_formats)
 
     def get_platform_elements(self, platform, **kwargs):  # noqa: E501
-        """Retrieve the composite sequences for a given platform  # noqa: E501
+        """Retrieve the probes for a given platform  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -3263,7 +3366,7 @@ class DefaultApi(object):
             return data
 
     def get_platform_elements_with_http_info(self, platform, **kwargs):  # noqa: E501
-        """Retrieve the composite sequences for a given platform  # noqa: E501
+        """Retrieve the probes for a given platform  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -3355,7 +3458,7 @@ class DefaultApi(object):
         :param int offset:
         :param int limit:
         :param SortArgArrayDesign sort:
-        :return: FilteringAndPaginatedResponseDataObjectArrayDesignValueObject
+        :return: FilteredAndPaginatedResponseDataObjectArrayDesignValueObject
                  If the method is called asynchronously,
                  returns the request thread.
         """
@@ -3380,7 +3483,7 @@ class DefaultApi(object):
         :param int offset:
         :param int limit:
         :param SortArgArrayDesign sort:
-        :return: FilteringAndPaginatedResponseDataObjectArrayDesignValueObject
+        :return: FilteredAndPaginatedResponseDataObjectArrayDesignValueObject
                  If the method is called asynchronously,
                  returns the request thread.
         """
@@ -3436,7 +3539,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='FilteringAndPaginatedResponseDataObjectArrayDesignValueObject',  # noqa: E501
+            response_type='FilteredAndPaginatedResponseDataObjectArrayDesignValueObject',  # noqa: E501
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -3459,7 +3562,7 @@ class DefaultApi(object):
         :param int offset:
         :param int limit:
         :param SortArgArrayDesign sort:
-        :return: FilteringAndPaginatedResponseDataObjectArrayDesignValueObject
+        :return: FilteredAndPaginatedResponseDataObjectArrayDesignValueObject
                  If the method is called asynchronously,
                  returns the request thread.
         """
@@ -3485,7 +3588,7 @@ class DefaultApi(object):
         :param int offset:
         :param int limit:
         :param SortArgArrayDesign sort:
-        :return: FilteringAndPaginatedResponseDataObjectArrayDesignValueObject
+        :return: FilteredAndPaginatedResponseDataObjectArrayDesignValueObject
                  If the method is called asynchronously,
                  returns the request thread.
         """
@@ -3548,7 +3651,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='FilteringAndPaginatedResponseDataObjectArrayDesignValueObject',  # noqa: E501
+            response_type='FilteredAndPaginatedResponseDataObjectArrayDesignValueObject',  # noqa: E501
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -3762,7 +3865,7 @@ class DefaultApi(object):
         :param int offset:
         :param int limit:
         :param SortArgExpressionAnalysisResultSet sort:
-        :return: FilteringAndPaginatedResponseDataObjectDifferentialExpressionAnalysisResultSetValueObject
+        :return: FilteredAndPaginatedResponseDataObjectDifferentialExpressionAnalysisResultSetValueObject
                  If the method is called asynchronously,
                  returns the request thread.
         """
@@ -3789,7 +3892,7 @@ class DefaultApi(object):
         :param int offset:
         :param int limit:
         :param SortArgExpressionAnalysisResultSet sort:
-        :return: FilteringAndPaginatedResponseDataObjectDifferentialExpressionAnalysisResultSetValueObject
+        :return: FilteredAndPaginatedResponseDataObjectDifferentialExpressionAnalysisResultSetValueObject
                  If the method is called asynchronously,
                  returns the request thread.
         """
@@ -3851,7 +3954,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='FilteringAndPaginatedResponseDataObjectDifferentialExpressionAnalysisResultSetValueObject',  # noqa: E501
+            response_type='FilteredAndPaginatedResponseDataObjectDifferentialExpressionAnalysisResultSetValueObject',  # noqa: E501
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -4057,7 +4160,7 @@ class DefaultApi(object):
         :param int offset:
         :param int limit:
         :param SortArgTaxon sort:
-        :return: FilteringAndPaginatedResponseDataObjectExpressionExperimentValueObject
+        :return: FilteredAndPaginatedResponseDataObjectExpressionExperimentValueObject
                  If the method is called asynchronously,
                  returns the request thread.
         """
@@ -4083,7 +4186,7 @@ class DefaultApi(object):
         :param int offset:
         :param int limit:
         :param SortArgTaxon sort:
-        :return: FilteringAndPaginatedResponseDataObjectExpressionExperimentValueObject
+        :return: FilteredAndPaginatedResponseDataObjectExpressionExperimentValueObject
                  If the method is called asynchronously,
                  returns the request thread.
         """
@@ -4145,7 +4248,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='FilteringAndPaginatedResponseDataObjectExpressionExperimentValueObject',  # noqa: E501
+            response_type='FilteredAndPaginatedResponseDataObjectExpressionExperimentValueObject',  # noqa: E501
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -4256,53 +4359,53 @@ class DefaultApi(object):
             _request_timeout=params.get('_request_timeout'),
             collection_formats=collection_formats)
 
-    def get_taxon_genes_overlapping_chromosome(self, taxon, chromosome, **kwargs):  # noqa: E501
+    def get_taxon_genes_overlapping_chromosome(self, taxon, chromosome, start, size, **kwargs):  # noqa: E501
         """Retrieve genes overlapping a given region in a taxon  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.get_taxon_genes_overlapping_chromosome(taxon, chromosome, async_req=True)
+        >>> thread = api.get_taxon_genes_overlapping_chromosome(taxon, chromosome, start, size, async_req=True)
         >>> result = thread.get()
 
         :param bool async_req:
         :param Taxon6 taxon: (required)
         :param str chromosome: (required)
+        :param int start: (required)
+        :param int size: (required)
         :param str strand:
-        :param int start:
-        :param int size:
         :return: ResponseDataObjectListGeneValueObject
                  If the method is called asynchronously,
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
         if kwargs.get('async_req'):
-            return self.get_taxon_genes_overlapping_chromosome_with_http_info(taxon, chromosome, **kwargs)  # noqa: E501
+            return self.get_taxon_genes_overlapping_chromosome_with_http_info(taxon, chromosome, start, size, **kwargs)  # noqa: E501
         else:
-            (data) = self.get_taxon_genes_overlapping_chromosome_with_http_info(taxon, chromosome, **kwargs)  # noqa: E501
+            (data) = self.get_taxon_genes_overlapping_chromosome_with_http_info(taxon, chromosome, start, size, **kwargs)  # noqa: E501
             return data
 
-    def get_taxon_genes_overlapping_chromosome_with_http_info(self, taxon, chromosome, **kwargs):  # noqa: E501
+    def get_taxon_genes_overlapping_chromosome_with_http_info(self, taxon, chromosome, start, size, **kwargs):  # noqa: E501
         """Retrieve genes overlapping a given region in a taxon  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.get_taxon_genes_overlapping_chromosome_with_http_info(taxon, chromosome, async_req=True)
+        >>> thread = api.get_taxon_genes_overlapping_chromosome_with_http_info(taxon, chromosome, start, size, async_req=True)
         >>> result = thread.get()
 
         :param bool async_req:
         :param Taxon6 taxon: (required)
         :param str chromosome: (required)
+        :param int start: (required)
+        :param int size: (required)
         :param str strand:
-        :param int start:
-        :param int size:
         :return: ResponseDataObjectListGeneValueObject
                  If the method is called asynchronously,
                  returns the request thread.
         """
 
-        all_params = ['taxon', 'chromosome', 'strand', 'start', 'size']  # noqa: E501
+        all_params = ['taxon', 'chromosome', 'start', 'size', 'strand']  # noqa: E501
         all_params.append('async_req')
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
@@ -4325,6 +4428,14 @@ class DefaultApi(object):
         if ('chromosome' not in params or
                 params['chromosome'] is None):
             raise ValueError("Missing the required parameter `chromosome` when calling `get_taxon_genes_overlapping_chromosome`")  # noqa: E501
+        # verify the required parameter 'start' is set
+        if ('start' not in params or
+                params['start'] is None):
+            raise ValueError("Missing the required parameter `start` when calling `get_taxon_genes_overlapping_chromosome`")  # noqa: E501
+        # verify the required parameter 'size' is set
+        if ('size' not in params or
+                params['size'] is None):
+            raise ValueError("Missing the required parameter `size` when calling `get_taxon_genes_overlapping_chromosome`")  # noqa: E501
 
         collection_formats = {}
 
@@ -4372,7 +4483,7 @@ class DefaultApi(object):
             collection_formats=collection_formats)
 
     def search(self, **kwargs):  # noqa: E501
-        """Search everything in Gemma.  # noqa: E501
+        """Search everything in Gemma  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -4385,8 +4496,8 @@ class DefaultApi(object):
         :param Taxon2 taxon:
         :param Platform5 platform:
         :param list[str] result_types:
-        :param int limit: Maximum number of search results to return; capped at 2000 unless 'resultObject' is excluded.
-        :param list[str] exclude:
+        :param int limit: Maximum number of search results to return; capped at 2000 unless `resultObject` is excluded.
+        :param list[str] exclude: List of fields to exclude from the payload. Only `resultObject` is supported.
         :return: SearchResultsResponseDataObject
                  If the method is called asynchronously,
                  returns the request thread.
@@ -4399,7 +4510,7 @@ class DefaultApi(object):
             return data
 
     def search_with_http_info(self, **kwargs):  # noqa: E501
-        """Search everything in Gemma.  # noqa: E501
+        """Search everything in Gemma  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -4412,8 +4523,8 @@ class DefaultApi(object):
         :param Taxon2 taxon:
         :param Platform5 platform:
         :param list[str] result_types:
-        :param int limit: Maximum number of search results to return; capped at 2000 unless 'resultObject' is excluded.
-        :param list[str] exclude:
+        :param int limit: Maximum number of search results to return; capped at 2000 unless `resultObject` is excluded.
+        :param list[str] exclude: List of fields to exclude from the payload. Only `resultObject` is supported.
         :return: SearchResultsResponseDataObject
                  If the method is called asynchronously,
                  returns the request thread.
@@ -4577,8 +4688,9 @@ class DefaultApi(object):
             collection_formats=collection_formats)
 
     def search_annotations_by_path_query(self, query, **kwargs):  # noqa: E501
-        """Search for annotation tags.  # noqa: E501
+        """Search for annotation tags  # noqa: E501
 
+        This is deprecated in favour of passing `query` as a query parameter.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -4599,8 +4711,9 @@ class DefaultApi(object):
             return data
 
     def search_annotations_by_path_query_with_http_info(self, query, **kwargs):  # noqa: E501
-        """Search for annotation tags.  # noqa: E501
+        """Search for annotation tags  # noqa: E501
 
+        This is deprecated in favour of passing `query` as a query parameter.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -4675,6 +4788,7 @@ class DefaultApi(object):
     def search_datasets(self, **kwargs):  # noqa: E501
         """Retrieve datasets associated to an annotation tags search  # noqa: E501
 
+        This is deprecated in favour of the getDatasets() endpoint.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -4687,7 +4801,7 @@ class DefaultApi(object):
         :param int offset:
         :param int limit:
         :param SortArgExpressionExperiment sort:
-        :return: PaginatedResponseDataObjectExpressionExperimentValueObject
+        :return: FilteredAndPaginatedResponseDataObjectExpressionExperimentValueObject
                  If the method is called asynchronously,
                  returns the request thread.
         """
@@ -4701,6 +4815,7 @@ class DefaultApi(object):
     def search_datasets_with_http_info(self, **kwargs):  # noqa: E501
         """Retrieve datasets associated to an annotation tags search  # noqa: E501
 
+        This is deprecated in favour of the getDatasets() endpoint.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -4713,7 +4828,7 @@ class DefaultApi(object):
         :param int offset:
         :param int limit:
         :param SortArgExpressionExperiment sort:
-        :return: PaginatedResponseDataObjectExpressionExperimentValueObject
+        :return: FilteredAndPaginatedResponseDataObjectExpressionExperimentValueObject
                  If the method is called asynchronously,
                  returns the request thread.
         """
@@ -4772,7 +4887,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='PaginatedResponseDataObjectExpressionExperimentValueObject',  # noqa: E501
+            response_type='FilteredAndPaginatedResponseDataObjectExpressionExperimentValueObject',  # noqa: E501
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -4783,6 +4898,7 @@ class DefaultApi(object):
     def search_datasets_by_query_in_path(self, query, **kwargs):  # noqa: E501
         """Retrieve datasets associated to an annotation tags search  # noqa: E501
 
+        This is deprecated in favour of passing `query` as a query parameter.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -4795,7 +4911,7 @@ class DefaultApi(object):
         :param int offset:
         :param int limit:
         :param SortArgExpressionExperiment sort:
-        :return: PaginatedResponseDataObjectExpressionExperimentValueObject
+        :return: FilteredAndPaginatedResponseDataObjectExpressionExperimentValueObject
                  If the method is called asynchronously,
                  returns the request thread.
         """
@@ -4809,6 +4925,7 @@ class DefaultApi(object):
     def search_datasets_by_query_in_path_with_http_info(self, query, **kwargs):  # noqa: E501
         """Retrieve datasets associated to an annotation tags search  # noqa: E501
 
+        This is deprecated in favour of passing `query` as a query parameter.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -4821,7 +4938,7 @@ class DefaultApi(object):
         :param int offset:
         :param int limit:
         :param SortArgExpressionExperiment sort:
-        :return: PaginatedResponseDataObjectExpressionExperimentValueObject
+        :return: FilteredAndPaginatedResponseDataObjectExpressionExperimentValueObject
                  If the method is called asynchronously,
                  returns the request thread.
         """
@@ -4884,7 +5001,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='PaginatedResponseDataObjectExpressionExperimentValueObject',  # noqa: E501
+            response_type='FilteredAndPaginatedResponseDataObjectExpressionExperimentValueObject',  # noqa: E501
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -4895,6 +5012,7 @@ class DefaultApi(object):
     def search_taxon_datasets(self, taxon, **kwargs):  # noqa: E501
         """Retrieve datasets within a given taxa associated to an annotation tags search  # noqa: E501
 
+        Use getDatasets() with a `query` parameter and a `filter` parameter with `taxon.id = {taxon} or taxon.commonName = {taxon} or taxon.scientificName = {taxon}` to restrict the taxon instead.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -4908,7 +5026,7 @@ class DefaultApi(object):
         :param int offset:
         :param int limit:
         :param SortArgExpressionExperiment sort:
-        :return: PaginatedResponseDataObjectExpressionExperimentValueObject
+        :return: FilteredAndPaginatedResponseDataObjectExpressionExperimentValueObject
                  If the method is called asynchronously,
                  returns the request thread.
         """
@@ -4922,6 +5040,7 @@ class DefaultApi(object):
     def search_taxon_datasets_with_http_info(self, taxon, **kwargs):  # noqa: E501
         """Retrieve datasets within a given taxa associated to an annotation tags search  # noqa: E501
 
+        Use getDatasets() with a `query` parameter and a `filter` parameter with `taxon.id = {taxon} or taxon.commonName = {taxon} or taxon.scientificName = {taxon}` to restrict the taxon instead.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -4935,7 +5054,7 @@ class DefaultApi(object):
         :param int offset:
         :param int limit:
         :param SortArgExpressionExperiment sort:
-        :return: PaginatedResponseDataObjectExpressionExperimentValueObject
+        :return: FilteredAndPaginatedResponseDataObjectExpressionExperimentValueObject
                  If the method is called asynchronously,
                  returns the request thread.
         """
@@ -5000,7 +5119,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='PaginatedResponseDataObjectExpressionExperimentValueObject',  # noqa: E501
+            response_type='FilteredAndPaginatedResponseDataObjectExpressionExperimentValueObject',  # noqa: E501
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -5011,6 +5130,7 @@ class DefaultApi(object):
     def search_taxon_datasets_by_query_in_path(self, taxon, query, **kwargs):  # noqa: E501
         """Retrieve datasets within a given taxa associated to an annotation tags search  # noqa: E501
 
+        This is deprecated in favour of passing `query` as a query parameter.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -5024,7 +5144,7 @@ class DefaultApi(object):
         :param int offset:
         :param int limit:
         :param SortArgExpressionExperiment sort:
-        :return: PaginatedResponseDataObjectExpressionExperimentValueObject
+        :return: FilteredAndPaginatedResponseDataObjectExpressionExperimentValueObject
                  If the method is called asynchronously,
                  returns the request thread.
         """
@@ -5038,6 +5158,7 @@ class DefaultApi(object):
     def search_taxon_datasets_by_query_in_path_with_http_info(self, taxon, query, **kwargs):  # noqa: E501
         """Retrieve datasets within a given taxa associated to an annotation tags search  # noqa: E501
 
+        This is deprecated in favour of passing `query` as a query parameter.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -5051,7 +5172,7 @@ class DefaultApi(object):
         :param int offset:
         :param int limit:
         :param SortArgExpressionExperiment sort:
-        :return: PaginatedResponseDataObjectExpressionExperimentValueObject
+        :return: FilteredAndPaginatedResponseDataObjectExpressionExperimentValueObject
                  If the method is called asynchronously,
                  returns the request thread.
         """
@@ -5120,7 +5241,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='PaginatedResponseDataObjectExpressionExperimentValueObject',  # noqa: E501
+            response_type='FilteredAndPaginatedResponseDataObjectExpressionExperimentValueObject',  # noqa: E501
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
