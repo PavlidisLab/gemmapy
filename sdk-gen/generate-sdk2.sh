@@ -9,6 +9,7 @@ chmod u+x openapi-generator-cli.sh
 
 # echo "SDK will be generated in $temp_sdk_dir..."
 
+rm -r tmp
 
 
 ./openapi-generator-cli.sh generate -i openapi.yaml  -g python -o tmp --additional-properties=packageVersion=0.99.0,packageName=gemmapy.sdk2 --skip-validate-spec
