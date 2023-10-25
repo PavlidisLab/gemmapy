@@ -204,9 +204,10 @@ class GemmaPy(object):
         """
         api_response = self.api.get_result_set(result_set, **kwargs)
         df = pandas.DataFrame(columns=['id', 'factorValue', 'category'])
-        for f in api_response.data.experimental_factors:
+        for f in api_response.data.experimental_factors:            
             for v in f.values:
-                df = df.append({'id':v.id, 'factorValue':v.factor_value, 'category':v.category},
+                row = pandas.DataFrame([{'id':v.id, 'factorValue':v.factor_value, 'category':v.category}])
+                df = pandas.concat([df,row],
                                ignore_index=True)
         return df
 
@@ -221,9 +222,12 @@ class GemmaPy(object):
         for d in rs.data:
             cate = ' x '.join(f.category for f in d.experimental_factors)
             leve = '; '.join(f.description for f in d.experimental_factors)
-            df = df.append({'resultSet.id': d.id,
+            
+            row =  pandas.DataFrame([{'resultSet.id': d.id,
                             'factor.category': cate,
-                            'factor.level': leve}, ignore_index=True)
+                            'factor.level': leve}])
+            
+            df = pandas.concat([df,row], ignore_index=True)
         return df
 
     def search_annotations(self, query, **kwargs):  # noqa: E501
