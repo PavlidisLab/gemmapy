@@ -60,6 +60,9 @@ class GemmaPy(object):
 
         return df.drop(columns=['Bioassay', 'ExternalID'], errors='ignore')
 
+    def get_dataset_expression_for_genes(self,datasets,genes, **kwargs):
+        return self.api.get_dataset_expression_for_genes(datasets, genes, **kwargs)
+
     def get_dataset_differential_expression_analyses(self, dataset, **kwargs):  # noqa: E501
         """Retrieve the differential analyses of a dataset
 
@@ -69,21 +72,28 @@ class GemmaPy(object):
         :rtype: ResponseDataObjectListDifferentialExpressionAnalysisValueObject
         """
         return self.api.get_dataset_differential_expression_analyses(dataset, **kwargs)
-
-    def get_dataset_expression(self, dataset, **kwargs):  # noqa: E501
-        """Retrieve the expression data of a dataset
-
-        :param str dataset: (required)
-        :param bool filter: Filter results by matching the expression
-        :return: DataFrame
-        """
-        api_response = self.api.get_dataset_expression(dataset, **kwargs)
+    
+    def get_dataset_processed_expression(self,dataset,**kwargs):
+        api_response = self.api.get_dataset_processed_expression(dataset, **kwargs)
         df = pandas.read_csv(StringIO(api_response), sep='\t', comment='#', dtype={'Probe':'str'})
-
+        
         # conditioning: fix names and remove redundant columns
         df = df.drop(columns=['Sequence', 'GemmaId'], errors='ignore')
         df.columns = [c if c.find('Name=') < 0 else c[c.find('Name=')+5:] for c in df.columns]
         return df
+    
+    def get_dataset_quantitation_types(self,dataset,**kwargs):
+        return self.api.get_dataset_quantitation_types(dataset, **kwargs)
+    
+    def get_dataset_raw_expression(self,dataset,**kwargs):
+        api_response = self.api.get_dataset_raw_expression(dataset, **kwargs)
+        df = pandas.read_csv(StringIO(api_response), sep='\t', comment='#', dtype={'Probe':'str'})
+        
+        # conditioning: fix names and remove redundant columns
+        df = df.drop(columns=['Sequence', 'GemmaId'], errors='ignore')
+        df.columns = [c if c.find('Name=') < 0 else c[c.find('Name=')+5:] for c in df.columns]
+        return df
+        
 
 
     def get_dataset_platforms(self, dataset, **kwargs):  # noqa: E501
@@ -101,6 +111,9 @@ class GemmaPy(object):
         :rtype: ResponseDataObjectListBioAssayValueObject
         """
         return self.api.get_dataset_samples(dataset, **kwargs)
+    
+    def get_datasets(self,**kwargs):
+        return self.api.get_datasets(**kwargs)
 
     def get_datasets_by_ids(self, dataset, **kwargs):  # noqa: E501
         """Retrieve datasets by their identifiers
@@ -238,20 +251,6 @@ class GemmaPy(object):
         """
         return self.api.search_annotations(query=query, **kwargs)
 
-    def search_datasets(self, query, taxon, **kwargs):
-        """Retrieve datasets within a given taxa associated to an annotation tags search
-
-        :param str taxon: (required)
-        :param list[str] query: (required)
-        :param str filter: Filter results by matching the expression
-        :param int offset: The offset of the first retrieved result
-        :param int limit: Limit the number of results retrieved
-        :param str sort: Order results by the given property and direction. The '+'
-          sign indicate ascending order whereas the '-' indicate descending.
-        :rtype: PaginatedResponseDataObjectExpressionExperimentValueObject
-        """
-        return self.api.search_taxon_datasets(taxon, query=query, **kwargs)
-
 # Below are "Convenience" (combination) functions
     def get_dataset_object(self, dataset, **kwargs):
         """Combines various endpoint calls to return an annotated data object
@@ -365,39 +364,6 @@ class GemmaPy(object):
         :rtype: ResponseDataObjectListTaxonValueObject
         """
         return self.api.get_taxa(**kwargs)
-
-    def get_taxon_datasets(self, taxon, **kwargs):  # noqa: E501
-        """Retrieve the datasets for a given taxon
-
-        :param str/int taxon: (required)
-
-        **taxon** can either be Taxon ID, Taxon NCBI ID, or one of its
-        string identifiers: scientific name, common name. It is
-        recommended to use Taxon ID for efficiency. Please note, that
-        not all taxa have all the possible identifiers available. Use
-        the get_taxa_by_ids function to retrieve the necessary
-        information. For convenience, below is a list of officially
-        supported taxa:
-
-        ==  =========   ======================== ==========
-        ID  Comm.name   Scient.name              NcbiID
-        ==  =========   ======================== ==========
-        1   human       Homo sapiens             9606
-        2   mouse       Mus musculus             10090
-        3   rat         Rattus norvegicus        10116
-        11  yeast       Saccharomyces cerevisiae 4932
-        12  zebrafish   Danio rerio              7955
-        13  fly         Drosophila melanogaster  7227
-        14  worm        Caenorhabditis elegans   6239
-        ==  =========   ======================== ==========
-
-        :param str filter:
-        :param int offset:
-        :param int limit:
-        :param str sort:
-        :rtype: PaginatedResponseDataObjectExpressionExperimentValueObject
-        """
-        return self.api.get_taxon_datasets(taxon, **kwargs)
 
 # Tests
 if __name__ == '__main__':
