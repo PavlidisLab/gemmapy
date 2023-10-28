@@ -43,8 +43,16 @@ class GemmaPy(object):
         :param str dataset: (required)
         :rtype: ResponseDataObjectSetAnnotationValueObject
         """
+        raw = False
+        if 'raw' in kwargs.keys():
+            raw = kwargs.pop('raw')
+        
         api_response =  self.api.get_dataset_annotations(dataset, **kwargs)
-        return ps.processAnnotations(api_response)
+        
+        if raw:
+            return ps.processAnnotations(api_response)
+        else:
+            return api_response
 
     def get_dataset_design(self, dataset, **kwargs):  # noqa: E501
         """Retrieve the design of a dataset
