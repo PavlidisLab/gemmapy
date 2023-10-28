@@ -5,6 +5,7 @@ Gemma python API (https://gemma.msl.ubc.ca/rest/v2/)
 
 import logging
 from   gemmapy import sdk
+from gemmapy import processors as ps
 import pandas
 import numpy
 import anndata
@@ -42,7 +43,8 @@ class GemmaPy(object):
         :param str dataset: (required)
         :rtype: ResponseDataObjectSetAnnotationValueObject
         """
-        return self.api.get_dataset_annotations(dataset, **kwargs)
+        api_response =  self.api.get_dataset_annotations(dataset, **kwargs)
+        return ps.processAnnotations(api_response)
 
     def get_dataset_design(self, dataset, **kwargs):  # noqa: E501
         """Retrieve the design of a dataset
