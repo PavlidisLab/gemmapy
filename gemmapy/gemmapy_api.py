@@ -313,6 +313,9 @@ class GemmaPy(object):
         }
 
         # final touch
+        des = des.filter(items = exM.columns, axis = 0)
+        
+        
         assert set(des.index) < set(exM.columns), 'Err2' # design rows is subset of exM columns
         exM = exM[des.index]
 
