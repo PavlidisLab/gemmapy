@@ -53,7 +53,13 @@ class GemmaPy(object):
         :return: DataFrame
         """
         api_response = self.api.get_dataset_design(dataset, **kwargs)
-        df = pandas.read_csv(StringIO(api_response), sep='\t', comment='#')
+        uncomment = api_response.split("\n#")
+        api_response = uncomment[len(uncomment)-1]
+        uncomment = api_response.split('\n',1)
+        api_response = uncomment[len(uncomment)-1]
+        
+        
+        df = pandas.read_csv(StringIO(api_response), sep='\t')
 
         # conditioning: fix Bioassay names, add them index, remove redundant columns
         rowall = [c[c.find('Name=')+5:] for c in df['Bioassay'] if c.find('Name=') >= 0]
@@ -83,11 +89,25 @@ class GemmaPy(object):
         :return: DataFrame
         """
         api_response = self.api.get_dataset_expression(dataset, **kwargs)
+        uncomment = api_response.split("\n#")
+        api_response = uncomment[len(uncomment)-1]
+        uncomment = api_response.split('\n',1)
+        api_response = uncomment[len(uncomment)-1]
+        
+        df = pandas.read_csv(StringIO(api_response), sep='\t', dtype={'Probe':'str'})        
+        # conditioning: fix names and remove redundant columns
+        df = df.drop(columns=['Sequence', 'GemmaId'], errors='ignore')
+        df.columns = [c if c.find('Name=') < 0 else c[c.find('Name=')+5:] for c in df.columns]
+        return df
     
     def get_dataset_processed_expression(self,dataset,**kwargs):
         api_response = self.api.get_dataset_processed_expression(dataset, **kwargs)
-        df = pandas.read_csv(StringIO(api_response), sep='\t', comment='#', dtype={'Probe':'str'})
+        uncomment = api_response.split("\n#")
+        api_response = uncomment[len(uncomment)-1]
+        uncomment = api_response.split('\n',1)
+        api_response = uncomment[len(uncomment)-1]
         
+        df = pandas.read_csv(StringIO(api_response), sep='\t', dtype={'Probe':'str'})        
         # conditioning: fix names and remove redundant columns
         df = df.drop(columns=['Sequence', 'GemmaId'], errors='ignore')
         df.columns = [c if c.find('Name=') < 0 else c[c.find('Name=')+5:] for c in df.columns]
@@ -98,7 +118,12 @@ class GemmaPy(object):
     
     def get_dataset_raw_expression(self,dataset,**kwargs):
         api_response = self.api.get_dataset_raw_expression(dataset, **kwargs)
-        df = pandas.read_csv(StringIO(api_response), sep='\t', comment='#', dtype={'Probe':'str'})
+        uncomment = api_response.split("\n#")
+        api_response = uncomment[len(uncomment)-1]
+        uncomment = api_response.split('\n',1)
+        api_response = uncomment[len(uncomment)-1]
+        
+        df = pandas.read_csv(StringIO(api_response), sep='\t', dtype={'Probe':'str'})
         
         # conditioning: fix names and remove redundant columns
         df = df.drop(columns=['Sequence', 'GemmaId'], errors='ignore')
