@@ -263,7 +263,7 @@ class GemmaPy(object):
         :return: AnnData class object
         """
 
-        exM = self.get_dataset_expression(dataset, **kwargs)
+        exM = self.get_dataset_processed_expression(dataset, **kwargs)
         des = self.get_dataset_design(dataset, **kwargs)
         mdata = self.get_datasets_by_ids([dataset], **kwargs)
 
