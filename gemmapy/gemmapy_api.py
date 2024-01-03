@@ -239,7 +239,13 @@ class GemmaPy(object):
         :return: DataFrame
         """
         api_response = self.api.get_result_set_as_tsv(result_set, **kwargs)
-        df = pandas.read_csv(StringIO(api_response), sep='\t', comment='#')
+        
+        uncomment = api_response.split("\n#")
+        api_response = uncomment[len(uncomment)-1]
+        uncomment = api_response.split('\n',1)
+        api_response = uncomment[len(uncomment)-1]
+        
+        df = pandas.read_csv(StringIO(api_response), sep='\t')
         df = df.drop(columns=['id','probe_id','gene_id','gene_name'], errors='ignore')
         df = df.rename(columns={'probe_name':'Probe','gene_official_symbol':'GeneSymbol',
                                 'gene_official_name':'GeneName','gene_ncbi_id':'NCBIid'})
@@ -409,7 +415,11 @@ class GemmaPy(object):
         :return: DataFrame
         """
         api_response = self.api.get_platform_annotations(platform, **kwargs)
-        return pandas.read_csv(StringIO(api_response), sep='\t', comment='#')
+        uncomment = api_response.split("\n#")
+        api_response = uncomment[len(uncomment)-1]
+        uncomment = api_response.split('\n',1)
+        api_response = uncomment[len(uncomment)-1]
+        return pandas.read_csv(StringIO(api_response), sep='\t')
 
     def get_taxa(self, **kwargs):  # noqa: E501
         """Retrieve all available taxa
