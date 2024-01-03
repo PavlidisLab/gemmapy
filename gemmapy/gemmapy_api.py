@@ -42,7 +42,9 @@ class GemmaPy(object):
         :param str dataset: (required)
         :rtype: ResponseDataObjectSetAnnotationValueObject
         """
+        
         return self.api.get_dataset_annotations(dataset, **kwargs)
+        
 
     def get_dataset_design(self, dataset, **kwargs):  # noqa: E501
         """Retrieve the design of a dataset
@@ -59,6 +61,9 @@ class GemmaPy(object):
         df.index = rowall
 
         return df.drop(columns=['Bioassay', 'ExternalID'], errors='ignore')
+
+    def get_dataset_expression_for_genes(self,datasets,genes, **kwargs):
+        return self.api.get_dataset_expression_for_genes(datasets, genes, **kwargs)
 
     def get_dataset_differential_expression_analyses(self, dataset, **kwargs):  # noqa: E501
         """Retrieve the differential analyses of a dataset
@@ -78,12 +83,28 @@ class GemmaPy(object):
         :return: DataFrame
         """
         api_response = self.api.get_dataset_expression(dataset, **kwargs)
+    
+    def get_dataset_processed_expression(self,dataset,**kwargs):
+        api_response = self.api.get_dataset_processed_expression(dataset, **kwargs)
         df = pandas.read_csv(StringIO(api_response), sep='\t', comment='#', dtype={'Probe':'str'})
-
+        
         # conditioning: fix names and remove redundant columns
         df = df.drop(columns=['Sequence', 'GemmaId'], errors='ignore')
         df.columns = [c if c.find('Name=') < 0 else c[c.find('Name=')+5:] for c in df.columns]
         return df
+    
+    def get_dataset_quantitation_types(self,dataset,**kwargs):
+        return self.api.get_dataset_quantitation_types(dataset, **kwargs)
+    
+    def get_dataset_raw_expression(self,dataset,**kwargs):
+        api_response = self.api.get_dataset_raw_expression(dataset, **kwargs)
+        df = pandas.read_csv(StringIO(api_response), sep='\t', comment='#', dtype={'Probe':'str'})
+        
+        # conditioning: fix names and remove redundant columns
+        df = df.drop(columns=['Sequence', 'GemmaId'], errors='ignore')
+        df.columns = [c if c.find('Name=') < 0 else c[c.find('Name=')+5:] for c in df.columns]
+        return df
+        
 
 
     def get_dataset_platforms(self, dataset, **kwargs):  # noqa: E501
@@ -101,6 +122,9 @@ class GemmaPy(object):
         :rtype: ResponseDataObjectListBioAssayValueObject
         """
         return self.api.get_dataset_samples(dataset, **kwargs)
+    
+    def get_datasets(self,**kwargs):
+        return self.api.get_datasets(**kwargs)
 
     def get_datasets_by_ids(self, dataset, **kwargs):  # noqa: E501
         """Retrieve datasets by their identifiers
@@ -204,9 +228,10 @@ class GemmaPy(object):
         """
         api_response = self.api.get_result_set(result_set, **kwargs)
         df = pandas.DataFrame(columns=['id', 'factorValue', 'category'])
-        for f in api_response.data.experimental_factors:
+        for f in api_response.data.experimental_factors:            
             for v in f.values:
-                df = df.append({'id':v.id, 'factorValue':v.factor_value, 'category':v.category},
+                row = pandas.DataFrame([{'id':v.id, 'factorValue':v.factor_value, 'category':v.category}])
+                df = pandas.concat([df,row],
                                ignore_index=True)
         return df
 
@@ -221,9 +246,12 @@ class GemmaPy(object):
         for d in rs.data:
             cate = ' x '.join(f.category for f in d.experimental_factors)
             leve = '; '.join(f.description for f in d.experimental_factors)
-            df = df.append({'resultSet.id': d.id,
+            
+            row =  pandas.DataFrame([{'resultSet.id': d.id,
                             'factor.category': cate,
-                            'factor.level': leve}, ignore_index=True)
+                            'factor.level': leve}])
+            
+            df = pandas.concat([df,row], ignore_index=True)
         return df
 
     def search_annotations(self, query, **kwargs):  # noqa: E501
@@ -258,7 +286,7 @@ class GemmaPy(object):
         :return: AnnData class object
         """
 
-        exM = self.get_dataset_expression(dataset, **kwargs)
+        exM = self.get_dataset_processed_expression(dataset, **kwargs)
         des = self.get_dataset_design(dataset, **kwargs)
         mdata = self.get_datasets_by_ids([dataset], **kwargs)
 
