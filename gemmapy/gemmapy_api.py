@@ -5,6 +5,9 @@ Gemma python API (https://gemma.msl.ubc.ca/rest/v2/)
 
 import logging
 from   gemmapy import sdk
+from gemmapy import processors as ps
+
+
 import pandas
 import numpy
 import anndata
@@ -34,8 +37,43 @@ class GemmaPy(object):
             configuration.password = auth[1]
 
         # create an instance of the API class
-        self.api = sdk.DefaultApi(sdk.ApiClient(configuration))
+        self.raw = sdk.DefaultApi(sdk.ApiClient(configuration))
 
+
+    # /resultSets/count get_number_of_result_sets ------
+    # unimplemented
+    # we don't need this here, not included
+    
+    # /resultSets/{resultSet}, get_result_set ------ 
+    def get_result_set(self, result_set, **kwargs):  # noqa: E501
+        """Retrieve a single analysis result set by its identifier
+
+        :param int result_set: (required)
+        :return: DataFrame
+        """
+        api_response = self.raw.get_result_set_as_tsv(result_set, **kwargs)
+        
+        df = ps.process_de_matrix(api_response)
+        
+        return df
+        
+    # gemma.R uses an undocumented variable in get_result_set to access result set factors
+    # this is inaccessible to gemmapy
+    
+    # /resultSets, get_result_sets -----
+    # unimplemented
+    
+    # /annotations/search, search_annotations --------
+    def search_annotations(self, query, **kwargs):  # noqa: E501
+        """Search for annotation tags
+
+        :param list[str] query: (required)
+        :rtype: ResponseDataObjectListAnnotationSearchResultValueObject
+        """
+        api_response = self.raw.search_annotations(query=query, **kwargs)
+        return ps.process_search_annotations(api_response)
+    
+    
     def get_dataset_annotations(self, dataset, **kwargs):  # noqa: E501
         """Retrieve the annotations analysis of a dataset
 
@@ -43,7 +81,7 @@ class GemmaPy(object):
         :rtype: ResponseDataObjectSetAnnotationValueObject
         """
         
-        return self.api.get_dataset_annotations(dataset, **kwargs)
+        return self.raw.get_dataset_annotations(dataset, **kwargs)
         
 
     def get_dataset_design(self, dataset, **kwargs):  # noqa: E501
@@ -52,7 +90,7 @@ class GemmaPy(object):
         :param str dataset: (required)
         :return: DataFrame
         """
-        api_response = self.api.get_dataset_design(dataset, **kwargs)
+        api_response = self.raw.get_dataset_design(dataset, **kwargs)
         uncomment = api_response.split("\n#")
         api_response = uncomment[len(uncomment)-1]
         uncomment = api_response.split('\n',1)
@@ -69,7 +107,7 @@ class GemmaPy(object):
         return df.drop(columns=['Bioassay', 'ExternalID'], errors='ignore')
 
     def get_dataset_expression_for_genes(self,datasets,genes, **kwargs):
-        return self.api.get_dataset_expression_for_genes(datasets, genes, **kwargs)
+        return self.raw.get_dataset_expression_for_genes(datasets, genes, **kwargs)
 
     def get_dataset_differential_expression_analyses(self, dataset, **kwargs):  # noqa: E501
         """Retrieve the differential analyses of a dataset
@@ -79,7 +117,7 @@ class GemmaPy(object):
         :param int limit: Limit the number of results retrieved
         :rtype: ResponseDataObjectListDifferentialExpressionAnalysisValueObject
         """
-        return self.api.get_dataset_differential_expression_analyses(dataset, **kwargs)
+        return self.raw.get_dataset_differential_expression_analyses(dataset, **kwargs)
 
     def get_dataset_expression(self, dataset, **kwargs):  # noqa: E501
         """Retrieve the expression data of a dataset
@@ -88,7 +126,7 @@ class GemmaPy(object):
         :param bool filter: Filter results by matching the expression
         :return: DataFrame
         """
-        api_response = self.api.get_dataset_expression(dataset, **kwargs)
+        api_response = self.raw.get_dataset_expression(dataset, **kwargs)
         uncomment = api_response.split("\n#")
         api_response = uncomment[len(uncomment)-1]
         uncomment = api_response.split('\n',1)
@@ -101,7 +139,7 @@ class GemmaPy(object):
         return df
     
     def get_dataset_processed_expression(self,dataset,**kwargs):
-        api_response = self.api.get_dataset_processed_expression(dataset, **kwargs)
+        api_response = self.raw.get_dataset_processed_expression(dataset, **kwargs)
         uncomment = api_response.split("\n#")
         api_response = uncomment[len(uncomment)-1]
         uncomment = api_response.split('\n',1)
@@ -114,10 +152,10 @@ class GemmaPy(object):
         return df
     
     def get_dataset_quantitation_types(self,dataset,**kwargs):
-        return self.api.get_dataset_quantitation_types(dataset, **kwargs)
+        return self.raw.get_dataset_quantitation_types(dataset, **kwargs)
     
     def get_dataset_raw_expression(self,dataset,**kwargs):
-        api_response = self.api.get_dataset_raw_expression(dataset, **kwargs)
+        api_response = self.raw.get_dataset_raw_expression(dataset, **kwargs)
         uncomment = api_response.split("\n#")
         api_response = uncomment[len(uncomment)-1]
         uncomment = api_response.split('\n',1)
@@ -138,7 +176,7 @@ class GemmaPy(object):
         :param str dataset: (required)
         :rtype: ResponseDataObjectListArrayDesignValueObject
         """
-        return self.api.get_dataset_platforms(dataset, **kwargs)
+        return self.raw.get_dataset_platforms(dataset, **kwargs)
 
     def get_dataset_samples(self, dataset, **kwargs):  # noqa: E501
         """Retrieve the samples of a dataset
@@ -146,10 +184,10 @@ class GemmaPy(object):
         :param str dataset: (required)
         :rtype: ResponseDataObjectListBioAssayValueObject
         """
-        return self.api.get_dataset_samples(dataset, **kwargs)
+        return self.raw.get_dataset_samples(dataset, **kwargs)
     
     def get_datasets(self,**kwargs):
-        return self.api.get_datasets(**kwargs)
+        return self.raw.get_datasets(**kwargs)
 
     def get_datasets_by_ids(self, dataset, **kwargs):  # noqa: E501
         """Retrieve datasets by their identifiers
@@ -162,7 +200,7 @@ class GemmaPy(object):
           sign indicate ascending order whereas the '-' indicate descending.
         :rtype: PaginatedResponseDataObjectExpressionExperimentValueObject
         """
-        return self.api.get_datasets_by_ids(dataset, **kwargs)
+        return self.raw.get_datasets_by_ids(dataset, **kwargs)
 
     def get_gene_go_terms(self, gene, **kwargs):  # noqa: E501
         """Retrieve the GO terms associated to a gene
@@ -170,7 +208,7 @@ class GemmaPy(object):
         :param str gene: (required)
         :rtype: ResponseDataObjectListGeneOntologyTermValueObject
         """
-        return self.api.get_gene_go_terms(gene, **kwargs)
+        return self.raw.get_gene_go_terms(gene, **kwargs)
 
     def get_gene_locations(self, gene, **kwargs):  # noqa: E501
         """Retrieve the physical locations of a given gene
@@ -178,7 +216,7 @@ class GemmaPy(object):
         :param str gene: (required)
         :rtype: ResponseDataObjectListPhysicalLocationValueObject
         """
-        return self.api.get_gene_locations(gene, **kwargs)
+        return self.raw.get_gene_locations(gene, **kwargs)
 
     def get_gene_probes(self, gene, **kwargs):  # noqa: E501
         """Retrieve the probes associated to a genes
@@ -188,7 +226,7 @@ class GemmaPy(object):
         :param int limit: Limit the number of results retrieved
         :rtype: PaginatedResponseDataObjectCompositeSequenceValueObject
         """
-        return self.api.get_gene_probes(gene, **kwargs)
+        return self.raw.get_gene_probes(gene, **kwargs)
 
     def get_genes(self, genes, **kwargs):  # noqa: E501
         """Retrieve genes matching a gene identifier
@@ -196,7 +234,7 @@ class GemmaPy(object):
         :param list[str] genes: (required)
         :rtype: ResponseDataObjectListGeneValueObject
         """
-        return self.api.get_genes(genes, **kwargs)
+        return self.raw.get_genes(genes, **kwargs)
 
     def get_platform_datasets(self, platform, **kwargs):  # noqa: E501
         """Retrieve all experiments within a given platform
@@ -206,7 +244,7 @@ class GemmaPy(object):
         :param int limit: Limit the number of results retrieved
         :rtype: PaginatedResponseDataObjectExpressionExperimentValueObject
         """
-        return self.api.get_platform_datasets(platform, **kwargs)
+        return self.raw.get_platform_datasets(platform, **kwargs)
 
     def get_platform_element_genes(self, platform, probe, **kwargs):  # noqa: E501
         """Retrieve the genes associated to a probe in a given platform
@@ -217,7 +255,7 @@ class GemmaPy(object):
         :param int limit: Limit the number of results retrieved
         :rtype: PaginatedResponseDataObjectGeneValueObject
         """
-        return self.api.get_platform_element_genes(platform, probe, **kwargs)
+        return self.raw.get_platform_element_genes(platform, probe, **kwargs)
 
     def get_platforms_by_ids(self, platform, **kwargs):  # noqa: E501
         """Retrieve all platforms matching a set of platform identifiers
@@ -230,26 +268,9 @@ class GemmaPy(object):
           sign indicate ascending order whereas the '-' indicate descending.
         :rtype: PaginatedResponseDataObjectArrayDesignValueObject
         """
-        return self.api.get_platforms_by_ids(platform, **kwargs)
+        return self.raw.get_platforms_by_ids(platform, **kwargs)
 
-    def get_result_set(self, result_set, **kwargs):  # noqa: E501
-        """Retrieve a single analysis result set by its identifier
 
-        :param int result_set: (required)
-        :return: DataFrame
-        """
-        api_response = self.api.get_result_set_as_tsv(result_set, **kwargs)
-        
-        uncomment = api_response.split("\n#")
-        api_response = uncomment[len(uncomment)-1]
-        uncomment = api_response.split('\n',1)
-        api_response = uncomment[len(uncomment)-1]
-        
-        df = pandas.read_csv(StringIO(api_response), sep='\t')
-        df = df.drop(columns=['id','probe_id','gene_id','gene_name'], errors='ignore')
-        df = df.rename(columns={'probe_name':'Probe','gene_official_symbol':'GeneSymbol',
-                                'gene_official_name':'GeneName','gene_ncbi_id':'NCBIid'})
-        return df
 
     def get_result_set_factors(self, result_set, **kwargs):
         """Retrieve a single analysis result set by its identifier with Factors
@@ -257,7 +278,7 @@ class GemmaPy(object):
         :param int result_set: (required)
         :return: DataFrame
         """
-        api_response = self.api.get_result_set(result_set, **kwargs)
+        api_response = self.raw.get_result_set(result_set, **kwargs)
         df = pandas.DataFrame(columns=['id', 'factorValue', 'category'])
         for f in api_response.data.experimental_factors:            
             for v in f.values:
@@ -272,7 +293,7 @@ class GemmaPy(object):
         :param str dataset: (required)
         :return: DataFrame
         """
-        rs = self.api.get_result_sets(datasets=[dataset], **kwargs)
+        rs = self.raw.get_result_sets(datasets=[dataset], **kwargs)
         df = pandas.DataFrame(columns=['resultSet.id','factor.category','factor.level'])
         for d in rs.data:
             cate = ' x '.join(f.category for f in d.experimental_factors)
@@ -285,13 +306,7 @@ class GemmaPy(object):
             df = pandas.concat([df,row], ignore_index=True)
         return df
 
-    def search_annotations(self, query, **kwargs):  # noqa: E501
-        """Search for annotation tags
 
-        :param list[str] query: (required)
-        :rtype: ResponseDataObjectListAnnotationSearchResultValueObject
-        """
-        return self.api.search_annotations(query=query, **kwargs)
 
     def search_datasets(self, query, taxon, **kwargs):
         """Retrieve datasets within a given taxa associated to an annotation tags search
@@ -305,7 +320,7 @@ class GemmaPy(object):
           sign indicate ascending order whereas the '-' indicate descending.
         :rtype: PaginatedResponseDataObjectExpressionExperimentValueObject
         """
-        return self.api.search_taxon_datasets(taxon, query=query, **kwargs)
+        return self.raw.search_taxon_datasets(taxon, query=query, **kwargs)
 
 # Below are "Convenience" (combination) functions
     def get_dataset_object(self, dataset, **kwargs):
@@ -414,7 +429,7 @@ class GemmaPy(object):
         :param str platform: (required)
         :return: DataFrame
         """
-        api_response = self.api.get_platform_annotations(platform, **kwargs)
+        api_response = self.raw.get_platform_annotations(platform, **kwargs)
         uncomment = api_response.split("\n#")
         api_response = uncomment[len(uncomment)-1]
         uncomment = api_response.split('\n',1)
@@ -426,7 +441,7 @@ class GemmaPy(object):
 
         :rtype: ResponseDataObjectListTaxonValueObject
         """
-        return self.api.get_taxa(**kwargs)
+        return self.raw.get_taxa(**kwargs)
 
     def get_taxon_datasets(self, taxon, **kwargs):  # noqa: E501
         """Retrieve the datasets for a given taxon
@@ -459,7 +474,7 @@ class GemmaPy(object):
         :param str sort:
         :rtype: PaginatedResponseDataObjectExpressionExperimentValueObject
         """
-        return self.api.get_taxon_datasets(taxon, **kwargs)
+        return self.raw.get_taxon_datasets(taxon, **kwargs)
 
 # Tests
 if __name__ == '__main__':
