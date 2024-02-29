@@ -6,8 +6,9 @@ Gemma python API (https://gemma.msl.ubc.ca/rest/v2/)
 import logging
 from   gemmapy import sdk
 from gemmapy import processors as ps
+from gemmapy import validators as vs
 
-
+import typing as T
 import pandas
 import numpy
 import anndata
@@ -45,15 +46,16 @@ class GemmaPy(object):
     # we don't need this here, not included
     
     # /resultSets/{resultSet}, get_result_set ------ 
-    def get_result_set(self, result_set, **kwargs):  # noqa: E501
+    # made internal to not cause unneeded confusion
+    def __get_result_set(self, result_set, **kwargs):  # noqa: E501
         """Retrieve a single analysis result set by its identifier
 
         :param int result_set: (required)
         :return: DataFrame
         """
-        api_response = self.raw.get_result_set_as_tsv(result_set, **kwargs)
+        response = self.raw.get_result_set_as_tsv(result_set, **kwargs)
         
-        df = ps.process_de_matrix(api_response)
+        df = ps.process_de_matrix(response)
         
         return df
         
@@ -61,7 +63,39 @@ class GemmaPy(object):
     # this is inaccessible to gemmapy
     
     # /resultSets, get_result_sets -----
-    # unimplemented
+    
+    def get_result_sets(self,
+                        datasets:T.Optional[T.List[T.Union[str,int]]] = None,
+                        resultSets:T.Optional[T.List[int]] = None,
+                        filter:str = None,
+                        offset:int = 0,
+                        limit:int = 20,
+                        sort:str = "+id",
+                        **kwargs):  # noqa: E501
+        """Retrieve all result sets matching the provided criteria
+
+        :param str dataset: (required)
+        :return: DataFrame
+        """
+        
+        filter = vs.add_to_filter(filter, 'id', resultSets)
+        
+        
+        kwargs = vs.remove_nones(
+            datasets = datasets,
+            filter = filter,
+            offset = offset,
+            limit = limit,
+            sort = sort,
+            **kwargs)
+        
+        response = self.raw.get_result_sets(**kwargs)
+        
+        df = ps.process_DifferentialExpressionAnalysisResultSetValueObject(response.data)
+        ps.attach_attributes(df,response.to_dict())
+        
+        return response
+
     
     # /annotations/search, search_annotations --------
     def search_annotations(self, query, **kwargs):  # noqa: E501
@@ -70,19 +104,26 @@ class GemmaPy(object):
         :param list[str] query: (required)
         :rtype: ResponseDataObjectListAnnotationSearchResultValueObject
         """
-        api_response = self.raw.search_annotations(query=query, **kwargs)
-        return ps.process_search_annotations(api_response)
+        response = self.raw.search_annotations(query=query, **kwargs)
+        return ps.process_search_annotations(response.data)
     
-    
+    # /annotations/{taxon}/search search_datasets/search_taxon_datasets ----
+    # reduntant with other endpoints,
+
+    # /datasets/{dataset}/annotations, get_dataset_annotations ----------
     def get_dataset_annotations(self, dataset, **kwargs):  # noqa: E501
         """Retrieve the annotations analysis of a dataset
 
         :param str dataset: (required)
         :rtype: ResponseDataObjectSetAnnotationValueObject
         """
+        response = self.raw.get_dataset_annotations(dataset, **kwargs)
+        df = ps.process_annotations(response.data)
+        ps.attach_attributes(df, response.to_dict())
         
-        return self.raw.get_dataset_annotations(dataset, **kwargs)
-        
+        return df
+    
+
 
     def get_dataset_design(self, dataset, **kwargs):  # noqa: E501
         """Retrieve the design of a dataset
@@ -287,24 +328,6 @@ class GemmaPy(object):
                                ignore_index=True)
         return df
 
-    def get_result_sets(self, dataset, **kwargs):  # noqa: E501
-        """Retrieve all result sets matching the provided criteria
-
-        :param str dataset: (required)
-        :return: DataFrame
-        """
-        rs = self.raw.get_result_sets(datasets=[dataset], **kwargs)
-        df = pandas.DataFrame(columns=['resultSet.id','factor.category','factor.level'])
-        for d in rs.data:
-            cate = ' x '.join(f.category for f in d.experimental_factors)
-            leve = '; '.join(f.description for f in d.experimental_factors)
-            
-            row =  pandas.DataFrame([{'resultSet.id': d.id,
-                            'factor.category': cate,
-                            'factor.level': leve}])
-            
-            df = pandas.concat([df,row], ignore_index=True)
-        return df
 
 
 
