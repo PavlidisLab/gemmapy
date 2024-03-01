@@ -13,13 +13,8 @@ from io import StringIO
 import typing as T
 import warnings
 from gemmapy import subprocessors as sub
+import itertools as it
 
-# tolerance for missing values
-def access_field(x,field,na_type = None):
-    if field in dir(x):
-        return getattr(x,field)
-    else:
-        return na_type
 
 
 def read_tsv(d):
@@ -39,7 +34,7 @@ def process_de_matrix(d):
     return df
 
 
-def process_search_annotations(d):
+def process_search_annotations(d:list):
     df = pd.DataFrame({
         "category.name":  list(map(lambda x: x.category,d)),
         "category.URI":  list(map(lambda x: x.category_uri,d)),
@@ -56,7 +51,7 @@ def process_search_annotations(d):
     
     return df
 
-def process_annotations(d):
+def process_annotations(d:list):
     df = pd.DataFrame({
         "class.name":  list(map(lambda x: x.class_name,d)),
         "class.URI":  list(map(lambda x: x.class_uri,d)),
@@ -84,7 +79,7 @@ def attach_attributes(df:pd.DataFrame,attributes:dict,pop:T.List= ['data']):
 
 
 
-def process_DifferentialExpressionAnalysisResultSetValueObject(d):
+def process_DifferentialExpressionAnalysisResultSetValueObject(d:list,api):
     df = pd.DataFrame({})
     
     for x in d:
@@ -98,14 +93,57 @@ def process_DifferentialExpressionAnalysisResultSetValueObject(d):
             baseline_id = x.baseline_group.id
             
             non_control_factors = list(filter(lambda y: y.id != baseline_id,x.experimental_factors[0].values))
-            non_control_ids = [x for x in contrast_id if x == baseline_id]
+            non_control_ids = [x for x in contrast_id if x != baseline_id]
             size = len(non_control_ids)
             
             exp_factors = list(map(lambda y: sub.process_FactorValueValueObject(y), 
                                    non_control_factors))
             
+            
+            list(it.repeat(sub.access_field(d,'experimental_factor_category','category'),size))
+            
+            out = pd.DataFrame({
+                "result_ID": sub.rep(sub.access_field(x, "id"),size),
+                "contrast_ID": non_control_ids,
+                "experiment_ID": sub.rep(exp_id,size),
+                "factor_category": sub.rep(sub.access_field(x.experimental_factors[0],"category"),size),
+                "factor_category_URI" : sub.rep(sub.access_field(x.experimental_factors[0],"category_uri"),size),
+                "factor_ID": sub.rep(sub.access_field(x.experimental_factors[0],"id"),size),
+                "baseline_factors": sub.rep(sub.process_FactorValueValueObject(x.baseline_group),size),
+                "experimental_factors": exp_factors,
+                "subsetFactor_subset": sub.rep(not sub.access_field(x,"analysis","subset_factor_value") is None,size),
+                "subsetFactor": sub.rep(sub.process_FactorValueValueObject(x.analysis.subset_factor_value), size)
+            })
+            
+            df = pd.concat([df, out])
+            
         else:
-            pass
+            return d
+            ids = list(map(lambda x: sub.field_in_list(x,'id'),
+                      sub.field_in_list(x.experimental_factors,"values")))
+            
+            factor_ids = sub.field_in_list(x.experimental_factors,'id')
+            
+            
+            # in an effort to standarize the outpurs, we will always put the
+            # sort by the factor id no
+            order = sub.order(factor_ids)
+            ids = [ids[i] for i in order]
+            factor_ids.sort()
+            
+            ids = [[x,y] for x in ids[0] for y in ids[1]]
+            
+            
+            # information provided in a single result set is not sufficient
+            # to identify which factor values represent the controls.
+            # we use the api object itself to call this one's friends
+            # to figure that out
+            all_sets = api.raw.get_result_sets(datasets = [exp_id])
+            
+            
+            
+            
+            return d
         
         
     return df

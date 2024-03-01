@@ -91,10 +91,10 @@ class GemmaPy(object):
         
         response = self.raw.get_result_sets(**kwargs)
         
-        df = ps.process_DifferentialExpressionAnalysisResultSetValueObject(response.data)
-        ps.attach_attributes(df,response.to_dict())
+        df = ps.process_DifferentialExpressionAnalysisResultSetValueObject(response.data,self)
+        # ps.attach_attributes(df,response.to_dict())
         
-        return response
+        return df
 
     
     # /annotations/search, search_annotations --------
