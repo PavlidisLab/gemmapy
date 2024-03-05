@@ -18,6 +18,10 @@ def remove_nones(**kwargs):
 
 def add_to_filter(filt:T.Optional[str], prop: str, terms: T.List[T.Union[str,int]]):
     
+    if terms is None:
+        return filt
+    
+    
     if filt is None:
         filt = ""
     

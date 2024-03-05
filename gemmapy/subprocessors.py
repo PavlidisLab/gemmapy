@@ -47,6 +47,13 @@ def field_in_list(x,*fields, na_type = np.nan):
         return [access_field(y,*fields) for y in x]
 
 
+    
+
+def process_FactorValueValueObject_list(d:T.Optional[list]):
+    out = [process_FactorValueBasicValueObject(x) for x in d]
+    return pd.concat(out)
+    
+
 def process_FactorValueValueObject(d):
     return process_FactorValueBasicValueObject(d)
 
