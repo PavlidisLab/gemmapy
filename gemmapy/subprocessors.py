@@ -24,9 +24,11 @@ def rep(obj,times):
 # tolerance for missing values
 def access_field(x,*fields,na_type = np.nan):
     target = None
+    target_set = False
     for field in fields:
-        if target is None and field in dir(x):
+        if not target_set and field in dir(x):
             target = getattr(x, field)
+            target_set = True
         elif target is None:
             return na_type
         elif field in dir(target):
