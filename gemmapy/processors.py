@@ -76,9 +76,9 @@ def attach_attributes(df:pd.DataFrame,attributes:dict,pop:T.List= ['data']):
 
 def process_DifferentialExpressionAnalysisResultSetValueObject(d:list,api):
     df = pd.DataFrame({
-        "result_ID":[],
+        "result_ID":pd.Series(dtype='int'),
         "contrast_ID": [],
-        "experiment_ID": [],
+        "experiment_ID": pd.Series(dtype='int'),
         "factor_category": [],
         "factor_category_URI" : [],
         "factor_ID": [],
@@ -107,7 +107,7 @@ def process_DifferentialExpressionAnalysisResultSetValueObject(d:list,api):
             baseline_id = x.baseline_group.id
             
             non_control_factors = list(filter(lambda y: y.id != baseline_id,x.experimental_factors[0].values))
-            contrast_id = [x for x in contrast_id if x != baseline_id]
+            contrast_id = [str(x) for x in contrast_id if x != baseline_id]
             size = len(contrast_id)
             
             experimental_factors = list(map(lambda y: sub.process_FactorValueValueObject(y), 
@@ -166,11 +166,6 @@ def process_DifferentialExpressionAnalysisResultSetValueObject(d:list,api):
         
     out = pd.concat(out_list,ignore_index = True)
     
-    # impose integer types to ids when possible
-    out = out.astype({
-        "result_ID":'int32',
-        "experiment_ID": 'int32',
-        })
     
     return out
 
