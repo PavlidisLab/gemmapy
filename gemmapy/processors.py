@@ -35,19 +35,14 @@ def process_de_matrix(d):
 
 
 def process_search_annotations(d:list):
-    df = pd.DataFrame({
-        "category.name":  list(map(lambda x: x.category,d)),
-        "category.URI":  list(map(lambda x: x.category_uri,d)),
-        "value.name":  list(map(lambda x: x.value,d)),
-        "value.URI":  list(map(lambda x: x.value_uri,d))
-        })
+
     
-    # df = pd.DataFrame({
-    #     "category.name": [access_field(x,'category' for x in d)],
-    #     "category.URI": [access_field(x,'category_uri' for x in d)],
-    #     "value.name": [access_field(x,'value' for x in d)],
-    #     "value.URI": [access_field(x,'value_uri' for x in d)]
-    #     })
+    df = pd.DataFrame({
+        "category.name": sub.field_in_list(d,'category'),
+        "category.URI": sub.field_in_list(d,'category_uri'),
+        "value.name": sub.field_in_list(d,'value'),
+        "value.URI": sub.field_in_list(d,'value_uri')
+        })
     
     return df
 
@@ -80,7 +75,18 @@ def attach_attributes(df:pd.DataFrame,attributes:dict,pop:T.List= ['data']):
 
 
 def process_DifferentialExpressionAnalysisResultSetValueObject(d:list,api):
-    df = pd.DataFrame({})
+    df = pd.DataFrame({
+        "result_ID":[],
+        "contrast_ID": [],
+        "experiment_ID": [],
+        "factor_category": [],
+        "factor_category_URI" : [],
+        "factor_ID": [],
+        "baseline_factors": [],
+        "experimental_factors": [],
+        "subsetFactor_subset": [],
+        "subsetFactor": []
+    })
     out_list = [df]
     for x in d:
         if x.analysis.source_experiment is None:
@@ -124,10 +130,10 @@ def process_DifferentialExpressionAnalysisResultSetValueObject(d:list,api):
             
             relevant_ids = list(filter(lambda y: not any(sub.list_in_list(y, baseline_ids)),ids))
             
-                 
             fac_vals = [sub.access_field(y,'values') for y in x.experimental_factors]
             all_factors = pd.concat(
-                [sub.process_FactorValueValueObject_list(y) for y in fac_vals]
+                [sub.process_FactorValueValueObject_list(y) for y in fac_vals],
+                ignore_index = True
                 )
             
             baseline_factors = all_factors.loc[all_factors.ID.isin(baseline_ids)]
@@ -158,5 +164,13 @@ def process_DifferentialExpressionAnalysisResultSetValueObject(d:list,api):
         
         out_list.append(out)
         
-    return pd.concat(out_list)
+    out = pd.concat(out_list,ignore_index = True)
+    
+    # impose integer types to ids when possible
+    out = out.astype({
+        "result_ID":'int32',
+        "experiment_ID": 'int32',
+        })
+    
+    return out
 

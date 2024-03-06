@@ -51,7 +51,7 @@ def field_in_list(x,*fields, na_type = np.nan):
 
 def process_FactorValueValueObject_list(d:T.Optional[list]):
     out = [process_FactorValueBasicValueObject(x) for x in d]
-    return pd.concat(out)
+    return pd.concat(out,ignore_index = True)
     
 
 def process_FactorValueValueObject(d):
@@ -102,7 +102,7 @@ def process_FactorValueBasicValueObject(d):
         
         characteristics = characteristics[~characteristics.value_ID.isin(statements.value_ID)]
         
-        out = pd.concat([characteristics,statements])
+        out = pd.concat([characteristics,statements],ignore_index = True)
         size = out.shape[0]
         
         out["summary"] = rep(access_field(d,'summary'),size)
