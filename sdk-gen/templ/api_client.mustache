@@ -192,6 +192,8 @@ class ApiClient(object):
             return None
         elif isinstance(obj, self.PRIMITIVE_TYPES):
             return obj
+        elif isinstance(obj,np.int64) or isinstance(obj,np.int32) or isinstance(obj,np.int16):
+            return int(obj)
         elif isinstance(obj, list):
             return [self.sanitize_for_serialization(sub_obj)
                     for sub_obj in obj]
