@@ -90,10 +90,9 @@ class GemmaPy(object):
             **kwargs)
         
         response = self.raw.get_result_sets(**kwargs)
-        
         df = ps.process_DifferentialExpressionAnalysisResultSetValueObject(response.data,self)
-        # ps.attach_attributes(df,response.to_dict())
-        
+        ps.attach_attributes(df, response.to_dict())
+
         return df
 
     
