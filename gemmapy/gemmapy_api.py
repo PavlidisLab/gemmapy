@@ -97,7 +97,7 @@ class GemmaPy(object):
 
     
     # /annotations/search, search_annotations --------
-    def search_annotations(self, query, **kwargs):  # noqa: E501
+    def search_annotations(self, query:T.List[str], **kwargs):  # noqa: E501
         """Search for annotation tags
 
         :param list[str] query: (required)
@@ -110,7 +110,7 @@ class GemmaPy(object):
     # reduntant with other endpoints,
 
     # /datasets/{dataset}/annotations, get_dataset_annotations ----------
-    def get_dataset_annotations(self, dataset, **kwargs):  # noqa: E501
+    def get_dataset_annotations(self, dataset:T.Union[str,int], **kwargs):  # noqa: E501
         """Retrieve the annotations analysis of a dataset
 
         :param str dataset: (required)
@@ -122,34 +122,24 @@ class GemmaPy(object):
         
         return df
     
-
-
-    def get_dataset_design(self, dataset, **kwargs):  # noqa: E501
+    # /datasets/{dataset}/design, get_dataset_design -----
+    def get_dataset_design(self, dataset:T.Union[str,int], **kwargs):  # noqa: E501
         """Retrieve the design of a dataset
 
         :param str dataset: (required)
         :return: DataFrame
         """
         api_response = self.raw.get_dataset_design(dataset, **kwargs)
-        uncomment = api_response.split("\n#")
-        api_response = uncomment[len(uncomment)-1]
-        uncomment = api_response.split('\n',1)
-        api_response = uncomment[len(uncomment)-1]
+        df = ps.process_dataset_design(api_response)
         
-        
-        df = pandas.read_csv(StringIO(api_response), sep='\t')
-
-        # conditioning: fix Bioassay names, add them index, remove redundant columns
-        rowall = [c[c.find('Name=')+5:] for c in df['Bioassay'] if c.find('Name=') >= 0]
-        assert len(rowall) == df.shape[0], 'Err1'
-        df.index = rowall
-
-        return df.drop(columns=['Bioassay', 'ExternalID'], errors='ignore')
-
-    def get_dataset_expression_for_genes(self,datasets,genes, **kwargs):
-        return self.raw.get_dataset_expression_for_genes(datasets, genes, **kwargs)
-
-    def get_dataset_differential_expression_analyses(self, dataset, **kwargs):  # noqa: E501
+        return df
+    
+    # /datasets/{datasets}/expressions/differential ------
+    # unimplemented
+    # not sure how the parameters for this endpoint works and doesn't seem essential
+    
+    # /datasets/{dataset}/analyses/differential, get_dataset_differential_expression_analyses ------
+    def get_dataset_differential_expression_analyses(self, dataset:T.Union[str,int], **kwargs):  # noqa: E501
         """Retrieve the differential analyses of a dataset
 
         :param str dataset: (required)
@@ -157,7 +147,17 @@ class GemmaPy(object):
         :param int limit: Limit the number of results retrieved
         :rtype: ResponseDataObjectListDifferentialExpressionAnalysisValueObject
         """
-        return self.raw.get_dataset_differential_expression_analyses(dataset, **kwargs)
+        api_response = self.raw.get_dataset_differential_expression_analyses(dataset, **kwargs)
+        df = ps.process_dea(api_response.data)
+        
+        return df
+    
+
+
+    def get_dataset_expression_for_genes(self,datasets,genes, **kwargs):
+        return self.raw.get_dataset_expression_for_genes(datasets, genes, **kwargs)
+
+
 
     def get_dataset_expression(self, dataset, **kwargs):  # noqa: E501
         """Retrieve the expression data of a dataset
