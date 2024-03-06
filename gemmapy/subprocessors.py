@@ -40,9 +40,9 @@ def access_field(x,*fields,na_type = np.nan):
     return target
 
 
-def field_in_list(x,*fields, na_type = np.nan):
-    if x is None:
-        return []
+def field_in_list(x,*fields, blank_series =  pd.Series(dtype='str'), na_type = np.nan):
+    if x is None or len(x)==0:
+        return blank_series
     else:
         return [access_field(y,*fields) for y in x]
 
@@ -79,12 +79,12 @@ def process_FactorValueBasicValueObject(d):
             'category': [access_field(d,"category")],
             "category_URI": [access_field(d,"category_uri")],
             'value':[access_field(d,"measurement","value")],
-            'value_URI':[None],
-            'predicate':[None],
-            "predicate.URI":[None],
-            "object":[None],
-            "object_URI":[None],
-            "summary":[None],
+            'value_URI':[np.nan],
+            'predicate':[np.nan],
+            "predicate.URI":[np.nan],
+            "object":[np.nan],
+            "object_URI":[np.nan],
+            "summary":[np.nan],
             "ID":[access_field(d,'id')],
             "factor_ID":[access_field(d,"experimental_factor_id")],
             "factor_category":[access_field(d,"experimental_factor_category","category")],
