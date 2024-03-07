@@ -60,28 +60,22 @@ def process_search_annotations(d:list):
 
     
     df = pd.DataFrame({
-        "category.name": sub.field_in_list(d,'category'),
-        "category.URI": sub.field_in_list(d,'category_uri'),
-        "value.name": sub.field_in_list(d,'value'),
-        "value.URI": sub.field_in_list(d,'value_uri')
+        "category_name": sub.field_in_list(d,'category'),
+        "category_URI": sub.field_in_list(d,'category_uri'),
+        "value_name": sub.field_in_list(d,'value'),
+        "value_URI": sub.field_in_list(d,'value_uri')
         })
     
     return df
 
 def process_annotations(d:list):
-    df = pd.DataFrame({
-        "class.name":  list(map(lambda x: x.class_name,d)),
-        "class.URI":  list(map(lambda x: x.class_uri,d)),
-        "term.name":  list(map(lambda x: x.term_name,d)),
-        "term.URI":  list(map(lambda x: x.term_uri,d))
-        })
     
-    # df = pd.DataFrame({
-    #     "class.name":  [access_field(x,'class_name' for x in d)],
-    #     "class.URI":  [access_field(x,'class_uri' for x in d)],
-    #     "term.name": [access_field(x,'term_name' for x in d)],
-    #     "term.URI":  [access_field(x,'term_uri' for x in d)]
-    #     })
+    df = pd.DataFrame({
+        "class_name": sub.field_in_list(d,"class_name"),
+        "class_URI": sub.field_in_list(d,"class_uri"),
+        "term_name": sub.field_in_list(d,"term_name"),
+        "term_URI": sub.field_in_list(d,"term_uri")
+        })
     
     return df
 
