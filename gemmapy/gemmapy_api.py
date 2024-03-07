@@ -1,4 +1,4 @@
-# coding: utf-8
+# -*- coding: utf-8 -*-
 """
 Gemma python API (https://gemma.msl.ubc.ca/rest/v2/)
 """
@@ -47,7 +47,8 @@ class GemmaPy(object):
     
     # /resultSets/{resultSet}, get_result_set ------ 
     # made internal to not cause unneeded confusion
-    def __get_result_set(self, result_set, **kwargs):  # noqa: E501
+    # use get_differential_expression_values instead
+    def __get_result_set(self, result_set:int, **kwargs):  # noqa: E501
         """Retrieve a single analysis result set by its identifier
 
         :param int result_set: (required)
@@ -55,7 +56,7 @@ class GemmaPy(object):
         """
         response = self.raw.get_result_set_as_tsv(result_set, **kwargs)
         
-        df = ps.process_de_matrix(response)
+        df = ps.process_de_matrix(response, result_set,self)
         
         return df
         

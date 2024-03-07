@@ -27,11 +27,32 @@ def read_tsv(d):
     return df
 
 
-def process_de_matrix(d):
+def process_de_matrix(d,rs,api):
     df = read_tsv(d)
     df = df.drop(columns=['id','probe_id','gene_id','gene_name'], errors='ignore')
     df = df.rename(columns={'probe_name':'Probe','gene_official_symbol':'GeneSymbol',
                             'gene_official_name':'GeneName','gene_ncbi_id':'NCBIid'})
+    
+    i_regex = r"contrast_[0-9]+?_[0-9]+?_"
+    
+    if any([not re.search(i_regex,x) is None for x in df.columns]):
+        result_set = api.get_result_sets(resultSets = [rs])
+        to_rename = [x for x in df.columns if not re.search(i_regex,x) is None]
+        
+        def rename(name,result_set):
+            x = name.split('_')
+            if x[1] + "_" + x[2] in list(result_set.contrast_ID):
+                return name
+            else:
+                assert x[2] + "_" + x[1]  in list(result_set.contrast_ID)
+                x[1], x[2] = x[2], x[1]
+                return '_'.join(x)
+        
+        new_name = [rename(x,result_set) for x in to_rename]
+        
+        rename_dict = {new_name[i]: to_rename[i] for i in range(len(new_name))}
+        df = df.rename(columns = rename_dict)
+    
     return df
 
 

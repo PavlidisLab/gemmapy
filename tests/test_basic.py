@@ -8,6 +8,7 @@ Created on Tue Mar  5 18:06:47 2024
 import unittest
 import gemmapy
 import pandas as pd
+from gemmapy import subprocessors as sub
 
 class TestProcessedEndpoints(unittest.TestCase):
     
@@ -51,10 +52,27 @@ class TestProcessedEndpoints(unittest.TestCase):
 
         res = api.get_dataset_differential_expression_analyses(200)
         self.assertTrue(type(res) is pd.core.frame.DataFrame)
-
-        res2 = api.get_result_sets([200])
         
-        self.assertTrue(all(res.contrast_ID == res2.contrast_ID))
+                        
+    def test_result_set_table_compatibility(self):
+        api = gemmapy.GemmaPy()
+        
+        res = api.get_dataset_differential_expression_analyses(200)
+        res2 = api.get_result_sets(resultSets = [res.result_ID[0]])
+        self.assertTrue(all(
+            sub.list_in_list(res2.contrast_ID, res.contrast_ID)
+            ))
+
+        
+        dif_exp = api._GemmaPy__get_result_set(res.result_ID[0])
+        
+        expected_cols = ["contrast_" + str(x) +"_log2fc" for x in res2.contrast_ID]
+        
+        self.assertTrue(all(
+            sub.list_in_list(expected_cols,list(dif_exp.columns))
+            ))
+        
+        
 
 
     

@@ -16,7 +16,7 @@ def order(lis:list):
     return np.argsort(lis).tolist()
 
 def list_in_list(list1,list2):
-    return list(elem in list1 for elem in list2)
+    return list(elem in list(list2) for elem in list(list1))
 
 
 def rep(obj,times):
