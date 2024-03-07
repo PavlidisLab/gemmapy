@@ -13,6 +13,7 @@ import pandas
 import numpy
 import anndata
 from io import StringIO
+import warnings
 
 logger = logging.getLogger(__name__)
 
@@ -106,8 +107,6 @@ class GemmaPy(object):
         response = self.raw.search_annotations(query=query, **kwargs)
         return ps.process_search_annotations(response.data)
     
-    # /annotations/{taxon}/search search_datasets/search_taxon_datasets ----
-    # reduntant with other endpoints,
 
     # /datasets/{dataset}/annotations, get_dataset_annotations ----------
     def get_dataset_annotations(self, dataset:T.Union[str,int], **kwargs):  # noqa: E501
@@ -152,13 +151,14 @@ class GemmaPy(object):
         
         return df
     
-
-
-    def get_dataset_expression_for_genes(self,datasets,genes, **kwargs):
-        return self.raw.get_dataset_expression_for_genes(datasets, genes, **kwargs)
-
-
-
+    # /datasets/{dataset}/analyses/differential/resultSets -----
+    # unimplemented
+    # unsure about the distinction between this and the get_dataset_differential_expression_analyses. 
+    # seem to contain the reduntant information
+    
+    
+    # /datasets/{dataset}/data -----
+    # deprecated, remove later
     def get_dataset_expression(self, dataset, **kwargs):  # noqa: E501
         """Retrieve the expression data of a dataset
 
@@ -166,6 +166,8 @@ class GemmaPy(object):
         :param bool filter: Filter results by matching the expression
         :return: DataFrame
         """
+        warnings.warn('get_dataset_expression is deprecated, please use get_dataset_processed_expression instead')
+        
         api_response = self.raw.get_dataset_expression(dataset, **kwargs)
         uncomment = api_response.split("\n#")
         api_response = uncomment[len(uncomment)-1]
