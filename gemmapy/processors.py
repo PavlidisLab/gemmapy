@@ -294,3 +294,42 @@ def process_dataset_design(d):
     df.index = rowall
 
     return df.drop(columns=['Bioassay', 'ExternalID'], errors='ignore')
+
+
+
+
+def process_dataset_gene_expression(d:list):
+    out = {}
+    datasets = sub.field_in_list(d,'dataset_id')
+    for i in range(len(d)):
+        x = d[i]
+        dataset = datasets[i]
+        
+        if len(x.gene_expression_levels) == 0:
+            dataset_exp = pd.DataFrame({})
+        else:
+            def compile_exp_frame(gene_expression_levels):
+                y = gene_expression_levels
+                
+                def get_expression_row(bio_assay_expression_levels):
+                    z = bio_assay_expression_levels.copy()
+                    for k in z.keys():
+                        z[k] = [z[k]]
+                        out = pd.DataFrame(z)
+                        return out
+                    
+                    
+                out = pd.concat(
+                    [get_expression_row(z.bio_assay_expression_levels) for z in y.vectors],
+                    ignore_index = True)
+                nrows = out.shape[0]
+                out.insert(0,"NCBIid",sub.rep(y.gene_ncbi_id,nrows))
+                out.insert(0,"GeneSymbol",sub.rep(y.gene_official_symbol,nrows))
+                out.insert(0,"Probe",sub.field_in_list(y.vectors,'design_element_name'))
+                return out
+            dataset_exp = pd.concat([compile_exp_frame(y) for y in x.gene_expression_levels],ignore_index = True)
+        
+        out.update({dataset:dataset_exp })
+
+
+    return out

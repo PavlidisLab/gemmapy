@@ -180,6 +180,28 @@ class GemmaPy(object):
         df.columns = [c if c.find('Name=') < 0 else c[c.find('Name=')+5:] for c in df.columns]
         return df
     
+    
+    
+    # /datasets/{datasets}/expressions/genes/{genes}, get_dataset_expression_for_genes ------
+    def get_dataset_expression_for_genes(self,
+                                         datasets:T.List[T.Union[str,int]],
+                                         genes:T.List[int],
+                                         keep_non_specific:bool = False,
+                                         consolidate = None,
+                                         **kwargs):
+        kwargs = vs.remove_nones(
+            keep_non_specific = keep_non_specific,
+            consolidate = consolidate,
+            **kwargs)
+        
+        api_response = self.raw.get_dataset_expression_for_genes(datasets, genes, **kwargs)
+        df = ps.process_dataset_gene_expression(api_response.data)
+        
+        return df
+        
+
+
+
     def get_dataset_processed_expression(self,dataset,**kwargs):
         api_response = self.raw.get_dataset_processed_expression(dataset, **kwargs)
         uncomment = api_response.split("\n#")
