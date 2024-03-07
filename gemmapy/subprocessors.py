@@ -22,7 +22,10 @@ def list_in_list(list1,list2):
 def rep(obj,times):
     return list(it.repeat(obj,times))
 
-# tolerance for missing values
+# access_field and field_in_list functions are written with
+# tolerance for missing values in mind. they are here
+# to prevent small changes in the api from preventing the
+# whole functions from working
 def access_field(x,*fields,na_type = np.nan):
     target = None
     target_set = False
