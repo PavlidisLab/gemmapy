@@ -40,6 +40,12 @@ class TestProcessedEndpoints(unittest.TestCase):
         self.assertTrue(type(res2) is pd.core.frame.DataFrame)
         self.assertTrue(res2.shape[0] ==0)
         self.assertTrue(res2.shape[1] == 4)
+        
+    def test_get_dataset_annotations(self):
+        api = gemmapy.GemmaPy()
+        res = api.get_dataset_annotations(1)
+        self.assertTrue(type(res) is pd.core.frame.DataFrame)
+        self.assertTrue(res.shape[1] == 4)
 
     def test_get_dataset_design(self):
         api = gemmapy.GemmaPy()
@@ -72,7 +78,21 @@ class TestProcessedEndpoints(unittest.TestCase):
             sub.list_in_list(expected_cols,list(dif_exp.columns))
             ))
         
+    def test_get_dataset_expression_for_genes(self):
+        api = gemmapy.GemmaPy()
         
+        res = api.get_dataset_expression_for_genes(datasets = [1,4,2], genes = [10225,2841])
+        
+        type(list(res.values())[0])
+        
+        self.assertTrue(all(
+            [type(value) is pd.core.frame.DataFrame for value in res.values()]
+            ))
+        self.assertTrue(res[2].shape == (0,0))
+        
+        self.assertTrue(res[1].shape[0]>1)
+        self.assertTrue(res[4].shape[0]>1)
+
 
 
     
