@@ -199,9 +199,25 @@ class GemmaPy(object):
         
         return df
         
+    # datasets/{datasets}/expressions/pca -----
+    # unimplemented
+    
+    
+    # datasets/{dataset}/platforms ------
+    def get_dataset_platforms(self, dataset, **kwargs):  # noqa: E501
+        """Retrieve the platform of a dataset
 
-
-
+        :param str dataset: (required)
+        :rtype: ResponseDataObjectListArrayDesignValueObject
+        """
+        api_response = self.raw.get_dataset_platforms(dataset, **kwargs)
+        df = ps.process_platforms(api_response.data)
+        
+        return(df)
+    
+    
+    
+    
     def get_dataset_processed_expression(self,dataset,**kwargs):
         api_response = self.raw.get_dataset_processed_expression(dataset, **kwargs)
         uncomment = api_response.split("\n#")
@@ -233,14 +249,6 @@ class GemmaPy(object):
         return df
         
 
-
-    def get_dataset_platforms(self, dataset, **kwargs):  # noqa: E501
-        """Retrieve the platform of a dataset
-
-        :param str dataset: (required)
-        :rtype: ResponseDataObjectListArrayDesignValueObject
-        """
-        return self.raw.get_dataset_platforms(dataset, **kwargs)
 
     def get_dataset_samples(self, dataset, **kwargs):  # noqa: E501
         """Retrieve the samples of a dataset

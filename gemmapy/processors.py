@@ -333,3 +333,31 @@ def process_dataset_gene_expression(d:list):
 
 
     return out
+
+def process_platforms(d:list):
+    
+    df = pd.DataFrame({
+        "platform_ID": sub.field_in_list(d,"id"),
+        "platform_short_name": sub.field_in_list(d,"short_name"),
+        "platform_name": sub.field_in_list(d,"name"),
+        "platform_description": sub.field_in_list(d,"description"),
+        "platform_troubled": sub.field_in_list(d,"troubled"),
+        "platform_experiment_count": sub.field_in_list(d,"expression_experiment_count"),
+        "platform_type": sub.field_in_list(d,"technology_type")
+        })
+        
+    taxon = process_taxon(sub.field_in_list(d,'taxon'))
+    
+    return pd.concat([df, taxon], axis=1)
+
+def process_taxon(d:list):
+    df = pd.DataFrame({
+        "taxon_name": sub.field_in_list(d,"common_name"),
+        "taxon_scientific": sub.field_in_list(d,"scientific_name"),
+        "taxon_id": sub.field_in_list(d,"id"),
+        "taxon_NCBI": sub.field_in_list(d,"ncbi_id"),
+        "taxon_database_name": sub.field_in_list(d,"external_database","name"),
+        "taxon_database_id": sub.field_in_list(d,"external_database",'id'),
+        })
+    
+    return df
