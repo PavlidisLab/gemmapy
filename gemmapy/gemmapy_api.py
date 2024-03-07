@@ -60,8 +60,7 @@ class GemmaPy(object):
         
         return df
         
-    # gemma.R uses an undocumented variable in get_result_set to access result set factors
-    # this is inaccessible to gemmapy
+
     
     # /resultSets, get_result_sets -----
     
