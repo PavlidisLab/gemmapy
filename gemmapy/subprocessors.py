@@ -12,6 +12,11 @@ from io import StringIO
 
 import itertools as it
 
+def match(list1, list2):
+    return [ list2.index(x) if x in list2 else None for x in list1 ]
+    
+def make_dict(keys,values):
+    return {keys[i]: values[i] for i in range(len(keys))}
 
 def order(lis:list):
     return np.argsort(lis).tolist()
