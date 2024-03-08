@@ -43,7 +43,8 @@ def process_de_matrix(d,rs,api):
         
         new_name = [rename(x,result_set) for x in to_rename]
         
-        rename_dict = {new_name[i]: to_rename[i] for i in range(len(new_name))}
+        rename_dict = sub.make_dict(to_rename, new_name)
+        # rename_dict = {new_name[i]: to_rename[i] for i in range(len(new_name))}
         df = df.rename(columns = rename_dict)
     
     return df
@@ -272,13 +273,7 @@ def process_DifferentialExpressionAnalysisResultSetValueObject(d:list,api):
     return out
 
 def process_dataset_design(d):
-    
-    uncomment = d.split("\n#")
-    d = uncomment[len(uncomment)-1]
-    uncomment = d.split('\n',1)
-    d = uncomment[len(uncomment)-1]
-    
-    df = pd.read_csv(StringIO(d), sep='\t')
+    df = sub.read_tsv(d)
 
     # conditioning: fix Bioassay names, add them index, remove redundant columns
     # rowall = [re.search(r"(?<=Name=).*",x).group() for x in df['Bioassay']]
@@ -351,6 +346,54 @@ def process_taxon(d:list):
         "taxon_NCBI": sub.field_in_list(d,"ncbi_id"),
         "taxon_database_name": sub.field_in_list(d,"external_database","name"),
         "taxon_database_id": sub.field_in_list(d,"external_database",'id'),
+        })
+    
+    return df
+
+
+def process_expression(d, dataset, api):
+    # dataset 2 is an example why this more complex renaming is needed
+    # check a non gsm study too since R's make names might be handling
+    # more non-uniformities
+    df = sub.read_tsv(d)
+    m_cols = list(df.columns)
+    samples = api.raw.get_dataset_samples(dataset).data
+    sample_ids = sub.field_in_list(samples,"sample",'name')
+    sample_names = sub.field_in_list(samples,"name")
+    
+    sample_ids = [x.replace("|",".") for x in sample_ids]
+    
+    def find_match(x):
+        match = None
+        for i in range(len(m_cols)):
+            if m_cols[i].find(x+"_") != -1:
+                match = i
+        return match
+    
+    sample_matches= [find_match(x) for x in sample_ids]
+    
+    
+    rename_dict = sub.make_dict([m_cols[i] for i in sample_matches],sample_names)
+
+    df = df.rename(columns = rename_dict)
+    
+    df = df.drop(columns=['Sequence', 'GemmaId'], errors='ignore')
+    return df
+
+def process_samples(d:list):
+    
+    df = pd.DataFrame({
+        "sample_name": sub.field_in_list(d,"name"),
+        "sample_ID": sub.field_in_list(d,"sample",'id'),
+        "sample_description": sub.field_in_list(d,"description"),
+        "sample_outlier": sub.field_in_list(d,"outlier"),
+        "sample_accession": sub.field_in_list(d,"accession","accession"),
+        "sample_database": sub.field_in_list(d,"accession","external_database",'name'),
+        "sample_characteristics": [sub.process_CharacteristicValueObject(x).drop("value_ID",axis = 1) 
+                                   for x in sub.field_in_list(d,"sample","characteristics")],
+        "sample_factorValues:": [sub.process_FactorValueValueObject_list(x)
+                                for x in sub.field_in_list(d,"sample","factor_value_objects")]
+        
         })
     
     return df

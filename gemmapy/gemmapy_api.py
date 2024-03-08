@@ -162,7 +162,7 @@ class GemmaPy(object):
     
     # /datasets/{dataset}/data -----
     # deprecated, remove later
-    def get_dataset_expression(self, dataset, **kwargs):  # noqa: E501
+    def get_dataset_expression(self, dataset:T.Union[int,str], **kwargs):  # noqa: E501
         """Retrieve the expression data of a dataset
 
         :param str dataset: (required)
@@ -198,7 +198,7 @@ class GemmaPy(object):
     
     
     # datasets/{dataset}/platforms ------
-    def get_dataset_platforms(self, dataset, **kwargs):  # noqa: E501
+    def get_dataset_platforms(self, dataset:T.Union[int,str], **kwargs):  # noqa: E501
         """Retrieve the platform of a dataset
 
         :param str dataset: (required)
@@ -212,18 +212,28 @@ class GemmaPy(object):
     
     # datasets/{dataset}/data/processed ------
     
-    def get_dataset_processed_expression(self,dataset,**kwargs):
+    def get_dataset_processed_expression(self,dataset:T.Union[int,str],**kwargs):
         api_response = self.raw.get_dataset_processed_expression(dataset, **kwargs)
-        uncomment = api_response.split("\n#")
-        api_response = uncomment[len(uncomment)-1]
-        uncomment = api_response.split('\n',1)
-        api_response = uncomment[len(uncomment)-1]
         
-        df = pandas.read_csv(StringIO(api_response), sep='\t', dtype={'Probe':'str'})        
-        # conditioning: fix names and remove redundant columns
-        df = df.drop(columns=['Sequence', 'GemmaId'], errors='ignore')
-        df.columns = [c if c.find('Name=') < 0 else c[c.find('Name=')+5:] for c in df.columns]
+        df = ps.process_expression(api_response,dataset,self)
+        
         return df
+    
+    
+    
+    
+    # datasets/{dataset}/samples, get_dataset_samples --------
+    def get_dataset_samples(self, dataset:T.Union[int,str], **kwargs):  # noqa: E501
+        """Retrieve the samples of a dataset
+
+        :param str dataset: (required)
+        :rtype: ResponseDataObjectListBioAssayValueObject
+        """
+        api_response = self.raw.get_dataset_samples(dataset, **kwargs)
+        df = ps.process_samples(api_response.data)
+        return df
+        
+    
     
     def get_dataset_quantitation_types(self,dataset,**kwargs):
         return self.raw.get_dataset_quantitation_types(dataset, **kwargs)
@@ -244,14 +254,7 @@ class GemmaPy(object):
         
 
 
-    def get_dataset_samples(self, dataset, **kwargs):  # noqa: E501
-        """Retrieve the samples of a dataset
 
-        :param str dataset: (required)
-        :rtype: ResponseDataObjectListBioAssayValueObject
-        """
-        return self.raw.get_dataset_samples(dataset, **kwargs)
-    
     def get_datasets(self,**kwargs):
         return self.raw.get_datasets(**kwargs)
 
