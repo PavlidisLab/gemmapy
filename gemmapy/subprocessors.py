@@ -77,7 +77,7 @@ def process_FactorValueBasicValueObject(d):
             "factor_category":[],
             "factor_category_URI":[]
             })
-    elif d.measurement is None:
+    elif not d.measurement is None:
         return pd.DataFrame({
             'category': [access_field(d,"category")],
             "category_URI": [access_field(d,"category_uri")],
