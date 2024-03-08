@@ -9,7 +9,6 @@ Created on Mon Feb 26 20:29:08 2024
 
 import pandas as pd
 import numpy as np
-from io import StringIO
 import typing as T
 import warnings
 from gemmapy import subprocessors as sub
@@ -18,17 +17,11 @@ import re
 
 
 
-def read_tsv(d):
-    uncomment = d.split("\n#")
-    api_response = uncomment[len(uncomment)-1]
-    uncomment = api_response.split('\n',1)
-    api_response = uncomment[len(uncomment)-1]
-    df = pd.read_csv(StringIO(api_response), sep='\t')
-    return df
+
 
 
 def process_de_matrix(d,rs,api):
-    df = read_tsv(d)
+    df = sub.read_tsv(d)
     df = df.drop(columns=['id','probe_id','gene_id','gene_name'], errors='ignore')
     df = df.rename(columns={'probe_name':'Probe','gene_official_symbol':'GeneSymbol',
                             'gene_official_name':'GeneName','gene_ncbi_id':'NCBIid'})

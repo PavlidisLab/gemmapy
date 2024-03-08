@@ -8,6 +8,7 @@ Created on Thu Feb 29 02:15:57 2024
 import pandas as pd
 import typing as T
 import numpy as np
+from io import StringIO
 
 import itertools as it
 
@@ -147,3 +148,10 @@ def process_StatementValueObject(d:T.Optional[list]):
     
     return df
 
+def read_tsv(d):
+    uncomment = d.split("\n#")
+    api_response = uncomment[len(uncomment)-1]
+    uncomment = api_response.split('\n',1)
+    api_response = uncomment[len(uncomment)-1]
+    df = pd.read_csv(StringIO(api_response), sep='\t')
+    return df
