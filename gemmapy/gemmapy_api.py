@@ -122,7 +122,10 @@ class GemmaPy(object):
         return df
     
     # /datasets/{dataset}/design, get_dataset_design -----
-    def get_dataset_design(self, dataset:T.Union[str,int], **kwargs):  # noqa: E501
+    # this endpoint is not very useful since the names it comes with
+    # is annoying to match names provided in the samples endpoint
+    # make_design replaces this
+    def __get_dataset_design(self, dataset:T.Union[str,int], **kwargs):  # noqa: E501
         """Retrieve the design of a dataset
 
         :param str dataset: (required)
