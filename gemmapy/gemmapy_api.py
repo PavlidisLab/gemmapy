@@ -168,17 +168,8 @@ class GemmaPy(object):
         """
         warnings.warn('get_dataset_expression is deprecated, please use get_dataset_processed_expression instead')
         
-        api_response = self.raw.get_dataset_expression(dataset, **kwargs)
-        uncomment = api_response.split("\n#")
-        api_response = uncomment[len(uncomment)-1]
-        uncomment = api_response.split('\n',1)
-        api_response = uncomment[len(uncomment)-1]
-        
-        df = pandas.read_csv(StringIO(api_response), sep='\t', dtype={'Probe':'str'})        
-        # conditioning: fix names and remove redundant columns
-        df = df.drop(columns=['Sequence', 'GemmaId'], errors='ignore')
-        df.columns = [c if c.find('Name=') < 0 else c[c.find('Name=')+5:] for c in df.columns]
-        return df
+        return self.get_dataset_processed_expression(dataset,**kwargs)
+
     
     
     
@@ -216,7 +207,7 @@ class GemmaPy(object):
         return(df)
     
     
-    
+    # datasets/{dataset}/data/processed ------
     
     def get_dataset_processed_expression(self,dataset,**kwargs):
         api_response = self.raw.get_dataset_processed_expression(dataset, **kwargs)
