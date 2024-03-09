@@ -377,7 +377,13 @@ def process_expression(d, dataset, api):
 
     df = df.rename(columns = rename_dict)
     
+    assert all(sub.list_in_list(sample_names,list(df.columns)))
+    
     df = df.drop(columns=['Sequence', 'GemmaId'], errors='ignore')
+    
+    non_samples = [x for x in list(df.columns) if not x in sample_names]
+    df = df.reindex(columns = non_samples + sample_names)
+    
     return df
 
 def process_samples(d:list):
