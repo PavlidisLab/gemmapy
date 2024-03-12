@@ -403,3 +403,40 @@ def process_samples(d:list):
         })
     
     return df
+
+def process_datasets(d:list):
+    df = pd.DataFrame({
+        "experiment_short_name": sub.field_in_list(d,"short_name"),
+        "experiment_name": sub.field_in_list(d,"name"),
+        "experiment_id": sub.field_in_list(d,"id"),
+        "experiment_description": sub.field_in_list(d,"description"),
+        "experiment_troubled": sub.field_in_list(d,"troubled"),
+        "experiment_accession": sub.field_in_list(d,"accession"),
+        "experiment_database":sub.field_in_list(d,"external_database"),
+        "experiment_URI":sub.field_in_list(d,"external_uri"),
+        "experiment_sample_count": sub.field_in_list(d,"bio_assay_count"),
+        "experiment_last_updated":  sub.field_in_list(d,"last_updated"),
+        "experiment_batch_effect":sub.field_in_list(d,"batch_effect"),
+        "geeq_batch_corrected":sub.field_in_list(d,"geeq","batch_corrected"),
+        "geeq_batch_confound":sub.field_in_list(d,"geeq","q_score_public_batch_confound"),
+        "geeq_batch_effect":sub.field_in_list(d,"geeq","q_score_public_batch_effect"),
+        "geeq_raw_data":sub.field_in_list(d,"geeq","s_score_raw_data"),
+        "geeq_q_score":sub.field_in_list(d,"geeq","public_quality_score"),
+        "geeq_s_score":sub.field_in_list(d,"geeq","public_suitability_score")
+        })
+    
+    taxon = process_taxon(sub.field_in_list(d,'taxon'))
+    
+    return pd.concat([df, taxon], axis=1)
+
+def process_QuantitationTypeValueObject(d:list):
+    df = pd.DataFrame({
+        "id": sub.field_in_list(d,"id"),
+        "name": sub.field_in_list(d,"name"),
+        "description": sub.field_in_list(d,"description"),
+        "type": ["processed" if "ProcessedExpressionDataVector" in x else "raw" for x in sub.field_in_list(d,"vector_type")],
+        "scale": sub.field_in_list(d,"scale"),
+        "preferred": sub.field_in_list(d,"is_preferred"),
+        "recomputed": sub.field_in_list(d,"is_recomputed_from_raw_data")
+        })
+    return df

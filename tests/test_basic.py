@@ -49,7 +49,7 @@ class TestProcessedEndpoints(unittest.TestCase):
 
     def test_get_dataset_design(self):
         api = gemmapy.GemmaPy()
-        res = api.get_dataset_design('1')
+        res = api._GemmaPy__get_dataset_design('1')
         self.assertTrue(type(res) is pd.core.frame.DataFrame)
         
     

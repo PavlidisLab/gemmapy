@@ -131,8 +131,8 @@ class GemmaPy(object):
         :param str dataset: (required)
         :return: DataFrame
         """
-        api_response = self.raw.get_dataset_design(dataset, **kwargs)
-        df = ps.process_dataset_design(api_response)
+        response = self.raw.get_dataset_design(dataset, **kwargs)
+        df = ps.process_dataset_design(response)
         
         return df
     
@@ -149,8 +149,8 @@ class GemmaPy(object):
         :param int limit: Limit the number of results retrieved
         :rtype: ResponseDataObjectListDifferentialExpressionAnalysisValueObject
         """
-        api_response = self.raw.get_dataset_differential_expression_analyses(dataset, **kwargs)
-        df = ps.process_dea(api_response.data)
+        response = self.raw.get_dataset_differential_expression_analyses(dataset, **kwargs)
+        df = ps.process_dea(response.data)
         
         return df
     
@@ -188,8 +188,8 @@ class GemmaPy(object):
             consolidate = consolidate,
             **kwargs)
         
-        api_response = self.raw.get_dataset_expression_for_genes(datasets, genes, **kwargs)
-        df = ps.process_dataset_gene_expression(api_response.data)
+        response = self.raw.get_dataset_expression_for_genes(datasets, genes, **kwargs)
+        df = ps.process_dataset_gene_expression(response.data)
         
         return df
         
@@ -204,8 +204,8 @@ class GemmaPy(object):
         :param str dataset: (required)
         :rtype: ResponseDataObjectListArrayDesignValueObject
         """
-        api_response = self.raw.get_dataset_platforms(dataset, **kwargs)
-        df = ps.process_platforms(api_response.data)
+        response = self.raw.get_dataset_platforms(dataset, **kwargs)
+        df = ps.process_platforms(response.data)
         
         return(df)
     
@@ -213,12 +213,22 @@ class GemmaPy(object):
     # datasets/{dataset}/data/processed ------
     
     def get_dataset_processed_expression(self,dataset:T.Union[int,str],**kwargs):
-        api_response = self.raw.get_dataset_processed_expression(dataset, **kwargs)
+        response = self.raw.get_dataset_processed_expression(dataset, **kwargs)
         
-        df = ps.process_expression(api_response,dataset,self)
+        df = ps.process_expression(response,dataset,self)
         
         return df
     
+    # datasets/{dataset}/quantitationTypes get_dataset_quantitation_types ----------
+    
+    def get_dataset_quantitation_types(self,dataset:T.Union[int,str],**kwargs):
+        
+        response = self.raw.get_dataset_quantitation_types(dataset, **kwargs)
+        df = ps.process_QuantitationTypeValueObject(response)
+        
+        
+        return df
+
     # datasets/{dataset}/data/raw, get_dataset_raw_expression ---------
     def get_dataset_raw_expression(self,dataset:T.Union[int,str],quantitation_type:[int],**kwargs):
         
@@ -226,9 +236,9 @@ class GemmaPy(object):
             quantitation_type = quantitation_type,
             **kwargs)
         
-        api_response = self.raw.get_dataset_raw_expression(dataset, **kwargs)
+        response = self.raw.get_dataset_raw_expression(dataset, **kwargs)
         
-        df = ps.process_expression(api_response,dataset,self)
+        df = ps.process_expression(response,dataset,self)
         
         return df
     
@@ -240,21 +250,54 @@ class GemmaPy(object):
         :param str dataset: (required)
         :rtype: ResponseDataObjectListBioAssayValueObject
         """
-        api_response = self.raw.get_dataset_samples(dataset, **kwargs)
-        df = ps.process_samples(api_response.data)
+        response = self.raw.get_dataset_samples(dataset, **kwargs)
+        df = ps.process_samples(response.data)
         return df
         
+    # datasets/{dataset}/svd --- 
+    # not implemented
+    
+    # datasets, get_datasets ------
+    def get_datasets(self,query:T.Optional[str] = None, 
+                     filter:T.Optional[str] = None, 
+                     taxa:T.Optional[T.List[str]] = None, 
+                     uris:T.Optional[T.List[str]] = None,
+                     offset:int = 0,
+                     limit:int = 20,
+                     sort:str = "+id",
+                     **kwargs):
+        
+        filter = vs.add_to_filter(filter, 'allCharacteristics.valueUri', uris)
+        filter = vs.add_to_filter(filter, 'taxon.commonName', taxa)
+        
+        kwargs = vs.remove_nones(
+            query = query,
+            filter = filter,
+            offset = offset,
+            limit = limit,
+            sort = sort,
+            **kwargs)
+        
+        response = self.raw.get_datasets(**kwargs)
+        df = ps.process_datasets(response.data)
+        ps.attach_attributes(df, response.to_dict())
+
+        
+        return df
+    
+    # datasets/annotations -----
+    # currently unimplemented
     
     
-    def get_dataset_quantitation_types(self,dataset,**kwargs):
-        return self.raw.get_dataset_quantitation_types(dataset, **kwargs)
-    
-
-
-    def get_datasets(self,**kwargs):
-        return self.raw.get_datasets(**kwargs)
-
-    def get_datasets_by_ids(self, dataset, **kwargs):  # noqa: E501
+    # datasets/{datasets}, get_datasets_by_ids -----
+    def get_datasets_by_ids(self, dataset:T.List[T.Union[str,int]],
+                            filter:T.Optional[str] = None, 
+                            taxa:T.Optional[T.List[str]] = None, 
+                            uris:T.Optional[T.List[str]] = None,
+                            offset:int = 0,
+                            limit:int = 20,
+                            sort:str = "+id",
+                            **kwargs):  # noqa: E501
         """Retrieve datasets by their identifiers
 
         :param list[str] dataset: (required)
@@ -265,8 +308,34 @@ class GemmaPy(object):
           sign indicate ascending order whereas the '-' indicate descending.
         :rtype: PaginatedResponseDataObjectExpressionExperimentValueObject
         """
-        return self.raw.get_datasets_by_ids(dataset, **kwargs)
+        filter = vs.add_to_filter(filter, 'allCharacteristics.valueUri', uris)
+        filter = vs.add_to_filter(filter, 'taxon.commonName', taxa)
+        
+        
+        kwargs = vs.remove_nones(
+            filter = filter,
+            offset = offset,
+            limit = limit,
+            sort = sort,
+            **kwargs)
+        
+        response = self.raw.get_datasets_by_ids(dataset, **kwargs)
+        df = ps.process_datasets(response.data)
+        ps.attach_attributes(df, response.to_dict())
+        
+        return df
 
+     # datasets/categories -----
+     # currently unimplemented
+
+    # datasets/taxa -----
+    # currently unimplemented
+
+    # datasets/count -----
+    # currently unimplemented
+
+    # genes/{gene}/goTerms -------   
+    
     def get_gene_go_terms(self, gene, **kwargs):  # noqa: E501
         """Retrieve the GO terms associated to a gene
 
@@ -274,6 +343,13 @@ class GemmaPy(object):
         :rtype: ResponseDataObjectListGeneOntologyTermValueObject
         """
         return self.raw.get_gene_go_terms(gene, **kwargs)
+
+    
+
+
+
+
+
 
     def get_gene_locations(self, gene, **kwargs):  # noqa: E501
         """Retrieve the physical locations of a given gene
