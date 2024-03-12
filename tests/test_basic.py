@@ -93,6 +93,14 @@ class TestProcessedEndpoints(unittest.TestCase):
         self.assertTrue(res[1].shape[0]>1)
         self.assertTrue(res[4].shape[0]>1)
 
+    def test_get_processed_expression_samples_compatibility(self):
+        api = gemmapy.GemmaPy()
+        exp = api.get_dataset_processed_expression(2)
+        samples = api.get_dataset_samples(2)
+    
+    def test_get_dataset_raw_expression(self):
+        api = gemmapy.GemmaPy()
+        exp = api.get_dataset_raw_expression(2,507039)
 
 
     

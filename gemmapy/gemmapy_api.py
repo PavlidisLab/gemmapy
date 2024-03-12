@@ -219,7 +219,18 @@ class GemmaPy(object):
         
         return df
     
-    
+    # datasets/{dataset}/data/raw, get_dataset_raw_expression ---------
+    def get_dataset_raw_expression(self,dataset:T.Union[int,str],quantitation_type:[int],**kwargs):
+        
+        kwargs = vs.remove_nones(
+            quantitation_type = quantitation_type,
+            **kwargs)
+        
+        api_response = self.raw.get_dataset_raw_expression(dataset, **kwargs)
+        
+        df = ps.process_expression(api_response,dataset,self)
+        
+        return df
     
     
     # datasets/{dataset}/samples, get_dataset_samples --------
@@ -238,21 +249,6 @@ class GemmaPy(object):
     def get_dataset_quantitation_types(self,dataset,**kwargs):
         return self.raw.get_dataset_quantitation_types(dataset, **kwargs)
     
-    def get_dataset_raw_expression(self,dataset,**kwargs):
-        api_response = self.raw.get_dataset_raw_expression(dataset, **kwargs)
-        uncomment = api_response.split("\n#")
-        api_response = uncomment[len(uncomment)-1]
-        uncomment = api_response.split('\n',1)
-        api_response = uncomment[len(uncomment)-1]
-        
-        df = pandas.read_csv(StringIO(api_response), sep='\t', dtype={'Probe':'str'})
-        
-        # conditioning: fix names and remove redundant columns
-        df = df.drop(columns=['Sequence', 'GemmaId'], errors='ignore')
-        df.columns = [c if c.find('Name=') < 0 else c[c.find('Name=')+5:] for c in df.columns]
-        return df
-        
-
 
 
     def get_datasets(self,**kwargs):
