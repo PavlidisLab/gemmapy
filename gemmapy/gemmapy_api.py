@@ -46,7 +46,12 @@ class GemmaPy(object):
     # unimplemented
     # we don't need this here, not included
     
-    # /resultSets/{resultSet}, get_result_set ------ 
+    # /resultSets/{resultSet}
+    # this was only used in the past to access result set metadata by 
+    # using a hidden parameter. this information can be accessed using get_result_sets
+    # enpoint instead
+    
+    # /resultSets/{resultSet_}, get_result_set_as_tsv ------ 
     # made internal to not cause unneeded confusion
     # use get_differential_expression_values instead
     def __get_result_set(self, result_set:int, **kwargs):  # noqa: E501
@@ -325,8 +330,8 @@ class GemmaPy(object):
         
         return df
 
-     # datasets/categories -----
-     # currently unimplemented
+    # datasets/categories -----
+    # currently unimplemented
 
     # datasets/taxa -----
     # currently unimplemented
@@ -336,30 +341,35 @@ class GemmaPy(object):
 
     # genes/{gene}/goTerms -------   
     
-    def get_gene_go_terms(self, gene, **kwargs):  # noqa: E501
+    def get_gene_go_terms(self, gene:T.Union[str,int], **kwargs):  # noqa: E501
         """Retrieve the GO terms associated to a gene
 
         :param str gene: (required)
         :rtype: ResponseDataObjectListGeneOntologyTermValueObject
         """
-        return self.raw.get_gene_go_terms(gene, **kwargs)
+        response = self.raw.get_gene_go_terms(gene, **kwargs)
+        df = ps.process_GO(response.data)
+        return df
 
     
-
-
-
-
-
-
-    def get_gene_locations(self, gene, **kwargs):  # noqa: E501
+    # genes/{gene}/locations, get_gene_locations ----
+    
+    def get_gene_locations(self, gene:T.Union[str,int], **kwargs):  # noqa: E501
         """Retrieve the physical locations of a given gene
 
         :param str gene: (required)
         :rtype: ResponseDataObjectListPhysicalLocationValueObject
         """
-        return self.raw.get_gene_locations(gene, **kwargs)
-
-    def get_gene_probes(self, gene, **kwargs):  # noqa: E501
+        response = self.raw.get_gene_locations(gene, **kwargs)
+        df = ps.process_gene_location(response.data)
+        return df
+    
+    # genes/{gene}/probes, get_gene_probes -----
+    
+    def get_gene_probes(self, gene:T.Union[str,int],
+                        offset:int = 0,
+                        limit:int = 20,
+                        **kwargs):  # noqa: E501
         """Retrieve the probes associated to a genes
 
         :param str gene: (required)
@@ -367,7 +377,17 @@ class GemmaPy(object):
         :param int limit: Limit the number of results retrieved
         :rtype: PaginatedResponseDataObjectCompositeSequenceValueObject
         """
-        return self.raw.get_gene_probes(gene, **kwargs)
+        kwargs = vs.remove_nones(offset = offset,
+                                 limit = limit,
+                                 **kwargs)
+        
+        response = self.raw.get_gene_probes(gene, **kwargs)
+        df = ps.process_elements(response.data)
+        ps.attach_attributes(df, response.to_dict())
+        return df
+        
+        
+    # genes/{genes}, get_genes-------
 
     def get_genes(self, genes, **kwargs):  # noqa: E501
         """Retrieve genes matching a gene identifier
@@ -375,9 +395,22 @@ class GemmaPy(object):
         :param list[str] genes: (required)
         :rtype: ResponseDataObjectListGeneValueObject
         """
-        return self.raw.get_genes(genes, **kwargs)
+        response = self.raw.get_genes(genes, **kwargs)
+        df = ps.process_genes(response.data)
+        return df
 
-    def get_platform_datasets(self, platform, **kwargs):  # noqa: E501
+    # platforms/count -----
+    # unimplemented
+    
+    # platforms/{platform}/annotations -----
+    # unimplemented
+
+    # platform/{platform}/datasets, get_platform_datasets ----
+
+    def get_platform_datasets(self, platform:T.Union[str,int],
+                              offset:int = 0,
+                              limit:int = 20,
+                              **kwargs):  # noqa: E501
         """Retrieve all experiments within a given platform
 
         :param str platform: (required)
@@ -385,9 +418,27 @@ class GemmaPy(object):
         :param int limit: Limit the number of results retrieved
         :rtype: PaginatedResponseDataObjectExpressionExperimentValueObject
         """
-        return self.raw.get_platform_datasets(platform, **kwargs)
+        
+        kwargs = vs.remove_nones(offset = offset,
+                                 limit = limit,
+                                 **kwargs)
+        
+        
+        response = self.raw.get_platform_datasets(platform, **kwargs)
+        df = ps.process_datasets(response.data)
+        ps.attach_attributes(df, response.to_dict())
+        return df
 
-    def get_platform_element_genes(self, platform, probe, **kwargs):  # noqa: E501
+    # platforms/{platform}/elements/{probes} -----
+    # not implemented
+    
+    # platforms/{platform}/elements/{probe}/genes, get_platform_element_genes ----
+
+    def get_platform_element_genes(self, platform:T.Union[str,int], 
+                                   probe:T.Union[str,int],
+                                   offset:int = 0,
+                                   limit:int = 20,
+                                   **kwargs):  # noqa: E501
         """Retrieve the genes associated to a probe in a given platform
 
         :param str platform: (required)
@@ -396,9 +447,50 @@ class GemmaPy(object):
         :param int limit: Limit the number of results retrieved
         :rtype: PaginatedResponseDataObjectGeneValueObject
         """
-        return self.raw.get_platform_element_genes(platform, probe, **kwargs)
+        kwargs = vs.remove_nones(offset = offset,
+                                 limit = limit,
+                                 **kwargs)
+        
+        response =  self.raw.get_platform_element_genes(platform, probe, **kwargs)
+        df = ps.process_genes(response.data)
+        ps.attach_attributes(df, response.to_dict())
+        return df
+    # platforms/{platform}/elements ----
+    # unimplemented
+    # reduntant with annotation files
 
-    def get_platforms_by_ids(self, platform, **kwargs):  # noqa: E501
+    # platforms get_platforms -----
+    # unimplemented in R but easier to keep things separate here
+    def get_platforms(self,
+                      filter:str = None,
+                      taxa:T.List[str] = None,
+                      offset:int=0,
+                      limit:int = 20,
+                      sort:str="+id",
+                      **kwargs):
+        
+        
+        filter = vs.add_to_filter(filter,"taxon.commonName",taxa)
+        
+        kwargs = vs.remove_nones(filter = filter,
+                                 offset = offset,
+                                 limit = limit,
+                                 sort = sort,
+                                 **kwargs)
+        
+        response =  self.raw.get_platforms(**kwargs)
+        df = ps.process_platforms(response.data)
+        ps.attach_attributes(df, response.to_dict())
+        return df
+
+    # platforms/{platform}, get_platforms_by_ids ---- 
+    def get_platforms_by_ids(self, platforms:T.List[T.Union[str,int]], 
+                             filter:str = None,
+                             taxa:T.List[str] = None,
+                             offset:int=0,
+                             limit:int = 20,
+                             sort:str="+id",
+                             **kwargs):  # noqa: E501
         """Retrieve all platforms matching a set of platform identifiers
 
         :param list[str] platform: (required)
@@ -409,41 +501,46 @@ class GemmaPy(object):
           sign indicate ascending order whereas the '-' indicate descending.
         :rtype: PaginatedResponseDataObjectArrayDesignValueObject
         """
-        return self.raw.get_platforms_by_ids(platform, **kwargs)
-
-
-
-    def get_result_set_factors(self, result_set, **kwargs):
-        """Retrieve a single analysis result set by its identifier with Factors
-
-        :param int result_set: (required)
-        :return: DataFrame
-        """
-        api_response = self.raw.get_result_set(result_set, **kwargs)
-        df = pandas.DataFrame(columns=['id', 'factorValue', 'category'])
-        for f in api_response.data.experimental_factors:            
-            for v in f.values:
-                row = pandas.DataFrame([{'id':v.id, 'factorValue':v.factor_value, 'category':v.category}])
-                df = pandas.concat([df,row],
-                               ignore_index=True)
+        filter = vs.add_to_filter(filter,"taxon.commonName",taxa)
+        kwargs = vs.remove_nones(filter = filter,
+                                 offset = offset,
+                                 limit = limit,
+                                 sort = sort,
+                                 **kwargs)
+        
+        response =  self.raw.get_platforms_by_ids(platforms, **kwargs)
+        df = ps.process_platforms(response.data)
+        ps.attach_attributes(df, response.to_dict())
         return df
+    
+    
+    # search search ------
+    # this enpdoint is not very useful when specific endpoints exist for specific
+    # result types. keeping here for now for compatibility with R
+    
+    def search_gemma(self,
+                     query:str,
+                     taxon:T.Optional[T.Union[str,int]]=None,
+                     platform:T.Optional[T.Union[str,int]] = None,
+                     limit:int = 100,
+                     result_type:str = "experiment"):
+        
+        result_type = vs.check_result_type(result_type)
+        
+        kwargs = vs.remove_nones(query =query,
+                                 taxon = taxon,
+                                 platform = platform,
+                                 limit = limit,
+                                 result_types = [result_type])
+        
+        response = self.raw.search(**kwargs)
+        # df = ps.process_search(response.data,result_type)
+        
+        return response.data
 
 
 
 
-    def search_datasets(self, query, taxon, **kwargs):
-        """Retrieve datasets within a given taxa associated to an annotation tags search
-
-        :param str taxon: (required)
-        :param list[str] query: (required)
-        :param str filter: Filter results by matching the expression
-        :param int offset: The offset of the first retrieved result
-        :param int limit: Limit the number of results retrieved
-        :param str sort: Order results by the given property and direction. The '+'
-          sign indicate ascending order whereas the '-' indicate descending.
-        :rtype: PaginatedResponseDataObjectExpressionExperimentValueObject
-        """
-        return self.raw.search_taxon_datasets(taxon, query=query, **kwargs)
 
 # Below are "Convenience" (combination) functions
     def get_dataset_object(self, dataset, **kwargs):

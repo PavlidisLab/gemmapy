@@ -440,3 +440,69 @@ def process_QuantitationTypeValueObject(d:list):
         "recomputed": sub.field_in_list(d,"is_recomputed_from_raw_data")
         })
     return df
+
+def process_GO(d:list):
+    df = pd.DataFrame({
+        'term_name': sub.field_in_list(d,'term'),
+        'term_ID': sub.field_in_list(d,'go_id'),
+        'term_URI': sub.field_in_list(d,'uri')
+        })
+    return df
+
+
+def process_gene_location(d:list):
+    df = pd.DataFrame({
+        'chromosome': sub.field_in_list(d,'chromosome'),
+        'strand': sub.field_in_list(d,'strand'),
+        'nucleotide': sub.field_in_list(d,'nucleotide'),
+        'length': sub.field_in_list(d,'nucleotide_length')
+        })    
+    taxon = process_taxon(sub.field_in_list(d,'taxon'))
+    return pd.concat([df, taxon], axis=1)
+
+def process_elements(d:list):
+    df =  pd.DataFrame({
+        'mapping_name': sub.field_in_list(d,'name'),
+        'mappint_description': sub.field_in_list(d,'description')
+        })
+    array = process_gemma_array(sub.field_in_list(d,"array_design"))
+    
+    return pd.concat([df, array], axis=1)
+
+def process_gemma_array(d:list):
+    df =  pd.DataFrame({
+        'platform_short_name': sub.field_in_list(d,'short_name'),
+        'platform_name': sub.field_in_list(d,'name'),
+        'platform_ID': sub.field_in_list(d,'id'),
+        'platform_type': sub.field_in_list(d,'technology_type'),
+        'platform_description': sub.field_in_list(d,'description'),
+        'platform_troubled': sub.field_in_list(d,'troubled')
+        })
+    taxon = process_taxon(sub.field_in_list(d,'taxon'))
+    return pd.concat([df, taxon], axis=1)
+
+
+def process_genes(d:list):
+    df = pd.DataFrame({
+        "gene_symbol": sub.field_in_list(d,'official_symbol'),
+        "gene_ensembl": sub.field_in_list(d,'ensembl_id'),
+        "gene_NCBI": sub.field_in_list(d,'ncbi_id'),
+        "gene_name":  sub.field_in_list(d,'official_name'),
+        "gene_aliases":sub.field_in_list(d,'aliases'),
+        "gene_mfx_rank": sub.field_in_list(d,'multifunctionality_rank')
+        })
+    
+    taxon = process_taxon(sub.field_in_list(d,'taxon'))
+    
+    return pd.concat([df, taxon], axis=1)
+
+def process_search(d:list,result_type):
+    if result_type == "ubic.gemma.model.expression.experiment.ExpressionExperiment":
+        return process_datasets(sub.field_in_list(d,'result_object'))
+    if result_type == "ubic.gemma.model.genome.Gene":
+        return process_genes(sub.field_in_list(d,'result_object'))
+    if result_type ==  "ubic.gemma.model.expression.arrayDesign.ArrayDesign":
+        return process_platforms(sub.field_in_list(d,'result_object'))
+    return sub.field_in_list(d,'result_object')
+
+

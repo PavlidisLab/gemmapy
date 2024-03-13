@@ -33,3 +33,12 @@ def add_to_filter(filt:T.Optional[str], prop: str, terms: T.List[T.Union[str,int
     return filt
 
 
+
+def check_result_type(typ:str):
+    if typ == 'experiment':
+        return "ubic.gemma.model.expression.experiment.ExpressionExperiment"
+    if typ == "gene":
+        return "ubic.gemma.model.genome.Gene"
+    if typ =='platform':
+        return 'ubic.gemma.model.expression.arrayDesign.ArrayDesign'
+    return typ

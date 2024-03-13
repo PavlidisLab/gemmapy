@@ -49,7 +49,7 @@ def access_field(x,*fields,na_type = np.nan):
     return target
 
 
-def field_in_list(x,*fields, blank_series =  pd.Series(dtype='str'), na_type = np.nan):
+def field_in_list(x:list,*fields, blank_series =  pd.Series(dtype='str'), na_type = np.nan):
     if x is None or len(x)==0:
         return blank_series
     else:
@@ -160,3 +160,11 @@ def read_tsv(d):
     api_response = uncomment[len(uncomment)-1]
     df = pd.read_csv(StringIO(api_response), sep='\t')
     return df
+
+
+
+def dict_to_attr(d:dict):
+    obj = lambda: None
+    for k in d.keys():
+        setattr(obj,k,d[k])
+    return obj
