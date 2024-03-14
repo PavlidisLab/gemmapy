@@ -7,9 +7,10 @@ import logging
 from   gemmapy import sdk
 from gemmapy import processors as ps
 from gemmapy import validators as vs
+from gemmapy import subprocessors as sub
 
 import typing as T
-import pandas
+import pandas as pd
 import numpy
 import anndata
 from io import StringIO
@@ -543,6 +544,28 @@ class GemmaPy(object):
 
 
 # Below are "Convenience" (combination) functions
+
+    def make_design(self,samples):
+        pass
+        
+    def get_all_pages(self,fun:T.Callable,step_size = 100,**kwargs):
+        out = []        
+        poke_call = fun(limit =1,**kwargs)
+        
+        if type(poke_call) == pd.core.frame.DataFrame:
+            count = poke_call.attributes["total_elements"]
+        else:
+            count = poke_call.total_elements
+        
+        for i in range(0,count,step_size):
+            out.append(fun(limit = step_size,offset = i,**kwargs))
+        
+        if type(poke_call) == pd.core.frame.DataFrame:
+            return pd.concat(out)
+        else:
+            return sub.break_list([x.data for x in out])
+        
+
     def get_dataset_object(self, dataset, **kwargs):
         """Combines various endpoint calls to return an annotated data object
         of the queried dataset, including expression data and the experimental
@@ -654,7 +677,7 @@ class GemmaPy(object):
         api_response = uncomment[len(uncomment)-1]
         uncomment = api_response.split('\n',1)
         api_response = uncomment[len(uncomment)-1]
-        return pandas.read_csv(StringIO(api_response), sep='\t')
+        return pd.read_csv(StringIO(api_response), sep='\t')
 
     def get_taxa(self, **kwargs):  # noqa: E501
         """Retrieve all available taxa
@@ -779,7 +802,7 @@ if __name__ == '__main__':
                        'contrast_bipolar disorder, manic phase_logFoldChange']].sort_values(
                 'contrast_bipolar disorder, manic phase_pvalue')
         print('Upregulated probes')
-        with pandas.option_context('display.max_rows', None, 'display.max_columns', None):
+        with pd.option_context('display.max_rows', None, 'display.max_columns', None):
             print(de_up[:10])
 
         de_dn = de[de['diffexpr']=='Down']
@@ -787,7 +810,7 @@ if __name__ == '__main__':
                        'contrast_bipolar disorder, manic phase_logFoldChange']].sort_values(
                 'contrast_bipolar disorder, manic phase_pvalue')
         print('\nDownregulated probes')
-        with pandas.option_context('display.max_rows', None, 'display.max_columns', None):
+        with pd.option_context('display.max_rows', None, 'display.max_columns', None):
             print(de_dn[:10])
 
     def get_platform_annotations_test():

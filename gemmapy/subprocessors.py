@@ -28,6 +28,12 @@ def list_in_list(list1,list2):
 def rep(obj,times):
     return list(it.repeat(obj,times))
 
+def break_list(lis:list):
+    out = []
+    for x in lis:
+        out.extend(x)
+    return out
+
 # access_field and field_in_list functions are written with
 # tolerance for missing values in mind. they are here
 # to prevent small changes in the api from preventing the
