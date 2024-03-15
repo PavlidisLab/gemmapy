@@ -68,7 +68,8 @@ def process_annotations(d:list):
         "class_name": sub.field_in_list(d,"class_name"),
         "class_URI": sub.field_in_list(d,"class_uri"),
         "term_name": sub.field_in_list(d,"term_name"),
-        "term_URI": sub.field_in_list(d,"term_uri")
+        "term_URI": sub.field_in_list(d,"term_uri"),
+        "object_class": sub.field_in_list(d,"object_class"),
         })
     
     return df
