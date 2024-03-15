@@ -93,8 +93,8 @@ def process_dea(d):
         "factor_ID": [],
         "baseline_factors": [],
         "experimental_factors": [],
-        "subsetFactor_subset": [],
-        "subsetFactor": [],
+        "is_subset": [],
+        "subset_factor": [],
         "probes_analyzed": pd.Series(dtype='int'),
         "genes_analyzed": pd.Series(dtype='int')
     })
@@ -166,8 +166,8 @@ def process_dea(d):
                     "factor_ID": sub.rep(factor_ID,size),
                     "baseline_factors": sub.rep(baseline_factors,size),
                     "experimental_factors": experimental_factors,
-                    "subsetFactor_subset": sub.rep(not sub.access_field(d[i],"subset_factor_value") is None,size),
-                    "subsetFactor": sub.rep(sub.process_FactorValueValueObject(sub.access_field(d[i],"subset_factor_value")), size),
+                    "is_subset": sub.rep(not sub.access_field(d[i],"subset_factor_value") is None,size),
+                    "subset_factor": sub.rep(sub.process_FactorValueValueObject(sub.access_field(d[i],"subset_factor_value")), size),
                     "probes_analyzed": sub.rep(d[i].result_sets[j].number_of_probes_analyzed,size),
                     "genes_analyzed": sub.rep(d[i].result_sets[j].number_of_genes_analyzed,size)
             })
@@ -188,8 +188,8 @@ def process_DifferentialExpressionAnalysisResultSetValueObject(d:list,api):
         "factor_ID": [],
         "baseline_factors": [],
         "experimental_factors": [],
-        "subsetFactor_subset": [],
-        "subsetFactor": []
+        "is_subset": [],
+        "subset_factor": []
     })
     out_list = [df]
     for x in d:
@@ -262,8 +262,8 @@ def process_DifferentialExpressionAnalysisResultSetValueObject(d:list,api):
             "factor_ID": sub.rep(factor_ID,size),
             "baseline_factors": sub.rep(baseline_factors,size),
             "experimental_factors": experimental_factors,
-            "subsetFactor_subset": sub.rep(not sub.access_field(x,"analysis","subset_factor_value") is None,size),
-            "subsetFactor": sub.rep(sub.process_FactorValueValueObject(x.analysis.subset_factor_value), size)
+            "is_subset": sub.rep(not sub.access_field(x,"analysis","subset_factor_value") is None,size),
+            "subset_factor": sub.rep(sub.process_FactorValueValueObject(x.analysis.subset_factor_value), size)
         })
         
         out_list.append(out)
@@ -398,7 +398,7 @@ def process_samples(d:list):
         "sample_database": sub.field_in_list(d,"accession","external_database",'name'),
         "sample_characteristics": [sub.process_CharacteristicValueObject(x).drop("value_ID",axis = 1) 
                                    for x in sub.field_in_list(d,"sample","characteristics")],
-        "sample_factorValues:": [sub.process_FactorValueValueObject_list(x)
+        "sample_factor_values:": [sub.process_FactorValueValueObject_list(x)
                                 for x in sub.field_in_list(d,"sample","factor_value_objects")]
         
         })
