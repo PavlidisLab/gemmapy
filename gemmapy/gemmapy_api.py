@@ -23,7 +23,7 @@ class GemmaPy(object):
     Main API class
     """
 
-    def __init__(self, auth=None, devel=False):
+    def __init__(self, auth=None, path="prod"):
         """
         :param list auth: (optional) A list or tuple of credential strings, e.g.
           (your_username, your_password)
@@ -32,8 +32,16 @@ class GemmaPy(object):
         """
 
         configuration = sdk.Configuration()
-        if devel:
+        if path == "prod":
+            pass
+            # configuration.host = 'https://gemma.msl.ubc.ca/rest/v2'
+        elif path == 'dev':
             configuration.host = 'https://dev.gemma.msl.ubc.ca/rest/v2'
+        elif path == 'staging':
+            configuration.host = "https://staging-gemma.msl.ubc.ca/rest/v2"
+        else:
+            configuration.host = path
+        
 
         if auth is not None:
             configuration.username = auth[0]
@@ -403,8 +411,27 @@ class GemmaPy(object):
     # platforms/count -----
     # unimplemented
     
-    # platforms/{platform}/annotations -----
-    # unimplemented
+    # platform/{platform}/annotations -----
+    # in gemma.R this endpoint isn't implemented and uses a convenience function instead
+    # here we just use the enpoint since the added functionality isn't needed
+
+    # Corresponding gemma.R function doesn't use any endpoint (uses some alternative URL
+    # to get info) but has several options allowing to select the ann. type:
+    # annotType = c("bioProcess", "noParents", "allParents")
+    # This feature is not implemented here, the return value corresponds to "noParents"
+    # (as of 2022-05-19)
+    def get_platform_annotations(self, platform, **kwargs):
+        """Retrieve the annotations of a given platform
+
+        :param str platform: (required)
+        :return: DataFrame
+        """
+        api_response = self.raw.get_platform_annotations(platform, **kwargs)
+        uncomment = api_response.split("\n#")
+        api_response = uncomment[len(uncomment)-1]
+        uncomment = api_response.split('\n',1)
+        api_response = uncomment[len(uncomment)-1]
+        return pd.read_csv(StringIO(api_response), sep='\t')
 
     # platform/{platform}/datasets, get_platform_datasets ----
 
@@ -545,6 +572,9 @@ class GemmaPy(object):
 
 # Below are "Convenience" (combination) functions
 
+    # set_gemma_user is not needed since it's wrapped in the GemmaPy class
+    # 
+
     def make_design(self,samples):
         pass
         
@@ -661,23 +691,7 @@ class GemmaPy(object):
 
         return rss
 
-    # Corresponding gemma.R function doesn't use any endpoint (uses some alternative URL
-    # to get info) but has several options allowing to select the ann. type:
-    # annotType = c("bioProcess", "noParents", "allParents")
-    # This feature is not implemented here, the return value corresponds to "noParents"
-    # (as of 2022-05-19)
-    def get_platform_annotations(self, platform, **kwargs):
-        """Retrieve the annotations of a given platform
 
-        :param str platform: (required)
-        :return: DataFrame
-        """
-        api_response = self.raw.get_platform_annotations(platform, **kwargs)
-        uncomment = api_response.split("\n#")
-        api_response = uncomment[len(uncomment)-1]
-        uncomment = api_response.split('\n',1)
-        api_response = uncomment[len(uncomment)-1]
-        return pd.read_csv(StringIO(api_response), sep='\t')
 
     def get_taxa(self, **kwargs):  # noqa: E501
         """Retrieve all available taxa
