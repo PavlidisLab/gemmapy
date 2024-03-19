@@ -11,10 +11,11 @@ from gemmapy import subprocessors as sub
 
 import typing as T
 import pandas as pd
-import numpy
+import numpy as np
 import anndata
 from io import StringIO
 import warnings
+import re
 
 logger = logging.getLogger(__name__)
 
@@ -551,7 +552,8 @@ class GemmaPy(object):
                      taxon:T.Optional[T.Union[str,int]]=None,
                      platform:T.Optional[T.Union[str,int]] = None,
                      limit:int = 100,
-                     result_type:str = "experiment"):
+                     result_type:str = "experiment",
+                     **kwargs):
         
         result_type = vs.check_result_type(result_type)
         
@@ -559,42 +561,84 @@ class GemmaPy(object):
                                  taxon = taxon,
                                  platform = platform,
                                  limit = limit,
-                                 result_types = [result_type])
+                                 result_types = [result_type],
+                                 **kwargs)
         
         response = self.raw.search(**kwargs)
         # df = ps.process_search(response.data,result_type)
         
         return response.data
+    
+    # taxa/{taxon}/genes/{gene}/locations----
+    # unimplemented, redundant with get_gene_locations
 
-
+    # taxa ----
+    def get_taxa(self, **kwargs):
+        response =  self.raw.get_taxa(**kwargs)
+        
+        df = ps.process_taxon(response.data)
+        return df[df.isnull().taxon_name != True]
+        
+        
+    
+    # taxa/{taxa}, get_taxa_by_ids -----
+    # implemented, hardly needed with 3 taxa  
 
 
 
 # Below are "Convenience" (combination) functions
 
     # set_gemma_user is not needed since it's wrapped in the GemmaPy class
-    # 
+    # get_platform_annotations is the default get_platform_annotations
+    
 
-    def make_design(self,samples):
+    def make_design(self,samples,meta_type = 'text'):
+        
+        categories = pd.concat([x[["factor_ID","factor_category","factor_category_URI"]] for x in samples.sample_factor_values],
+                  ignore_index = True).drop_duplicates()
+        
+        
+        def get_val_uri(x):
+            return [",".join([z if z is not None else "" for z in y[y.factor_ID==x].value_URI]) for y in samples.sample_factor_values]
+        
+        factor_URIs = [get_val_uri(x) for x in categories.factor_ID]
+        
+        def get_text(x):
+            def get_summary(y):
+                return ','.join([z[1].summary if z[1].summary is not None else z[1].value  for z in y[y.factor_ID==x].iterrows()])
+            
+            return [get_summary(y) for y in samples.sample_factor_values]
+            
+            
+        
+        text = [get_text(x) for x in categories.factor_ID]
+        
+        
+        if meta_type =='text':
+            design_frame = pd.DataFrame({
+                k:v for k in categories.factor_category for v in text
+                })
+        elif meta_type == 'uri':
+            design_frame = pd.DataFrame({
+                k:v for k in categories.factor_category_URI for v in factor_URIs
+                })
+        elif meta_type =='both':
+            design_frame = pd.DataFrame({
+                k:v for v in [["|".join([text[i][j],factor_URIs[i][j]]) for j in range(len(text[i]))] for i in range(len(text))]
+                for k in ["|".join([x,y]) for x in categories.factor_category for y in categories.factor_category_URI]
+                })
+            
+        design_frame.insert(loc = 0,column = "factor_values",value = samples.sample_factor_values)
+        design_frame.index = samples.sample_name
+        
+        return design_frame
+        
+        
+    
+    def __subset_factor_values(self):
         pass
         
-    def get_all_pages(self,fun:T.Callable,step_size = 100,**kwargs):
-        out = []        
-        poke_call = fun(limit =1,**kwargs)
-        
-        if type(poke_call) == pd.core.frame.DataFrame:
-            count = poke_call.attributes["total_elements"]
-        else:
-            count = poke_call.total_elements
-        
-        for i in range(0,count,step_size):
-            out.append(fun(limit = step_size,offset = i,**kwargs))
-        
-        if type(poke_call) == pd.core.frame.DataFrame:
-            return pd.concat(out)
-        else:
-            return sub.break_list([x.data for x in out])
-        
+
 
     def get_dataset_object(self, dataset, **kwargs):
         """Combines various endpoint calls to return an annotated data object
@@ -639,7 +683,7 @@ class GemmaPy(object):
         exM = exM[des.index]
 
         # make AnnData object
-        adata = anndata.AnnData(exM, dtype=numpy.float32)
+        adata = anndata.AnnData(exM, dtype=np.float32)
         if not (genes is None):
             adata.obs = adata.obs.join(genes)
         adata.var = adata.var.join(des)
@@ -700,38 +744,36 @@ class GemmaPy(object):
         """
         return self.raw.get_taxa(**kwargs)
 
-    def get_taxon_datasets(self, taxon, **kwargs):  # noqa: E501
-        """Retrieve the datasets for a given taxon
 
-        :param str/int taxon: (required)
+    # gemma_call unimplemented, not needed    
 
-        **taxon** can either be Taxon ID, Taxon NCBI ID, or one of its
-        string identifiers: scientific name, common name. It is
-        recommended to use Taxon ID for efficiency. Please note, that
-        not all taxa have all the possible identifiers available. Use
-        the get_taxa_by_ids function to retrieve the necessary
-        information. For convenience, below is a list of officially
-        supported taxa:
+    def get_all_pages(self,fun:T.Callable,step_size = 100,**kwargs):
+        out = []        
+        poke_call = fun(limit =1,**kwargs)
+        
+        if type(poke_call) == pd.core.frame.DataFrame:
+            count = poke_call.attributes["total_elements"]
+        else:
+            count = poke_call.total_elements
+        
+        for i in range(0,count,step_size):
+            out.append(fun(limit = step_size,offset = i,**kwargs))
+        
+        if type(poke_call) == pd.core.frame.DataFrame:
+            return pd.concat(out,ignore_index = True)
+        else:
+            return sub.break_list([x.data for x in out])
+        
 
-        ==  =========   ======================== ==========
-        ID  Comm.name   Scient.name              NcbiID
-        ==  =========   ======================== ==========
-        1   human       Homo sapiens             9606
-        2   mouse       Mus musculus             10090
-        3   rat         Rattus norvegicus        10116
-        11  yeast       Saccharomyces cerevisiae 4932
-        12  zebrafish   Danio rerio              7955
-        13  fly         Drosophila melanogaster  7227
-        14  worm        Caenorhabditis elegans   6239
-        ==  =========   ======================== ==========
+    # filter_properties currently unimplemented. requires keeping the json around
+    
+    def get_child_terms(self,terms:T.List[str]):
+        output = self.get_datasets(uris=terms)
+        
+        return re.findall(r'http.*?(?=,|\))',output.attributes['filter'])
+    
+    # update_results currenty unimplemented and not really essential
 
-        :param str filter:
-        :param int offset:
-        :param int limit:
-        :param str sort:
-        :rtype: PaginatedResponseDataObjectExpressionExperimentValueObject
-        """
-        return self.raw.get_taxon_datasets(taxon, **kwargs)
 
 # Tests
 if __name__ == '__main__':
