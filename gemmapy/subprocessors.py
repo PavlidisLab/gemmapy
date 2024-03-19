@@ -52,6 +52,9 @@ def access_field(x,*fields,na_type = np.nan):
         else:
             return na_type
     
+    if target is None:
+        return na_type
+    
     return target
 
 
