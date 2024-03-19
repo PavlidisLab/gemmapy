@@ -398,7 +398,7 @@ def process_samples(d:list):
         "sample_database": sub.field_in_list(d,"accession","external_database",'name'),
         "sample_characteristics": [sub.process_CharacteristicValueObject(x).drop("value_ID",axis = 1) 
                                    for x in sub.field_in_list(d,"sample","characteristics")],
-        "sample_factor_values:": [sub.process_FactorValueValueObject_list(x)
+        "sample_factor_values": [sub.process_FactorValueValueObject_list(x)
                                 for x in sub.field_in_list(d,"sample","factor_value_objects")]
         
         })
