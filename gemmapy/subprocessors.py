@@ -76,7 +76,7 @@ def process_FactorValueValueObject(d):
     return process_FactorValueBasicValueObject(d)
 
 def process_FactorValueBasicValueObject(d):
-    if d is None:
+    if d is None or pd.isna(d):
         return pd.DataFrame({
             'category': [],
             "category_URI": [],

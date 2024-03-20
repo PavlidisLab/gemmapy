@@ -45,7 +45,7 @@ class TestProcessedEndpoints(unittest.TestCase):
         api = gemmapy.GemmaPy()
         res = api.get_dataset_annotations(1)
         self.assertTrue(type(res) is pd.core.frame.DataFrame)
-        self.assertTrue(res.shape[1] == 4)
+        self.assertTrue(res.shape[1] == 5)
 
     def test_get_dataset_design(self):
         api = gemmapy.GemmaPy()
