@@ -82,7 +82,7 @@ class GemmaPy(object):
     
     def get_result_sets(self,
                         datasets:T.Optional[T.List[T.Union[str,int]]] = None,
-                        resultSets:T.Optional[T.List[int]] = None,
+                        result_sets:T.Optional[T.List[int]] = None,
                         filter:str = None,
                         offset:int = 0,
                         limit:int = 20,
@@ -94,7 +94,7 @@ class GemmaPy(object):
         :return: DataFrame
         """
         
-        filter = vs.add_to_filter(filter, 'id', resultSets)
+        filter = vs.add_to_filter(filter, 'id', result_sets)
         
         
         kwargs = vs.remove_nones(
@@ -691,7 +691,11 @@ class GemmaPy(object):
 
         return adata
 
-    def get_differential_expression_values(self, dataset = None, resultSet = None, readableContrasts = False, **kwargs):
+    def get_differential_expression_values(self, 
+                                           dataset:T.Optional[T.Union[str,int]] = None, 
+                                           result_sets:T.Optional[T.List[T.Union[str,int]]] = None,
+                                           readable_contrasts = False, 
+                                           **kwargs):
         """Retrieves the differential expression resultSet(s) associated with the dataset.
         If there is more than one resultSet, use get_result_sets() to see the options
         and get the ID you want. Alternatively, you can query the resultSet directly
@@ -705,45 +709,39 @@ class GemmaPy(object):
           will be replaced with human readable contrast information.
         :return: list[DataFrame]
         """
-        if dataset is not None and resultSet is not None:
-            rss = self.get_result_sets(dataset)
-            if not resultSet in rss['resultSet.id'].values:
-                logger.warning('The queried resultSet is not derived from this dataset. ' 
-                               'Check the available resultSets with "get_result_sets()" '
-                               'or query without the dataset parameter.')
+        if dataset is not None and result_sets is not None:
+            diffs =  self.get_dataset_differential_expression_analyses(dataset)
+            rss = diffs.result_ID
+            if not all(sub.list_in_list(result_sets, rss)):
+                warnings.warn('The queried resultSet is not derived from this dataset. ' 
+                              'Check the available resultSets with "get_result_sets()" '
+                              'or query without the dataset parameter.')
                 return
-            resultSet = [resultSet,]
-        elif dataset is not None and resultSet is None:
-            rss = self.get_result_sets(dataset)
-            resultSet = rss['resultSet.id'].unique()
-        elif dataset is None and resultSet is not None:
-            resultSet = [resultSet,]
-        else:
-            print("stop")
-            return
-
+        elif dataset is not None and result_sets is None:
+            diffs =  self.get_dataset_differential_expression_analyses(dataset)
+            result_sets = diffs.result_ID.unique()
+        elif dataset is None and result_sets is None:
+            raise ValueError('You must specify a dataset or result_sets')
+            
         rss = {}
-        for rs in resultSet:
-            df = self.get_result_set(rs)
-            if readableContrasts:
-                fact = self.get_result_set_factors(rs)
+        if readable_contrasts:
+            all_factors =  self.get_result_sets(result_sets = result_sets)
+        
+        for rs in result_sets:
+            df = self.__get_result_set(rs)
+            if readable_contrasts:
+                factors = pd.concat(
+                    list(all_factors[all_factors.result_ID == rs].experimental_factors)
+                    ).drop_duplicates()
                 cols = [s.replace('log2fc','logFoldChange') for s in df.columns]
-                for i in range(fact.shape[0]):
-                    cols = [s.replace(str(fact.loc[i,'id']),fact.loc[i,'factorValue']) for s in cols]
-                df.columns = cols
+                for i in range(factors.shape[0]):
+                    cols = [s.replace(str(factors.ID[i]),factors.summary[i]) for s in cols]
+                    df.columns = cols
             rss[rs] = df
-
         return rss
+            
 
-
-
-    def get_taxa(self, **kwargs):  # noqa: E501
-        """Retrieve all available taxa
-
-        :rtype: ResponseDataObjectListTaxonValueObject
-        """
-        return self.raw.get_taxa(**kwargs)
-
+    # get_taxa is moved to base. only removes the nameless rat now
 
     # gemma_call unimplemented, not needed    
 
