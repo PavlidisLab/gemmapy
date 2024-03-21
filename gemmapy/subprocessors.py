@@ -18,8 +18,11 @@ def match(list1, list2):
 def make_dict(keys,values):
     return {keys[i]: values[i] for i in range(len(keys))}
 
-def order(lis:list):
-    return np.argsort(lis).tolist()
+def order(lis:list,decreasing = False):
+    out = np.argsort(lis).tolist()
+    if decreasing:
+        out.reverse()
+    return out
 
 def list_in_list(list1,list2):
     return list(elem in list(list2) for elem in list(list1))

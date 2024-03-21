@@ -12,7 +12,7 @@ from gemmapy import subprocessors as sub
 import typing as T
 import pandas as pd
 import numpy as np
-import anndata
+import anndata as ad
 from io import StringIO
 import warnings
 import re
@@ -156,7 +156,9 @@ class GemmaPy(object):
     # not sure how the parameters for this endpoint works and doesn't seem essential
     
     # /datasets/{dataset}/analyses/differential, get_dataset_differential_expression_analyses ------
-    def get_dataset_differential_expression_analyses(self, dataset:T.Union[str,int], **kwargs):  # noqa: E501
+    def get_dataset_differential_expression_analyses(self, 
+                                                     dataset:T.Union[str,int],
+                                                     **kwargs):  # noqa: E501
         """Retrieve the differential analyses of a dataset
 
         :param str dataset: (required)
@@ -164,7 +166,8 @@ class GemmaPy(object):
         :param int limit: Limit the number of results retrieved
         :rtype: ResponseDataObjectListDifferentialExpressionAnalysisValueObject
         """
-        response = self.raw.get_dataset_differential_expression_analyses(dataset, **kwargs)
+        response = self.raw.get_dataset_differential_expression_analyses(dataset,
+                                                                         **kwargs)
         df = ps.process_dea(response.data)
         
         return df
@@ -246,7 +249,8 @@ class GemmaPy(object):
         return df
 
     # datasets/{dataset}/data/raw, get_dataset_raw_expression ---------
-    def get_dataset_raw_expression(self,dataset:T.Union[int,str],quantitation_type:[int],**kwargs):
+    def get_dataset_raw_expression(self,dataset:T.Union[int,str],
+                                   quantitation_type:[int],**kwargs):
         
         kwargs = vs.remove_nones(
             quantitation_type = quantitation_type,
@@ -643,12 +647,24 @@ class GemmaPy(object):
         
         
     
-    def __subset_factor_values(self):
+    def __subset_factor_values(self,
+                               factor_values,
+                               differential_expressions:pd.DataFrame,
+                               result_set,
+                               contrast):
         pass
         
 
 
-    def get_dataset_object(self, dataset, **kwargs):
+    def get_dataset_object(self, datasets:T.List[T.Union[str,int]],
+                           genes:T.Optional[T.List[T.Union[str,int]]] = None,
+                           keep_non_specific = False,
+                           consolidate:T.Optional[str] = None,
+                           result_sets:T.Optional[T.List[int]] = None,
+                           contrasts:T.Optional[T.List[int]] = None,
+                           meta_type:str = 'text',
+                           output_type:str = 'anndata',
+                           **kwargs):
         """Combines various endpoint calls to return an annotated data object
         of the queried dataset, including expression data and the experimental
         design.
@@ -656,48 +672,152 @@ class GemmaPy(object):
         :param str dataset: (required)
         :return: AnnData class object
         """
-
-        exM = self.get_dataset_processed_expression(dataset, **kwargs)
-        des = self.get_dataset_design(dataset, **kwargs)
-        mdata = self.get_datasets_by_ids([dataset], **kwargs)
-
-        # condition expr. data: add index
-        exM.index = exM["Probe"]
-
-        # genes metadata: extract description columns
-        try:
-            genes = exM[['GeneSymbol', 'GeneName', 'NCBIid']]
-        except KeyError:
-            logger.warning("WARNING: One or more gene descriptions are missing in Expression table")
-            genes = None
-
-        # compile metadata
-        mda = {
-            'title' : mdata.data[0].name,
-            'abstract' : mdata.data[0].description,
-            'url' : 'https://gemma.msl.ubc.ca/expressionExperiment/showExpressionExperiment.html?id='+str(mdata.data[0].id),
-            'database' : mdata.data[0].external_database,
-            'accession' : mdata.data[0].accession,
-            'GemmaQualityScore' : mdata.data[0].geeq.public_quality_score,
-            'GemmaSuitabilityScore' : mdata.data[0].geeq.public_suitability_score,
-            'taxon' : mdata.data[0].taxon
-        }
-
-        # final touch
-        des = des.filter(items = exM.columns, axis = 0)
+        
+        if output_type not in ["anndata","tidy","dict"]:
+            raise ValueError('Please enter a valid output_type. anndata for'
+                             '"anndata" objects, "tidy" for long form pandas'
+                             'DataFrames, "dict" for dictionaries with separate'
+                             'expression and metadata fields'
+                              )
+            
+        unique_sets = list(set(datasets))
+        
+        metadata = {k:self.get_dataset_samples(k) for k in unique_sets}
         
         
-        assert set(des.index) < set(exM.columns), 'Err2' # design rows is subset of exM columns
-        exM = exM[des.index]
-
-        # make AnnData object
-        adata = anndata.AnnData(exM, dtype=np.float32)
-        if not (genes is None):
-            adata.obs = adata.obs.join(genes)
-        adata.var = adata.var.join(des)
-        adata.uns = mda
-
-        return adata
+        if genes is None:
+            def get_exp(dataset):
+                exp = self.get_dataset_processed_expression(dataset)
+                meta = metadata[dataset]
+                
+                if not keep_non_specific:
+                    exp = exp[~exp.GeneSymbol.str.contains("|",regex = False,na = True)]
+                
+                if consolidate is not None and consolidate =='pickmax':
+                    mean_exp = exp[meta.sample_name].mean(axis=1,skipna=True)
+                    exp = exp.iloc[list(sub.order(mean_exp,decreasing = True))]
+                    exp = exp[~exp.duplicated('GeneSymbol')]
+                elif consolidate is not None and consolidate == 'pickvar':
+                    exp_var = exp[meta.sample_name].var(axis = 1, skipna= True)
+                    exp = exp.iloc[list(sub.order(exp_var,decreasing = True))]
+                    exp = exp[~exp.duplicated('GeneSymbol')]
+                elif consolidate is not None and consolidate == 'average':
+                    dups = list(
+                        set(list(
+                            exp[exp.duplicated("GeneSymbol")]["GeneSymbol"]
+                            ))
+                        )
+                    
+                    def get_mean(dup):
+                        dup_subset = exp[exp.GeneSymbol == dup]
+                        dup_mean =  exp[meta.sample_name].mean(axis = 0)
+                        probe = "Averaged from " + " ".join(dup_subset.Probe)
+                        
+                        gene_info = dup_subset.\
+                            loc[:,
+                                np.array(~np.array(
+                                    sub.list_in_list(
+                                        dup_subset.columns,["Probe"] +\
+                                            list(meta.sample_name))))].iloc[0].\
+                                to_frame().T
+                        
+                        probe = pd.DataFrame({
+                            "Probe": [probe]})
+                        data = dup_mean.to_frame().T
+                        return pd.concat([probe,gene_info.reset_index(drop = True),data],
+                                         axis = 1)
+                    
+                    dup_means = [get_mean(dup) for dup in dups]
+                    exp = pd.concat([exp[~exp.GeneSymbol.isin(dups)]] + dup_means, 
+                                    ignore_index = True)
+                return exp
+            #get_exp
+            
+            expression = {k:get_exp(k) for k in unique_sets}
+            
+        else:
+            expression = self.\
+                get_dataset_expression_for_genes(unique_sets,
+                                                 genes = genes,
+                                                 keep_non_specific = keep_non_specific,
+                                                 consolidate = consolidate)
+        
+        designs = {k:self.make_design(metadata[k]) for k in metadata.keys()}
+        dat = self.get_datasets_by_ids(unique_sets)
+        def pack_data(i):
+            dataset = datasets[i]
+            packed_info = {
+                "design":designs[dataset].copy(),
+                "exp": expression[dataset].copy(),
+                "dat": dat[dat.experiment_ID == dataset].copy().reset_index(),
+                "result_set": None,
+                "contrasts": None
+                }
+            
+            
+            
+            if result_sets is not None:
+                packed_info['result_set'] = result_sets[i]
+            if contrasts is not None:
+                packed_info['contrasts'] = contrasts[i]
+            # reordering to match expression/metadata no longer necesarry
+            
+            diff = self.get_dataset_differential_expression_analyses(dataset)
+            
+            if result_sets is not None:
+                # incomplete
+                cons = None if contrasts is None else contrasts[i]
+                
+                relevant = self.__subset_factor_values(packed_info['design'].\
+                                                       factor_values,
+                                                       diff,
+                                                       result_sets[i],
+                                                       cons)
+            return packed_info
+        
+        
+        
+        # packed_data = [pack_data(i) for i in range(len(datasets))]
+        
+        packed_data = {datasets[i]:pack_data(i) for i in range(len(datasets))}
+        
+        
+        if output_type == 'anndata':
+            def make_anndata(pack):
+                pack['exp'].index = pack['exp']['Probe']
+                try: 
+                    gene_data = pack['exp'][['GeneSymbol', 'NCBIid']]
+                except KeyError:
+                    logger.warning("WARNING: One or more gene descriptions are missing in Expression table")
+                    gene_data = None
+                
+                mda = {
+                    'title': pack['dat'].experiment_name[0],
+                    'abstract': pack['dat'].experiment_description[0],
+                    'url': 'https://gemma.msl.ubc.ca/expressionExperiment/showExpressionExperiment.html?id='+ \
+                        str(pack['dat'].experiment_ID[0]),
+                    'database': pack['dat'].experiment_database[0],
+                    'accesion':  pack['dat'].experiment_accession[0],
+                    "GemmaQualityScore":  pack['dat'].geeq_q_score[0],
+                    "GemmaSuitabilityScore":  pack['dat'].geeq_s_score[0],
+                    "taxon":  pack['dat'].taxon_name[0]
+                    }
+                
+                exp = pack['exp'][pack['design'].index]
+                adata = ad.AnnData(exp)
+                if not (gene_data is None):
+                    adata.obs = adata.obs.join(gene_data)
+                    
+                
+                adata.var = adata.var.join(pack['design'])
+                adata.uns = mda
+                return adata
+            # make_anndata
+            
+            
+            out = {k:make_anndata(packed_data[k]) for k in packed_data.keys()}
+        
+        return out
 
     def get_differential_expression_values(self, 
                                            dataset:T.Optional[T.Union[str,int]] = None, 
