@@ -816,7 +816,10 @@ class GemmaPy(object):
             
             
             out = {k:make_anndata(packed_data[k]) for k in packed_data.keys()}
-        
+        elif output_type == 'dict':
+            out = packed_data
+        elif output_type == "tidy":
+            pass
         return out
 
     def get_differential_expression_values(self, 
