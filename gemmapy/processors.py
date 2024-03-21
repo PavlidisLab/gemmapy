@@ -287,7 +287,7 @@ def process_dataset_design(d):
 
 
 
-def process_dataset_gene_expression(d:list):
+def process_dataset_gene_expression(d:list,self):
     out = {}
     datasets = sub.field_in_list(d,'dataset_id')
     for i in range(len(d)):
@@ -318,6 +318,17 @@ def process_dataset_gene_expression(d:list):
                 return out
             dataset_exp = pd.concat([compile_exp_frame(y) for y in x.gene_expression_levels],ignore_index = True)
         
+        samples = self.get_dataset_samples(dataset)
+        
+        dataset_exp = \
+            dataset_exp.\
+                reindex(
+                    columns = \
+                        list(dataset_exp.columns[~np.array(
+                            sub.list_in_list(dataset_exp.columns,
+                                             samples.sample_name))]) + \
+                            list(samples.sample_name))
+        
         out.update({dataset:dataset_exp })
 
 
@@ -346,7 +357,7 @@ def process_taxon(d:list):
         "taxon_id": sub.field_in_list(d,"id"),
         "taxon_NCBI": sub.field_in_list(d,"ncbi_id"),
         "taxon_database_name": sub.field_in_list(d,"external_database","name"),
-        "taxon_database_id": sub.field_in_list(d,"external_database",'id'),
+        "taxon_database_ID": sub.field_in_list(d,"external_database",'id'),
         })
     
     return df
@@ -409,7 +420,7 @@ def process_datasets(d:list):
     df = pd.DataFrame({
         "experiment_short_name": sub.field_in_list(d,"short_name"),
         "experiment_name": sub.field_in_list(d,"name"),
-        "experiment_id": sub.field_in_list(d,"id"),
+        "experiment_ID": sub.field_in_list(d,"id"),
         "experiment_description": sub.field_in_list(d,"description"),
         "experiment_troubled": sub.field_in_list(d,"troubled"),
         "experiment_accession": sub.field_in_list(d,"accession"),
@@ -432,7 +443,7 @@ def process_datasets(d:list):
 
 def process_QuantitationTypeValueObject(d:list):
     df = pd.DataFrame({
-        "id": sub.field_in_list(d,"id"),
+        "ID": sub.field_in_list(d,"id"),
         "name": sub.field_in_list(d,"name"),
         "description": sub.field_in_list(d,"description"),
         "type": ["processed" if "ProcessedExpressionDataVector" in x else "raw" for x in sub.field_in_list(d,"vector_type")],
