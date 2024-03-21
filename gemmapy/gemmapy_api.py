@@ -593,19 +593,23 @@ class GemmaPy(object):
     
 
     def make_design(self,samples,meta_type = 'text'):
-        
-        categories = pd.concat([x[["factor_ID","factor_category","factor_category_URI"]] for x in samples.sample_factor_values],
+        categories = pd.concat([x[["factor_ID","factor_category","factor_category_URI"]] 
+                                for x in samples.sample_factor_values],
                   ignore_index = True).drop_duplicates()
         
         
         def get_val_uri(x):
-            return [",".join([z if z is not None else "" for z in y[y.factor_ID==x].value_URI]) for y in samples.sample_factor_values]
+            return [",".join([str(z) if z is not None else "" 
+                              for z in y[y.factor_ID==x].value_URI]) 
+                    for y in samples.sample_factor_values]
         
         factor_URIs = [get_val_uri(x) for x in categories.factor_ID]
         
         def get_text(x):
             def get_summary(y):
-                return ','.join([z[1].summary if z[1].summary is not None else z[1].value  for z in y[y.factor_ID==x].iterrows()])
+                return ','.join([z[1].summary
+                                 if z[1].summary is not None else z[1].value 
+                                 for z in y[y.factor_ID==x].iterrows()])
             
             return [get_summary(y) for y in samples.sample_factor_values]
             
@@ -624,11 +628,14 @@ class GemmaPy(object):
                 })
         elif meta_type =='both':
             design_frame = pd.DataFrame({
-                k:v for v in [["|".join([text[i][j],factor_URIs[i][j]]) for j in range(len(text[i]))] for i in range(len(text))]
-                for k in ["|".join([x,y]) for x in categories.factor_category for y in categories.factor_category_URI]
+                k:v for v in [["|".join([text[i][j],factor_URIs[i][j]]) 
+                               for j in range(len(text[i]))] for i in range(len(text))]
+                for k in ["|".join([x,y]) for x in categories.factor_category 
+                          for y in categories.factor_category_URI]
                 })
             
-        design_frame.insert(loc = 0,column = "factor_values",value = samples.sample_factor_values)
+        design_frame.insert(loc = 0,column = "factor_values",
+                            value = samples.sample_factor_values)
         design_frame.index = samples.sample_name
         
         return design_frame
