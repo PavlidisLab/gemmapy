@@ -10,10 +10,15 @@ import typing as T
 import numpy as np
 from io import StringIO
 
+
 import itertools as it
 
 def match(list1, list2):
     return [ list2.index(x) if x in list2 else None for x in list1 ]
+
+# lis[match(to_match,by)] in R
+def match_by(lis, to_match, by):
+    return [lis[i] for i in match(to_match,by)]
     
 def make_dict(keys,values):
     return {keys[i]: values[i] for i in range(len(keys))}
@@ -23,6 +28,19 @@ def order(lis:list,decreasing = False):
     if decreasing:
         out.reverse()
     return out
+
+
+# set doesn't preserve order
+def unique(lis):
+    lis = list(lis)
+    out = []
+    
+    for x in lis:
+        if x not in out:
+            out.append(x)
+    return(out)
+    
+    
 
 def list_in_list(list1,list2):
     return list(elem in list(list2) for elem in list(list1))
@@ -170,7 +188,10 @@ def read_tsv(d):
     api_response = uncomment[len(uncomment)-1]
     uncomment = api_response.split('\n',1)
     api_response = uncomment[len(uncomment)-1]
-    df = pd.read_csv(StringIO(api_response), sep='\t')
+    df = pd.read_csv(StringIO(api_response), sep='\t',dtype = {'Probe':str,
+                                                               "Sequence": str,
+                                                               "GeneSymbol":str,
+                                                               "GeneName":str})
     return df
 
 

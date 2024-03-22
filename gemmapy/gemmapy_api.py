@@ -652,7 +652,51 @@ class GemmaPy(object):
                                differential_expressions:pd.DataFrame,
                                result_set,
                                contrast):
-        pass
+        out = sub.rep(True,len(factor_values))
+        if differential_expressions is not None:
+            subset = differential_expressions[differential_expressions.result_ID == 
+                                     result_set].subset_factor.drop_duplicates()
+            # result set should have the same subset for all contrasts
+            assert len(subset) == 1
+            if subset[0].shape[0]!=0:
+                subset_ids = subset[0].ID
+                
+                in_subset = [any(sub.list_in_list(x.ID, subset_ids)) for x in factor_values]
+                
+                out = out and in_subset
+            
+            if contrast is not None:
+                cn = differential_expressions[
+                    list(differential_expressions.result_ID == result_set) and 
+                    list(differential_expressions.contrast_ID == str(contrast))]
+                
+                baseline_id = list(sub.unique(sub.break_list([list(x.ID) for x in cn.baseline_factors])))
+                baseline_factor_id = list(sub.unique(sub.break_list([list(x.factor_ID) for x in cn.baseline_factors])))
+                
+                contrast_id =  list(sub.unique(sub.break_list([list(x.ID) for x in cn.experimental_factors])))
+                contrast_factor_id =  list(sub.unique(sub.break_list([list(x.factor_ID) for x in cn.experimental_factors])))
+                
+                contrast_id = sub.match_by(contrast_id,baseline_factor_id, contrast_factor_id)
+                
+                def in_con(factor_value):
+                    cond1 = all(sub.list_in_list(contrast_id, factor_value.ID)) or \
+                            all(sub.list_in_list(baseline_id,factor_value.ID))                   
+                    
+                    if len(contrast_id)==2:
+                        cond2 = (contrast_id[0] in factor_value.ID and \
+                                    baseline_id[1] in factor_value.ID) or \
+                            (contrast_id[1] in factor_value.ID and \
+                                       baseline_id[0] in factor_value.ID)
+                        
+                        cond1 = cond1 or cond2
+                    
+                    return cond1
+                        
+                in_contrast = [in_con(x) for x in factor_values]
+                
+                out = out and in_contrast
+        
+        return out
         
 
 
@@ -661,7 +705,7 @@ class GemmaPy(object):
                            keep_non_specific = False,
                            consolidate:T.Optional[str] = None,
                            result_sets:T.Optional[T.List[int]] = None,
-                           contrasts:T.Optional[T.List[int]] = None,
+                           contrasts:T.Optional[T.List[str]] = None,
                            meta_type:str = 'text',
                            output_type:str = 'anndata',
                            **kwargs):
@@ -755,7 +799,6 @@ class GemmaPy(object):
                 }
             
             
-            
             if result_sets is not None:
                 packed_info['result_set'] = result_sets[i]
             if contrasts is not None:
@@ -765,7 +808,11 @@ class GemmaPy(object):
             diff = self.get_dataset_differential_expression_analyses(dataset)
             
             if result_sets is not None:
-                # incomplete
+                gene_info = packed_info['exp'].\
+                    columns[[not x 
+                             for x in sub.list_in_list(packed_info['exp'].columns,
+                                                       packed_info['design'].index)]]
+                
                 cons = None if contrasts is None else contrasts[i]
                 
                 relevant = self.__subset_factor_values(packed_info['design'].\
@@ -773,13 +820,23 @@ class GemmaPy(object):
                                                        diff,
                                                        result_sets[i],
                                                        cons)
+                packed_info['design'] = packed_info['design'][relevant]
+                packed_info['exp'] = packed_info['exp'][gene_info.append(packed_info['design'].index)]
+                
+                    
             return packed_info
         
         
         
         # packed_data = [pack_data(i) for i in range(len(datasets))]
         
-        packed_data = {datasets[i]:pack_data(i) for i in range(len(datasets))}
+        if result_sets is None:    
+            packed_data = {datasets[i]:pack_data(i) for i in range(len(datasets))}
+        else:
+            names = [str(datasets[i]) +'_' + str(result_sets[i]) for i in range(len(datasets))]
+            if contrasts is not None:
+                names = [names[i] + "_" + contrasts[i] for i in range(len(datasets))] 
+            packed_data = {names[i]:pack_data(i) for i in range(len(datasets))}
         
         
         if output_type == 'anndata':

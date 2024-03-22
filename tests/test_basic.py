@@ -9,6 +9,7 @@ import unittest
 import gemmapy
 import pandas as pd
 from gemmapy import subprocessors as sub
+import anndata as ad
 
 class TestProcessedEndpoints(unittest.TestCase):
     
@@ -101,6 +102,31 @@ class TestProcessedEndpoints(unittest.TestCase):
     def test_get_dataset_raw_expression(self):
         api = gemmapy.GemmaPy()
         exp = api.get_dataset_raw_expression(2,507039)
+        
+    def test_get_dataset_object(self):
+        api = gemmapy.GemmaPy()
+
+        datasets = [549, 873, 1869]
+        genes = [8913, 7840]
+        
+        obj = api.get_dataset_object(datasets,genes)
+        
+        self.assertTrue(len(obj) == 3)
+        self.assertTrue(type(obj) == dict)
+        self.assertTrue(type(obj[list(obj)[0]]) == ad.AnnData)
+        
+        ds = 442
+        
+        dea = api.get_dataset_differential_expression_analyses(dataset = ds)
+        
+        obj =  api.get_dataset_object(datasets =sub.rep(ds,dea.shape[0]),
+                               result_sets = dea.result_ID,
+                               contrasts = dea.contrast_ID,output_type='dict')
+        
+        self.assertTrue(len(obj) == dea.shape[0])
+        
+        
+        
 
 
     
