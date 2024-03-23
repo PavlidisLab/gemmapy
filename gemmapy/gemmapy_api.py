@@ -793,7 +793,8 @@ class GemmaPy(object):
             packed_info = {
                 "design":designs[dataset].copy(),
                 "exp": expression[dataset].copy(),
-                "dat": dat[dat.experiment_ID == dataset].copy().reset_index(),
+                "dat": dat[(dat.experiment_ID == dataset) | \
+                           (dat.experiment_short_name == dataset)].copy().reset_index(),
                 "result_set": None,
                 "contrasts": None
                 }
