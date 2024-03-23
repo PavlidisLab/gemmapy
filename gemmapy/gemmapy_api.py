@@ -830,14 +830,16 @@ class GemmaPy(object):
         
         
         # packed_data = [pack_data(i) for i in range(len(datasets))]
-        
-        if result_sets is None:    
-            packed_data = {datasets[i]:pack_data(i) for i in range(len(datasets))}
-        else:
-            names = [str(datasets[i]) +'_' + str(result_sets[i]) for i in range(len(datasets))]
+        packed_data = [pack_data(i) for i in range(len(datasets))]
+        keys = [str(x['dat'].experiment_ID[0]) for x in packed_data]
+
+        if result_sets is not None:
+            keys = [keys[i] + "_" + str(result_sets[i]) for i in range(len(datasets))]
             if contrasts is not None:
-                names = [names[i] + "_" + contrasts[i] for i in range(len(datasets))] 
-            packed_data = {names[i]:pack_data(i) for i in range(len(datasets))}
+                keys = [keys[i] + "_" + str(contrasts[i]) for i in range(len(datasets))] 
+        
+        packed_data = {keys[i]:packed_data[i] for i in range(len(datasets))}
+        
         
         
         if output_type == 'anndata':
