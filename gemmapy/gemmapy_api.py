@@ -10,9 +10,12 @@ from gemmapy import validators as vs
 from gemmapy import subprocessors as sub
 
 import typing as T
+from typing import Optional, List, Callable,Union
+from pandas import DataFrame
 import pandas as pd
 import numpy as np
 import anndata as ad
+from anndata import AnnData
 from io import StringIO
 import warnings
 import re
@@ -559,6 +562,24 @@ class GemmaPy(object):
                      limit:int = 100,
                      result_type:str = "experiment",
                      **kwargs):
+        """
+        
+        :param query: DESCRIPTION
+        :type query: str
+        :param taxon: DESCRIPTION, defaults to None
+        :type taxon: T.Optional[T.Union[str,int]], optional
+        :param platform: DESCRIPTION, defaults to None
+        :type platform: T.Optional[T.Union[str,int]], optional
+        :param limit: DESCRIPTION, defaults to 100
+        :type limit: int, optional
+        :param result_type: DESCRIPTION, defaults to "experiment"
+        :type result_type: str, optional
+        :param **kwargs: DESCRIPTION
+        :type **kwargs: TYPE
+        :return: DESCRIPTION
+        :rtype: TYPE
+
+        """
         
         result_type = vs.check_result_type(result_type)
         
@@ -597,7 +618,17 @@ class GemmaPy(object):
     # get_platform_annotations is the default get_platform_annotations
     
 
-    def make_design(self,samples,meta_type = 'text'):
+    def make_design(self,samples:pd.DataFrame,meta_type:str = 'text'):
+        """
+        
+        :param samples: DESCRIPTION
+        :type samples: pd.DataFrame
+        :param meta_type: DESCRIPTION, defaults to 'text'
+        :type meta_type: str, optional
+        :return: DESCRIPTION
+        :rtype: TYPE
+
+        """
         categories = pd.concat([x[["factor_ID","factor_category","factor_category_URI"]] 
                                 for x in samples.sample_factor_values],
                   ignore_index = True).drop_duplicates()
@@ -700,45 +731,78 @@ class GemmaPy(object):
         
 
 
-    def get_dataset_object(self, datasets:T.List[T.Union[str,int]],
-                           genes:T.Optional[T.List[T.Union[str,int]]] = None,
+    def get_dataset_object(self, datasets:List[str|int],
+                           genes:Optional[List[str|int]] = None,
                            keep_non_specific = False,
-                           consolidate:T.Optional[str] = None,
-                           result_sets:T.Optional[T.List[int]] = None,
-                           contrasts:T.Optional[T.List[str]] = None,
+                           consolidate:Optional[str] = None,
+                           result_sets:Optional[List[int]] = None,
+                           contrasts:Optional[List[str]] = None,
                            meta_type:str = 'text',
                            output_type:str = 'anndata',
-                           **kwargs):
+                           **kwargs)->dict[int:dict|AnnData]:
+        
         """Return a data structure including all relevant data related to
         gene expression in a dataset. Either returns an anndata object or 
         a dictionary with all the needed fields.
-
-        :param list[str|int] datasets: Numerical dataset identifier
+        
+        
+        :param datasets: Numerical dataset identifier
           dataset short names
-        :param list[str,int] genes: (optional) An ncbi gene identifier an, 
+        :type datasets: List[str|int]
+        :param genes: An ncbi gene identifier an, 
           ensembl gene identifier which typically starts with ensg or an 
-          official gene symbol approved by hgnc
+          official gene symbol approved by hgnc, defaults to None
+        :type genes: Optional[List[str|int]], optional
+        :param keep_non_specific: DESCRIPTION, defaults to False
+        :type keep_non_specific: TYPE, optional
+        :param consolidate: DESCRIPTION, defaults to None
+        :type consolidate: Optional[str], optional
+        :param result_sets: DESCRIPTION, defaults to None
+        :type result_sets: Optional[List[int]], optional
+        :param contrasts: DESCRIPTION, defaults to None
+        :type contrasts: Optional[List[str]], optional
+        :param meta_type: DESCRIPTION, defaults to 'text'
+        :type meta_type: str, optional
+        :param output_type: DESCRIPTION, defaults to 'anndata'
+        :type output_type: str, optional
+        :param **kwargs: DESCRIPTION
+        :type **kwargs: TYPE
+        :raises ValueError: DESCRIPTION
+        :return: DESCRIPTION
+        :rtype: dict[int:dict|AnnData]
+
+        """
+        
+        
+        """
+
+        :param list[str|int] datasets: 
+        :param Optional[list[str,int]] genes: 
         :param bool keep_non_specific: False by default. If True, results from 
           probesets that are not specific to the gene will also be returned.
-        :param str consolidate: An option for gene expression level consolidation. 
+        :param Optional[str] consolidate: An option for gene expression level consolidation. 
           If empty, will return every probe for the genes. "pickmax" to pick 
           the probe with the highest expression, "pickvar" to pick the prove 
           with the highest variance and "average" for returning the average 
           expression
-        :param list[int] result_sets: (optional) Result set IDs of the a 
+        :param Optional[list[int]] result_sets: Result set IDs of the a 
           differential expression analysis. If provided, the output will only 
           include the samples from the subset used in the result set ID. Must 
           be the same length as datasets. 
-        :param list[int] contrasts: (optional) Contrast IDs of a differential 
+        :param Optional[list[int]] contrasts: Contrast IDs of a differential 
           expression contrast. Need result_sets to be defined to work. If 
           provided, the output will only include samples relevant to the '
           specific contrats. Must be the same length as datasets.
         :param str meta_type: How should the metadata information should be 
           included. Can be "text", "uri" or "both". "text" and "uri" options
         :param str output_type: Type of the returned object. "anndata" for an 
-          AnnData object and "dict" for a dictionary.
+          AnnData object and "dict" for a dictionary populated with DataFrames.
         :return: dict | AnnData class object
         """
+        
+        
+        
+
         
         if output_type not in ["anndata","tidy","dict"]:
             raise ValueError('Please enter a valid output_type. anndata for'
@@ -906,24 +970,33 @@ class GemmaPy(object):
         return out
 
     def get_differential_expression_values(self, 
-                                           dataset:T.Optional[T.Union[str,int]] = None, 
-                                           result_sets:T.Optional[T.List[T.Union[str,int]]] = None,
-                                           readable_contrasts = False, 
-                                           **kwargs):
-        """Retrieves the differential expression resultSet(s) associated with the dataset.
+                                           dataset:Optional[str|int] = None, 
+                                           result_sets:Optional[List[str|int]] = None,
+                                           readable_contrasts:bool = False, 
+                                           **kwargs)->List[DataFrame]:
+        """
+        Retrieves the differential expression resultSet(s) associated with the dataset.
         If there is more than one resultSet, use get_result_sets() to see the options
         and get the ID you want. Alternatively, you can query the resultSet directly
         if you know its ID beforehand.
-
-        :param str | int dataset: (optional) A dataset identifier.
-        :param int result_sets: (optional) result set identifiers. If a dataset
+        
+        :param dataset: A dataset identifier, defaults to None
+        :type dataset: Optional[str|int], optional
+        :param result_sets: result set identifiers. If a dataset
           is not provided, all result sets will be downloaded. If it is provided
-          it will only be used to ensure all result sets belong to the dataset.
-        :param bool readable_contrasts: (optional) If False (default), the returned columns
+          it will only be used to ensure all result sets belong to the dataset, defaults to None
+        :type result_sets: Optional[List[str|int]], optional
+        :param readable_contrasts: If False (default), the returned columns
           will use internal constrasts IDs as names. Details about the contrasts can be
           accessed using get_dataset_differential_expression_analyses(). If True IDs
-          will be replaced with human readable contrast information.
-        :return: list[DataFrame]
+          will be replaced with human readable contrast information, defaults to False
+        :type readable_contrasts: bool, optional
+        :param **kwargs: 
+        :type **kwargs: TYPE
+        :raises ValueError: DESCRIPTION
+        :return: A list of data frames with differential expression values per result set.
+        :rtype: List[DataFrame]
+
         """
         if dataset is not None and result_sets is not None:
             diffs =  self.get_dataset_differential_expression_analyses(dataset)
@@ -961,19 +1034,26 @@ class GemmaPy(object):
 
     # gemma_call unimplemented, not needed    
 
-    def get_all_pages(self,fun:T.Callable,step_size = 100,**kwargs):
+    def get_all_pages(self,fun:T.Callable,step_size:int = 100,**kwargs)->Union[list,DataFrame]:
         """
         A convenience function to allow easy iteration over paginated outputs.
         If the function returns a DataFrame output will be merged by the rows,
         if the function returns a list (eg. 'raw' functions) a concatanated list
         will be returned
         
-        :param Callable fun: A callable from gemmapy with offset and limit
+        
+        :param fun: A callable from gemmapy with offset and limit
           functions
-        :param int step_size: Size of individual calls to the server. 100 is 
-          the maximum value 
-        :return: list | DataFrame
+        :type fun: T.Callable
+        :param step_size: Size of individual calls to the server. 100 is 
+          the maximum value and the default.
+        :type step_size: int, optional
+        :param **kwargs: arguments for the callable fun
+        :return: A DataFrame or a list containing all the output depending on 
+          output of the callable
+        :rtype: Union[list,DataFrame]
         """
+
         out = []        
         poke_call = fun(limit =1,**kwargs)
         
@@ -993,16 +1073,21 @@ class GemmaPy(object):
 
     # filter_properties currently unimplemented. requires keeping the json around
     
-    def get_child_terms(self,terms:T.List[str]):
+    def get_child_terms(self,terms:List[str])->List[str]:
         """
         When querying for ontology terms, Gemma propagates these terms to 
         include any datasets with their child terms in the results. This 
         function returns these children for any number of terms, including all 
         children and the terms itself in the output vector
         
-        :param list[str] terms A list of ontology terms
-        :return: list[str]
+        :param terms: A list of ontology terms
+        :type terms: List[str]
+        :return: An array containing descendends of the annotation terms, 
+        including the terms themselves
+        :rtype: List[str]
+
         """
+        
         output = self.get_datasets(uris=terms)
         
         return re.findall(r'http.*?(?=,|\))',output.attributes['filter'])
