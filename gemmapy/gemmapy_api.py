@@ -709,12 +709,35 @@ class GemmaPy(object):
                            meta_type:str = 'text',
                            output_type:str = 'anndata',
                            **kwargs):
-        """Combines various endpoint calls to return an annotated data object
-        of the queried dataset, including expression data and the experimental
-        design.
+        """Return a data structure including all relevant data related to
+        gene expression in a dataset. Either returns an anndata object or 
+        a dictionary with all the needed fields.
 
-        :param str dataset: (required)
-        :return: AnnData class object
+        :param list[str|int] datasets: Numerical dataset identifier
+          dataset short names
+        :param list[str,int] genes: (optional) An ncbi gene identifier an, 
+          ensembl gene identifier which typically starts with ensg or an 
+          official gene symbol approved by hgnc
+        :param bool keep_non_specific: False by default. If True, results from 
+          probesets that are not specific to the gene will also be returned.
+        :param str consolidate: An option for gene expression level consolidation. 
+          If empty, will return every probe for the genes. "pickmax" to pick 
+          the probe with the highest expression, "pickvar" to pick the prove 
+          with the highest variance and "average" for returning the average 
+          expression
+        :param list[int] result_sets: (optional) Result set IDs of the a 
+          differential expression analysis. If provided, the output will only 
+          include the samples from the subset used in the result set ID. Must 
+          be the same length as datasets. 
+        :param list[int] contrasts: (optional) Contrast IDs of a differential 
+          expression contrast. Need result_sets to be defined to work. If 
+          provided, the output will only include samples relevant to the '
+          specific contrats. Must be the same length as datasets.
+        :param str meta_type: How should the metadata information should be 
+          included. Can be "text", "uri" or "both". "text" and "uri" options
+        :param str output_type: Type of the returned object. "anndata" for an 
+          AnnData object and "dict" for a dictionary.
+        :return: dict | AnnData class object
         """
         
         if output_type not in ["anndata","tidy","dict"]:
@@ -892,9 +915,11 @@ class GemmaPy(object):
         and get the ID you want. Alternatively, you can query the resultSet directly
         if you know its ID beforehand.
 
-        :param str dataset: (optional)
-        :param int resultSet: (optional)
-        :param bool readableContrasts: (optional) If False (default), the returned columns
+        :param str | int dataset: (optional) A dataset identifier.
+        :param int result_sets: (optional) result set identifiers. If a dataset
+          is not provided, all result sets will be downloaded. If it is provided
+          it will only be used to ensure all result sets belong to the dataset.
+        :param bool readable_contrasts: (optional) If False (default), the returned columns
           will use internal constrasts IDs as names. Details about the contrasts can be
           accessed using get_dataset_differential_expression_analyses(). If True IDs
           will be replaced with human readable contrast information.
@@ -937,6 +962,18 @@ class GemmaPy(object):
     # gemma_call unimplemented, not needed    
 
     def get_all_pages(self,fun:T.Callable,step_size = 100,**kwargs):
+        """
+        A convenience function to allow easy iteration over paginated outputs.
+        If the function returns a DataFrame output will be merged by the rows,
+        if the function returns a list (eg. 'raw' functions) a concatanated list
+        will be returned
+        
+        :param Callable fun: A callable from gemmapy with offset and limit
+          functions
+        :param int step_size: Size of individual calls to the server. 100 is 
+          the maximum value 
+        :return: list | DataFrame
+        """
         out = []        
         poke_call = fun(limit =1,**kwargs)
         
@@ -957,6 +994,15 @@ class GemmaPy(object):
     # filter_properties currently unimplemented. requires keeping the json around
     
     def get_child_terms(self,terms:T.List[str]):
+        """
+        When querying for ontology terms, Gemma propagates these terms to 
+        include any datasets with their child terms in the results. This 
+        function returns these children for any number of terms, including all 
+        children and the terms itself in the output vector
+        
+        :param list[str] terms A list of ontology terms
+        :return: list[str]
+        """
         output = self.get_datasets(uris=terms)
         
         return re.findall(r'http.*?(?=,|\))',output.attributes['filter'])
