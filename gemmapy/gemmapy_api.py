@@ -27,7 +27,7 @@ class GemmaPy(object):
     Main API class
     """
 
-    def __init__(self, auth=None, path="prod"):
+    def __init__(self, auth:list|tuple=None, path="prod"):
         """
         :param list auth: (optional) A list or tuple of credential strings, e.g.
           (your_username, your_password)
@@ -90,7 +90,7 @@ class GemmaPy(object):
                         offset:int = 0,
                         limit:int = 20,
                         sort:str = "+id",
-                        **kwargs):  # noqa: E501
+                        **kwargs)->DataFrame:  # noqa: E501
         """Retrieve all result sets matching the provided criteria
 
         :param str dataset: (required)
@@ -116,7 +116,7 @@ class GemmaPy(object):
 
     
     # /annotations/search, search_annotations --------
-    def search_annotations(self, query:T.List[str], **kwargs):  # noqa: E501
+    def search_annotations(self, query:List[str], **kwargs)->DataFrame:  # noqa: E501
         """Search for annotation tags
 
         :param list[str] query: (required)
@@ -127,7 +127,7 @@ class GemmaPy(object):
     
 
     # /datasets/{dataset}/annotations, get_dataset_annotations ----------
-    def get_dataset_annotations(self, dataset:T.Union[str,int], **kwargs):  # noqa: E501
+    def get_dataset_annotations(self, dataset:str|int, **kwargs)->DataFrame:  # noqa: E501
         """Retrieve the annotations analysis of a dataset
 
         :param str dataset: (required)
@@ -143,7 +143,7 @@ class GemmaPy(object):
     # this endpoint is not very useful since the names it comes with
     # is annoying to match names provided in the samples endpoint
     # make_design replaces this
-    def __get_dataset_design(self, dataset:T.Union[str,int], **kwargs):  # noqa: E501
+    def __get_dataset_design(self, dataset:str|int, **kwargs):  # noqa: E501
         """Retrieve the design of a dataset
 
         :param str dataset: (required)
@@ -160,8 +160,8 @@ class GemmaPy(object):
     
     # /datasets/{dataset}/analyses/differential, get_dataset_differential_expression_analyses ------
     def get_dataset_differential_expression_analyses(self, 
-                                                     dataset:T.Union[str,int],
-                                                     **kwargs):  # noqa: E501
+                                                     dataset:str|int,
+                                                     **kwargs)->DataFrame:  # noqa: E501
         """Retrieve the differential analyses of a dataset
 
         :param str dataset: (required)
@@ -183,7 +183,7 @@ class GemmaPy(object):
     
     # /datasets/{dataset}/data -----
     # deprecated, remove later
-    def get_dataset_expression(self, dataset:T.Union[int,str], **kwargs):  # noqa: E501
+    def get_dataset_expression(self, dataset:str|int, **kwargs)->DataFrame:  # noqa: E501
         """Retrieve the expression data of a dataset
 
         :param str dataset: (required)
@@ -199,11 +199,11 @@ class GemmaPy(object):
     
     # /datasets/{datasets}/expressions/genes/{genes}, get_dataset_expression_for_genes ------
     def get_dataset_expression_for_genes(self,
-                                         datasets:T.List[T.Union[str,int]],
-                                         genes:T.List[int],
+                                         datasets:List[str|int],
+                                         genes:List[int],
                                          keep_non_specific:bool = False,
                                          consolidate = None,
-                                         **kwargs):
+                                         **kwargs)->dict[int:DataFrame]:
         kwargs = vs.remove_nones(
             keep_non_specific = keep_non_specific,
             consolidate = consolidate,
@@ -220,7 +220,7 @@ class GemmaPy(object):
     
     
     # datasets/{dataset}/platforms ------
-    def get_dataset_platforms(self, dataset:T.Union[int,str], **kwargs):  # noqa: E501
+    def get_dataset_platforms(self, dataset:str|int, **kwargs)->DataFrame:  # noqa: E501
         """Retrieve the platform of a dataset
 
         :param str dataset: (required)
@@ -234,7 +234,7 @@ class GemmaPy(object):
     
     # datasets/{dataset}/data/processed ------
     
-    def get_dataset_processed_expression(self,dataset:T.Union[int,str],**kwargs):
+    def get_dataset_processed_expression(self,dataset:str|int,**kwargs)->DataFrame:
         response = self.raw.get_dataset_processed_expression(dataset, **kwargs)
         
         df = ps.process_expression(response,dataset,self)
@@ -243,7 +243,7 @@ class GemmaPy(object):
     
     # datasets/{dataset}/quantitationTypes get_dataset_quantitation_types ----------
     
-    def get_dataset_quantitation_types(self,dataset:T.Union[int,str],**kwargs):
+    def get_dataset_quantitation_types(self,dataset:int|str,**kwargs)->DataFrame:
         
         response = self.raw.get_dataset_quantitation_types(dataset, **kwargs)
         df = ps.process_QuantitationTypeValueObject(response)
@@ -252,8 +252,8 @@ class GemmaPy(object):
         return df
 
     # datasets/{dataset}/data/raw, get_dataset_raw_expression ---------
-    def get_dataset_raw_expression(self,dataset:T.Union[int,str],
-                                   quantitation_type:[int],**kwargs):
+    def get_dataset_raw_expression(self,dataset:int|str,
+                                   quantitation_type:[int],**kwargs)->DataFrame:
         
         kwargs = vs.remove_nones(
             quantitation_type = quantitation_type,
@@ -267,7 +267,7 @@ class GemmaPy(object):
     
     
     # datasets/{dataset}/samples, get_dataset_samples --------
-    def get_dataset_samples(self, dataset:T.Union[int,str], **kwargs):  # noqa: E501
+    def get_dataset_samples(self, dataset:int|str, **kwargs)->DataFrame:  # noqa: E501
         """Retrieve the samples of a dataset
 
         :param str dataset: (required)
@@ -281,14 +281,14 @@ class GemmaPy(object):
     # not implemented
     
     # datasets, get_datasets ------
-    def get_datasets(self,query:T.Optional[str] = None, 
-                     filter:T.Optional[str] = None, 
-                     taxa:T.Optional[T.List[str]] = None, 
-                     uris:T.Optional[T.List[str]] = None,
+    def get_datasets(self,query:Optional[str] = None, 
+                     filter:Optional[str] = None, 
+                     taxa:Optional[List[str]] = None, 
+                     uris:Optional[List[str]] = None,
                      offset:int = 0,
                      limit:int = 20,
                      sort:str = "+id",
-                     **kwargs):
+                     **kwargs)->DataFrame:
         
         filter = vs.add_to_filter(filter, 'allCharacteristics.valueUri', uris)
         filter = vs.add_to_filter(filter, 'taxon.commonName', taxa)
@@ -313,14 +313,14 @@ class GemmaPy(object):
     
     
     # datasets/{datasets}, get_datasets_by_ids -----
-    def get_datasets_by_ids(self, dataset:T.List[T.Union[str,int]],
-                            filter:T.Optional[str] = None, 
-                            taxa:T.Optional[T.List[str]] = None, 
-                            uris:T.Optional[T.List[str]] = None,
+    def get_datasets_by_ids(self, dataset:List[str|int],
+                            filter:Optional[str] = None, 
+                            taxa:Optional[List[str]] = None, 
+                            uris:Optional[List[str]] = None,
                             offset:int = 0,
                             limit:int = 20,
                             sort:str = "+id",
-                            **kwargs):  # noqa: E501
+                            **kwargs)->DataFrame:  # noqa: E501
         """Retrieve datasets by their identifiers
 
         :param list[str] dataset: (required)
@@ -359,7 +359,7 @@ class GemmaPy(object):
 
     # genes/{gene}/goTerms -------   
     
-    def get_gene_go_terms(self, gene:T.Union[str,int], **kwargs):  # noqa: E501
+    def get_gene_go_terms(self, gene:str|int, **kwargs)->DataFrame:  # noqa: E501
         """Retrieve the GO terms associated to a gene
 
         :param str gene: (required)
@@ -372,7 +372,7 @@ class GemmaPy(object):
     
     # genes/{gene}/locations, get_gene_locations ----
     
-    def get_gene_locations(self, gene:T.Union[str,int], **kwargs):  # noqa: E501
+    def get_gene_locations(self, gene:str|int, **kwargs)->DataFrame:  # noqa: E501
         """Retrieve the physical locations of a given gene
 
         :param str gene: (required)
@@ -384,10 +384,10 @@ class GemmaPy(object):
     
     # genes/{gene}/probes, get_gene_probes -----
     
-    def get_gene_probes(self, gene:T.Union[str,int],
+    def get_gene_probes(self, gene:str|int,
                         offset:int = 0,
                         limit:int = 20,
-                        **kwargs):  # noqa: E501
+                        **kwargs)->DataFrame:  # noqa: E501
         """Retrieve the probes associated to a genes
 
         :param str gene: (required)
@@ -407,7 +407,7 @@ class GemmaPy(object):
         
     # genes/{genes}, get_genes-------
 
-    def get_genes(self, genes, **kwargs):  # noqa: E501
+    def get_genes(self, genes, **kwargs)->DataFrame:  # noqa: E501
         """Retrieve genes matching a gene identifier
 
         :param list[str] genes: (required)
@@ -429,7 +429,7 @@ class GemmaPy(object):
     # annotType = c("bioProcess", "noParents", "allParents")
     # This feature is not implemented here, the return value corresponds to "noParents"
     # (as of 2022-05-19)
-    def get_platform_annotations(self, platform, **kwargs):
+    def get_platform_annotations(self, platform:int|str, **kwargs)->DataFrame:
         """Retrieve the annotations of a given platform
 
         :param str platform: (required)
@@ -444,10 +444,10 @@ class GemmaPy(object):
 
     # platform/{platform}/datasets, get_platform_datasets ----
 
-    def get_platform_datasets(self, platform:T.Union[str,int],
+    def get_platform_datasets(self, platform:str|int,
                               offset:int = 0,
                               limit:int = 20,
-                              **kwargs):  # noqa: E501
+                              **kwargs)->DataFrame:  # noqa: E501
         """Retrieve all experiments within a given platform
 
         :param str platform: (required)
@@ -471,11 +471,11 @@ class GemmaPy(object):
     
     # platforms/{platform}/elements/{probe}/genes, get_platform_element_genes ----
 
-    def get_platform_element_genes(self, platform:T.Union[str,int], 
-                                   probe:T.Union[str,int],
+    def get_platform_element_genes(self, platform:str|int, 
+                                   probe:str|int,
                                    offset:int = 0,
                                    limit:int = 20,
-                                   **kwargs):  # noqa: E501
+                                   **kwargs)->DataFrame:  # noqa: E501
         """Retrieve the genes associated to a probe in a given platform
 
         :param str platform: (required)
@@ -500,11 +500,11 @@ class GemmaPy(object):
     # unimplemented in R but easier to keep things separate here
     def get_platforms(self,
                       filter:str = None,
-                      taxa:T.List[str] = None,
+                      taxa:List[str] = None,
                       offset:int=0,
                       limit:int = 20,
                       sort:str="+id",
-                      **kwargs):
+                      **kwargs)->DataFrame:
         
         
         filter = vs.add_to_filter(filter,"taxon.commonName",taxa)
@@ -521,13 +521,13 @@ class GemmaPy(object):
         return df
 
     # platforms/{platform}, get_platforms_by_ids ---- 
-    def get_platforms_by_ids(self, platforms:T.List[T.Union[str,int]], 
+    def get_platforms_by_ids(self, platforms:List[str|int], 
                              filter:str = None,
-                             taxa:T.List[str] = None,
+                             taxa:List[str] = None,
                              offset:int=0,
                              limit:int = 20,
                              sort:str="+id",
-                             **kwargs):  # noqa: E501
+                             **kwargs)->DataFrame:  # noqa: E501
         """Retrieve all platforms matching a set of platform identifiers
 
         :param list[str] platform: (required)
@@ -557,19 +557,25 @@ class GemmaPy(object):
     
     def search_gemma(self,
                      query:str,
-                     taxon:T.Optional[T.Union[str,int]]=None,
-                     platform:T.Optional[T.Union[str,int]] = None,
+                     taxon:Optional[str|int]=None,
+                     platform:Optional[str|int] = None,
                      limit:int = 100,
                      result_type:str = "experiment",
-                     **kwargs):
+                     **kwargs)->list:
         """
         
-        :param query: DESCRIPTION
+        :param query: The search query. Either plain text ('traumatic'), or an 
+          ontology term URI ('http://purl.obolibrary.org/obo/UBERON_0002048').
+          Datasets that contain the given string in their short of full name
+          will also be matched. Can be multiple identifiers separated by commas.
         :type query: str
-        :param taxon: DESCRIPTION, defaults to None
-        :type taxon: T.Optional[T.Union[str,int]], optional
-        :param platform: DESCRIPTION, defaults to None
-        :type platform: T.Optional[T.Union[str,int]], optional
+        :param taxon: A numerical taxon identifier or an ncbi taxon identifier
+          or a taxon identifier that matches either its scientific or common
+          name, defaults to None
+        :type taxon: Optional[str|int], optional
+        :param platform: A platform numerical identifier or a platform short 
+          name, defaults to None
+        :type platform: Optional[str|int], optional
         :param limit: DESCRIPTION, defaults to 100
         :type limit: int, optional
         :param result_type: DESCRIPTION, defaults to "experiment"
@@ -599,7 +605,7 @@ class GemmaPy(object):
     # unimplemented, redundant with get_gene_locations
 
     # taxa ----
-    def get_taxa(self, **kwargs):
+    def get_taxa(self, **kwargs)->DataFrame:
         response =  self.raw.get_taxa(**kwargs)
         
         df = ps.process_taxon(response.data)
@@ -618,17 +624,23 @@ class GemmaPy(object):
     # get_platform_annotations is the default get_platform_annotations
     
 
-    def make_design(self,samples:pd.DataFrame,meta_type:str = 'text'):
+    def make_design(self,samples:DataFrame,meta_type:str = 'text')->DataFrame:
         """
-        
-        :param samples: DESCRIPTION
-        :type samples: pd.DataFrame
-        :param meta_type: DESCRIPTION, defaults to 'text'
+        Using on the output of get_dataset_samples, this function creates a
+        simplified design table, granting one column to each experimental variable
+
+
+        :param samples: An output from get_dataset_samples.
+        :type samples: DataFrame
+        :param meta_type: Type of metadata to include in the output. "text",
+          "uri" or "both", defaults to 'text'
         :type meta_type: str, optional
-        :return: DESCRIPTION
-        :rtype: TYPE
+        :return: A DataFrame including the design table for the dataset
+        :rtype: DataFrame
 
         """
+        
+        
         categories = pd.concat([x[["factor_ID","factor_category","factor_category_URI"]] 
                                 for x in samples.sample_factor_values],
                   ignore_index = True).drop_duplicates()
@@ -753,53 +765,45 @@ class GemmaPy(object):
           ensembl gene identifier which typically starts with ensg or an 
           official gene symbol approved by hgnc, defaults to None
         :type genes: Optional[List[str|int]], optional
-        :param keep_non_specific: DESCRIPTION, defaults to False
+        :param keep_non_specific: If True, results from 
+          probesets that are not specific to the gene will also be returned,
+          defaults to False
         :type keep_non_specific: TYPE, optional
-        :param consolidate: DESCRIPTION, defaults to None
-        :type consolidate: Optional[str], optional
-        :param result_sets: DESCRIPTION, defaults to None
-        :type result_sets: Optional[List[int]], optional
-        :param contrasts: DESCRIPTION, defaults to None
-        :type contrasts: Optional[List[str]], optional
-        :param meta_type: DESCRIPTION, defaults to 'text'
-        :type meta_type: str, optional
-        :param output_type: DESCRIPTION, defaults to 'anndata'
-        :type output_type: str, optional
-        :param **kwargs: DESCRIPTION
-        :type **kwargs: TYPE
-        :raises ValueError: DESCRIPTION
-        :return: DESCRIPTION
-        :rtype: dict[int:dict|AnnData]
-
-        """
-        
-        
-        """
-
-        :param list[str|int] datasets: 
-        :param Optional[list[str,int]] genes: 
-        :param bool keep_non_specific: False by default. If True, results from 
-          probesets that are not specific to the gene will also be returned.
-        :param Optional[str] consolidate: An option for gene expression level consolidation. 
+        :param consolidate: DESCRIPTION, An option for gene expression level consolidation. 
           If empty, will return every probe for the genes. "pickmax" to pick 
           the probe with the highest expression, "pickvar" to pick the prove 
           with the highest variance and "average" for returning the average 
-          expression
-        :param Optional[list[int]] result_sets: Result set IDs of the a 
+          expression to None
+        :type consolidate: Optional[str], optional
+        :param result_sets: Result set IDs of the a 
           differential expression analysis. If provided, the output will only 
           include the samples from the subset used in the result set ID. Must 
-          be the same length as datasets. 
-        :param Optional[list[int]] contrasts: Contrast IDs of a differential 
+          be the same length as datasets, defaults to None
+        :type result_sets: Optional[List[int]], optional
+        :param contrasts: Contrast IDs of a differential 
           expression contrast. Need result_sets to be defined to work. If 
           provided, the output will only include samples relevant to the '
           specific contrats. Must be the same length as datasets.
         :param str meta_type: How should the metadata information should be 
-          included. Can be "text", "uri" or "both". "text" and "uri" options
-        :param str output_type: Type of the returned object. "anndata" for an 
-          AnnData object and "dict" for a dictionary populated with DataFrames.
-        :return: dict | AnnData class object
+          included. Can be "text", "uri" or "both". "text" and "uri" options, defaults to None
+        :type contrasts: Optional[List[str]], optional
+        :param meta_type: How should the metadata information should be 
+          included. Can be "text", "uri" or "both". "text" and "uri" options, defaults to 'text'
+        :type meta_type: str, optional
+        :param output_type: Type of the returned object. "anndata" for an 
+          AnnData object and "dict" for a dictionary populated with DataFrames,
+          defaults to 'anndata'
+        :type output_type: str, optional
+        :param **kwargs: DESCRIPTION
+        :type **kwargs: TYPE
+        :raises ValueError: DESCRIPTION
+        :return: A dictionary containing AnnData objects or nested dictionaries
+          that contain expression and sample metada of the requested experiments
+        :rtype: dict[int:dict|AnnData]
+
         """
         
+
         
         
 
