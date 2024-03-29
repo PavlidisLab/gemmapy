@@ -60,6 +60,10 @@ def break_list(lis:list):
 # to prevent small changes in the api from preventing the
 # whole functions from working
 def access_field(x,*fields,na_type = np.nan):
+    if type(x) is dict:
+        return access_field_dict(x,*fields,na_type = na_type)
+    
+    
     target = None
     target_set = False
     for field in fields:
@@ -78,6 +82,23 @@ def access_field(x,*fields,na_type = np.nan):
     
     return target
 
+def access_field_dict(x,*fields,na_type = np.nan):
+    target = None
+    target_set = False
+    for field in fields:
+        if not target_set and field in x.keys():
+            target = x[field]
+            target_set= True
+        elif target is None:
+            return na_type
+        elif type(target) is dict and field in target.keys():
+            target = target[field]
+        else:
+            return na_type
+        
+        if target is None:
+            return na_type
+        return target
 
 def field_in_list(x:list,*fields, blank_series =  pd.Series(dtype='str'), na_type = np.nan):
     if x is None or len(x)==0:
