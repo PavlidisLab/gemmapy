@@ -1077,6 +1077,48 @@ class GemmaPy(object):
 
     # filter_properties currently unimplemented. requires keeping the json around
     
+    def filter_properties(self, output_type:str = 'DataFrame')->dict|DataFrame:
+        
+        d = self.raw.api_client.rest_client.GET("https://gemma.msl.ubc.ca/rest/v2/openapi.json").urllib3_response
+        api_file = json.loads(d.data)
+        
+        dataset_filter = api_file["components"]["schemas"]["FilterArgExpressionExperiment"]["x-gemma-filterable-properties"]
+        
+        platform_filter = api_file["components"]["schemas"]["FilterArgArrayDesign"]["x-gemma-filterable-properties"]
+        
+        result_set_filter = api_file["components"]["schemas"]["FilterArgExpressionAnalysisResultSet"]["x-gemma-filterable-properties"]
+        
+        if output_type == 'DataFrame':
+            return {
+                "dataset":pd.DataFrame({
+                    "name": sub.field_in_list(dataset_filter,'name'),
+                    "type": sub.field_in_list(dataset_filter,'type'),
+                    "description": sub.field_in_list(dataset_filter,'description')
+                    }),
+                "platform":pd.DataFrame({
+                    "name": sub.field_in_list(platform_filter,'name'),
+                    "type": sub.field_in_list(platform_filter,'type'),
+                    "description": sub.field_in_list(platform_filter,'description')
+                    }),
+                "result_set":pd.DataFrame({
+                    "name": sub.field_in_list(result_set_filter,'name'),
+                    "type": sub.field_in_list(result_set_filter,'type'),
+                    "description": sub.field_in_list(result_set_filter,'description')
+                    })
+                }
+        elif output_type == 'dict':
+            return {
+                "dataset": {x['name']:{"type":x['type'],
+                                              "description":sub.access_field(x,'description',None)} for x in dataset_filter},
+                'platform':{x['name']:{"type":x['type'],
+                                              "description":sub.access_field(x,'description',None)} for x in platform_filter},
+                'result_set':{x['name']:{"type":x['type'],
+                                              "description":sub.access_field(x,'description',None)} for x in result_set_filter}
+                
+                }
+            
+        
+    
     def get_child_terms(self,terms:List[str])->List[str]:
         """
         When querying for ontology terms, Gemma propagates these terms to 
