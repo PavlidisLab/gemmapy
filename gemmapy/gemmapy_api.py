@@ -8,7 +8,6 @@ from   gemmapy import sdk
 from gemmapy import processors as ps
 from gemmapy import validators as vs
 from gemmapy import subprocessors as sub
-
 import typing as T
 from typing import Optional, List, Callable,Union
 from pandas import DataFrame
@@ -19,6 +18,7 @@ from anndata import AnnData
 from io import StringIO
 import warnings
 import re
+import json
 
 logger = logging.getLogger(__name__)
 
@@ -527,7 +527,34 @@ class GemmaPy(object):
                              offset:int=0,
                              limit:int = 20,
                              sort:str="+id",
-                             **kwargs)->DataFrame:  # noqa: E501
+                             **kwargs)->DataFrame:
+        
+        """Retrieve all platforms matching a set of platform identifiers
+
+
+        
+        :param platforms: Platform numerical identifiers or platform short names.
+        :type platforms: List[str|int]
+        :param filter: DESCRIPTION, defaults to None
+        :type filter: str, optional
+        :param taxa: DESCRIPTION, defaults to None
+        :type taxa: List[str], optional
+        :param offset: DESCRIPTION, defaults to 0
+        :type offset: int, optional
+        :param limit: DESCRIPTION, defaults to 20
+        :type limit: int, optional
+        :param sort: DESCRIPTION, defaults to "+id"
+        :type sort: str, optional
+        :param **kwargs: DESCRIPTION
+        :type **kwargs: TYPE
+        :return: DESCRIPTION
+        :rtype: DataFrame
+
+        """
+        
+        
+        
+        
         """Retrieve all platforms matching a set of platform identifiers
 
         :param list[str] platform: (required)
@@ -561,8 +588,11 @@ class GemmaPy(object):
                      platform:Optional[str|int] = None,
                      limit:int = 100,
                      result_type:str = "experiment",
-                     **kwargs)->list:
+                     **kwargs)->list[sdk.SearchResultValueObjectObject]:
+
+        
         """
+        Search everything in Gemma
         
         :param query: The search query. Either plain text ('traumatic'), or an 
           ontology term URI ('http://purl.obolibrary.org/obo/UBERON_0002048').
@@ -576,14 +606,18 @@ class GemmaPy(object):
         :param platform: A platform numerical identifier or a platform short 
           name, defaults to None
         :type platform: Optional[str|int], optional
-        :param limit: DESCRIPTION, defaults to 100
+        :param limit: Defaults to 100 with a maximum value of 2000. Limits the
+        number of returned results. Note that this function does not support
+        pagination., defaults to 100
         :type limit: int, optional
-        :param result_type: DESCRIPTION, defaults to "experiment"
+        :param result_type: The kind of results that should be included in the
+        output. Can be "experiment", "gene", "platform" or a long object type name,
+        documented in the API documentation., defaults to "experiment"
         :type result_type: str, optional
-        :param **kwargs: DESCRIPTION
-        :type **kwargs: TYPE
-        :return: DESCRIPTION
-        :rtype: TYPE
+        :param **kwargs: Additional arguments to raw.search
+        :return: A list containing the results. Actual results are under the 
+        result_object component as dicts
+        :rtype: list[sdk.SearchResultValueObjectObject]
 
         """
         
@@ -606,6 +640,16 @@ class GemmaPy(object):
 
     # taxa ----
     def get_taxa(self, **kwargs)->DataFrame:
+        """
+        Get all taxa within Gemma
+        
+        :param **kwargs: Additional arguments to raw.get_taxa
+        :return: A DataFrame including the names, IDs and database information
+          about the taxons
+        :rtype: DataFrame
+
+        """
+        
         response =  self.raw.get_taxa(**kwargs)
         
         df = ps.process_taxon(response.data)
@@ -984,6 +1028,30 @@ class GemmaPy(object):
         and get the ID you want. Alternatively, you can query the resultSet directly
         if you know its ID beforehand.
         
+        In Gemma each result set corresponds to the estimated effects 
+        associated with a single factor in the design, and each can have 
+        multiple contrasts (for each level compared to baseline). Thus a 
+        dataset with a 2x3 factorial design will have two result sets, one of 
+        which will have one contrast, and one having two contrasts.
+        
+        The methodology for differential expression is explained in `Curation 
+        of over 10000 transcriptomic studies to enable data reuse <https://doi.org/10.1093/database/baab006>`_.
+        Briefly, differential expression analysis is performed on the dataset
+        based on the annotated experimental design with up two three potentially
+        nested factors. Gemma attempts to automatically assign baseline conditions
+        for each factor. In the absence of a clear control condition, a baseline 
+        is arbitrarily selected. A generalized linear model with empirical Bayes
+        shrinkage of t-statistics is fit to the data for each platform element 
+        (probe/gene) using an implementation of the limma algorithm. For 
+        RNA-seq data, we use weighted regression, applying the voom algorithm
+        to compute weights from the mean–variance relationship of the data. 
+        Contrasts of each condition are then computed compared to the selected 
+        baseline. In some situations, Gemma will split the data into subsets for
+        analysis. A typical such situation is when a ‘batch’ factor is present 
+        and confounded with another factor, the subsets being determined by the
+        levels of the confounding factor.
+        
+        
         :param dataset: A dataset identifier, defaults to None
         :type dataset: Optional[str|int], optional
         :param result_sets: result set identifiers. If a dataset
@@ -997,7 +1065,8 @@ class GemmaPy(object):
         :type readable_contrasts: bool, optional
         :param **kwargs: 
         :type **kwargs: TYPE
-        :raises ValueError: DESCRIPTION
+        :raises ValueError: Will return a value error if neither result_sets nor a dataset
+        is provided
         :return: A list of data frames with differential expression values per result set.
         :rtype: List[DataFrame]
 
@@ -1038,7 +1107,7 @@ class GemmaPy(object):
 
     # gemma_call unimplemented, not needed    
 
-    def get_all_pages(self,fun:T.Callable,step_size:int = 100,**kwargs)->Union[list,DataFrame]:
+    def get_all_pages(self,fun:Callable,step_size:int = 100,**kwargs)->Union[list,DataFrame]:
         """
         A convenience function to allow easy iteration over paginated outputs.
         If the function returns a DataFrame output will be merged by the rows,
@@ -1048,7 +1117,7 @@ class GemmaPy(object):
         
         :param fun: A callable from gemmapy with offset and limit
           functions
-        :type fun: T.Callable
+        :type fun: Callable
         :param step_size: Size of individual calls to the server. 100 is 
           the maximum value and the default.
         :type step_size: int, optional
