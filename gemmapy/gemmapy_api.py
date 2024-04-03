@@ -67,12 +67,17 @@ class GemmaPy(object):
     # /resultSets/{resultSet_}, get_result_set_as_tsv ------ 
     # made internal to not cause unneeded confusion
     # use get_differential_expression_values instead
-    def __get_result_set(self, result_set:int, **kwargs):  # noqa: E501
-        """Retrieve a single analysis result set by its identifier
-
-        :param int result_set: (required)
-        :return: DataFrame
+    def __get_result_set(self, result_set:int, **kwargs):
         """
+        
+        :param result_set: DESCRIPTION
+        :type result_set: int
+        :param **kwargs: Additional arguments to pass to raw.get_result_set_as_tsv
+        :return: DESCRIPTION
+        :rtype: TYPE
+
+        """
+        
         response = self.raw.get_result_set_as_tsv(result_set, **kwargs)
         
         df = ps.process_de_matrix(response, result_set,self)
@@ -90,7 +95,61 @@ class GemmaPy(object):
                         offset:int = 0,
                         limit:int = 20,
                         sort:str = "+id",
-                        **kwargs)->DataFrame:  # noqa: E501
+                        **kwargs)->DataFrame:
+        """Returns queried result set
+
+        Output and usage of this function is mostly identical to 
+        get_dataset_differential_expression_analyses. The principal difference
+        being the ability to restrict your result sets, being able to query 
+        across multiple datasets and being able to use the filter argument to 
+        search based on result set properties.
+
+
+        
+        :param datasets: A numerical dataset identifier or a dataset short name, defaults to None
+        :type datasets: T.Optional[T.List[T.Union[str,int]]], optional
+        :param result_sets: 	A result set identifier. Note that result set identifiers are not static and can change when Gemma re-runs analyses internally. Whem using these as inputs, try to make sure you access a currently existing result set ID by basing them on result sets returned for a particular dataset or filter used in get_result_sets, defaults to None
+        :type result_sets: T.Optional[T.List[int]], optional
+        :param filter: Filter results by matching expression. Use 
+        filter_properties function to get a list of all available parameters. 
+        These properties can be combined using "and" "or" clauses and may 
+        contain common operators such as "=", "<" or "in". (e.g. 
+        "taxon.commonName = human", "taxon.commonName in (human,mouse), 
+        "id < 1000"), defaults to None
+        :type filter: str, optional
+        :param offset: The offset of the first retrieved result., defaults to 0
+        :type offset: int, optional
+        :param limit: Limits the result to specified amount of objects.
+        Has a maximum value of 100. Use together with offset and the 
+        total_elements attribute in the output to compile all data if needed.
+        Alternatively get_all_pages function can be used with all functions
+        including offset and limit parameters, defaults to 20
+        :type limit: int, optional
+        :param sort: Order results by the given property and direction. The '+'
+        sign indicate ascending order whereas the '-' indicate descending,
+        defaults to "+id"
+        :type sort: str, optional
+        :param **kwargs: Additional arguments to pass to raw.get_result_sets
+        :return: A DataFrame with information about the queried result sets. 
+        Note that this function does not return differential expression values
+        themselves
+        
+        The fields of the DataFrame are:
+            - result_ID: Result set ID of the differential expression analysis. May represent multiple factors in a single model.
+            - contrast_ID: Id of the specific contrast factor. Together with the result.ID they uniquely represent a given contrast.
+            - experiment_ID: Id of the source experiment
+            - factor_category: Category for the contrast
+            - factor_category_URI: URI for the baseline category
+            - factor_ID: ID of the factor
+            - baseline_factors: Characteristics of the baseline. This field is a DataFrame
+            - experimental_factors: Characteristics of the experimental group. This field is a DataFrame
+            - is_subset: True if the result set belong to a subset, False if not. Subsets are created when performing differential expression to avoid unhelpful comparisons.
+            - subset_factor: Characteristics of the subset. This field is a DataFrame
+        
+        :rtype: DataFrame
+
+        """
+        
         """Retrieve all result sets matching the provided criteria
 
         :param str dataset: (required)
@@ -116,23 +175,48 @@ class GemmaPy(object):
 
     
     # /annotations/search, search_annotations --------
-    def search_annotations(self, query:List[str], **kwargs)->DataFrame:  # noqa: E501
-        """Search for annotation tags
-
-        :param list[str] query: (required)
-        :rtype: ResponseDataObjectListAnnotationSearchResultValueObject
+    def search_annotations(self, query:List[str], **kwargs)->DataFrame:
         """
+        Search for annotation tags
+
+
+        :param query: The search query
+        :type query: List[str]
+        :param **kwargs: Additional arguments to pass to raw.search_annotations
+        :return: A DataFrame with annotations matching the given identifiers. 
+        The fields of the DataFrame are:
+            - category_name: Category that the annotation belongs to
+            - category_URI: URI for the category_name
+            - value_name: Annotation term
+            - value_URI: URI for the value_name
+        :rtype: DataFrame
+
+        """
+
         response = self.raw.search_annotations(query=query, **kwargs)
         return ps.process_search_annotations(response.data)
     
 
     # /datasets/{dataset}/annotations, get_dataset_annotations ----------
-    def get_dataset_annotations(self, dataset:str|int, **kwargs)->DataFrame:  # noqa: E501
-        """Retrieve the annotations analysis of a dataset
-
-        :param str dataset: (required)
-        :rtype: ResponseDataObjectSetAnnotationValueObject
+    def get_dataset_annotations(self, dataset:str|int, **kwargs)->DataFrame:
         """
+        Retrieve the annotations of a dataset
+
+
+        :param dataset: 	A numerical dataset identifier or a dataset short name
+        :type dataset: str|int
+        :param **kwargs: Additional arguments to pass to raw.get_dataset_annotations
+        :return: A DataFrame with information about the annotations of the queried dataset. 
+        The fields of the DataFrame are:
+            - class_name: Name of the annotation class (e.g. organism part)
+            - class_URI: URI for the annotation class
+            - term_name: Name of the annotation term (e.g. lung)
+            - term_URI: URI for the annotation term
+            - object_class: Class of object that the term originated from.       
+        :rtype: DataFrame
+
+        """
+
         response = self.raw.get_dataset_annotations(dataset, **kwargs)
         df = ps.process_annotations(response.data)
         ps.attach_attributes(df, response.to_dict())
@@ -143,12 +227,18 @@ class GemmaPy(object):
     # this endpoint is not very useful since the names it comes with
     # is annoying to match names provided in the samples endpoint
     # make_design replaces this
-    def __get_dataset_design(self, dataset:str|int, **kwargs):  # noqa: E501
-        """Retrieve the design of a dataset
-
-        :param str dataset: (required)
-        :return: DataFrame
+    def __get_dataset_design(self, dataset:str|int, **kwargs):
         """
+        
+        :param dataset: DESCRIPTION
+        :type dataset: str|int
+        :param **kwargs: Additional arguments to pass to raw.get_dataset_design
+        :type **kwargs: TYPE
+        :return: DESCRIPTION
+        :rtype: TYPE
+
+        """
+
         response = self.raw.get_dataset_design(dataset, **kwargs)
         df = ps.process_dataset_design(response)
         
@@ -161,13 +251,35 @@ class GemmaPy(object):
     # /datasets/{dataset}/analyses/differential, get_dataset_differential_expression_analyses ------
     def get_dataset_differential_expression_analyses(self, 
                                                      dataset:str|int,
-                                                     **kwargs)->DataFrame:  # noqa: E501
-        """Retrieve the differential analyses of a dataset
+                                                     **kwargs)->DataFrame:
+        """Retrieve annotations and surface level stats for a dataset's differential analyses
+        
+        :param dataset: A numerical dataset identifier or a dataset short name
+        :type dataset: str|int
+        :param **kwargs: Additional arguments to pass to raw.get_dataset_differential_expression_analyses
+        :return: A data table with information about the differential expression
+        analysis of the queried dataset. Note that this funciton does not return 
+        differential expression values themselves. Use
+        get_differential_expression_values to get differential expression
+        values (see examples).
+        
+        The fields of the DataFrame are:
+            - result_ID: Result set ID of the differential expression analysis. May represent multiple factors in a single model.
+            - contrast_ID: Id of the specific contrast factor. Together with the result.ID they uniquely represent a given contrast.
+            - experiment_ID: Id of the source experiment
+            - factor_category: Category for the contrast
+            - factor_category_URI: URI for the contrast category
+            - factor_ID: ID of the factor
+            - baseline_factors: Characteristics of the baseline. This field is a DataFrame
+            - experimental_factors: Characteristics of the experimental group. This field is a DataFrame
+            - isSubset: True if the result set belong to a subset, False if not. 
+            Subsets are created when performing differential expression to avoid 
+            unhelpful comparisons.
+            - subset_factor: Characteristics of the subset. This field is a DataFrame
+            - probes_analyzed: Number of probesets represented in the contrast
+            - genes_analyzed: Number of genes represented in the contrast
+        :rtype: DataFrame
 
-        :param str dataset: (required)
-        :param int offset: The offset of the first retrieved result
-        :param int limit: Limit the number of results retrieved
-        :rtype: ResponseDataObjectListDifferentialExpressionAnalysisValueObject
         """
         response = self.raw.get_dataset_differential_expression_analyses(dataset,
                                                                          **kwargs)
@@ -183,12 +295,9 @@ class GemmaPy(object):
     
     # /datasets/{dataset}/data -----
     # deprecated, remove later
-    def get_dataset_expression(self, dataset:str|int, **kwargs)->DataFrame:  # noqa: E501
-        """Retrieve the expression data of a dataset
-
-        :param str dataset: (required)
-        :param bool filter: Filter results by matching the expression
-        :return: DataFrame
+    def get_dataset_expression(self, dataset:str|int, **kwargs)->DataFrame:
+        """
+        Deprecated in favour of get_dataset_expression
         """
         warnings.warn('get_dataset_expression is deprecated, please use get_dataset_processed_expression instead')
         
@@ -204,6 +313,30 @@ class GemmaPy(object):
                                          keep_non_specific:bool = False,
                                          consolidate = None,
                                          **kwargs)->dict[int:DataFrame]:
+        """Retrieve the expression data matrix of a set of datasets and genes
+
+
+        :param datasets: A numerical dataset identifier or a dataset short name
+        :type datasets: List[str|int]
+        :param genes: An ensembl gene identifier which typically starts with 
+        ensg or an ncbi gene identifier or an official gene symbol approved by 
+        hgnc
+        :type genes: List[int]
+        :param keep_non_specific: If True, results from probesets that are not
+        specific to the gene will also be returned., defaults to False
+        :type keep_non_specific: bool, optional
+        :param consolidate: An option for gene expression level consolidation. 
+        If empty, will return every probe for the genes. "pickmax" to pick the
+        probe with the highest expression, "pickvar" to pick the prove with the 
+        highest variance and "average" for returning the average expression, 
+        defaults to None
+        :type consolidate: TYPE, optional
+        :param **kwargs: Additional arguments to pass to raw.get_dataset_expression_for_genes
+        :return: A dict of DataFrames keyed to dataset ids
+        :rtype: dict[int:DataFrame]
+
+        """
+        
         kwargs = vs.remove_nones(
             keep_non_specific = keep_non_specific,
             consolidate = consolidate,
@@ -220,11 +353,29 @@ class GemmaPy(object):
     
     
     # datasets/{dataset}/platforms ------
-    def get_dataset_platforms(self, dataset:str|int, **kwargs)->DataFrame:  # noqa: E501
-        """Retrieve the platform of a dataset
+    def get_dataset_platforms(self, dataset:str|int, **kwargs)->DataFrame:
+        """
+        
+        :param dataset: A numerical dataset identifier or a dataset short name
+        :type dataset: str|int
+        :param **kwargs: Additional arguments to pass to raw.get_dataset_platforms
+        :return: 
+            A DataFrame with information about the platforms.
+            
+            The fields of the DataFrame are:
+                
+            - platform_ID: Id number of the platform given by Gemma
+            - platform_type: Type of the platform.
+            - platform_description: Free text field describing the platform.
+            - platform_troubled: Whether the platform is marked as troubled by a Gemma curator.
+            - taxon_name: Name of the species
+            - taxon_scientific: Scientific name for the taxon
+            - taxon_ID: Internal identifier given to the species by Gemma
+            - taxon_NCBI: NCBI ID of the taxon
+            - taxon_database_name: Underlying database used in Gemma for the taxon
+            - taxon_database_ID: ID of the underlying database used in Gemma for the taxon  
+        :rtype: DataFrame
 
-        :param str dataset: (required)
-        :rtype: ResponseDataObjectListArrayDesignValueObject
         """
         response = self.raw.get_dataset_platforms(dataset, **kwargs)
         df = ps.process_platforms(response.data)
@@ -235,6 +386,16 @@ class GemmaPy(object):
     # datasets/{dataset}/data/processed ------
     
     def get_dataset_processed_expression(self,dataset:str|int,**kwargs)->DataFrame:
+        """Retrieve processed expression data of a dataset
+
+        
+        :param dataset:  numerical dataset identifier or a dataset short name
+        :type dataset: str|int
+        :param **kwargs: Additional arguments to pass to raw.get_dataset_processed_expression
+        :return: A DataFrame of the expression matrix for the queried dataset
+        :rtype: DataFrame
+
+        """
         response = self.raw.get_dataset_processed_expression(dataset, **kwargs)
         
         df = ps.process_expression(response,dataset,self)
@@ -244,9 +405,34 @@ class GemmaPy(object):
     # datasets/{dataset}/quantitationTypes get_dataset_quantitation_types ----------
     
     def get_dataset_quantitation_types(self,dataset:int|str,**kwargs)->DataFrame:
+        """Retrieve quantitation types of a dataset
+
+        
+        :param dataset: 	A numerical dataset identifier or a dataset short name
+        :type dataset: int|str
+        :param **kwargs: Additional arguments to pass to raw.get_dataset_quantitation_types
+        :return: A DataFrame containing the quantitation types
+        
+        The fields of the output DataFrame are:
+            - id: If of the quantitation type. Any raw quantitation type can be
+            accessed by get_dataset_raw_expression function using this id.
+            - name: Name of the quantitation type
+            - description: Description of the quantitation type
+            - type: Type of the quantitation type. Either raw or processed. 
+            Each dataset will have one processed quantitation type which is the 
+            data returned using get_dataset_processed_expression
+            - ratio: Whether or not the quanitation type is a ratio of multiple
+            quantitation types. Typically TRUE for processed TWOCOLOR quantitation type.
+            - preferred: The preferred raw quantitation type. This version is 
+            used in generation of the processed data within gemma.
+            - recomputed: If TRUE this quantitation type is generated by
+            recomputing raw data files Gemma had access to
+        :rtype: DataFrame
+
+        """
         
         response = self.raw.get_dataset_quantitation_types(dataset, **kwargs)
-        df = ps.process_QuantitationTypeValueObject(response)
+        df = ps.process_QuantitationTypeValueObject(response.data)
         
         
         return df
@@ -254,6 +440,19 @@ class GemmaPy(object):
     # datasets/{dataset}/data/raw, get_dataset_raw_expression ---------
     def get_dataset_raw_expression(self,dataset:int|str,
                                    quantitation_type:[int],**kwargs)->DataFrame:
+        """
+        
+        :param dataset: A numerical dataset identifier or a dataset short name
+        :type dataset: int|str
+        :param quantitation_type: Quantitation type id. These can be acquired 
+        using get_dataset_quantitation_types function. This endpoint can only 
+        return non-processed quantitation types.
+        :type quantitation_type: [int]
+        :param **kwargs: Additional arguments to pass to raw.get_dataset_raw_expression
+        :return: A DataFrame of the expression matrix for the queried dataset
+        :rtype: DataFrame
+
+        """
         
         kwargs = vs.remove_nones(
             quantitation_type = quantitation_type,
@@ -267,11 +466,27 @@ class GemmaPy(object):
     
     
     # datasets/{dataset}/samples, get_dataset_samples --------
-    def get_dataset_samples(self, dataset:int|str, **kwargs)->DataFrame:  # noqa: E501
-        """Retrieve the samples of a dataset
+    def get_dataset_samples(self, dataset:int|str, **kwargs)->DataFrame:
+        """
+        Retrieve the samples of a dataset
 
-        :param str dataset: (required)
-        :rtype: ResponseDataObjectListBioAssayValueObject
+
+        :param dataset: A numerical dataset identifier or a dataset short name
+        :type dataset: int|str
+        :param **kwargs: Additional arguments to pass to raw.get_dataset_samples
+        :return: A DataFrame with information about the samples of the queried dataset.
+        
+        The fields of the DataFrame are:
+            - sample_name: Internal name given to the sample.
+            - sample_ID: Internal ID of the sample
+            - sample_description: Free text description of the sample
+            - sample_outlier: Whether or not the sample is marked as an outlier
+            - sample_accession: Accession ID of the sample in it's original database
+            - sample_database: Database of origin for the sample
+            - sample_characteristics: Characteristics of the sample. This field is a data table
+            - sample_factor_values: Experimental factor values of the sample. This field is a data table
+        :rtype: DataFrame
+
         """
         response = self.raw.get_dataset_samples(dataset, **kwargs)
         df = ps.process_samples(response.data)
@@ -289,6 +504,73 @@ class GemmaPy(object):
                      limit:int = 20,
                      sort:str = "+id",
                      **kwargs)->DataFrame:
+        """
+        
+        :param query: The search query. Either plain text ('traumatic'), or an 
+        ontology term URI ('http://purl.obolibrary.org/obo/UBERON_0002048').
+        Datasets that contain the given string in their short of full name will 
+        also be matched., defaults to None
+        :type query: Optional[str], optional
+        :param filter: Filter results by matching expression. Use 
+        filter_properties function to get a list of all available parameters. 
+        These properties can be combined using "and" "or" clauses and may 
+        contain common operators such as "=", "<" or "in". (e.g. 
+        "taxon.commonName = human", "taxon.commonName in (human,mouse), 
+        "id < 1000"), defaults to None
+        :type filter: Optional[str], optional
+        :param taxa: 	
+A vector of taxon common names (e.g. human, mouse, rat). Providing multiple species will return results for all species. These are appended to the filter and equivalent to filtering for taxon.commonName property, defaults to None
+        :param taxa: A list of taxon common names (e.g. human, mouse, rat). 
+        Providing multiple species will return results for all species. 
+        These are appended to the filter and equivalent to filtering for 
+        taxon.commonName property, defaults to None
+        :type taxa: Optional[List[str]], optional
+        :param uris: A vector of ontology term URIs. Providing multiple terms
+        will return results containing any of the terms and their children. 
+        These are appended to the filter and equivalent to filtering for 
+        allCharacteristics.valueUri, defaults to None
+        :type uris: Optional[List[str]], optional
+        :param offset: The offset of the first retrieved result., defaults to 0
+        :type offset: int, optional
+        :param limit: Limits the result to specified amount of objects.
+        Has a maximum value of 100. Use together with offset and the 
+        total_elements attribute in the output to compile all data if needed.
+        Alternatively get_all_pages function can be used with all functions
+        including offset and limit parameters, defaults to 20
+        :type limit: int, optional
+        :param sort: Order results by the given property and direction. The '+'
+        sign indicate ascending order whereas the '-' indicate descending,
+        defaults to "+id"
+        :type sort: str, optional
+        :param **kwargs: Additional arguments to pass to raw.get_datasets
+        :return: A DataFrame with information about the queried dataset(s).
+        
+        The fields of the DataFrame are:
+            - experiment_short_name: Shortname given to the dataset within Gemma. Often corresponds to accession ID
+            - experiment_name: Full title of the dataset
+            - experiment_ID: Internal ID of the dataset.
+            - experiment_description: Description of the dataset
+            - experiment_troubled: Did an automatic process within gemma or a curator mark the dataset as "troubled"
+            - experiment_accession: Accession ID of the dataset in the external database it was taken from
+            - experiment_database: The name of the database where the dataset was taken from
+            - experiment_URI: URI of the original database
+            - experiment_sample_count: Number of samples in the dataset
+            - experiment_batch_effect: A text field describing whether the dataset has batch effects
+            - geeq.batch_corrected: Whether batch correction has been performed on the dataset.
+            - geeq.batch_confound: 0 if batch info isn't available, -1 if batch counfoud is detected, 1 if batch information is available and no batch confound found
+            - geeq.batch_effect: -1 if batch p value < 0.0001, 1 if batch p value > 0.1, 0 if otherwise and when there is no batch information is available or when the data is confounded with batches.
+            - geeq_raw_data: -1 if no raw data available, 1 if raw data was available. When available, Gemma reprocesses raw data to get expression values and batches
+            - geeq_q_score: Data quality score given to the dataset by Gemma.
+            - geeq.s_score: Suitability score given to the dataset by Gemma. Refers to factors like batches, platforms and other aspects of experimental design
+            - taxon_name: Name of the species
+            - taxon_scientific: Scientific name for the taxon
+            - taxon_ID: Internal identifier given to the species by Gemma
+            - taxon_NCBI: NCBI ID of the taxon
+            - taxon_database_name: Underlying database used in Gemma for the taxon
+            - taxon_database_ID: ID of the underyling database used in Gemma for the taxon
+        :rtype: DataFrame
+
+        """
         
         filter = vs.add_to_filter(filter, 'allCharacteristics.valueUri', uris)
         filter = vs.add_to_filter(filter, 'taxon.commonName', taxa)
@@ -320,17 +602,70 @@ class GemmaPy(object):
                             offset:int = 0,
                             limit:int = 20,
                             sort:str = "+id",
-                            **kwargs)->DataFrame:  # noqa: E501
-        """Retrieve datasets by their identifiers
-
-        :param list[str] dataset: (required)
-        :param str filter: Filter results by matching the expression
-        :param int offset: The offset of the first retrieved result
-        :param int limit: Limit the number of results retrieved
-        :param str sort: Order results by the given property and direction. The '+'
-          sign indicate ascending order whereas the '-' indicate descending.
-        :rtype: PaginatedResponseDataObjectExpressionExperimentValueObject
+                            **kwargs)->DataFrame:
         """
+        
+        :param dataset: Numerical dataset identifiers or dataset short names.
+        :type dataset: List[str|int]
+        :param filter: Filter results by matching expression. Use 
+        filter_properties function to get a list of all available parameters. 
+        These properties can be combined using "and" "or" clauses and may 
+        contain common operators such as "=", "<" or "in". (e.g. 
+        "taxon.commonName = human", "taxon.commonName in (human,mouse), 
+        "id < 1000"), defaults to None
+        :type filter: Optional[str], optional
+        :param taxa: A list of taxon common names (e.g. human, mouse, rat). 
+        Providing multiple species will return results for all species. 
+        These are appended to the filter and equivalent to filtering for 
+        taxon.commonName property, defaults to None
+        :type taxa: Optional[List[str]], optional
+        :param uris: A vector of ontology term URIs. Providing multiple terms
+        will return results containing any of the terms and their children. 
+        These are appended to the filter and equivalent to filtering for 
+        allCharacteristics.valueUri, defaults to None
+        :type uris: Optional[List[str]], optional
+        :param offset: The offset of the first retrieved result., defaults to 0
+        :type offset: int, optional
+        :param limit: Limits the result to specified amount of objects.
+        Has a maximum value of 100. Use together with offset and the 
+        total_elements attribute in the output to compile all data if needed.
+        Alternatively get_all_pages function can be used with all functions
+        including offset and limit parameters, defaults to 20
+        :type limit: int, optional
+        :param sort: Order results by the given property and direction. The '+'
+        sign indicate ascending order whereas the '-' indicate descending,
+        defaults to "+id"
+        :type sort: str, optional
+        :param **kwargs: Additional arguments to pass to raw.get_datasets_by_ids
+        :return: A DataFrame with information about the queried dataset(s).
+        
+        The fields of the DataFrame are:
+            - experiment_short_name: Shortname given to the dataset within Gemma. Often corresponds to accession ID
+            - experiment_name: Full title of the dataset
+            - experiment_ID: Internal ID of the dataset.
+            - experiment_description: Description of the dataset
+            - experiment_troubled: Did an automatic process within gemma or a curator mark the dataset as "troubled"
+            - experiment_accession: Accession ID of the dataset in the external database it was taken from
+            - experiment_database: The name of the database where the dataset was taken from
+            - experiment_URI: URI of the original database
+            - experiment_sample_count: Number of samples in the dataset
+            - experiment_batch_effect: A text field describing whether the dataset has batch effects
+            - geeq.batch_corrected: Whether batch correction has been performed on the dataset.
+            - geeq.batch_confound: 0 if batch info isn't available, -1 if batch counfoud is detected, 1 if batch information is available and no batch confound found
+            - geeq.batch_effect: -1 if batch p value < 0.0001, 1 if batch p value > 0.1, 0 if otherwise and when there is no batch information is available or when the data is confounded with batches.
+            - geeq_raw_data: -1 if no raw data available, 1 if raw data was available. When available, Gemma reprocesses raw data to get expression values and batches
+            - geeq_q_score: Data quality score given to the dataset by Gemma.
+            - geeq.s_score: Suitability score given to the dataset by Gemma. Refers to factors like batches, platforms and other aspects of experimental design
+            - taxon_name: Name of the species
+            - taxon_scientific: Scientific name for the taxon
+            - taxon_ID: Internal identifier given to the species by Gemma
+            - taxon_NCBI: NCBI ID of the taxon
+            - taxon_database_name: Underlying database used in Gemma for the taxon
+            - taxon_database_ID: ID of the underyling database used in Gemma for the taxon
+        :rtype: DataFrame
+
+        """
+
         filter = vs.add_to_filter(filter, 'allCharacteristics.valueUri', uris)
         filter = vs.add_to_filter(filter, 'taxon.commonName', taxa)
         
@@ -359,11 +694,21 @@ class GemmaPy(object):
 
     # genes/{gene}/goTerms -------   
     
-    def get_gene_go_terms(self, gene:str|int, **kwargs)->DataFrame:  # noqa: E501
-        """Retrieve the GO terms associated to a gene
+    def get_gene_go_terms(self, gene:str|int, **kwargs)->DataFrame:
+        """
+        
+        :param gene: An ensembl gene identifier which typically starts with 
+        ensg or an ncbi gene identifier or an official gene symbol approved by
+        hgnc
+        :type gene: str|int
+        :param **kwargs: Additional arguments to pass to raw.get_gene_go_terms
+        :return: A DataFrame with information about the GO terms assigned to the queried gene
+        The fields of the output DataFrame are:
+            - term_name: Name of the term
+            - term_ID: ID of the term
+            - term_URI: URI of the term 
+        :rtype: DataFrame
 
-        :param str gene: (required)
-        :rtype: ResponseDataObjectListGeneOntologyTermValueObject
         """
         response = self.raw.get_gene_go_terms(gene, **kwargs)
         df = ps.process_GO(response.data)
@@ -372,12 +717,29 @@ class GemmaPy(object):
     
     # genes/{gene}/locations, get_gene_locations ----
     
-    def get_gene_locations(self, gene:str|int, **kwargs)->DataFrame:  # noqa: E501
-        """Retrieve the physical locations of a given gene
-
-        :param str gene: (required)
-        :rtype: ResponseDataObjectListPhysicalLocationValueObject
+    def get_gene_locations(self, gene:str|int, **kwargs)->DataFrame:
         """
+        
+        :param gene: DESCRIPTION
+        :type gene: str|int
+        :param **kwargs: DAdditional arguments to pass to raw.get_gene_locations
+        :type **kwargs: TYPE
+        :return: A DataFrame with information about the physical location of the queried gene
+        The fields of the output DataFrame are:
+            - chromosome: Name of the chromosome the gene is located
+            - strand: Which strand the gene is located
+            - nucleotide: Nucleotide number for the gene
+            - length: Gene length
+            - taxon_name: Name of the species
+            - taxon_scientific: Scientific name for the taxon
+            - taxon_ID: Internal identifier given to the species by Gemma
+            - taxon_NCBI: NCBI ID of the taxon
+            - taxon_database_name: Underlying database used in Gemma for the taxon
+            - taxon_database_ID: ID of the underlying database used in Gemma for the taxon      
+        :rtype: DataFrame
+
+        """
+
         response = self.raw.get_gene_locations(gene, **kwargs)
         df = ps.process_gene_location(response.data)
         return df
@@ -387,14 +749,44 @@ class GemmaPy(object):
     def get_gene_probes(self, gene:str|int,
                         offset:int = 0,
                         limit:int = 20,
-                        **kwargs)->DataFrame:  # noqa: E501
-        """Retrieve the probes associated to a genes
+                        **kwargs)->DataFrame:
+        """Retrieve the probes associated to a genes across all platforms
+        
+        :param gene: An ensembl gene identifier which typically starts with
+        ensg or an ncbi gene identifier or an official gene symbol approved by 
+        hgnc
+        :type gene: str|int
+        :param offset: The offset of the first retrieved result., defaults to 0
+        :type offset: int, optional
+        :param limit: Limits the result to specified amount of objects.
+        Has a maximum value of 100. Use together with offset and the 
+        total_elements attribute in the output to compile all data if needed.
+        Alternatively get_all_pages function can be used with all functions
+        including offset and limit parameters, defaults to 20
+        :type limit: int, optional
+        :param **kwargs: Additional arguments to pass to raw.get_gene_probes
+        :return: A DataFrame with information about the probes representing a 
+        gene across all platrofms.
+        
+        The fields of the output DataFrame are:
+            - element_name: Name of the element. Typically the probeset name
+            - element_description: A free text field providing optional information about the element
+            - platform_short_name: Shortname of the platform given by Gemma. Typically the GPL identifier.
+            - platform_name: Full name of the platform
+            - platform_ID: Id number of the platform given by Gemma
+            - platform_type: Type of the platform.
+            - platform_description: Free text field describing the platform.
+            - platform_troubled: Whether the platform is marked as troubled by a Gemma curator.
+            - taxon_name: Name of the species
+            - taxon_scientific: Scientific name for the taxon
+            - taxon_ID: Internal identifier given to the species by Gemma
+            - taxon_NCBI: NCBI ID of the taxon
+            - taxon_database_name: Underlying database used in Gemma for the taxon
+            - taxon_database_ID: ID of the underlying database used in Gemma for the taxon    
+        :rtype: DataFrame
 
-        :param str gene: (required)
-        :param int offset: The offset of the first retrieved result
-        :param int limit: Limit the number of results retrieved
-        :rtype: PaginatedResponseDataObjectCompositeSequenceValueObject
         """
+        
         kwargs = vs.remove_nones(offset = offset,
                                  limit = limit,
                                  **kwargs)
@@ -407,12 +799,32 @@ class GemmaPy(object):
         
     # genes/{genes}, get_genes-------
 
-    def get_genes(self, genes, **kwargs)->DataFrame:  # noqa: E501
-        """Retrieve genes matching a gene identifier
+    def get_genes(self, genes:int|str, **kwargs)->DataFrame:
+        """Retrieve genes matching gene identifiers
 
-        :param list[str] genes: (required)
-        :rtype: ResponseDataObjectListGeneValueObject
+        :param genes: An ensembl gene identifier which typically starts with 
+          ensg or an ncbi gene identifier or an official gene symbol approved by hgnc
+        :type genes: int|str
+        :param **kwargs: Additional arguments to pass to raw_get_genes
+        :return: A DataFrame with the information about the querried genes.
+        
+        The fields of the output DataFrame are:
+            - gene_symbol: Symbol for the gene
+            - gene_ensembl: Ensembl ID for the gene
+            - gene_NCBI: NCBI id for the gene
+            - gene_name: Name of the gene
+            - gene_aliases: Gene aliases. Each row includes a vector
+            - gene_MFX_rank: Multifunctionality rank for the gene
+            - taxon_name: Name of the species
+            - taxon_scientific: Scientific name for the taxon
+            - taxon_ID: Internal identifier given to the species by Gemma
+            - taxon_NCBI: NCBI ID of the taxon
+            - taxon_database_name: Underlying database used in Gemma for the taxon
+            - taxon_database_ID: ID of the underlying database used in Gemma for the taxon    
+        :rtype: DataFrame
+
         """
+
         response = self.raw.get_genes(genes, **kwargs)
         df = ps.process_genes(response.data)
         return df
@@ -430,11 +842,23 @@ class GemmaPy(object):
     # This feature is not implemented here, the return value corresponds to "noParents"
     # (as of 2022-05-19)
     def get_platform_annotations(self, platform:int|str, **kwargs)->DataFrame:
-        """Retrieve the annotations of a given platform
+        """Gets Gemma's platform annotations including mappings of microarray probes to genes.
+        
+        :param platform: A platform numerical identifier or a platform short name
+        :type platform: int|str
+        :param **kwargs: Additional arguments to pass to raw.get_platform_annotations
+        :type **kwargs: TYPE
+        :return: A DataFrame of annotations
+        
+        - ProbeName: Probeset names provided by the platform. Gene symbols for generic annotations
+        - GeneSymbols: Genes that were found to be aligned to the probe sequence. Note that it is possible for probes to be non-specific. Alignment to multiple genes are indicated with gene symbols separated by "|"s
+        - GeneNames: Name of the gene
+        - GOTerms: GO Terms associated with the genes. annotType argument can be used to choose which terms should be included.
+        - GemmaIDs and NCBIids: respective IDs for the genes.
+        :rtype: DataFrame
 
-        :param str platform: (required)
-        :return: DataFrame
         """
+        
         api_response = self.raw.get_platform_annotations(platform, **kwargs)
         uncomment = api_response.split("\n#")
         api_response = uncomment[len(uncomment)-1]
@@ -447,13 +871,48 @@ class GemmaPy(object):
     def get_platform_datasets(self, platform:str|int,
                               offset:int = 0,
                               limit:int = 20,
-                              **kwargs)->DataFrame:  # noqa: E501
-        """Retrieve all experiments within a given platform
+                              **kwargs)->DataFrame:
+        """Retrieve all experiments using a given platform
 
-        :param str platform: (required)
-        :param int offset: The offset of the first retrieved result
-        :param int limit: Limit the number of results retrieved
-        :rtype: PaginatedResponseDataObjectExpressionExperimentValueObject
+        
+        :param platform: A platform numerical identifier or a platform short name
+        :type platform: str|int
+        :param offset: The offset of the first retrieved result., defaults to 0
+        :type offset: int, optional
+        :param limit: Limits the result to specified amount of objects.
+        Has a maximum value of 100. Use together with offset and the 
+        total_elements attribute in the output to compile all data if needed.
+        Alternatively get_all_pages function can be used with all functions
+        including offset and limit parameters, defaults to 20
+        :type limit: int, optional
+        :param **kwargs: Additional arguments to pass to raw.get_platform_datasets
+        :return: A DataFrame with information about the queried dataset(s).
+        
+        The fields of the DataFrame are:
+            - experiment_short_name: Shortname given to the dataset within Gemma. Often corresponds to accession ID
+            - experiment_name: Full title of the dataset
+            - experiment_ID: Internal ID of the dataset.
+            - experiment_description: Description of the dataset
+            - experiment_troubled: Did an automatic process within gemma or a curator mark the dataset as "troubled"
+            - experiment_accession: Accession ID of the dataset in the external database it was taken from
+            - experiment_database: The name of the database where the dataset was taken from
+            - experiment_URI: URI of the original database
+            - experiment_sample_count: Number of samples in the dataset
+            - experiment_batch_effect: A text field describing whether the dataset has batch effects
+            - geeq.batch_corrected: Whether batch correction has been performed on the dataset.
+            - geeq.batch_confound: 0 if batch info isn't available, -1 if batch counfoud is detected, 1 if batch information is available and no batch confound found
+            - geeq.batch_effect: -1 if batch p value < 0.0001, 1 if batch p value > 0.1, 0 if otherwise and when there is no batch information is available or when the data is confounded with batches.
+            - geeq_raw_data: -1 if no raw data available, 1 if raw data was available. When available, Gemma reprocesses raw data to get expression values and batches
+            - geeq_q_score: Data quality score given to the dataset by Gemma.
+            - geeq.s_score: Suitability score given to the dataset by Gemma. Refers to factors like batches, platforms and other aspects of experimental design
+            - taxon_name: Name of the species
+            - taxon_scientific: Scientific name for the taxon
+            - taxon_ID: Internal identifier given to the species by Gemma
+            - taxon_NCBI: NCBI ID of the taxon
+            - taxon_database_name: Underlying database used in Gemma for the taxon
+            - taxon_database_ID: ID of the underyling database used in Gemma for the taxon
+        :rtype: DataFrame
+
         """
         
         kwargs = vs.remove_nones(offset = offset,
@@ -475,15 +934,43 @@ class GemmaPy(object):
                                    probe:str|int,
                                    offset:int = 0,
                                    limit:int = 20,
-                                   **kwargs)->DataFrame:  # noqa: E501
+                                   **kwargs)->DataFrame:
+        
+        
         """Retrieve the genes associated to a probe in a given platform
+        
+        :param platform: A platform numerical identifier or a platform short name
+        :type platform: str|int
+        :param probe: A probe name or it's numerical identifier
+        :type probe: str|int
+        :param offset: The offset of the first retrieved result., defaults to 0
+        :type offset: int, optional
+        :param limit: Limits the result to specified amount of objects.
+        Has a maximum value of 100. Use together with offset and the 
+        total_elements attribute in the output to compile all data if needed.
+        Alternatively get_all_pages function can be used with all functions
+        including offset and limit parameters, defaults to 20
+        :type limit: int, optional
+        :param **kwargs: Additional arguments to pass to raw.get_platform_element_genes
+        :type **kwargs: TYPE
+        :return: A DataFrame with the information about querried gene(s).
+        The fields of the output DataFrame are:
+            - gene_symbol: Symbol for the gene
+            - gene_ensembl: Ensembl ID for the gene
+            - gene_NCBI: NCBI id for the gene
+            - gene_name: Name of the gene
+            - gene_aliases: Gene aliases. Each row includes a vector
+            - gene_MFX_rank: Multifunctionality rank for the gene
+            - taxon_name: Name of the species
+            - taxon_scientific: Scientific name for the taxon
+            - taxon_ID: Internal identifier given to the species by Gemma
+            - taxon_NCBI: NCBI ID of the taxon
+            - taxon_database_name: Underlying database used in Gemma for the taxon
+            - taxon_database_ID: ID of the underlying database used in Gemma for the taxon
+        :rtype: DataFrame
 
-        :param str platform: (required)
-        :param str probe: (required)
-        :param int offset: The offset of the first retrieved result
-        :param int limit: Limit the number of results retrieved
-        :rtype: PaginatedResponseDataObjectGeneValueObject
         """
+        
         kwargs = vs.remove_nones(offset = offset,
                                  limit = limit,
                                  **kwargs)
@@ -505,7 +992,54 @@ class GemmaPy(object):
                       limit:int = 20,
                       sort:str="+id",
                       **kwargs)->DataFrame:
+        """
+        Retrieve all platforms
         
+        :param filter: Filter results by matching expression. Use 
+          filter_properties function to get a list of all available parameters.
+          These properties can be combined using "and" "or" clauses and may 
+          contain common operators such as "=", "<" or "in". (e.g. 
+          "taxon.commonName = human", "taxon.commonName in (human,mouse), 
+          "id < 1000"), defaults to None
+        :type filter: str, optional
+        :param taxa: A list of taxon common names (e.g. human, mouse, rat). 
+        Providing multiple species will return results for all species. These 
+        are appended to the filter and equivalent to filtering for 
+        taxon.commonName property, defaults to None
+        :type taxa: List[str], optional
+        :param offset: The offset of the first retrieved result., defaults to 0
+        :type offset: int, optional
+        :param limit: Limits the result to specified amount of objects.
+        Has a maximum value of 100. Use together with offset and the 
+        total_elements attribute in the output to compile all data if needed.
+        Alternatively get_all_pages function can be used with all functions
+        including offset and limit parameters, defaults to 20
+        :type limit: int, optional
+        :param sort: Order results by the given property and direction. The '+'
+        sign indicate ascending order whereas the '-' indicate descending,
+        defaults to "+id"
+        :type sort: str, optional
+        :param **kwargs: Additional arguments to raw.get_platforms_by_ids
+        :return: A DataFrame with information about the platform(s).
+        
+        The fields of the output DataFrame are:
+
+            - platform_ID: Internal identifier of the platform
+            - platform_short_name: Shortname of the platform.
+            - platform_name: Full name of the platform.
+            - platform_description: Free text description of the platform
+            - platform_troubled: Whether or not the platform was marked "troubled" by a Gemma process or a curator
+            - platform_experiment_count: Number of experiments using the platform within Gemma
+            - platform_type: Technology type for the platform.
+            - taxon_name: Name of the species platform was made for
+            - taxon_scientific: Scientific name for the taxon
+            - taxon_ID: Internal identifier given to the species by Gemma
+            - taxon_NCBI: NCBI ID of the taxon
+            - taxon_database_name: Underlying database used in Gemma for the taxon
+            - taxon_database_ID: ID of the underyling database used in Gemma for the taxon
+        :rtype: DataFrame
+
+        """
         
         filter = vs.add_to_filter(filter,"taxon.commonName",taxa)
         
@@ -528,42 +1062,58 @@ class GemmaPy(object):
                              limit:int = 20,
                              sort:str="+id",
                              **kwargs)->DataFrame:
+   
         
-        """Retrieve all platforms matching a set of platform identifiers
-
+        
+        """Retrieve platforms by their identifiers
 
         
         :param platforms: Platform numerical identifiers or platform short names.
         :type platforms: List[str|int]
-        :param filter: DESCRIPTION, defaults to None
+        :param filter: Filter results by matching expression. Use 
+          filter_properties function to get a list of all available parameters.
+          These properties can be combined using "and" "or" clauses and may 
+          contain common operators such as "=", "<" or "in". (e.g. 
+          "taxon.commonName = human", "taxon.commonName in (human,mouse), 
+          "id < 1000"), defaults to None
         :type filter: str, optional
-        :param taxa: DESCRIPTION, defaults to None
+        :param taxa: A list of taxon common names (e.g. human, mouse, rat). 
+        Providing multiple species will return results for all species. These 
+        are appended to the filter and equivalent to filtering for 
+        taxon.commonName property, defaults to None
         :type taxa: List[str], optional
-        :param offset: DESCRIPTION, defaults to 0
+        :param offset: The offset of the first retrieved result., defaults to 0
         :type offset: int, optional
-        :param limit: DESCRIPTION, defaults to 20
+        :param limit: Limits the result to specified amount of objects.
+        Has a maximum value of 100. Use together with offset and the 
+        total_elements attribute in the output to compile all data if needed.
+        Alternatively get_all_pages function can be used with all functions
+        including offset and limit parameters, defaults to 20
         :type limit: int, optional
-        :param sort: DESCRIPTION, defaults to "+id"
+        :param sort: Order results by the given property and direction. The '+'
+        sign indicate ascending order whereas the '-' indicate descending,
+        defaults to "+id"
         :type sort: str, optional
-        :param **kwargs: DESCRIPTION
-        :type **kwargs: TYPE
-        :return: DESCRIPTION
+        :param **kwargs: Additional arguments to raw.get_platforms_by_ids
+        :return: A DataFrame with information about the platform(s).
+        
+        The fields of the output DataFrame are:
+
+            - platform_ID: Internal identifier of the platform
+            - platform_short_name: Shortname of the platform.
+            - platform_name: Full name of the platform.
+            - platform_description: Free text description of the platform
+            - platform_troubled: Whether or not the platform was marked "troubled" by a Gemma process or a curator
+            - platform_experiment_count: Number of experiments using the platform within Gemma
+            - platform_type: Technology type for the platform.
+            - taxon_name: Name of the species platform was made for
+            - taxon_scientific: Scientific name for the taxon
+            - taxon_ID: Internal identifier given to the species by Gemma
+            - taxon_NCBI: NCBI ID of the taxon
+            - taxon_database_name: Underlying database used in Gemma for the taxon
+            - taxon_database_ID: ID of the underyling database used in Gemma for the taxon
         :rtype: DataFrame
 
-        """
-        
-        
-        
-        
-        """Retrieve all platforms matching a set of platform identifiers
-
-        :param list[str] platform: (required)
-        :param str filter: Filter results by matching the expression
-        :param int offset: The offset of the first retrieved result
-        :param int limit: Limit the number of results retrieved
-        :param str sort: Order results by the given property and direction. The '+'
-          sign indicate ascending order whereas the '-' indicate descending.
-        :rtype: PaginatedResponseDataObjectArrayDesignValueObject
         """
         filter = vs.add_to_filter(filter,"taxon.commonName",taxa)
         kwargs = vs.remove_nones(filter = filter,
@@ -1144,9 +1694,19 @@ class GemmaPy(object):
             return sub.break_list([x.data for x in out])
         
 
-    # filter_properties currently unimplemented. requires keeping the json around
     
     def filter_properties(self, output_type:str = 'DataFrame')->dict|DataFrame:
+        """
+        Some functions such as get_datasets and get_platforms include a filter
+        argument that allows creation of more complex queries. This function 
+        returns a list of supported properties to be used in those filters
+        
+        :param output_type: Type to return. "DataFrame" or "dict", defaults to 'DataFrame'
+        :type output_type: str, optional
+        :return: DataFrame or dict containing supported properties and their data types
+        :rtype: dict|DataFrame
+
+        """
         
         d = self.raw.api_client.rest_client.GET("https://gemma.msl.ubc.ca/rest/v2/openapi.json").urllib3_response
         api_file = json.loads(d.data)

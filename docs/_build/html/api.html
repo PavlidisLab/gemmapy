@@ -73,61 +73,100 @@ used. Default is False.</p></li>
 <td><p>Return a data structure including all relevant data related to gene expression in a dataset.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#gemmapy.GemmaPy.get_dataset_annotations" title="gemmapy.GemmaPy.get_dataset_annotations"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_dataset_annotations</span></code></a>(dataset, **kwargs)</p></td>
-<td><p>Retrieve the annotations analysis of a dataset</p></td>
+<td><p>Retrieve the annotations of a dataset</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#gemmapy.GemmaPy.get_differential_expression_values" title="gemmapy.GemmaPy.get_differential_expression_values"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_differential_expression_values</span></code></a>([...])</p></td>
 <td><p>Retrieves the differential expression resultSet(s) associated with the dataset.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#gemmapy.GemmaPy.get_dataset_differential_expression_analyses" title="gemmapy.GemmaPy.get_dataset_differential_expression_analyses"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_dataset_differential_expression_analyses</span></code></a>(...)</p></td>
-<td><p>Retrieve the differential analyses of a dataset</p></td>
+<td><p>Retrieve annotations and surface level stats for a dataset's differential analyses</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#gemmapy.GemmaPy.get_dataset_expression" title="gemmapy.GemmaPy.get_dataset_expression"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_dataset_expression</span></code></a>(dataset, **kwargs)</p></td>
-<td><p>Retrieve the expression data of a dataset</p></td>
+<td><p>Deprecated in favour of get_dataset_expression</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#gemmapy.GemmaPy.get_dataset_platforms" title="gemmapy.GemmaPy.get_dataset_platforms"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_dataset_platforms</span></code></a>(dataset, **kwargs)</p></td>
-<td><p>Retrieve the platform of a dataset</p></td>
+<td><p><dl class="field-list simple">
+<dt class="field-odd">type dataset<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span></p>
+</dd>
+</dl>
+</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#gemmapy.GemmaPy.get_result_sets" title="gemmapy.GemmaPy.get_result_sets"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_result_sets</span></code></a>([datasets, result_sets, ...])</p></td>
-<td><p>Retrieve all result sets matching the provided criteria</p></td>
+<td><p>Returns queried result set</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#gemmapy.GemmaPy.get_dataset_samples" title="gemmapy.GemmaPy.get_dataset_samples"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_dataset_samples</span></code></a>(dataset, **kwargs)</p></td>
 <td><p>Retrieve the samples of a dataset</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#gemmapy.GemmaPy.get_datasets_by_ids" title="gemmapy.GemmaPy.get_datasets_by_ids"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_datasets_by_ids</span></code></a>(dataset[, filter, taxa, ...])</p></td>
-<td><p>Retrieve datasets by their identifiers</p></td>
+<td><p><dl class="field-list simple">
+<dt class="field-odd">type dataset<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]]</span></p>
+</dd>
+</dl>
+</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#gemmapy.GemmaPy.get_gene_go_terms" title="gemmapy.GemmaPy.get_gene_go_terms"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_gene_go_terms</span></code></a>(gene, **kwargs)</p></td>
-<td><p>Retrieve the GO terms associated to a gene</p></td>
+<td><p><dl class="field-list simple">
+<dt class="field-odd">type gene<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span></p>
+</dd>
+</dl>
+</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#gemmapy.GemmaPy.get_gene_locations" title="gemmapy.GemmaPy.get_gene_locations"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_gene_locations</span></code></a>(gene, **kwargs)</p></td>
-<td><p>Retrieve the physical locations of a given gene</p></td>
+<td><p><dl class="field-list simple">
+<dt class="field-odd">type gene<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span></p>
+</dd>
+</dl>
+</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#gemmapy.GemmaPy.get_gene_probes" title="gemmapy.GemmaPy.get_gene_probes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_gene_probes</span></code></a>(gene[, offset, limit])</p></td>
-<td><p>Retrieve the probes associated to a genes</p></td>
+<td><p>Retrieve the probes associated to a genes across all platforms</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#gemmapy.GemmaPy.get_genes" title="gemmapy.GemmaPy.get_genes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_genes</span></code></a>(genes, **kwargs)</p></td>
-<td><p>Retrieve genes matching a gene identifier</p></td>
+<td><p>Retrieve genes matching gene identifiers</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#gemmapy.GemmaPy.get_platform_annotations" title="gemmapy.GemmaPy.get_platform_annotations"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_platform_annotations</span></code></a>(platform, **kwargs)</p></td>
-<td><p>Retrieve the annotations of a given platform</p></td>
+<td><p>Gets Gemma's platform annotations including mappings of microarray probes to genes.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#gemmapy.GemmaPy.get_platform_datasets" title="gemmapy.GemmaPy.get_platform_datasets"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_platform_datasets</span></code></a>(platform[, offset, limit])</p></td>
-<td><p>Retrieve all experiments within a given platform</p></td>
+<td><p>Retrieve all experiments using a given platform</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#gemmapy.GemmaPy.get_platform_element_genes" title="gemmapy.GemmaPy.get_platform_element_genes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_platform_element_genes</span></code></a>(platform, probe)</p></td>
 <td><p>Retrieve the genes associated to a probe in a given platform</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#gemmapy.GemmaPy.get_platforms_by_ids" title="gemmapy.GemmaPy.get_platforms_by_ids"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_platforms_by_ids</span></code></a>(platforms[, filter, ...])</p></td>
-<td><p>Retrieve all platforms matching a set of platform identifiers</p></td>
+<td><p>Retrieve platforms by their identifiers</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#gemmapy.GemmaPy.search_annotations" title="gemmapy.GemmaPy.search_annotations"><code class="xref py py-obj docutils literal notranslate"><span class="pre">search_annotations</span></code></a>(query, **kwargs)</p></td>
 <td><p>Search for annotation tags</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_taxa</span></code>(**kwargs)</p></td>
-<td><p></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gemmapy.GemmaPy.get_taxa" title="gemmapy.GemmaPy.get_taxa"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_taxa</span></code></a>(**kwargs)</p></td>
+<td><p>Get all taxa within Gemma</p></td>
 </tr>
 </tbody>
 </table>
+<dl class="py method">
+<dt class="sig sig-object py" id="gemmapy.GemmaPy.filter_properties">
+<span class="sig-name descname"><span class="pre">filter_properties</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'DataFrame'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.filter_properties"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.filter_properties" title="Link to this definition">¶</a></dt>
+<dd><p>Some functions such as get_datasets and get_platforms include a filter
+argument that allows creation of more complex queries. This function 
+returns a list of supported properties to be used in those filters</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>output_type</strong> (<em>str</em><em>, </em><em>optional</em>) – Type to return. “DataFrame” or “dict”, defaults to ‘DataFrame’</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>DataFrame or dict containing supported properties and their data types</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict|DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="gemmapy.GemmaPy.get_all_pages">
 <span class="sig-name descname"><span class="pre">get_all_pages</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fun</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.get_all_pages"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.get_all_pages" title="Link to this definition">¶</a></dt>
@@ -140,14 +179,18 @@ will be returned</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>fun</strong> (<em>Callable</em>) – A callable from gemmapy with offset and limit
 functions</p></li>
-<li><p><strong>step_size</strong> (<em>int</em>) – Size of individual calls to the server. 100 is 
-the maximum value</p></li>
+<li><p><strong>step_size</strong> (<em>int</em><em>, </em><em>optional</em>) – Size of individual calls to the server. 100 is 
+the maximum value and the default.</p></li>
 <li><p><strong>**kwargs</strong> – <p>arguments for the callable fun</p>
 </p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>list|DataFrame</p>
+<dd class="field-even"><p>A DataFrame or a list containing all the output depending on 
+output of the callable</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Union[list,DataFrame]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -159,20 +202,47 @@ the maximum value</p></li>
 include any datasets with their child terms in the results. This 
 function returns these children for any number of terms, including all 
 children and the terms itself in the output vector</p>
-<p>:param list[str] terms A list of ontology terms
-:return: list[str]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>terms</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – A list of ontology terms</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An array containing descendends of the annotation terms,</p>
+</dd>
+</dl>
+<p>including the terms themselves
+:rtype: List[str]</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gemmapy.GemmaPy.get_dataset_annotations">
 <span class="sig-name descname"><span class="pre">get_dataset_annotations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.get_dataset_annotations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.get_dataset_annotations" title="Link to this definition">¶</a></dt>
-<dd><p>Retrieve the annotations analysis of a dataset</p>
+<dd><p>Retrieve the annotations of a dataset</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>dataset</strong> (<em>str</em>) – (required)</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> (<em>str</em><em>|</em><em>int</em>) – A numerical dataset identifier or a dataset short name</p></li>
+<li><p><strong>**kwargs</strong> – <p>Additional arguments to pass to raw.get_dataset_annotations</p>
+</p></li>
+</ul>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#gemmapy.sdk.models.ResponseDataObjectSetAnnotationValueObject" title="gemmapy.sdk.models.ResponseDataObjectSetAnnotationValueObject">ResponseDataObjectSetAnnotationValueObject</a></p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A DataFrame with information about the annotations of the queried dataset.</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>The fields of the DataFrame are:</dt><dd><ul class="simple">
+<li><p>class_name: Name of the annotation class (e.g. organism part)</p></li>
+<li><p>class_URI: URI for the annotation class</p></li>
+<li><p>term_name: Name of the annotation term (e.g. lung)</p></li>
+<li><p>term_URI: URI for the annotation term</p></li>
+<li><p>object_class: Class of object that the term originated from.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -180,17 +250,45 @@ children and the terms itself in the output vector</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="gemmapy.GemmaPy.get_dataset_differential_expression_analyses">
 <span class="sig-name descname"><span class="pre">get_dataset_differential_expression_analyses</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.get_dataset_differential_expression_analyses"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.get_dataset_differential_expression_analyses" title="Link to this definition">¶</a></dt>
-<dd><p>Retrieve the differential analyses of a dataset</p>
+<dd><p>Retrieve annotations and surface level stats for a dataset’s differential analyses</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>dataset</strong> (<em>str</em>) – (required)</p></li>
-<li><p><strong>offset</strong> (<em>int</em>) – The offset of the first retrieved result</p></li>
-<li><p><strong>limit</strong> (<em>int</em>) – Limit the number of results retrieved</p></li>
+<li><p><strong>dataset</strong> (<em>str</em><em>|</em><em>int</em>) – A numerical dataset identifier or a dataset short name</p></li>
+<li><p><strong>**kwargs</strong> – <p>Additional arguments to pass to raw.get_dataset_differential_expression_analyses</p>
+</p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#gemmapy.sdk.models.ResponseDataObjectListDifferentialExpressionAnalysisValueObject" title="gemmapy.sdk.models.ResponseDataObjectListDifferentialExpressionAnalysisValueObject">ResponseDataObjectListDifferentialExpressionAnalysisValueObject</a></p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A data table with information about the differential expression</p>
+</dd>
+</dl>
+<p>analysis of the queried dataset. Note that this funciton does not return 
+differential expression values themselves. Use
+get_differential_expression_values to get differential expression
+values (see examples).</p>
+<dl>
+<dt>The fields of the DataFrame are:</dt><dd><ul class="simple">
+<li><p>result_ID: Result set ID of the differential expression analysis. May represent multiple factors in a single model.</p></li>
+<li><p>contrast_ID: Id of the specific contrast factor. Together with the result.ID they uniquely represent a given contrast.</p></li>
+<li><p>experiment_ID: Id of the source experiment</p></li>
+<li><p>factor_category: Category for the contrast</p></li>
+<li><p>factor_category_URI: URI for the contrast category</p></li>
+<li><p>factor_ID: ID of the factor</p></li>
+<li><p>baseline_factors: Characteristics of the baseline. This field is a DataFrame</p></li>
+<li><p>experimental_factors: Characteristics of the experimental group. This field is a DataFrame</p></li>
+<li><p>isSubset: True if the result set belong to a subset, False if not.</p></li>
+</ul>
+<p>Subsets are created when performing differential expression to avoid 
+unhelpful comparisons.
+- subset_factor: Characteristics of the subset. This field is a DataFrame
+- probes_analyzed: Number of probesets represented in the contrast
+- genes_analyzed: Number of genes represented in the contrast</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -198,18 +296,43 @@ children and the terms itself in the output vector</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="gemmapy.GemmaPy.get_dataset_expression">
 <span class="sig-name descname"><span class="pre">get_dataset_expression</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.get_dataset_expression"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.get_dataset_expression" title="Link to this definition">¶</a></dt>
-<dd><p>Retrieve the expression data of a dataset</p>
+<dd><p>Deprecated in favour of get_dataset_expression</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gemmapy.GemmaPy.get_dataset_expression_for_genes">
+<span class="sig-name descname"><span class="pre">get_dataset_expression_for_genes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datasets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">genes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_non_specific</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">consolidate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.get_dataset_expression_for_genes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.get_dataset_expression_for_genes" title="Link to this definition">¶</a></dt>
+<dd><p>Retrieve the expression data matrix of a set of datasets and genes</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>dataset</strong> (<em>str</em>) – (required)</p></li>
-<li><p><strong>filter</strong> (<em>bool</em>) – Filter results by matching the expression</p></li>
+<li><p><strong>datasets</strong> (<em>List</em><em>[</em><em>str</em><em>|</em><em>int</em><em>]</em>) – A numerical dataset identifier or a dataset short name</p></li>
+<li><p><strong>genes</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]</span>) – An ensembl gene identifier which typically starts with</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>DataFrame</p>
-</dd>
 </dl>
+<p>ensg or an ncbi gene identifier or an official gene symbol approved by 
+hgnc
+:type genes: List[int]
+:type keep_non_specific: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span>
+:param keep_non_specific: If True, results from probesets that are not
+specific to the gene will also be returned., defaults to False
+:type keep_non_specific: bool, optional
+:type consolidate: 
+:param consolidate: An option for gene expression level consolidation. 
+If empty, will return every probe for the genes. “pickmax” to pick the
+probe with the highest expression, “pickvar” to pick the prove with the 
+highest variance and “average” for returning the average expression, 
+defaults to None
+:type consolidate: TYPE, optional
+:param <a href="#id7"><span class="problematic" id="id8">**</span></a>kwargs: Additional arguments to pass to raw.get_dataset_expression_for_genes
+:return: A dict of DataFrames keyed to dataset ids
+:rtype: dict[int:DataFrame]</p>
 </dd></dl>
 
 <dl class="py method">
@@ -221,34 +344,47 @@ a dictionary with all the needed fields.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>datasets</strong> (<em>list</em><em>[</em><em>str</em><em>|</em><em>int</em><em>]</em>) – Numerical dataset identifier
+<li><p><strong>datasets</strong> (<em>List</em><em>[</em><em>str</em><em>|</em><em>int</em><em>]</em>) – Numerical dataset identifier
 dataset short names</p></li>
-<li><p><strong>genes</strong> (<em>Optional</em><em>[</em><em>list</em><em>[</em><em>str</em><em>,</em><em>int</em><em>]</em><em>]</em>) – An ncbi gene identifier an, 
+<li><p><strong>genes</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>str</em><em>|</em><em>int</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – An ncbi gene identifier an, 
 ensembl gene identifier which typically starts with ensg or an 
-official gene symbol approved by hgnc</p></li>
-<li><p><strong>keep_non_specific</strong> (<em>bool</em>) – False by default. If True, results from 
-probesets that are not specific to the gene will also be returned.</p></li>
-<li><p><strong>consolidate</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – An option for gene expression level consolidation. 
+official gene symbol approved by hgnc, defaults to None</p></li>
+<li><p><strong>keep_non_specific</strong> (<em>TYPE</em><em>, </em><em>optional</em>) – If True, results from 
+probesets that are not specific to the gene will also be returned,
+defaults to False</p></li>
+<li><p><strong>consolidate</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em><em>, </em><em>optional</em>) – DESCRIPTION, An option for gene expression level consolidation. 
 If empty, will return every probe for the genes. “pickmax” to pick 
 the probe with the highest expression, “pickvar” to pick the prove 
 with the highest variance and “average” for returning the average 
-expression</p></li>
-<li><p><strong>result_sets</strong> (<em>Optional</em><em>[</em><em>list</em><em>[</em><em>int</em><em>]</em><em>]</em>) – Result set IDs of the a 
+expression to None</p></li>
+<li><p><strong>result_sets</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>int</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – Result set IDs of the a 
 differential expression analysis. If provided, the output will only 
 include the samples from the subset used in the result set ID. Must 
-be the same length as datasets.</p></li>
-<li><p><strong>contrasts</strong> (<em>Optional</em><em>[</em><em>list</em><em>[</em><em>int</em><em>]</em><em>]</em>) – Contrast IDs of a differential 
+be the same length as datasets, defaults to None</p></li>
+<li><p><strong>contrasts</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – Contrast IDs of a differential 
 expression contrast. Need result_sets to be defined to work. If 
 provided, the output will only include samples relevant to the ‘
 specific contrats. Must be the same length as datasets.</p></li>
-<li><p><strong>meta_type</strong> (<em>str</em>) – How should the metadata information should be 
-included. Can be “text”, “uri” or “both”. “text” and “uri” options</p></li>
-<li><p><strong>output_type</strong> (<em>str</em>) – Type of the returned object. “anndata” for an 
-AnnData object and “dict” for a dictionary populated with DataFrames.</p></li>
+<li><p><strong>meta_type</strong> (<em>str</em><em>, </em><em>optional</em>) – How should the metadata information should be 
+included. Can be “text”, “uri” or “both”. “text” and “uri” options, defaults to None</p></li>
+<li><p><strong>meta_type</strong> – How should the metadata information should be 
+included. Can be “text”, “uri” or “both”. “text” and “uri” options, defaults to ‘text’</p></li>
+<li><p><strong>output_type</strong> (<em>str</em><em>, </em><em>optional</em>) – Type of the returned object. “anndata” for an 
+AnnData object and “dict” for a dictionary populated with DataFrames,
+defaults to ‘anndata’</p></li>
+<li><p><strong>**kwargs</strong> – <p>DESCRIPTION</p>
+</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>dict | AnnData class object</p>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – DESCRIPTION</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A dictionary containing AnnData objects or nested dictionaries
+that contain expression and sample metada of the requested experiments</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>dict[int:dict|AnnData]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -256,15 +392,116 @@ AnnData object and “dict” for a dictionary populated with DataFrames.</p></l
 <dl class="py method">
 <dt class="sig sig-object py" id="gemmapy.GemmaPy.get_dataset_platforms">
 <span class="sig-name descname"><span class="pre">get_dataset_platforms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.get_dataset_platforms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.get_dataset_platforms" title="Link to this definition">¶</a></dt>
-<dd><p>Retrieve the platform of a dataset</p>
-<dl class="field-list simple">
+<dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>dataset</strong> (<em>str</em>) – (required)</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> (<em>str</em><em>|</em><em>int</em>) – A numerical dataset identifier or a dataset short name</p></li>
+<li><p><strong>**kwargs</strong> – <p>Additional arguments to pass to raw.get_dataset_platforms</p>
+</p></li>
+</ul>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#gemmapy.sdk.models.ResponseDataObjectListArrayDesignValueObject" title="gemmapy.sdk.models.ResponseDataObjectListArrayDesignValueObject">ResponseDataObjectListArrayDesignValueObject</a></p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p>A DataFrame with information about the platforms.</p>
+<p>The fields of the DataFrame are:</p>
+<ul class="simple">
+<li><p>platform_ID: Id number of the platform given by Gemma</p></li>
+<li><p>platform_type: Type of the platform.</p></li>
+<li><p>platform_description: Free text field describing the platform.</p></li>
+<li><p>platform_troubled: Whether the platform is marked as troubled by a Gemma curator.</p></li>
+<li><p>taxon_name: Name of the species</p></li>
+<li><p>taxon_scientific: Scientific name for the taxon</p></li>
+<li><p>taxon_ID: Internal identifier given to the species by Gemma</p></li>
+<li><p>taxon_NCBI: NCBI ID of the taxon</p></li>
+<li><p>taxon_database_name: Underlying database used in Gemma for the taxon</p></li>
+<li><p>taxon_database_ID: ID of the underlying database used in Gemma for the taxon</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>DataFrame</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gemmapy.GemmaPy.get_dataset_processed_expression">
+<span class="sig-name descname"><span class="pre">get_dataset_processed_expression</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.get_dataset_processed_expression"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.get_dataset_processed_expression" title="Link to this definition">¶</a></dt>
+<dd><p>Retrieve processed expression data of a dataset</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> (<em>str</em><em>|</em><em>int</em>) – numerical dataset identifier or a dataset short name</p></li>
+<li><p><strong>**kwargs</strong> – <p>Additional arguments to pass to raw.get_dataset_processed_expression</p>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A DataFrame of the expression matrix for the queried dataset</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gemmapy.GemmaPy.get_dataset_quantitation_types">
+<span class="sig-name descname"><span class="pre">get_dataset_quantitation_types</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.get_dataset_quantitation_types"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.get_dataset_quantitation_types" title="Link to this definition">¶</a></dt>
+<dd><p>Retrieve quantitation types of a dataset</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> (<em>int</em><em>|</em><em>str</em>) – A numerical dataset identifier or a dataset short name</p></li>
+<li><p><strong>**kwargs</strong> – <p>Additional arguments to pass to raw.get_dataset_quantitation_types</p>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A DataFrame containing the quantitation types</p>
+</dd>
+</dl>
+<dl>
+<dt>The fields of the output DataFrame are:</dt><dd><ul class="simple">
+<li><p>id: If of the quantitation type. Any raw quantitation type can be</p></li>
+</ul>
+<p>accessed by get_dataset_raw_expression function using this id.
+- name: Name of the quantitation type
+- description: Description of the quantitation type
+- type: Type of the quantitation type. Either raw or processed. 
+Each dataset will have one processed quantitation type which is the 
+data returned using get_dataset_processed_expression
+- ratio: Whether or not the quanitation type is a ratio of multiple
+quantitation types. Typically TRUE for processed TWOCOLOR quantitation type.
+- preferred: The preferred raw quantitation type. This version is 
+used in generation of the processed data within gemma.
+- recomputed: If TRUE this quantitation type is generated by
+recomputing raw data files Gemma had access to</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gemmapy.GemmaPy.get_dataset_raw_expression">
+<span class="sig-name descname"><span class="pre">get_dataset_raw_expression</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quantitation_type</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.get_dataset_raw_expression"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.get_dataset_raw_expression" title="Link to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> (<em>int</em><em>|</em><em>str</em>) – A numerical dataset identifier or a dataset short name</p></li>
+<li><p><strong>quantitation_type</strong> (<span class="sphinx_autodoc_typehints-type">[&lt;class ‘int’&gt;]</span>) – Quantitation type id. These can be acquired</p></li>
+</ul>
+</dd>
+</dl>
+<p>using get_dataset_quantitation_types function. This endpoint can only 
+return non-processed quantitation types.
+:type quantitation_type: [int]
+:param <a href="#id19"><span class="problematic" id="id20">**</span></a>kwargs: Additional arguments to pass to raw.get_dataset_raw_expression
+:return: A DataFrame of the expression matrix for the queried dataset
+:rtype: DataFrame</p>
 </dd></dl>
 
 <dl class="py method">
@@ -273,31 +510,136 @@ AnnData object and “dict” for a dictionary populated with DataFrames.</p></l
 <dd><p>Retrieve the samples of a dataset</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>dataset</strong> (<em>str</em>) – (required)</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> (<em>int</em><em>|</em><em>str</em>) – A numerical dataset identifier or a dataset short name</p></li>
+<li><p><strong>**kwargs</strong> – <p>Additional arguments to pass to raw.get_dataset_samples</p>
+</p></li>
+</ul>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#gemmapy.sdk.models.ResponseDataObjectListBioAssayValueObject" title="gemmapy.sdk.models.ResponseDataObjectListBioAssayValueObject">ResponseDataObjectListBioAssayValueObject</a></p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A DataFrame with information about the samples of the queried dataset.</p>
 </dd>
+</dl>
+<dl class="simple">
+<dt>The fields of the DataFrame are:</dt><dd><ul class="simple">
+<li><p>sample_name: Internal name given to the sample.</p></li>
+<li><p>sample_ID: Internal ID of the sample</p></li>
+<li><p>sample_description: Free text description of the sample</p></li>
+<li><p>sample_outlier: Whether or not the sample is marked as an outlier</p></li>
+<li><p>sample_accession: Accession ID of the sample in it’s original database</p></li>
+<li><p>sample_database: Database of origin for the sample</p></li>
+<li><p>sample_characteristics: Characteristics of the sample. This field is a data table</p></li>
+<li><p>sample_factor_values: Experimental factor values of the sample. This field is a data table</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gemmapy.GemmaPy.get_datasets">
+<span class="sig-name descname"><span class="pre">get_datasets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">taxa</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uris</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'+id'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.get_datasets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.get_datasets" title="Link to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span></p>
+</dd>
+</dl>
+<dl>
+<dt>A vector of taxon common names (e.g. human, mouse, rat). Providing multiple species will return results for all species. These are appended to the filter and equivalent to filtering for taxon.commonName property, defaults to None</dt><dd><dl class="field-list simple">
+<dt class="field-odd">param taxa<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A list of taxon common names (e.g. human, mouse, rat).</p>
+</dd>
+</dl>
+<p>Providing multiple species will return results for all species. 
+These are appended to the filter and equivalent to filtering for 
+taxon.commonName property, defaults to None
+:type taxa: Optional[List[str]], optional</p>
+</dd>
+</dl>
+<dl class="field-list simple">
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gemmapy.GemmaPy.get_datasets_by_ids">
 <span class="sig-name descname"><span class="pre">get_datasets_by_ids</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">taxa</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uris</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'+id'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.get_datasets_by_ids"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.get_datasets_by_ids" title="Link to this definition">¶</a></dt>
-<dd><p>Retrieve datasets by their identifiers</p>
-<dl class="field-list simple">
+<dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>dataset</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – (required)</p></li>
-<li><p><strong>filter</strong> (<em>str</em>) – Filter results by matching the expression</p></li>
-<li><p><strong>offset</strong> (<em>int</em>) – The offset of the first retrieved result</p></li>
-<li><p><strong>limit</strong> (<em>int</em>) – Limit the number of results retrieved</p></li>
-<li><p><strong>sort</strong> (<em>str</em>) – Order results by the given property and direction. The ‘+’
-sign indicate ascending order whereas the ‘-’ indicate descending.</p></li>
+<li><p><strong>dataset</strong> (<em>List</em><em>[</em><em>str</em><em>|</em><em>int</em><em>]</em>) – Numerical dataset identifiers or dataset short names.</p></li>
+<li><p><strong>filter</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</span>) – Filter results by matching expression. Use</p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#gemmapy.sdk.models.PaginatedResponseDataObjectExpressionExperimentValueObject" title="gemmapy.sdk.models.PaginatedResponseDataObjectExpressionExperimentValueObject">PaginatedResponseDataObjectExpressionExperimentValueObject</a></p>
+</dl>
+<p>filter_properties function to get a list of all available parameters. 
+These properties can be combined using “and” “or” clauses and may 
+contain common operators such as “=”, “&lt;” or “in”. (e.g. 
+“taxon.commonName = human”, “taxon.commonName in (human,mouse), 
+“id &lt; 1000”), defaults to None
+:type filter: Optional[str], optional
+:type taxa: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]]</span>
+:param taxa: A list of taxon common names (e.g. human, mouse, rat). 
+Providing multiple species will return results for all species. 
+These are appended to the filter and equivalent to filtering for 
+taxon.commonName property, defaults to None
+:type taxa: Optional[List[str]], optional
+:type uris: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]]</span>
+:param uris: A vector of ontology term URIs. Providing multiple terms
+will return results containing any of the terms and their children. 
+These are appended to the filter and equivalent to filtering for 
+allCharacteristics.valueUri, defaults to None
+:type uris: Optional[List[str]], optional
+:type offset: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>
+:param offset: The offset of the first retrieved result., defaults to 0
+:type offset: int, optional
+:type limit: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>
+:param limit: Limits the result to specified amount of objects.
+Has a maximum value of 100. Use together with offset and the 
+total_elements attribute in the output to compile all data if needed.
+Alternatively get_all_pages function can be used with all functions
+including offset and limit parameters, defaults to 20
+:type limit: int, optional
+:type sort: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>
+:param sort: Order results by the given property and direction. The ‘+’
+sign indicate ascending order whereas the ‘-’ indicate descending,
+defaults to “+id”
+:type sort: str, optional
+:param <a href="#id25"><span class="problematic" id="id26">**</span></a>kwargs: Additional arguments to pass to raw.get_datasets_by_ids
+:return: A DataFrame with information about the queried dataset(s).</p>
+<dl class="simple">
+<dt>The fields of the DataFrame are:</dt><dd><ul class="simple">
+<li><p>experiment_short_name: Shortname given to the dataset within Gemma. Often corresponds to accession ID</p></li>
+<li><p>experiment_name: Full title of the dataset</p></li>
+<li><p>experiment_ID: Internal ID of the dataset.</p></li>
+<li><p>experiment_description: Description of the dataset</p></li>
+<li><p>experiment_troubled: Did an automatic process within gemma or a curator mark the dataset as “troubled”</p></li>
+<li><p>experiment_accession: Accession ID of the dataset in the external database it was taken from</p></li>
+<li><p>experiment_database: The name of the database where the dataset was taken from</p></li>
+<li><p>experiment_URI: URI of the original database</p></li>
+<li><p>experiment_sample_count: Number of samples in the dataset</p></li>
+<li><p>experiment_batch_effect: A text field describing whether the dataset has batch effects</p></li>
+<li><p>geeq.batch_corrected: Whether batch correction has been performed on the dataset.</p></li>
+<li><p>geeq.batch_confound: 0 if batch info isn’t available, -1 if batch counfoud is detected, 1 if batch information is available and no batch confound found</p></li>
+<li><p>geeq.batch_effect: -1 if batch p value &lt; 0.0001, 1 if batch p value &gt; 0.1, 0 if otherwise and when there is no batch information is available or when the data is confounded with batches.</p></li>
+<li><p>geeq_raw_data: -1 if no raw data available, 1 if raw data was available. When available, Gemma reprocesses raw data to get expression values and batches</p></li>
+<li><p>geeq_q_score: Data quality score given to the dataset by Gemma.</p></li>
+<li><p>geeq.s_score: Suitability score given to the dataset by Gemma. Refers to factors like batches, platforms and other aspects of experimental design</p></li>
+<li><p>taxon_name: Name of the species</p></li>
+<li><p>taxon_scientific: Scientific name for the taxon</p></li>
+<li><p>taxon_ID: Internal identifier given to the species by Gemma</p></li>
+<li><p>taxon_NCBI: NCBI ID of the taxon</p></li>
+<li><p>taxon_database_name: Underlying database used in Gemma for the taxon</p></li>
+<li><p>taxon_database_ID: ID of the underyling database used in Gemma for the taxon</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -309,35 +651,74 @@ sign indicate ascending order whereas the ‘-’ indicate descending.</p></li>
 If there is more than one resultSet, use get_result_sets() to see the options
 and get the ID you want. Alternatively, you can query the resultSet directly
 if you know its ID beforehand.</p>
+<p>In Gemma each result set corresponds to the estimated effects 
+associated with a single factor in the design, and each can have 
+multiple contrasts (for each level compared to baseline). Thus a 
+dataset with a 2x3 factorial design will have two result sets, one of 
+which will have one contrast, and one having two contrasts.</p>
+<p>The methodology for differential expression is explained in <a class="reference external" href="https://doi.org/10.1093/database/baab006">Curation 
+of over 10000 transcriptomic studies to enable data reuse</a>.
+Briefly, differential expression analysis is performed on the dataset
+based on the annotated experimental design with up two three potentially
+nested factors. Gemma attempts to automatically assign baseline conditions
+for each factor. In the absence of a clear control condition, a baseline 
+is arbitrarily selected. A generalized linear model with empirical Bayes
+shrinkage of t-statistics is fit to the data for each platform element 
+(probe/gene) using an implementation of the limma algorithm. For 
+RNA-seq data, we use weighted regression, applying the voom algorithm
+to compute weights from the mean–variance relationship of the data. 
+Contrasts of each condition are then computed compared to the selected 
+baseline. In some situations, Gemma will split the data into subsets for
+analysis. A typical such situation is when a ‘batch’ factor is present 
+and confounded with another factor, the subsets being determined by the
+levels of the confounding factor.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>dataset</strong> (<em>Optional</em><em>[</em><em>str</em><em>|</em><em>int</em><em>]</em>) – A dataset identifier.</p></li>
-<li><p><strong>result_sets</strong> (<em>Optional</em><em>[</em><em>int</em><em>]</em>) – result set identifiers. If a dataset
+<li><p><strong>dataset</strong> (<em>Optional</em><em>[</em><em>str</em><em>|</em><em>int</em><em>]</em><em>, </em><em>optional</em>) – A dataset identifier, defaults to None</p></li>
+<li><p><strong>result_sets</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>str</em><em>|</em><em>int</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – result set identifiers. If a dataset
 is not provided, all result sets will be downloaded. If it is provided
-it will only be used to ensure all result sets belong to the dataset.</p></li>
-<li><p><strong>readable_contrasts</strong> (<em>bool</em>) – If False (default), the returned columns
+it will only be used to ensure all result sets belong to the dataset, defaults to None</p></li>
+<li><p><strong>readable_contrasts</strong> (<em>bool</em><em>, </em><em>optional</em>) – If False (default), the returned columns
 will use internal constrasts IDs as names. Details about the contrasts can be
 accessed using get_dataset_differential_expression_analyses(). If True IDs
-will be replaced with human readable contrast information.</p></li>
+will be replaced with human readable contrast information, defaults to False</p></li>
+<li><p><strong>**kwargs</strong> – </p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>list[DataFrame]</p>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – Will return a value error if neither result_sets nor a dataset</p>
 </dd>
 </dl>
+<p>is provided
+:return: A list of data frames with differential expression values per result set.
+:rtype: List[DataFrame]</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gemmapy.GemmaPy.get_gene_go_terms">
 <span class="sig-name descname"><span class="pre">get_gene_go_terms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gene</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.get_gene_go_terms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.get_gene_go_terms" title="Link to this definition">¶</a></dt>
-<dd><p>Retrieve the GO terms associated to a gene</p>
-<dl class="field-list simple">
+<dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>gene</strong> (<em>str</em>) – (required)</p>
+<dd class="field-odd"><p><strong>gene</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>) – An ensembl gene identifier which typically starts with</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#gemmapy.sdk.models.ResponseDataObjectListGeneOntologyTermValueObject" title="gemmapy.sdk.models.ResponseDataObjectListGeneOntologyTermValueObject">ResponseDataObjectListGeneOntologyTermValueObject</a></p>
+</dl>
+<p>ensg or an ncbi gene identifier or an official gene symbol approved by
+hgnc
+:type gene: str|int
+:param <a href="#id31"><span class="problematic" id="id32">**</span></a>kwargs: Additional arguments to pass to raw.get_gene_go_terms
+:return: A DataFrame with information about the GO terms assigned to the queried gene
+The fields of the output DataFrame are:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>term_name: Name of the term</p></li>
+<li><p>term_ID: ID of the term</p></li>
+<li><p>term_URI: URI of the term</p></li>
+</ul>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -345,13 +726,36 @@ will be replaced with human readable contrast information.</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="gemmapy.GemmaPy.get_gene_locations">
 <span class="sig-name descname"><span class="pre">get_gene_locations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gene</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.get_gene_locations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.get_gene_locations" title="Link to this definition">¶</a></dt>
-<dd><p>Retrieve the physical locations of a given gene</p>
-<dl class="field-list simple">
+<dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>gene</strong> (<em>str</em>) – (required)</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gene</strong> (<em>str</em><em>|</em><em>int</em>) – DESCRIPTION</p></li>
+<li><p><strong>**kwargs</strong> – <p>DAdditional arguments to pass to raw.get_gene_locations</p>
+</p></li>
+</ul>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#gemmapy.sdk.models.ResponseDataObjectListPhysicalLocationValueObject" title="gemmapy.sdk.models.ResponseDataObjectListPhysicalLocationValueObject">ResponseDataObjectListPhysicalLocationValueObject</a></p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A DataFrame with information about the physical location of the queried gene</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>The fields of the output DataFrame are:</dt><dd><ul class="simple">
+<li><p>chromosome: Name of the chromosome the gene is located</p></li>
+<li><p>strand: Which strand the gene is located</p></li>
+<li><p>nucleotide: Nucleotide number for the gene</p></li>
+<li><p>length: Gene length</p></li>
+<li><p>taxon_name: Name of the species</p></li>
+<li><p>taxon_scientific: Scientific name for the taxon</p></li>
+<li><p>taxon_ID: Internal identifier given to the species by Gemma</p></li>
+<li><p>taxon_NCBI: NCBI ID of the taxon</p></li>
+<li><p>taxon_database_name: Underlying database used in Gemma for the taxon</p></li>
+<li><p>taxon_database_ID: ID of the underlying database used in Gemma for the taxon</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -359,17 +763,50 @@ will be replaced with human readable contrast information.</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="gemmapy.GemmaPy.get_gene_probes">
 <span class="sig-name descname"><span class="pre">get_gene_probes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gene</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.get_gene_probes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.get_gene_probes" title="Link to this definition">¶</a></dt>
-<dd><p>Retrieve the probes associated to a genes</p>
+<dd><p>Retrieve the probes associated to a genes across all platforms</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>gene</strong> (<em>str</em>) – (required)</p></li>
-<li><p><strong>offset</strong> (<em>int</em>) – The offset of the first retrieved result</p></li>
-<li><p><strong>limit</strong> (<em>int</em>) – Limit the number of results retrieved</p></li>
+<dd class="field-odd"><p><strong>gene</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>) – An ensembl gene identifier which typically starts with</p>
+</dd>
+</dl>
+<p>ensg or an ncbi gene identifier or an official gene symbol approved by 
+hgnc
+:type gene: str|int
+:type offset: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>
+:param offset: The offset of the first retrieved result., defaults to 0
+:type offset: int, optional
+:type limit: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>
+:param limit: Limits the result to specified amount of objects.
+Has a maximum value of 100. Use together with offset and the 
+total_elements attribute in the output to compile all data if needed.
+Alternatively get_all_pages function can be used with all functions
+including offset and limit parameters, defaults to 20
+:type limit: int, optional
+:param <a href="#id37"><span class="problematic" id="id38">**</span></a>kwargs: Additional arguments to pass to raw.get_gene_probes
+:return: A DataFrame with information about the probes representing a 
+gene across all platrofms.</p>
+<dl class="simple">
+<dt>The fields of the output DataFrame are:</dt><dd><ul class="simple">
+<li><p>element_name: Name of the element. Typically the probeset name</p></li>
+<li><p>element_description: A free text field providing optional information about the element</p></li>
+<li><p>platform_short_name: Shortname of the platform given by Gemma. Typically the GPL identifier.</p></li>
+<li><p>platform_name: Full name of the platform</p></li>
+<li><p>platform_ID: Id number of the platform given by Gemma</p></li>
+<li><p>platform_type: Type of the platform.</p></li>
+<li><p>platform_description: Free text field describing the platform.</p></li>
+<li><p>platform_troubled: Whether the platform is marked as troubled by a Gemma curator.</p></li>
+<li><p>taxon_name: Name of the species</p></li>
+<li><p>taxon_scientific: Scientific name for the taxon</p></li>
+<li><p>taxon_ID: Internal identifier given to the species by Gemma</p></li>
+<li><p>taxon_NCBI: NCBI ID of the taxon</p></li>
+<li><p>taxon_database_name: Underlying database used in Gemma for the taxon</p></li>
+<li><p>taxon_database_ID: ID of the underlying database used in Gemma for the taxon</p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#gemmapy.sdk.models.PaginatedResponseDataObjectCompositeSequenceValueObject" title="gemmapy.sdk.models.PaginatedResponseDataObjectCompositeSequenceValueObject">PaginatedResponseDataObjectCompositeSequenceValueObject</a></p>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -377,13 +814,40 @@ will be replaced with human readable contrast information.</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="gemmapy.GemmaPy.get_genes">
 <span class="sig-name descname"><span class="pre">get_genes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">genes</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.get_genes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.get_genes" title="Link to this definition">¶</a></dt>
-<dd><p>Retrieve genes matching a gene identifier</p>
+<dd><p>Retrieve genes matching gene identifiers</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>genes</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – (required)</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>genes</strong> (<em>int</em><em>|</em><em>str</em>) – An ensembl gene identifier which typically starts with 
+ensg or an ncbi gene identifier or an official gene symbol approved by hgnc</p></li>
+<li><p><strong>**kwargs</strong> – <p>Additional arguments to pass to raw_get_genes</p>
+</p></li>
+</ul>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#gemmapy.sdk.models.ResponseDataObjectListGeneValueObject" title="gemmapy.sdk.models.ResponseDataObjectListGeneValueObject">ResponseDataObjectListGeneValueObject</a></p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A DataFrame with the information about the querried genes.</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>The fields of the output DataFrame are:</dt><dd><ul class="simple">
+<li><p>gene_symbol: Symbol for the gene</p></li>
+<li><p>gene_ensembl: Ensembl ID for the gene</p></li>
+<li><p>gene_NCBI: NCBI id for the gene</p></li>
+<li><p>gene_name: Name of the gene</p></li>
+<li><p>gene_aliases: Gene aliases. Each row includes a vector</p></li>
+<li><p>gene_MFX_rank: Multifunctionality rank for the gene</p></li>
+<li><p>taxon_name: Name of the species</p></li>
+<li><p>taxon_scientific: Scientific name for the taxon</p></li>
+<li><p>taxon_ID: Internal identifier given to the species by Gemma</p></li>
+<li><p>taxon_NCBI: NCBI ID of the taxon</p></li>
+<li><p>taxon_database_name: Underlying database used in Gemma for the taxon</p></li>
+<li><p>taxon_database_ID: ID of the underlying database used in Gemma for the taxon</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -391,13 +855,29 @@ will be replaced with human readable contrast information.</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="gemmapy.GemmaPy.get_platform_annotations">
 <span class="sig-name descname"><span class="pre">get_platform_annotations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">platform</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.get_platform_annotations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.get_platform_annotations" title="Link to this definition">¶</a></dt>
-<dd><p>Retrieve the annotations of a given platform</p>
+<dd><p>Gets Gemma’s platform annotations including mappings of microarray probes to genes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>platform</strong> (<em>str</em>) – (required)</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>platform</strong> (<em>int</em><em>|</em><em>str</em>) – A platform numerical identifier or a platform short name</p></li>
+<li><p><strong>**kwargs</strong> – <p>Additional arguments to pass to raw.get_platform_annotations</p>
+</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>DataFrame</p>
+<dd class="field-even"><p>A DataFrame of annotations</p>
+</dd>
+</dl>
+<ul class="simple">
+<li><p>ProbeName: Probeset names provided by the platform. Gene symbols for generic annotations</p></li>
+<li><p>GeneSymbols: Genes that were found to be aligned to the probe sequence. Note that it is possible for probes to be non-specific. Alignment to multiple genes are indicated with gene symbols separated by “|”s</p></li>
+<li><p>GeneNames: Name of the gene</p></li>
+<li><p>GOTerms: GO Terms associated with the genes. annotType argument can be used to choose which terms should be included.</p></li>
+<li><p>GemmaIDs and NCBIids: respective IDs for the genes.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -405,17 +885,53 @@ will be replaced with human readable contrast information.</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="gemmapy.GemmaPy.get_platform_datasets">
 <span class="sig-name descname"><span class="pre">get_platform_datasets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">platform</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.get_platform_datasets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.get_platform_datasets" title="Link to this definition">¶</a></dt>
-<dd><p>Retrieve all experiments within a given platform</p>
+<dd><p>Retrieve all experiments using a given platform</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>platform</strong> (<em>str</em>) – (required)</p></li>
-<li><p><strong>offset</strong> (<em>int</em>) – The offset of the first retrieved result</p></li>
-<li><p><strong>limit</strong> (<em>int</em>) – Limit the number of results retrieved</p></li>
+<li><p><strong>platform</strong> (<em>str</em><em>|</em><em>int</em>) – A platform numerical identifier or a platform short name</p></li>
+<li><p><strong>offset</strong> (<em>int</em><em>, </em><em>optional</em>) – The offset of the first retrieved result., defaults to 0</p></li>
+<li><p><strong>limit</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>) – Limits the result to specified amount of objects.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#gemmapy.sdk.models.PaginatedResponseDataObjectExpressionExperimentValueObject" title="gemmapy.sdk.models.PaginatedResponseDataObjectExpressionExperimentValueObject">PaginatedResponseDataObjectExpressionExperimentValueObject</a></p>
+</dl>
+<p>Has a maximum value of 100. Use together with offset and the 
+total_elements attribute in the output to compile all data if needed.
+Alternatively get_all_pages function can be used with all functions
+including offset and limit parameters, defaults to 20
+:type limit: int, optional
+:param <a href="#id45"><span class="problematic" id="id46">**</span></a>kwargs: Additional arguments to pass to raw.get_platform_datasets
+:return: A DataFrame with information about the queried dataset(s).</p>
+<dl class="simple">
+<dt>The fields of the DataFrame are:</dt><dd><ul class="simple">
+<li><p>experiment_short_name: Shortname given to the dataset within Gemma. Often corresponds to accession ID</p></li>
+<li><p>experiment_name: Full title of the dataset</p></li>
+<li><p>experiment_ID: Internal ID of the dataset.</p></li>
+<li><p>experiment_description: Description of the dataset</p></li>
+<li><p>experiment_troubled: Did an automatic process within gemma or a curator mark the dataset as “troubled”</p></li>
+<li><p>experiment_accession: Accession ID of the dataset in the external database it was taken from</p></li>
+<li><p>experiment_database: The name of the database where the dataset was taken from</p></li>
+<li><p>experiment_URI: URI of the original database</p></li>
+<li><p>experiment_sample_count: Number of samples in the dataset</p></li>
+<li><p>experiment_batch_effect: A text field describing whether the dataset has batch effects</p></li>
+<li><p>geeq.batch_corrected: Whether batch correction has been performed on the dataset.</p></li>
+<li><p>geeq.batch_confound: 0 if batch info isn’t available, -1 if batch counfoud is detected, 1 if batch information is available and no batch confound found</p></li>
+<li><p>geeq.batch_effect: -1 if batch p value &lt; 0.0001, 1 if batch p value &gt; 0.1, 0 if otherwise and when there is no batch information is available or when the data is confounded with batches.</p></li>
+<li><p>geeq_raw_data: -1 if no raw data available, 1 if raw data was available. When available, Gemma reprocesses raw data to get expression values and batches</p></li>
+<li><p>geeq_q_score: Data quality score given to the dataset by Gemma.</p></li>
+<li><p>geeq.s_score: Suitability score given to the dataset by Gemma. Refers to factors like batches, platforms and other aspects of experimental design</p></li>
+<li><p>taxon_name: Name of the species</p></li>
+<li><p>taxon_scientific: Scientific name for the taxon</p></li>
+<li><p>taxon_ID: Internal identifier given to the species by Gemma</p></li>
+<li><p>taxon_NCBI: NCBI ID of the taxon</p></li>
+<li><p>taxon_database_name: Underlying database used in Gemma for the taxon</p></li>
+<li><p>taxon_database_ID: ID of the underyling database used in Gemma for the taxon</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -427,14 +943,104 @@ will be replaced with human readable contrast information.</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>platform</strong> (<em>str</em>) – (required)</p></li>
-<li><p><strong>probe</strong> (<em>str</em>) – (required)</p></li>
-<li><p><strong>offset</strong> (<em>int</em>) – The offset of the first retrieved result</p></li>
-<li><p><strong>limit</strong> (<em>int</em>) – Limit the number of results retrieved</p></li>
+<li><p><strong>platform</strong> (<em>str</em><em>|</em><em>int</em>) – A platform numerical identifier or a platform short name</p></li>
+<li><p><strong>probe</strong> (<em>str</em><em>|</em><em>int</em>) – A probe name or it’s numerical identifier</p></li>
+<li><p><strong>offset</strong> (<em>int</em><em>, </em><em>optional</em>) – The offset of the first retrieved result., defaults to 0</p></li>
+<li><p><strong>limit</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>) – Limits the result to specified amount of objects.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>PaginatedResponseDataObjectGeneValueObject</p>
+</dl>
+<p>Has a maximum value of 100. Use together with offset and the 
+total_elements attribute in the output to compile all data if needed.
+Alternatively get_all_pages function can be used with all functions
+including offset and limit parameters, defaults to 20
+:type limit: int, optional
+:param <a href="#id47"><span class="problematic" id="id48">**</span></a>kwargs: Additional arguments to pass to raw.get_platform_element_genes
+:type <a href="#id49"><span class="problematic" id="id50">**</span></a>kwargs: TYPE
+:return: A DataFrame with the information about querried gene(s).
+The fields of the output DataFrame are:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>gene_symbol: Symbol for the gene</p></li>
+<li><p>gene_ensembl: Ensembl ID for the gene</p></li>
+<li><p>gene_NCBI: NCBI id for the gene</p></li>
+<li><p>gene_name: Name of the gene</p></li>
+<li><p>gene_aliases: Gene aliases. Each row includes a vector</p></li>
+<li><p>gene_MFX_rank: Multifunctionality rank for the gene</p></li>
+<li><p>taxon_name: Name of the species</p></li>
+<li><p>taxon_scientific: Scientific name for the taxon</p></li>
+<li><p>taxon_ID: Internal identifier given to the species by Gemma</p></li>
+<li><p>taxon_NCBI: NCBI ID of the taxon</p></li>
+<li><p>taxon_database_name: Underlying database used in Gemma for the taxon</p></li>
+<li><p>taxon_database_ID: ID of the underlying database used in Gemma for the taxon</p></li>
+</ul>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gemmapy.GemmaPy.get_platforms">
+<span class="sig-name descname"><span class="pre">get_platforms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">taxa</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'+id'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.get_platforms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.get_platforms" title="Link to this definition">¶</a></dt>
+<dd><p>Retrieve all platforms</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filter</strong> (<em>str</em><em>, </em><em>optional</em>) – Filter results by matching expression. Use 
+filter_properties function to get a list of all available parameters.
+These properties can be combined using “and” “or” clauses and may 
+contain common operators such as “=”, “&lt;” or “in”. (e.g. 
+“taxon.commonName = human”, “taxon.commonName in (human,mouse), 
+“id &lt; 1000”), defaults to None</p></li>
+<li><p><strong>taxa</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]]</span>) – A list of taxon common names (e.g. human, mouse, rat).</p></li>
+</ul>
+</dd>
+</dl>
+<p>Providing multiple species will return results for all species. These 
+are appended to the filter and equivalent to filtering for 
+taxon.commonName property, defaults to None
+:type taxa: List[str], optional
+:type offset: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>
+:param offset: The offset of the first retrieved result., defaults to 0
+:type offset: int, optional
+:type limit: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>
+:param limit: Limits the result to specified amount of objects.
+Has a maximum value of 100. Use together with offset and the 
+total_elements attribute in the output to compile all data if needed.
+Alternatively get_all_pages function can be used with all functions
+including offset and limit parameters, defaults to 20
+:type limit: int, optional
+:type sort: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>
+:param sort: Order results by the given property and direction. The ‘+’
+sign indicate ascending order whereas the ‘-’ indicate descending,
+defaults to “+id”
+:type sort: str, optional
+:param <a href="#id51"><span class="problematic" id="id52">**</span></a>kwargs: Additional arguments to raw.get_platforms_by_ids
+:return: A DataFrame with information about the platform(s).</p>
+<p>The fields of the output DataFrame are:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>platform_ID: Internal identifier of the platform</p></li>
+<li><p>platform_short_name: Shortname of the platform.</p></li>
+<li><p>platform_name: Full name of the platform.</p></li>
+<li><p>platform_description: Free text description of the platform</p></li>
+<li><p>platform_troubled: Whether or not the platform was marked “troubled” by a Gemma process or a curator</p></li>
+<li><p>platform_experiment_count: Number of experiments using the platform within Gemma</p></li>
+<li><p>platform_type: Technology type for the platform.</p></li>
+<li><p>taxon_name: Name of the species platform was made for</p></li>
+<li><p>taxon_scientific: Scientific name for the taxon</p></li>
+<li><p>taxon_ID: Internal identifier given to the species by Gemma</p></li>
+<li><p>taxon_NCBI: NCBI ID of the taxon</p></li>
+<li><p>taxon_database_name: Underlying database used in Gemma for the taxon</p></li>
+<li><p>taxon_database_ID: ID of the underyling database used in Gemma for the taxon</p></li>
+</ul>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -442,20 +1048,63 @@ will be replaced with human readable contrast information.</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="gemmapy.GemmaPy.get_platforms_by_ids">
 <span class="sig-name descname"><span class="pre">get_platforms_by_ids</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">platforms</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">taxa</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'+id'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.get_platforms_by_ids"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.get_platforms_by_ids" title="Link to this definition">¶</a></dt>
-<dd><p>Retrieve all platforms matching a set of platform identifiers</p>
+<dd><p>Retrieve platforms by their identifiers</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>platform</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – (required)</p></li>
-<li><p><strong>filter</strong> (<em>str</em>) – Filter results by matching the expression</p></li>
-<li><p><strong>offset</strong> (<em>int</em>) – The offset of the first retrieved result</p></li>
-<li><p><strong>limit</strong> (<em>int</em>) – Limit the number of results retrieved</p></li>
-<li><p><strong>sort</strong> (<em>str</em>) – Order results by the given property and direction. The ‘+’
-sign indicate ascending order whereas the ‘-’ indicate descending.</p></li>
+<li><p><strong>platforms</strong> (<em>List</em><em>[</em><em>str</em><em>|</em><em>int</em><em>]</em>) – Platform numerical identifiers or platform short names.</p></li>
+<li><p><strong>filter</strong> (<em>str</em><em>, </em><em>optional</em>) – Filter results by matching expression. Use 
+filter_properties function to get a list of all available parameters.
+These properties can be combined using “and” “or” clauses and may 
+contain common operators such as “=”, “&lt;” or “in”. (e.g. 
+“taxon.commonName = human”, “taxon.commonName in (human,mouse), 
+“id &lt; 1000”), defaults to None</p></li>
+<li><p><strong>taxa</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]]</span>) – A list of taxon common names (e.g. human, mouse, rat).</p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>PaginatedResponseDataObjectArrayDesignValueObject</p>
+</dl>
+<p>Providing multiple species will return results for all species. These 
+are appended to the filter and equivalent to filtering for 
+taxon.commonName property, defaults to None
+:type taxa: List[str], optional
+:type offset: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>
+:param offset: The offset of the first retrieved result., defaults to 0
+:type offset: int, optional
+:type limit: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>
+:param limit: Limits the result to specified amount of objects.
+Has a maximum value of 100. Use together with offset and the 
+total_elements attribute in the output to compile all data if needed.
+Alternatively get_all_pages function can be used with all functions
+including offset and limit parameters, defaults to 20
+:type limit: int, optional
+:type sort: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>
+:param sort: Order results by the given property and direction. The ‘+’
+sign indicate ascending order whereas the ‘-’ indicate descending,
+defaults to “+id”
+:type sort: str, optional
+:param <a href="#id53"><span class="problematic" id="id54">**</span></a>kwargs: Additional arguments to raw.get_platforms_by_ids
+:return: A DataFrame with information about the platform(s).</p>
+<p>The fields of the output DataFrame are:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>platform_ID: Internal identifier of the platform</p></li>
+<li><p>platform_short_name: Shortname of the platform.</p></li>
+<li><p>platform_name: Full name of the platform.</p></li>
+<li><p>platform_description: Free text description of the platform</p></li>
+<li><p>platform_troubled: Whether or not the platform was marked “troubled” by a Gemma process or a curator</p></li>
+<li><p>platform_experiment_count: Number of experiments using the platform within Gemma</p></li>
+<li><p>platform_type: Technology type for the platform.</p></li>
+<li><p>taxon_name: Name of the species platform was made for</p></li>
+<li><p>taxon_scientific: Scientific name for the taxon</p></li>
+<li><p>taxon_ID: Internal identifier given to the species by Gemma</p></li>
+<li><p>taxon_NCBI: NCBI ID of the taxon</p></li>
+<li><p>taxon_database_name: Underlying database used in Gemma for the taxon</p></li>
+<li><p>taxon_database_ID: ID of the underyling database used in Gemma for the taxon</p></li>
+</ul>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -463,13 +1112,83 @@ sign indicate ascending order whereas the ‘-’ indicate descending.</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="gemmapy.GemmaPy.get_result_sets">
 <span class="sig-name descname"><span class="pre">get_result_sets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datasets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result_sets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'+id'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.get_result_sets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.get_result_sets" title="Link to this definition">¶</a></dt>
-<dd><p>Retrieve all result sets matching the provided criteria</p>
+<dd><p>Returns queried result set</p>
+<p>Output and usage of this function is mostly identical to 
+get_dataset_differential_expression_analyses. The principal difference
+being the ability to restrict your result sets, being able to query 
+across multiple datasets and being able to use the filter argument to 
+search based on result set properties.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>dataset</strong> (<em>str</em>) – (required)</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>datasets</strong> (<em>T.Optional</em><em>[</em><em>T.List</em><em>[</em><em>T.Union</em><em>[</em><em>str</em><em>,</em><em>int</em><em>]</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – A numerical dataset identifier or a dataset short name, defaults to None</p></li>
+<li><p><strong>result_sets</strong> (<em>T.Optional</em><em>[</em><em>T.List</em><em>[</em><em>int</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – A result set identifier. Note that result set identifiers are not static and can change when Gemma re-runs analyses internally. Whem using these as inputs, try to make sure you access a currently existing result set ID by basing them on result sets returned for a particular dataset or filter used in get_result_sets, defaults to None</p></li>
+<li><p><strong>filter</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</span>) – Filter results by matching expression. Use</p></li>
+</ul>
+</dd>
+</dl>
+<p>filter_properties function to get a list of all available parameters. 
+These properties can be combined using “and” “or” clauses and may 
+contain common operators such as “=”, “&lt;” or “in”. (e.g. 
+“taxon.commonName = human”, “taxon.commonName in (human,mouse), 
+“id &lt; 1000”), defaults to None
+:type filter: str, optional
+:type offset: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>
+:param offset: The offset of the first retrieved result., defaults to 0
+:type offset: int, optional
+:type limit: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>
+:param limit: Limits the result to specified amount of objects.
+Has a maximum value of 100. Use together with offset and the 
+total_elements attribute in the output to compile all data if needed.
+Alternatively get_all_pages function can be used with all functions
+including offset and limit parameters, defaults to 20
+:type limit: int, optional
+:type sort: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>
+:param sort: Order results by the given property and direction. The ‘+’
+sign indicate ascending order whereas the ‘-’ indicate descending,
+defaults to “+id”
+:type sort: str, optional
+:param <a href="#id55"><span class="problematic" id="id56">**</span></a>kwargs: Additional arguments to pass to raw.get_result_sets
+:return: A DataFrame with information about the queried result sets. 
+Note that this function does not return differential expression values
+themselves</p>
+<dl class="simple">
+<dt>The fields of the DataFrame are:</dt><dd><ul class="simple">
+<li><p>result_ID: Result set ID of the differential expression analysis. May represent multiple factors in a single model.</p></li>
+<li><p>contrast_ID: Id of the specific contrast factor. Together with the result.ID they uniquely represent a given contrast.</p></li>
+<li><p>experiment_ID: Id of the source experiment</p></li>
+<li><p>factor_category: Category for the contrast</p></li>
+<li><p>factor_category_URI: URI for the baseline category</p></li>
+<li><p>factor_ID: ID of the factor</p></li>
+<li><p>baseline_factors: Characteristics of the baseline. This field is a DataFrame</p></li>
+<li><p>experimental_factors: Characteristics of the experimental group. This field is a DataFrame</p></li>
+<li><p>is_subset: True if the result set belong to a subset, False if not. Subsets are created when performing differential expression to avoid unhelpful comparisons.</p></li>
+<li><p>subset_factor: Characteristics of the subset. This field is a DataFrame</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gemmapy.GemmaPy.get_taxa">
+<span class="sig-name descname"><span class="pre">get_taxa</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.get_taxa"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.get_taxa" title="Link to this definition">¶</a></dt>
+<dd><p>Get all taxa within Gemma</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>**kwargs</strong> – <p>Additional arguments to raw.get_taxa</p>
+</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>DataFrame</p>
+<dd class="field-even"><p>A DataFrame including the names, IDs and database information
+about the taxons</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -477,18 +1196,21 @@ sign indicate ascending order whereas the ‘-’ indicate descending.</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="gemmapy.GemmaPy.make_design">
 <span class="sig-name descname"><span class="pre">make_design</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">samples</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'text'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.make_design"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.make_design" title="Link to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Using on the output of get_dataset_samples, this function creates a
+simplified design table, granting one column to each experimental variable</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>samples</strong> (<em>pd.DataFrame</em>) – DESCRIPTION</p></li>
-<li><p><strong>meta_type</strong> (<em>str</em><em>, </em><em>optional</em>) – DESCRIPTION, defaults to ‘text’</p></li>
+<li><p><strong>samples</strong> (<em>DataFrame</em>) – An output from get_dataset_samples.</p></li>
+<li><p><strong>meta_type</strong> (<em>str</em><em>, </em><em>optional</em>) – Type of metadata to include in the output. “text”,
+“uri” or “both”, defaults to ‘text’</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>DESCRIPTION</p>
+<dd class="field-even"><p>A DataFrame including the design table for the dataset</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>TYPE</p>
+<dd class="field-odd"><p>DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -499,10 +1221,28 @@ sign indicate ascending order whereas the ‘-’ indicate descending.</p></li>
 <dd><p>Search for annotation tags</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>query</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – (required)</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>query</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – The search query</p></li>
+<li><p><strong>**kwargs</strong> – <p>Additional arguments to pass to raw.search_annotations</p>
+</p></li>
+</ul>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#gemmapy.sdk.models.ResponseDataObjectListAnnotationSearchResultValueObject" title="gemmapy.sdk.models.ResponseDataObjectListAnnotationSearchResultValueObject">ResponseDataObjectListAnnotationSearchResultValueObject</a></p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A DataFrame with annotations matching the given identifiers.</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>The fields of the DataFrame are:</dt><dd><ul class="simple">
+<li><p>category_name: Category that the annotation belongs to</p></li>
+<li><p>category_URI: URI for the category_name</p></li>
+<li><p>value_name: Annotation term</p></li>
+<li><p>value_URI: URI for the value_name</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -510,25 +1250,35 @@ sign indicate ascending order whereas the ‘-’ indicate descending.</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="gemmapy.GemmaPy.search_gemma">
 <span class="sig-name descname"><span class="pre">search_gemma</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">taxon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">platform</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'experiment'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.search_gemma"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.search_gemma" title="Link to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Search everything in Gemma</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>query</strong> (<em>str</em>) – DESCRIPTION</p></li>
-<li><p><strong>taxon</strong> (<em>T.Optional</em><em>[</em><em>T.Union</em><em>[</em><em>str</em><em>,</em><em>int</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – DESCRIPTION, defaults to None</p></li>
-<li><p><strong>platform</strong> (<em>T.Optional</em><em>[</em><em>T.Union</em><em>[</em><em>str</em><em>,</em><em>int</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – DESCRIPTION, defaults to None</p></li>
-<li><p><strong>limit</strong> (<em>int</em><em>, </em><em>optional</em>) – DESCRIPTION, defaults to 100</p></li>
-<li><p><strong>result_type</strong> (<em>str</em><em>, </em><em>optional</em>) – DESCRIPTION, defaults to “experiment”</p></li>
-<li><p><strong>**kwargs</strong> – <p>DESCRIPTION</p>
-</p></li>
+<li><p><strong>query</strong> (<em>str</em>) – The search query. Either plain text (‘traumatic’), or an 
+ontology term URI (’<a class="reference external" href="http://purl.obolibrary.org/obo/UBERON_0002048">http://purl.obolibrary.org/obo/UBERON_0002048</a>’).
+Datasets that contain the given string in their short of full name
+will also be matched. Can be multiple identifiers separated by commas.</p></li>
+<li><p><strong>taxon</strong> (<em>Optional</em><em>[</em><em>str</em><em>|</em><em>int</em><em>]</em><em>, </em><em>optional</em>) – A numerical taxon identifier or an ncbi taxon identifier
+or a taxon identifier that matches either its scientific or common
+name, defaults to None</p></li>
+<li><p><strong>platform</strong> (<em>Optional</em><em>[</em><em>str</em><em>|</em><em>int</em><em>]</em><em>, </em><em>optional</em>) – A platform numerical identifier or a platform short 
+name, defaults to None</p></li>
+<li><p><strong>limit</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>) – Defaults to 100 with a maximum value of 2000. Limits the</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>DESCRIPTION</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>TYPE</p>
-</dd>
 </dl>
+<p>number of returned results. Note that this function does not support
+pagination., defaults to 100
+:type limit: int, optional
+:type result_type: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>
+:param result_type: The kind of results that should be included in the
+output. Can be “experiment”, “gene”, “platform” or a long object type name,
+documented in the API documentation., defaults to “experiment”
+:type result_type: str, optional
+:param <a href="#id61"><span class="problematic" id="id62">**</span></a>kwargs: Additional arguments to raw.search
+:return: A list containing the results. Actual results are under the 
+result_object component as dicts
+:rtype: list[sdk.SearchResultValueObjectObject]</p>
 </dd></dl>
 
 </dd></dl>

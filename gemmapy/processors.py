@@ -354,7 +354,7 @@ def process_taxon(d:list):
     df = pd.DataFrame({
         "taxon_name": sub.field_in_list(d,"common_name"),
         "taxon_scientific": sub.field_in_list(d,"scientific_name"),
-        "taxon_id": sub.field_in_list(d,"id"),
+        "taxon_ID": sub.field_in_list(d,"id"),
         "taxon_NCBI": sub.field_in_list(d,"ncbi_id"),
         "taxon_database_name": sub.field_in_list(d,"external_database","name"),
         "taxon_database_ID": sub.field_in_list(d,"external_database",'id'),
@@ -447,6 +447,7 @@ def process_QuantitationTypeValueObject(d:list):
         "name": sub.field_in_list(d,"name"),
         "description": sub.field_in_list(d,"description"),
         "type": ["processed" if "ProcessedExpressionDataVector" in x else "raw" for x in sub.field_in_list(d,"vector_type")],
+        "ratio": sub.field_in_list(d,"is_ratio"),
         "scale": sub.field_in_list(d,"scale"),
         "preferred": sub.field_in_list(d,"is_preferred"),
         "recomputed": sub.field_in_list(d,"is_recomputed_from_raw_data")
@@ -474,8 +475,8 @@ def process_gene_location(d:list):
 
 def process_elements(d:list):
     df =  pd.DataFrame({
-        'mapping_name': sub.field_in_list(d,'name'),
-        'mappint_description': sub.field_in_list(d,'description')
+        'element_name': sub.field_in_list(d,'name'),
+        'element_description': sub.field_in_list(d,'description')
         })
     array = process_gemma_array(sub.field_in_list(d,"array_design"))
     
@@ -501,7 +502,7 @@ def process_genes(d:list):
         "gene_NCBI": sub.field_in_list(d,'ncbi_id'),
         "gene_name":  sub.field_in_list(d,'official_name'),
         "gene_aliases":sub.field_in_list(d,'aliases'),
-        "gene_mfx_rank": sub.field_in_list(d,'multifunctionality_rank')
+        "gene_MFX_rank": sub.field_in_list(d,'multifunctionality_rank')
         })
     
     taxon = process_taxon(sub.field_in_list(d,'taxon'))
