@@ -3,12 +3,10 @@
 Gemma python API (https://gemma.msl.ubc.ca/rest/v2/)
 """
 
-import logging
 from   gemmapy import sdk
 from gemmapy import processors as ps
 from gemmapy import validators as vs
 from gemmapy import subprocessors as sub
-import typing as T
 from typing import Optional, List, Callable,Union
 from pandas import DataFrame
 import pandas as pd
@@ -20,7 +18,6 @@ import warnings
 import re
 import json
 
-logger = logging.getLogger(__name__)
 
 class GemmaPy(object):
     """
@@ -148,12 +145,6 @@ class GemmaPy(object):
         
         :rtype: DataFrame
 
-        """
-        
-        """Retrieve all result sets matching the provided criteria
-
-        :param str dataset: (required)
-        :return: DataFrame
         """
         
         filter = vs.add_to_filter(filter, 'id', result_sets)
@@ -518,8 +509,10 @@ class GemmaPy(object):
         "taxon.commonName = human", "taxon.commonName in (human,mouse), 
         "id < 1000"), defaults to None
         :type filter: Optional[str], optional
-        :param taxa: 	
-A vector of taxon common names (e.g. human, mouse, rat). Providing multiple species will return results for all species. These are appended to the filter and equivalent to filtering for taxon.commonName property, defaults to None
+        :param taxa: A vector of taxon common names (e.g. human, mouse, rat).
+        Providing multiple species will return results for all species. These 
+        are appended to the filter and equivalent to filtering for 
+        taxon.commonName property, defaults to None
         :param taxa: A list of taxon common names (e.g. human, mouse, rat). 
         Providing multiple species will return results for all species. 
         These are appended to the filter and equivalent to filtering for 
@@ -1533,7 +1526,7 @@ A vector of taxon common names (e.g. human, mouse, rat). Providing multiple spec
                 try: 
                     gene_data = pack['exp'][['GeneSymbol', 'NCBIid']]
                 except KeyError:
-                    logger.warning("WARNING: One or more gene descriptions are missing in Expression table")
+                    warnings.warn("WARNING: One or more gene descriptions are missing in Expression table")
                     gene_data = None
                 
                 mda = {
