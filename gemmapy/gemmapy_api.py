@@ -89,8 +89,8 @@ class GemmaPy(object):
     # /resultSets, get_result_sets -----
     
     def get_result_sets(self,
-                        datasets:T.Optional[T.List[T.Union[str,int]]] = None,
-                        result_sets:T.Optional[T.List[int]] = None,
+                        datasets:Optional[List[str|int]] = None,
+                        result_sets:Optional[List[int]] = None,
                         filter:str = None,
                         offset:int = 0,
                         limit:int = 20,
@@ -107,9 +107,9 @@ class GemmaPy(object):
 
         
         :param datasets: A numerical dataset identifier or a dataset short name, defaults to None
-        :type datasets: T.Optional[T.List[T.Union[str,int]]], optional
+        :type datasets: Optional[List[str|int]], optional
         :param result_sets: 	A result set identifier. Note that result set identifiers are not static and can change when Gemma re-runs analyses internally. Whem using these as inputs, try to make sure you access a currently existing result set ID by basing them on result sets returned for a particular dataset or filter used in get_result_sets, defaults to None
-        :type result_sets: T.Optional[T.List[int]], optional
+        :type result_sets: Optional[List[int]], optional
         :param filter: Filter results by matching expression. Use 
         filter_properties function to get a list of all available parameters. 
         These properties can be combined using "and" "or" clauses and may 
