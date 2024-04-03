@@ -108,30 +108,30 @@ class GemmaPy(object):
         :param result_sets: 	A result set identifier. Note that result set identifiers are not static and can change when Gemma re-runs analyses internally. Whem using these as inputs, try to make sure you access a currently existing result set ID by basing them on result sets returned for a particular dataset or filter used in get_result_sets, defaults to None
         :type result_sets: Optional[List[int]], optional
         :param filter: Filter results by matching expression. Use 
-        filter_properties function to get a list of all available parameters. 
-        These properties can be combined using "and" "or" clauses and may 
-        contain common operators such as "=", "<" or "in". (e.g. 
-        "taxon.commonName = human", "taxon.commonName in (human,mouse), 
-        "id < 1000"), defaults to None
+          filter_properties function to get a list of all available parameters. 
+          These properties can be combined using "and" "or" clauses and may 
+          contain common operators such as "=", "<" or "in". (e.g. 
+          "taxon.commonName = human", "taxon.commonName in (human,mouse), 
+          "id < 1000"), defaults to None
         :type filter: str, optional
         :param offset: The offset of the first retrieved result., defaults to 0
         :type offset: int, optional
         :param limit: Limits the result to specified amount of objects.
-        Has a maximum value of 100. Use together with offset and the 
-        total_elements attribute in the output to compile all data if needed.
-        Alternatively get_all_pages function can be used with all functions
-        including offset and limit parameters, defaults to 20
+          Has a maximum value of 100. Use together with offset and the 
+          total_elements attribute in the output to compile all data if needed.
+          Alternatively get_all_pages function can be used with all functions
+          including offset and limit parameters, defaults to 20
         :type limit: int, optional
         :param sort: Order results by the given property and direction. The '+'
-        sign indicate ascending order whereas the '-' indicate descending,
-        defaults to "+id"
+          sign indicate ascending order whereas the '-' indicate descending,
+          defaults to "+id"
         :type sort: str, optional
         :param **kwargs: Additional arguments to pass to raw.get_result_sets
         :return: A DataFrame with information about the queried result sets. 
-        Note that this function does not return differential expression values
-        themselves
+          Note that this function does not return differential expression values
+          themselves
         
-        The fields of the DataFrame are:
+          The fields of the DataFrame are:
             - result_ID: Result set ID of the differential expression analysis. May represent multiple factors in a single model.
             - contrast_ID: Id of the specific contrast factor. Together with the result.ID they uniquely represent a given contrast.
             - experiment_ID: Id of the source experiment
@@ -175,7 +175,7 @@ class GemmaPy(object):
         :type query: List[str]
         :param **kwargs: Additional arguments to pass to raw.search_annotations
         :return: A DataFrame with annotations matching the given identifiers. 
-        The fields of the DataFrame are:
+          The fields of the DataFrame are:
             - category_name: Category that the annotation belongs to
             - category_URI: URI for the category_name
             - value_name: Annotation term
@@ -198,7 +198,7 @@ class GemmaPy(object):
         :type dataset: str|int
         :param **kwargs: Additional arguments to pass to raw.get_dataset_annotations
         :return: A DataFrame with information about the annotations of the queried dataset. 
-        The fields of the DataFrame are:
+          The fields of the DataFrame are:
             - class_name: Name of the annotation class (e.g. organism part)
             - class_URI: URI for the annotation class
             - term_name: Name of the annotation term (e.g. lung)
@@ -249,12 +249,12 @@ class GemmaPy(object):
         :type dataset: str|int
         :param **kwargs: Additional arguments to pass to raw.get_dataset_differential_expression_analyses
         :return: A data table with information about the differential expression
-        analysis of the queried dataset. Note that this funciton does not return 
-        differential expression values themselves. Use
-        get_differential_expression_values to get differential expression
-        values (see examples).
-        
-        The fields of the DataFrame are:
+          analysis of the queried dataset. Note that this funciton does not return 
+          differential expression values themselves. Use
+          get_differential_expression_values to get differential expression
+          values (see examples).
+          
+          The fields of the DataFrame are:
             - result_ID: Result set ID of the differential expression analysis. May represent multiple factors in a single model.
             - contrast_ID: Id of the specific contrast factor. Together with the result.ID they uniquely represent a given contrast.
             - experiment_ID: Id of the source experiment
@@ -264,8 +264,8 @@ class GemmaPy(object):
             - baseline_factors: Characteristics of the baseline. This field is a DataFrame
             - experimental_factors: Characteristics of the experimental group. This field is a DataFrame
             - isSubset: True if the result set belong to a subset, False if not. 
-            Subsets are created when performing differential expression to avoid 
-            unhelpful comparisons.
+              Subsets are created when performing differential expression to avoid 
+              unhelpful comparisons.
             - subset_factor: Characteristics of the subset. This field is a DataFrame
             - probes_analyzed: Number of probesets represented in the contrast
             - genes_analyzed: Number of genes represented in the contrast
@@ -310,17 +310,17 @@ class GemmaPy(object):
         :param datasets: A numerical dataset identifier or a dataset short name
         :type datasets: List[str|int]
         :param genes: An ensembl gene identifier which typically starts with 
-        ensg or an ncbi gene identifier or an official gene symbol approved by 
-        hgnc
+          ensg or an ncbi gene identifier or an official gene symbol approved by 
+          hgnc
         :type genes: List[int]
         :param keep_non_specific: If True, results from probesets that are not
-        specific to the gene will also be returned., defaults to False
+          specific to the gene will also be returned., defaults to False
         :type keep_non_specific: bool, optional
         :param consolidate: An option for gene expression level consolidation. 
-        If empty, will return every probe for the genes. "pickmax" to pick the
-        probe with the highest expression, "pickvar" to pick the prove with the 
-        highest variance and "average" for returning the average expression, 
-        defaults to None
+          If empty, will return every probe for the genes. "pickmax" to pick the
+          probe with the highest expression, "pickvar" to pick the prove with the 
+          highest variance and "average" for returning the average expression, 
+          defaults to None
         :type consolidate: TYPE, optional
         :param **kwargs: Additional arguments to pass to raw.get_dataset_expression_for_genes
         :return: A dict of DataFrames keyed to dataset ids
@@ -350,10 +350,8 @@ class GemmaPy(object):
         :param dataset: A numerical dataset identifier or a dataset short name
         :type dataset: str|int
         :param **kwargs: Additional arguments to pass to raw.get_dataset_platforms
-        :return: 
-            A DataFrame with information about the platforms.
-            
-            The fields of the DataFrame are:
+        :return: A DataFrame with information about the platforms.
+          The fields of the DataFrame are:
                 
             - platform_ID: Id number of the platform given by Gemma
             - platform_type: Type of the platform.
@@ -404,20 +402,20 @@ class GemmaPy(object):
         :param **kwargs: Additional arguments to pass to raw.get_dataset_quantitation_types
         :return: A DataFrame containing the quantitation types
         
-        The fields of the output DataFrame are:
+          The fields of the output DataFrame are:
             - id: If of the quantitation type. Any raw quantitation type can be
-            accessed by get_dataset_raw_expression function using this id.
+               by get_dataset_raw_expression function using this id.
             - name: Name of the quantitation type
             - description: Description of the quantitation type
             - type: Type of the quantitation type. Either raw or processed. 
-            Each dataset will have one processed quantitation type which is the 
-            data returned using get_dataset_processed_expression
+              Each dataset will have one processed quantitation type which is the 
+              data returned using get_dataset_processed_expression
             - ratio: Whether or not the quanitation type is a ratio of multiple
-            quantitation types. Typically TRUE for processed TWOCOLOR quantitation type.
+              quantitation types. Typically TRUE for processed TWOCOLOR quantitation type.
             - preferred: The preferred raw quantitation type. This version is 
-            used in generation of the processed data within gemma.
+              used in generation of the processed data within gemma.
             - recomputed: If TRUE this quantitation type is generated by
-            recomputing raw data files Gemma had access to
+              recomputing raw data files Gemma had access to
         :rtype: DataFrame
 
         """
@@ -436,8 +434,8 @@ class GemmaPy(object):
         :param dataset: A numerical dataset identifier or a dataset short name
         :type dataset: int|str
         :param quantitation_type: Quantitation type id. These can be acquired 
-        using get_dataset_quantitation_types function. This endpoint can only 
-        return non-processed quantitation types.
+          using get_dataset_quantitation_types function. This endpoint can only 
+          return non-processed quantitation types.
         :type quantitation_type: [int]
         :param **kwargs: Additional arguments to pass to raw.get_dataset_raw_expression
         :return: A DataFrame of the expression matrix for the queried dataset
@@ -467,7 +465,7 @@ class GemmaPy(object):
         :param **kwargs: Additional arguments to pass to raw.get_dataset_samples
         :return: A DataFrame with information about the samples of the queried dataset.
         
-        The fields of the DataFrame are:
+          The fields of the DataFrame are:
             - sample_name: Internal name given to the sample.
             - sample_ID: Internal ID of the sample
             - sample_description: Free text description of the sample
@@ -498,47 +496,47 @@ class GemmaPy(object):
         """
         
         :param query: The search query. Either plain text ('traumatic'), or an 
-        ontology term URI ('http://purl.obolibrary.org/obo/UBERON_0002048').
-        Datasets that contain the given string in their short of full name will 
-        also be matched., defaults to None
+          ontology term URI ('http://purl.obolibrary.org/obo/UBERON_0002048').
+          Datasets that contain the given string in their short of full name will 
+          also be matched., defaults to None
         :type query: Optional[str], optional
         :param filter: Filter results by matching expression. Use 
-        filter_properties function to get a list of all available parameters. 
-        These properties can be combined using "and" "or" clauses and may 
-        contain common operators such as "=", "<" or "in". (e.g. 
-        "taxon.commonName = human", "taxon.commonName in (human,mouse), 
-        "id < 1000"), defaults to None
+          filter_properties function to get a list of all available parameters. 
+          These properties can be combined using "and" "or" clauses and may 
+          contain common operators such as "=", "<" or "in". (e.g. 
+          "taxon.commonName = human", "taxon.commonName in (human,mouse), 
+          "id < 1000"), defaults to None
         :type filter: Optional[str], optional
         :param taxa: A vector of taxon common names (e.g. human, mouse, rat).
-        Providing multiple species will return results for all species. These 
-        are appended to the filter and equivalent to filtering for 
-        taxon.commonName property, defaults to None
+          Providing multiple species will return results for all species. These 
+          are appended to the filter and equivalent to filtering for 
+          taxon.commonName property, defaults to None
         :param taxa: A list of taxon common names (e.g. human, mouse, rat). 
-        Providing multiple species will return results for all species. 
-        These are appended to the filter and equivalent to filtering for 
-        taxon.commonName property, defaults to None
+          Providing multiple species will return results for all species. 
+          These are appended to the filter and equivalent to filtering for 
+          taxon.commonName property, defaults to None
         :type taxa: Optional[List[str]], optional
         :param uris: A vector of ontology term URIs. Providing multiple terms
-        will return results containing any of the terms and their children. 
-        These are appended to the filter and equivalent to filtering for 
-        allCharacteristics.valueUri, defaults to None
+          will return results containing any of the terms and their children. 
+          These are appended to the filter and equivalent to filtering for 
+          allCharacteristics.valueUri, defaults to None
         :type uris: Optional[List[str]], optional
         :param offset: The offset of the first retrieved result., defaults to 0
         :type offset: int, optional
         :param limit: Limits the result to specified amount of objects.
-        Has a maximum value of 100. Use together with offset and the 
-        total_elements attribute in the output to compile all data if needed.
-        Alternatively get_all_pages function can be used with all functions
-        including offset and limit parameters, defaults to 20
+          Has a maximum value of 100. Use together with offset and the 
+          total_elements attribute in the output to compile all data if needed.
+          Alternatively get_all_pages function can be used with all functions
+          including offset and limit parameters, defaults to 20
         :type limit: int, optional
         :param sort: Order results by the given property and direction. The '+'
-        sign indicate ascending order whereas the '-' indicate descending,
-        defaults to "+id"
+          sign indicate ascending order whereas the '-' indicate descending,
+          defaults to "+id"
         :type sort: str, optional
         :param **kwargs: Additional arguments to pass to raw.get_datasets
         :return: A DataFrame with information about the queried dataset(s).
         
-        The fields of the DataFrame are:
+          The fields of the DataFrame are:
             - experiment_short_name: Shortname given to the dataset within Gemma. Often corresponds to accession ID
             - experiment_name: Full title of the dataset
             - experiment_ID: Internal ID of the dataset.
@@ -601,38 +599,38 @@ class GemmaPy(object):
         :param dataset: Numerical dataset identifiers or dataset short names.
         :type dataset: List[str|int]
         :param filter: Filter results by matching expression. Use 
-        filter_properties function to get a list of all available parameters. 
-        These properties can be combined using "and" "or" clauses and may 
-        contain common operators such as "=", "<" or "in". (e.g. 
-        "taxon.commonName = human", "taxon.commonName in (human,mouse), 
-        "id < 1000"), defaults to None
+          filter_properties function to get a list of all available parameters. 
+          These properties can be combined using "and" "or" clauses and may 
+          contain common operators such as "=", "<" or "in". (e.g. 
+          "taxon.commonName = human", "taxon.commonName in (human,mouse), 
+          "id < 1000"), defaults to None
         :type filter: Optional[str], optional
         :param taxa: A list of taxon common names (e.g. human, mouse, rat). 
-        Providing multiple species will return results for all species. 
-        These are appended to the filter and equivalent to filtering for 
-        taxon.commonName property, defaults to None
+          Providing multiple species will return results for all species. 
+          These are appended to the filter and equivalent to filtering for 
+          taxon.commonName property, defaults to None
         :type taxa: Optional[List[str]], optional
         :param uris: A vector of ontology term URIs. Providing multiple terms
-        will return results containing any of the terms and their children. 
-        These are appended to the filter and equivalent to filtering for 
-        allCharacteristics.valueUri, defaults to None
+          will return results containing any of the terms and their children. 
+          These are appended to the filter and equivalent to filtering for 
+          allCharacteristics.valueUri, defaults to None
         :type uris: Optional[List[str]], optional
         :param offset: The offset of the first retrieved result., defaults to 0
         :type offset: int, optional
         :param limit: Limits the result to specified amount of objects.
-        Has a maximum value of 100. Use together with offset and the 
-        total_elements attribute in the output to compile all data if needed.
-        Alternatively get_all_pages function can be used with all functions
-        including offset and limit parameters, defaults to 20
+          Has a maximum value of 100. Use together with offset and the 
+          total_elements attribute in the output to compile all data if needed.
+          Alternatively get_all_pages function can be used with all functions
+          including offset and limit parameters, defaults to 20
         :type limit: int, optional
         :param sort: Order results by the given property and direction. The '+'
-        sign indicate ascending order whereas the '-' indicate descending,
-        defaults to "+id"
+          sign indicate ascending order whereas the '-' indicate descending,
+          defaults to "+id"
         :type sort: str, optional
         :param **kwargs: Additional arguments to pass to raw.get_datasets_by_ids
         :return: A DataFrame with information about the queried dataset(s).
         
-        The fields of the DataFrame are:
+          The fields of the DataFrame are:
             - experiment_short_name: Shortname given to the dataset within Gemma. Often corresponds to accession ID
             - experiment_name: Full title of the dataset
             - experiment_ID: Internal ID of the dataset.
@@ -691,12 +689,12 @@ class GemmaPy(object):
         """
         
         :param gene: An ensembl gene identifier which typically starts with 
-        ensg or an ncbi gene identifier or an official gene symbol approved by
-        hgnc
+          ensg or an ncbi gene identifier or an official gene symbol approved by
+          hgnc
         :type gene: str|int
         :param **kwargs: Additional arguments to pass to raw.get_gene_go_terms
         :return: A DataFrame with information about the GO terms assigned to the queried gene
-        The fields of the output DataFrame are:
+          The fields of the output DataFrame are:
             - term_name: Name of the term
             - term_ID: ID of the term
             - term_URI: URI of the term 
@@ -718,7 +716,7 @@ class GemmaPy(object):
         :param **kwargs: DAdditional arguments to pass to raw.get_gene_locations
         :type **kwargs: TYPE
         :return: A DataFrame with information about the physical location of the queried gene
-        The fields of the output DataFrame are:
+          The fields of the output DataFrame are:
             - chromosome: Name of the chromosome the gene is located
             - strand: Which strand the gene is located
             - nucleotide: Nucleotide number for the gene
@@ -746,22 +744,22 @@ class GemmaPy(object):
         """Retrieve the probes associated to a genes across all platforms
         
         :param gene: An ensembl gene identifier which typically starts with
-        ensg or an ncbi gene identifier or an official gene symbol approved by 
-        hgnc
+          ensg or an ncbi gene identifier or an official gene symbol approved by 
+          hgnc
         :type gene: str|int
         :param offset: The offset of the first retrieved result., defaults to 0
         :type offset: int, optional
         :param limit: Limits the result to specified amount of objects.
-        Has a maximum value of 100. Use together with offset and the 
-        total_elements attribute in the output to compile all data if needed.
-        Alternatively get_all_pages function can be used with all functions
-        including offset and limit parameters, defaults to 20
+          Has a maximum value of 100. Use together with offset and the 
+          total_elements attribute in the output to compile all data if needed.
+          Alternatively get_all_pages function can be used with all functions
+          including offset and limit parameters, defaults to 20
         :type limit: int, optional
         :param **kwargs: Additional arguments to pass to raw.get_gene_probes
         :return: A DataFrame with information about the probes representing a 
-        gene across all platrofms.
+          gene across all platrofms.
         
-        The fields of the output DataFrame are:
+          The fields of the output DataFrame are:
             - element_name: Name of the element. Typically the probeset name
             - element_description: A free text field providing optional information about the element
             - platform_short_name: Shortname of the platform given by Gemma. Typically the GPL identifier.
@@ -801,7 +799,7 @@ class GemmaPy(object):
         :param **kwargs: Additional arguments to pass to raw_get_genes
         :return: A DataFrame with the information about the querried genes.
         
-        The fields of the output DataFrame are:
+          The fields of the output DataFrame are:
             - gene_symbol: Symbol for the gene
             - gene_ensembl: Ensembl ID for the gene
             - gene_NCBI: NCBI id for the gene
@@ -843,11 +841,11 @@ class GemmaPy(object):
         :type **kwargs: TYPE
         :return: A DataFrame of annotations
         
-        - ProbeName: Probeset names provided by the platform. Gene symbols for generic annotations
-        - GeneSymbols: Genes that were found to be aligned to the probe sequence. Note that it is possible for probes to be non-specific. Alignment to multiple genes are indicated with gene symbols separated by "|"s
-        - GeneNames: Name of the gene
-        - GOTerms: GO Terms associated with the genes. annotType argument can be used to choose which terms should be included.
-        - GemmaIDs and NCBIids: respective IDs for the genes.
+          - ProbeName: Probeset names provided by the platform. Gene symbols for generic annotations
+          - GeneSymbols: Genes that were found to be aligned to the probe sequence. Note that it is possible for probes to be non-specific. Alignment to multiple genes are indicated with gene symbols separated by "|"s
+          - GeneNames: Name of the gene
+          - GOTerms: GO Terms associated with the genes. annotType argument can be used to choose which terms should be included.
+          - GemmaIDs and NCBIids: respective IDs for the genes.
         :rtype: DataFrame
 
         """
@@ -873,15 +871,15 @@ class GemmaPy(object):
         :param offset: The offset of the first retrieved result., defaults to 0
         :type offset: int, optional
         :param limit: Limits the result to specified amount of objects.
-        Has a maximum value of 100. Use together with offset and the 
-        total_elements attribute in the output to compile all data if needed.
-        Alternatively get_all_pages function can be used with all functions
-        including offset and limit parameters, defaults to 20
+          Has a maximum value of 100. Use together with offset and the 
+          total_elements attribute in the output to compile all data if needed.
+          Alternatively get_all_pages function can be used with all functions
+          including offset and limit parameters, defaults to 20
         :type limit: int, optional
         :param **kwargs: Additional arguments to pass to raw.get_platform_datasets
         :return: A DataFrame with information about the queried dataset(s).
         
-        The fields of the DataFrame are:
+          The fields of the DataFrame are:
             - experiment_short_name: Shortname given to the dataset within Gemma. Often corresponds to accession ID
             - experiment_name: Full title of the dataset
             - experiment_ID: Internal ID of the dataset.
@@ -939,15 +937,15 @@ class GemmaPy(object):
         :param offset: The offset of the first retrieved result., defaults to 0
         :type offset: int, optional
         :param limit: Limits the result to specified amount of objects.
-        Has a maximum value of 100. Use together with offset and the 
-        total_elements attribute in the output to compile all data if needed.
-        Alternatively get_all_pages function can be used with all functions
-        including offset and limit parameters, defaults to 20
+          Has a maximum value of 100. Use together with offset and the 
+          total_elements attribute in the output to compile all data if needed.
+          Alternatively get_all_pages function can be used with all functions
+          including offset and limit parameters, defaults to 20
         :type limit: int, optional
         :param **kwargs: Additional arguments to pass to raw.get_platform_element_genes
         :type **kwargs: TYPE
         :return: A DataFrame with the information about querried gene(s).
-        The fields of the output DataFrame are:
+          The fields of the output DataFrame are:
             - gene_symbol: Symbol for the gene
             - gene_ensembl: Ensembl ID for the gene
             - gene_NCBI: NCBI id for the gene
@@ -996,26 +994,26 @@ class GemmaPy(object):
           "id < 1000"), defaults to None
         :type filter: str, optional
         :param taxa: A list of taxon common names (e.g. human, mouse, rat). 
-        Providing multiple species will return results for all species. These 
-        are appended to the filter and equivalent to filtering for 
-        taxon.commonName property, defaults to None
+          Providing multiple species will return results for all species. These 
+          are appended to the filter and equivalent to filtering for 
+          taxon.commonName property, defaults to None
         :type taxa: List[str], optional
         :param offset: The offset of the first retrieved result., defaults to 0
         :type offset: int, optional
         :param limit: Limits the result to specified amount of objects.
-        Has a maximum value of 100. Use together with offset and the 
-        total_elements attribute in the output to compile all data if needed.
-        Alternatively get_all_pages function can be used with all functions
-        including offset and limit parameters, defaults to 20
+          Has a maximum value of 100. Use together with offset and the 
+          total_elements attribute in the output to compile all data if needed.
+          Alternatively get_all_pages function can be used with all functions
+          including offset and limit parameters, defaults to 20
         :type limit: int, optional
         :param sort: Order results by the given property and direction. The '+'
-        sign indicate ascending order whereas the '-' indicate descending,
-        defaults to "+id"
+          sign indicate ascending order whereas the '-' indicate descending,
+          defaults to "+id"
         :type sort: str, optional
         :param **kwargs: Additional arguments to raw.get_platforms_by_ids
         :return: A DataFrame with information about the platform(s).
         
-        The fields of the output DataFrame are:
+          The fields of the output DataFrame are:
 
             - platform_ID: Internal identifier of the platform
             - platform_short_name: Shortname of the platform.
@@ -1071,26 +1069,26 @@ class GemmaPy(object):
           "id < 1000"), defaults to None
         :type filter: str, optional
         :param taxa: A list of taxon common names (e.g. human, mouse, rat). 
-        Providing multiple species will return results for all species. These 
-        are appended to the filter and equivalent to filtering for 
-        taxon.commonName property, defaults to None
+          Providing multiple species will return results for all species. These 
+          are appended to the filter and equivalent to filtering for 
+          taxon.commonName property, defaults to None
         :type taxa: List[str], optional
         :param offset: The offset of the first retrieved result., defaults to 0
         :type offset: int, optional
         :param limit: Limits the result to specified amount of objects.
-        Has a maximum value of 100. Use together with offset and the 
-        total_elements attribute in the output to compile all data if needed.
-        Alternatively get_all_pages function can be used with all functions
-        including offset and limit parameters, defaults to 20
+          Has a maximum value of 100. Use together with offset and the 
+          total_elements attribute in the output to compile all data if needed.
+          Alternatively get_all_pages function can be used with all functions
+          including offset and limit parameters, defaults to 20
         :type limit: int, optional
         :param sort: Order results by the given property and direction. The '+'
-        sign indicate ascending order whereas the '-' indicate descending,
-        defaults to "+id"
+          sign indicate ascending order whereas the '-' indicate descending,
+          defaults to "+id"
         :type sort: str, optional
         :param **kwargs: Additional arguments to raw.get_platforms_by_ids
         :return: A DataFrame with information about the platform(s).
         
-        The fields of the output DataFrame are:
+          The fields of the output DataFrame are:
 
             - platform_ID: Internal identifier of the platform
             - platform_short_name: Shortname of the platform.
@@ -1150,16 +1148,16 @@ class GemmaPy(object):
           name, defaults to None
         :type platform: Optional[str|int], optional
         :param limit: Defaults to 100 with a maximum value of 2000. Limits the
-        number of returned results. Note that this function does not support
-        pagination., defaults to 100
+          number of returned results. Note that this function does not support
+          pagination., defaults to 100
         :type limit: int, optional
         :param result_type: The kind of results that should be included in the
-        output. Can be "experiment", "gene", "platform" or a long object type name,
-        documented in the API documentation., defaults to "experiment"
+          output. Can be "experiment", "gene", "platform" or a long object type name,
+          documented in the API documentation., defaults to "experiment"
         :type result_type: str, optional
         :param **kwargs: Additional arguments to raw.search
         :return: A list containing the results. Actual results are under the 
-        result_object component as dicts
+          result_object component as dicts
         :rtype: list[sdk.SearchResultValueObjectObject]
 
         """
@@ -1609,7 +1607,7 @@ class GemmaPy(object):
         :param **kwargs: 
         :type **kwargs: TYPE
         :raises ValueError: Will return a value error if neither result_sets nor a dataset
-        is provided
+          is provided
         :return: A list of data frames with differential expression values per result set.
         :rtype: List[DataFrame]
 
@@ -1650,7 +1648,7 @@ class GemmaPy(object):
 
     # gemma_call unimplemented, not needed    
 
-    def get_all_pages(self,fun:Callable,step_size:int = 100,**kwargs)->Union[list,DataFrame]:
+    def get_all_pages(self,fun:Callable,step_size:int = 100,**kwargs)->list|DataFrame:
         """
         A convenience function to allow easy iteration over paginated outputs.
         If the function returns a DataFrame output will be merged by the rows,
@@ -1667,7 +1665,7 @@ class GemmaPy(object):
         :param **kwargs: arguments for the callable fun
         :return: A DataFrame or a list containing all the output depending on 
           output of the callable
-        :rtype: Union[list,DataFrame]
+        :rtype: list|DataFrame
         """
 
         out = []        

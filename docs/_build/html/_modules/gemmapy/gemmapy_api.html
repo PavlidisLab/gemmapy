@@ -35,12 +35,10 @@
 <span class="sd">Gemma python API (https://gemma.msl.ubc.ca/rest/v2/)</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">from</span>   <span class="nn">gemmapy</span> <span class="kn">import</span> <span class="n">sdk</span>
 <span class="kn">from</span> <span class="nn">gemmapy</span> <span class="kn">import</span> <span class="n">processors</span> <span class="k">as</span> <span class="n">ps</span>
 <span class="kn">from</span> <span class="nn">gemmapy</span> <span class="kn">import</span> <span class="n">validators</span> <span class="k">as</span> <span class="n">vs</span>
 <span class="kn">from</span> <span class="nn">gemmapy</span> <span class="kn">import</span> <span class="n">subprocessors</span> <span class="k">as</span> <span class="n">sub</span>
-<span class="kn">import</span> <span class="nn">typing</span> <span class="k">as</span> <span class="nn">T</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span><span class="n">Union</span>
 <span class="kn">from</span> <span class="nn">pandas</span> <span class="kn">import</span> <span class="n">DataFrame</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
@@ -52,7 +50,6 @@
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">json</span>
 
-<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 <div class="viewcode-block" id="GemmaPy">
 <a class="viewcode-back" href="../../api.html#gemmapy.GemmaPy">[docs]</a>
@@ -125,8 +122,8 @@
 <div class="viewcode-block" id="GemmaPy.get_result_sets">
 <a class="viewcode-back" href="../../api.html#gemmapy.GemmaPy.get_result_sets">[docs]</a>
     <span class="k">def</span> <span class="nf">get_result_sets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
-                        <span class="n">datasets</span><span class="p">:</span><span class="n">T</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="n">T</span><span class="o">.</span><span class="n">List</span><span class="p">[</span><span class="n">T</span><span class="o">.</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span><span class="nb">int</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-                        <span class="n">result_sets</span><span class="p">:</span><span class="n">T</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="n">T</span><span class="o">.</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                        <span class="n">datasets</span><span class="p">:</span><span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="o">|</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                        <span class="n">result_sets</span><span class="p">:</span><span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                         <span class="nb">filter</span><span class="p">:</span><span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                         <span class="n">offset</span><span class="p">:</span><span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
                         <span class="n">limit</span><span class="p">:</span><span class="nb">int</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span>
@@ -143,34 +140,34 @@
 
 <span class="sd">        </span>
 <span class="sd">        :param datasets: A numerical dataset identifier or a dataset short name, defaults to None</span>
-<span class="sd">        :type datasets: T.Optional[T.List[T.Union[str,int]]], optional</span>
+<span class="sd">        :type datasets: Optional[List[str|int]], optional</span>
 <span class="sd">        :param result_sets: 	A result set identifier. Note that result set identifiers are not static and can change when Gemma re-runs analyses internally. Whem using these as inputs, try to make sure you access a currently existing result set ID by basing them on result sets returned for a particular dataset or filter used in get_result_sets, defaults to None</span>
-<span class="sd">        :type result_sets: T.Optional[T.List[int]], optional</span>
+<span class="sd">        :type result_sets: Optional[List[int]], optional</span>
 <span class="sd">        :param filter: Filter results by matching expression. Use </span>
-<span class="sd">        filter_properties function to get a list of all available parameters. </span>
-<span class="sd">        These properties can be combined using &quot;and&quot; &quot;or&quot; clauses and may </span>
-<span class="sd">        contain common operators such as &quot;=&quot;, &quot;&lt;&quot; or &quot;in&quot;. (e.g. </span>
-<span class="sd">        &quot;taxon.commonName = human&quot;, &quot;taxon.commonName in (human,mouse), </span>
-<span class="sd">        &quot;id &lt; 1000&quot;), defaults to None</span>
+<span class="sd">          filter_properties function to get a list of all available parameters. </span>
+<span class="sd">          These properties can be combined using &quot;and&quot; &quot;or&quot; clauses and may </span>
+<span class="sd">          contain common operators such as &quot;=&quot;, &quot;&lt;&quot; or &quot;in&quot;. (e.g. </span>
+<span class="sd">          &quot;taxon.commonName = human&quot;, &quot;taxon.commonName in (human,mouse), </span>
+<span class="sd">          &quot;id &lt; 1000&quot;), defaults to None</span>
 <span class="sd">        :type filter: str, optional</span>
 <span class="sd">        :param offset: The offset of the first retrieved result., defaults to 0</span>
 <span class="sd">        :type offset: int, optional</span>
 <span class="sd">        :param limit: Limits the result to specified amount of objects.</span>
-<span class="sd">        Has a maximum value of 100. Use together with offset and the </span>
-<span class="sd">        total_elements attribute in the output to compile all data if needed.</span>
-<span class="sd">        Alternatively get_all_pages function can be used with all functions</span>
-<span class="sd">        including offset and limit parameters, defaults to 20</span>
+<span class="sd">          Has a maximum value of 100. Use together with offset and the </span>
+<span class="sd">          total_elements attribute in the output to compile all data if needed.</span>
+<span class="sd">          Alternatively get_all_pages function can be used with all functions</span>
+<span class="sd">          including offset and limit parameters, defaults to 20</span>
 <span class="sd">        :type limit: int, optional</span>
 <span class="sd">        :param sort: Order results by the given property and direction. The &#39;+&#39;</span>
-<span class="sd">        sign indicate ascending order whereas the &#39;-&#39; indicate descending,</span>
-<span class="sd">        defaults to &quot;+id&quot;</span>
+<span class="sd">          sign indicate ascending order whereas the &#39;-&#39; indicate descending,</span>
+<span class="sd">          defaults to &quot;+id&quot;</span>
 <span class="sd">        :type sort: str, optional</span>
 <span class="sd">        :param **kwargs: Additional arguments to pass to raw.get_result_sets</span>
 <span class="sd">        :return: A DataFrame with information about the queried result sets. </span>
-<span class="sd">        Note that this function does not return differential expression values</span>
-<span class="sd">        themselves</span>
+<span class="sd">          Note that this function does not return differential expression values</span>
+<span class="sd">          themselves</span>
 <span class="sd">        </span>
-<span class="sd">        The fields of the DataFrame are:</span>
+<span class="sd">          The fields of the DataFrame are:</span>
 <span class="sd">            - result_ID: Result set ID of the differential expression analysis. May represent multiple factors in a single model.</span>
 <span class="sd">            - contrast_ID: Id of the specific contrast factor. Together with the result.ID they uniquely represent a given contrast.</span>
 <span class="sd">            - experiment_ID: Id of the source experiment</span>
@@ -184,12 +181,6 @@
 <span class="sd">        </span>
 <span class="sd">        :rtype: DataFrame</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
-<span class="w">        </span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Retrieve all result sets matching the provided criteria</span>
-
-<span class="sd">        :param str dataset: (required)</span>
-<span class="sd">        :return: DataFrame</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         
         <span class="nb">filter</span> <span class="o">=</span> <span class="n">vs</span><span class="o">.</span><span class="n">add_to_filter</span><span class="p">(</span><span class="nb">filter</span><span class="p">,</span> <span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="n">result_sets</span><span class="p">)</span>
@@ -223,7 +214,7 @@
 <span class="sd">        :type query: List[str]</span>
 <span class="sd">        :param **kwargs: Additional arguments to pass to raw.search_annotations</span>
 <span class="sd">        :return: A DataFrame with annotations matching the given identifiers. </span>
-<span class="sd">        The fields of the DataFrame are:</span>
+<span class="sd">          The fields of the DataFrame are:</span>
 <span class="sd">            - category_name: Category that the annotation belongs to</span>
 <span class="sd">            - category_URI: URI for the category_name</span>
 <span class="sd">            - value_name: Annotation term</span>
@@ -249,7 +240,7 @@
 <span class="sd">        :type dataset: str|int</span>
 <span class="sd">        :param **kwargs: Additional arguments to pass to raw.get_dataset_annotations</span>
 <span class="sd">        :return: A DataFrame with information about the annotations of the queried dataset. </span>
-<span class="sd">        The fields of the DataFrame are:</span>
+<span class="sd">          The fields of the DataFrame are:</span>
 <span class="sd">            - class_name: Name of the annotation class (e.g. organism part)</span>
 <span class="sd">            - class_URI: URI for the annotation class</span>
 <span class="sd">            - term_name: Name of the annotation term (e.g. lung)</span>
@@ -303,12 +294,12 @@
 <span class="sd">        :type dataset: str|int</span>
 <span class="sd">        :param **kwargs: Additional arguments to pass to raw.get_dataset_differential_expression_analyses</span>
 <span class="sd">        :return: A data table with information about the differential expression</span>
-<span class="sd">        analysis of the queried dataset. Note that this funciton does not return </span>
-<span class="sd">        differential expression values themselves. Use</span>
-<span class="sd">        get_differential_expression_values to get differential expression</span>
-<span class="sd">        values (see examples).</span>
-<span class="sd">        </span>
-<span class="sd">        The fields of the DataFrame are:</span>
+<span class="sd">          analysis of the queried dataset. Note that this funciton does not return </span>
+<span class="sd">          differential expression values themselves. Use</span>
+<span class="sd">          get_differential_expression_values to get differential expression</span>
+<span class="sd">          values (see examples).</span>
+<span class="sd">          </span>
+<span class="sd">          The fields of the DataFrame are:</span>
 <span class="sd">            - result_ID: Result set ID of the differential expression analysis. May represent multiple factors in a single model.</span>
 <span class="sd">            - contrast_ID: Id of the specific contrast factor. Together with the result.ID they uniquely represent a given contrast.</span>
 <span class="sd">            - experiment_ID: Id of the source experiment</span>
@@ -318,8 +309,8 @@
 <span class="sd">            - baseline_factors: Characteristics of the baseline. This field is a DataFrame</span>
 <span class="sd">            - experimental_factors: Characteristics of the experimental group. This field is a DataFrame</span>
 <span class="sd">            - isSubset: True if the result set belong to a subset, False if not. </span>
-<span class="sd">            Subsets are created when performing differential expression to avoid </span>
-<span class="sd">            unhelpful comparisons.</span>
+<span class="sd">              Subsets are created when performing differential expression to avoid </span>
+<span class="sd">              unhelpful comparisons.</span>
 <span class="sd">            - subset_factor: Characteristics of the subset. This field is a DataFrame</span>
 <span class="sd">            - probes_analyzed: Number of probesets represented in the contrast</span>
 <span class="sd">            - genes_analyzed: Number of genes represented in the contrast</span>
@@ -370,17 +361,17 @@
 <span class="sd">        :param datasets: A numerical dataset identifier or a dataset short name</span>
 <span class="sd">        :type datasets: List[str|int]</span>
 <span class="sd">        :param genes: An ensembl gene identifier which typically starts with </span>
-<span class="sd">        ensg or an ncbi gene identifier or an official gene symbol approved by </span>
-<span class="sd">        hgnc</span>
+<span class="sd">          ensg or an ncbi gene identifier or an official gene symbol approved by </span>
+<span class="sd">          hgnc</span>
 <span class="sd">        :type genes: List[int]</span>
 <span class="sd">        :param keep_non_specific: If True, results from probesets that are not</span>
-<span class="sd">        specific to the gene will also be returned., defaults to False</span>
+<span class="sd">          specific to the gene will also be returned., defaults to False</span>
 <span class="sd">        :type keep_non_specific: bool, optional</span>
 <span class="sd">        :param consolidate: An option for gene expression level consolidation. </span>
-<span class="sd">        If empty, will return every probe for the genes. &quot;pickmax&quot; to pick the</span>
-<span class="sd">        probe with the highest expression, &quot;pickvar&quot; to pick the prove with the </span>
-<span class="sd">        highest variance and &quot;average&quot; for returning the average expression, </span>
-<span class="sd">        defaults to None</span>
+<span class="sd">          If empty, will return every probe for the genes. &quot;pickmax&quot; to pick the</span>
+<span class="sd">          probe with the highest expression, &quot;pickvar&quot; to pick the prove with the </span>
+<span class="sd">          highest variance and &quot;average&quot; for returning the average expression, </span>
+<span class="sd">          defaults to None</span>
 <span class="sd">        :type consolidate: TYPE, optional</span>
 <span class="sd">        :param **kwargs: Additional arguments to pass to raw.get_dataset_expression_for_genes</span>
 <span class="sd">        :return: A dict of DataFrames keyed to dataset ids</span>
@@ -413,10 +404,8 @@
 <span class="sd">        :param dataset: A numerical dataset identifier or a dataset short name</span>
 <span class="sd">        :type dataset: str|int</span>
 <span class="sd">        :param **kwargs: Additional arguments to pass to raw.get_dataset_platforms</span>
-<span class="sd">        :return: </span>
-<span class="sd">            A DataFrame with information about the platforms.</span>
-<span class="sd">            </span>
-<span class="sd">            The fields of the DataFrame are:</span>
+<span class="sd">        :return: A DataFrame with information about the platforms.</span>
+<span class="sd">          The fields of the DataFrame are:</span>
 <span class="sd">                </span>
 <span class="sd">            - platform_ID: Id number of the platform given by Gemma</span>
 <span class="sd">            - platform_type: Type of the platform.</span>
@@ -473,20 +462,20 @@
 <span class="sd">        :param **kwargs: Additional arguments to pass to raw.get_dataset_quantitation_types</span>
 <span class="sd">        :return: A DataFrame containing the quantitation types</span>
 <span class="sd">        </span>
-<span class="sd">        The fields of the output DataFrame are:</span>
+<span class="sd">          The fields of the output DataFrame are:</span>
 <span class="sd">            - id: If of the quantitation type. Any raw quantitation type can be</span>
-<span class="sd">            accessed by get_dataset_raw_expression function using this id.</span>
+<span class="sd">               by get_dataset_raw_expression function using this id.</span>
 <span class="sd">            - name: Name of the quantitation type</span>
 <span class="sd">            - description: Description of the quantitation type</span>
 <span class="sd">            - type: Type of the quantitation type. Either raw or processed. </span>
-<span class="sd">            Each dataset will have one processed quantitation type which is the </span>
-<span class="sd">            data returned using get_dataset_processed_expression</span>
+<span class="sd">              Each dataset will have one processed quantitation type which is the </span>
+<span class="sd">              data returned using get_dataset_processed_expression</span>
 <span class="sd">            - ratio: Whether or not the quanitation type is a ratio of multiple</span>
-<span class="sd">            quantitation types. Typically TRUE for processed TWOCOLOR quantitation type.</span>
+<span class="sd">              quantitation types. Typically TRUE for processed TWOCOLOR quantitation type.</span>
 <span class="sd">            - preferred: The preferred raw quantitation type. This version is </span>
-<span class="sd">            used in generation of the processed data within gemma.</span>
+<span class="sd">              used in generation of the processed data within gemma.</span>
 <span class="sd">            - recomputed: If TRUE this quantitation type is generated by</span>
-<span class="sd">            recomputing raw data files Gemma had access to</span>
+<span class="sd">              recomputing raw data files Gemma had access to</span>
 <span class="sd">        :rtype: DataFrame</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -508,8 +497,8 @@
 <span class="sd">        :param dataset: A numerical dataset identifier or a dataset short name</span>
 <span class="sd">        :type dataset: int|str</span>
 <span class="sd">        :param quantitation_type: Quantitation type id. These can be acquired </span>
-<span class="sd">        using get_dataset_quantitation_types function. This endpoint can only </span>
-<span class="sd">        return non-processed quantitation types.</span>
+<span class="sd">          using get_dataset_quantitation_types function. This endpoint can only </span>
+<span class="sd">          return non-processed quantitation types.</span>
 <span class="sd">        :type quantitation_type: [int]</span>
 <span class="sd">        :param **kwargs: Additional arguments to pass to raw.get_dataset_raw_expression</span>
 <span class="sd">        :return: A DataFrame of the expression matrix for the queried dataset</span>
@@ -542,7 +531,7 @@
 <span class="sd">        :param **kwargs: Additional arguments to pass to raw.get_dataset_samples</span>
 <span class="sd">        :return: A DataFrame with information about the samples of the queried dataset.</span>
 <span class="sd">        </span>
-<span class="sd">        The fields of the DataFrame are:</span>
+<span class="sd">          The fields of the DataFrame are:</span>
 <span class="sd">            - sample_name: Internal name given to the sample.</span>
 <span class="sd">            - sample_ID: Internal ID of the sample</span>
 <span class="sd">            - sample_description: Free text description of the sample</span>
@@ -576,45 +565,47 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        </span>
 <span class="sd">        :param query: The search query. Either plain text (&#39;traumatic&#39;), or an </span>
-<span class="sd">        ontology term URI (&#39;http://purl.obolibrary.org/obo/UBERON_0002048&#39;).</span>
-<span class="sd">        Datasets that contain the given string in their short of full name will </span>
-<span class="sd">        also be matched., defaults to None</span>
+<span class="sd">          ontology term URI (&#39;http://purl.obolibrary.org/obo/UBERON_0002048&#39;).</span>
+<span class="sd">          Datasets that contain the given string in their short of full name will </span>
+<span class="sd">          also be matched., defaults to None</span>
 <span class="sd">        :type query: Optional[str], optional</span>
 <span class="sd">        :param filter: Filter results by matching expression. Use </span>
-<span class="sd">        filter_properties function to get a list of all available parameters. </span>
-<span class="sd">        These properties can be combined using &quot;and&quot; &quot;or&quot; clauses and may </span>
-<span class="sd">        contain common operators such as &quot;=&quot;, &quot;&lt;&quot; or &quot;in&quot;. (e.g. </span>
-<span class="sd">        &quot;taxon.commonName = human&quot;, &quot;taxon.commonName in (human,mouse), </span>
-<span class="sd">        &quot;id &lt; 1000&quot;), defaults to None</span>
+<span class="sd">          filter_properties function to get a list of all available parameters. </span>
+<span class="sd">          These properties can be combined using &quot;and&quot; &quot;or&quot; clauses and may </span>
+<span class="sd">          contain common operators such as &quot;=&quot;, &quot;&lt;&quot; or &quot;in&quot;. (e.g. </span>
+<span class="sd">          &quot;taxon.commonName = human&quot;, &quot;taxon.commonName in (human,mouse), </span>
+<span class="sd">          &quot;id &lt; 1000&quot;), defaults to None</span>
 <span class="sd">        :type filter: Optional[str], optional</span>
-<span class="sd">        :param taxa: 	</span>
-<span class="sd">A vector of taxon common names (e.g. human, mouse, rat). Providing multiple species will return results for all species. These are appended to the filter and equivalent to filtering for taxon.commonName property, defaults to None</span>
+<span class="sd">        :param taxa: A vector of taxon common names (e.g. human, mouse, rat).</span>
+<span class="sd">          Providing multiple species will return results for all species. These </span>
+<span class="sd">          are appended to the filter and equivalent to filtering for </span>
+<span class="sd">          taxon.commonName property, defaults to None</span>
 <span class="sd">        :param taxa: A list of taxon common names (e.g. human, mouse, rat). </span>
-<span class="sd">        Providing multiple species will return results for all species. </span>
-<span class="sd">        These are appended to the filter and equivalent to filtering for </span>
-<span class="sd">        taxon.commonName property, defaults to None</span>
+<span class="sd">          Providing multiple species will return results for all species. </span>
+<span class="sd">          These are appended to the filter and equivalent to filtering for </span>
+<span class="sd">          taxon.commonName property, defaults to None</span>
 <span class="sd">        :type taxa: Optional[List[str]], optional</span>
 <span class="sd">        :param uris: A vector of ontology term URIs. Providing multiple terms</span>
-<span class="sd">        will return results containing any of the terms and their children. </span>
-<span class="sd">        These are appended to the filter and equivalent to filtering for </span>
-<span class="sd">        allCharacteristics.valueUri, defaults to None</span>
+<span class="sd">          will return results containing any of the terms and their children. </span>
+<span class="sd">          These are appended to the filter and equivalent to filtering for </span>
+<span class="sd">          allCharacteristics.valueUri, defaults to None</span>
 <span class="sd">        :type uris: Optional[List[str]], optional</span>
 <span class="sd">        :param offset: The offset of the first retrieved result., defaults to 0</span>
 <span class="sd">        :type offset: int, optional</span>
 <span class="sd">        :param limit: Limits the result to specified amount of objects.</span>
-<span class="sd">        Has a maximum value of 100. Use together with offset and the </span>
-<span class="sd">        total_elements attribute in the output to compile all data if needed.</span>
-<span class="sd">        Alternatively get_all_pages function can be used with all functions</span>
-<span class="sd">        including offset and limit parameters, defaults to 20</span>
+<span class="sd">          Has a maximum value of 100. Use together with offset and the </span>
+<span class="sd">          total_elements attribute in the output to compile all data if needed.</span>
+<span class="sd">          Alternatively get_all_pages function can be used with all functions</span>
+<span class="sd">          including offset and limit parameters, defaults to 20</span>
 <span class="sd">        :type limit: int, optional</span>
 <span class="sd">        :param sort: Order results by the given property and direction. The &#39;+&#39;</span>
-<span class="sd">        sign indicate ascending order whereas the &#39;-&#39; indicate descending,</span>
-<span class="sd">        defaults to &quot;+id&quot;</span>
+<span class="sd">          sign indicate ascending order whereas the &#39;-&#39; indicate descending,</span>
+<span class="sd">          defaults to &quot;+id&quot;</span>
 <span class="sd">        :type sort: str, optional</span>
 <span class="sd">        :param **kwargs: Additional arguments to pass to raw.get_datasets</span>
 <span class="sd">        :return: A DataFrame with information about the queried dataset(s).</span>
 <span class="sd">        </span>
-<span class="sd">        The fields of the DataFrame are:</span>
+<span class="sd">          The fields of the DataFrame are:</span>
 <span class="sd">            - experiment_short_name: Shortname given to the dataset within Gemma. Often corresponds to accession ID</span>
 <span class="sd">            - experiment_name: Full title of the dataset</span>
 <span class="sd">            - experiment_ID: Internal ID of the dataset.</span>
@@ -680,38 +671,38 @@
 <span class="sd">        :param dataset: Numerical dataset identifiers or dataset short names.</span>
 <span class="sd">        :type dataset: List[str|int]</span>
 <span class="sd">        :param filter: Filter results by matching expression. Use </span>
-<span class="sd">        filter_properties function to get a list of all available parameters. </span>
-<span class="sd">        These properties can be combined using &quot;and&quot; &quot;or&quot; clauses and may </span>
-<span class="sd">        contain common operators such as &quot;=&quot;, &quot;&lt;&quot; or &quot;in&quot;. (e.g. </span>
-<span class="sd">        &quot;taxon.commonName = human&quot;, &quot;taxon.commonName in (human,mouse), </span>
-<span class="sd">        &quot;id &lt; 1000&quot;), defaults to None</span>
+<span class="sd">          filter_properties function to get a list of all available parameters. </span>
+<span class="sd">          These properties can be combined using &quot;and&quot; &quot;or&quot; clauses and may </span>
+<span class="sd">          contain common operators such as &quot;=&quot;, &quot;&lt;&quot; or &quot;in&quot;. (e.g. </span>
+<span class="sd">          &quot;taxon.commonName = human&quot;, &quot;taxon.commonName in (human,mouse), </span>
+<span class="sd">          &quot;id &lt; 1000&quot;), defaults to None</span>
 <span class="sd">        :type filter: Optional[str], optional</span>
 <span class="sd">        :param taxa: A list of taxon common names (e.g. human, mouse, rat). </span>
-<span class="sd">        Providing multiple species will return results for all species. </span>
-<span class="sd">        These are appended to the filter and equivalent to filtering for </span>
-<span class="sd">        taxon.commonName property, defaults to None</span>
+<span class="sd">          Providing multiple species will return results for all species. </span>
+<span class="sd">          These are appended to the filter and equivalent to filtering for </span>
+<span class="sd">          taxon.commonName property, defaults to None</span>
 <span class="sd">        :type taxa: Optional[List[str]], optional</span>
 <span class="sd">        :param uris: A vector of ontology term URIs. Providing multiple terms</span>
-<span class="sd">        will return results containing any of the terms and their children. </span>
-<span class="sd">        These are appended to the filter and equivalent to filtering for </span>
-<span class="sd">        allCharacteristics.valueUri, defaults to None</span>
+<span class="sd">          will return results containing any of the terms and their children. </span>
+<span class="sd">          These are appended to the filter and equivalent to filtering for </span>
+<span class="sd">          allCharacteristics.valueUri, defaults to None</span>
 <span class="sd">        :type uris: Optional[List[str]], optional</span>
 <span class="sd">        :param offset: The offset of the first retrieved result., defaults to 0</span>
 <span class="sd">        :type offset: int, optional</span>
 <span class="sd">        :param limit: Limits the result to specified amount of objects.</span>
-<span class="sd">        Has a maximum value of 100. Use together with offset and the </span>
-<span class="sd">        total_elements attribute in the output to compile all data if needed.</span>
-<span class="sd">        Alternatively get_all_pages function can be used with all functions</span>
-<span class="sd">        including offset and limit parameters, defaults to 20</span>
+<span class="sd">          Has a maximum value of 100. Use together with offset and the </span>
+<span class="sd">          total_elements attribute in the output to compile all data if needed.</span>
+<span class="sd">          Alternatively get_all_pages function can be used with all functions</span>
+<span class="sd">          including offset and limit parameters, defaults to 20</span>
 <span class="sd">        :type limit: int, optional</span>
 <span class="sd">        :param sort: Order results by the given property and direction. The &#39;+&#39;</span>
-<span class="sd">        sign indicate ascending order whereas the &#39;-&#39; indicate descending,</span>
-<span class="sd">        defaults to &quot;+id&quot;</span>
+<span class="sd">          sign indicate ascending order whereas the &#39;-&#39; indicate descending,</span>
+<span class="sd">          defaults to &quot;+id&quot;</span>
 <span class="sd">        :type sort: str, optional</span>
 <span class="sd">        :param **kwargs: Additional arguments to pass to raw.get_datasets_by_ids</span>
 <span class="sd">        :return: A DataFrame with information about the queried dataset(s).</span>
 <span class="sd">        </span>
-<span class="sd">        The fields of the DataFrame are:</span>
+<span class="sd">          The fields of the DataFrame are:</span>
 <span class="sd">            - experiment_short_name: Shortname given to the dataset within Gemma. Often corresponds to accession ID</span>
 <span class="sd">            - experiment_name: Full title of the dataset</span>
 <span class="sd">            - experiment_ID: Internal ID of the dataset.</span>
@@ -773,12 +764,12 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        </span>
 <span class="sd">        :param gene: An ensembl gene identifier which typically starts with </span>
-<span class="sd">        ensg or an ncbi gene identifier or an official gene symbol approved by</span>
-<span class="sd">        hgnc</span>
+<span class="sd">          ensg or an ncbi gene identifier or an official gene symbol approved by</span>
+<span class="sd">          hgnc</span>
 <span class="sd">        :type gene: str|int</span>
 <span class="sd">        :param **kwargs: Additional arguments to pass to raw.get_gene_go_terms</span>
 <span class="sd">        :return: A DataFrame with information about the GO terms assigned to the queried gene</span>
-<span class="sd">        The fields of the output DataFrame are:</span>
+<span class="sd">          The fields of the output DataFrame are:</span>
 <span class="sd">            - term_name: Name of the term</span>
 <span class="sd">            - term_ID: ID of the term</span>
 <span class="sd">            - term_URI: URI of the term </span>
@@ -803,7 +794,7 @@
 <span class="sd">        :param **kwargs: DAdditional arguments to pass to raw.get_gene_locations</span>
 <span class="sd">        :type **kwargs: TYPE</span>
 <span class="sd">        :return: A DataFrame with information about the physical location of the queried gene</span>
-<span class="sd">        The fields of the output DataFrame are:</span>
+<span class="sd">          The fields of the output DataFrame are:</span>
 <span class="sd">            - chromosome: Name of the chromosome the gene is located</span>
 <span class="sd">            - strand: Which strand the gene is located</span>
 <span class="sd">            - nucleotide: Nucleotide number for the gene</span>
@@ -834,22 +825,22 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Retrieve the probes associated to a genes across all platforms</span>
 <span class="sd">        </span>
 <span class="sd">        :param gene: An ensembl gene identifier which typically starts with</span>
-<span class="sd">        ensg or an ncbi gene identifier or an official gene symbol approved by </span>
-<span class="sd">        hgnc</span>
+<span class="sd">          ensg or an ncbi gene identifier or an official gene symbol approved by </span>
+<span class="sd">          hgnc</span>
 <span class="sd">        :type gene: str|int</span>
 <span class="sd">        :param offset: The offset of the first retrieved result., defaults to 0</span>
 <span class="sd">        :type offset: int, optional</span>
 <span class="sd">        :param limit: Limits the result to specified amount of objects.</span>
-<span class="sd">        Has a maximum value of 100. Use together with offset and the </span>
-<span class="sd">        total_elements attribute in the output to compile all data if needed.</span>
-<span class="sd">        Alternatively get_all_pages function can be used with all functions</span>
-<span class="sd">        including offset and limit parameters, defaults to 20</span>
+<span class="sd">          Has a maximum value of 100. Use together with offset and the </span>
+<span class="sd">          total_elements attribute in the output to compile all data if needed.</span>
+<span class="sd">          Alternatively get_all_pages function can be used with all functions</span>
+<span class="sd">          including offset and limit parameters, defaults to 20</span>
 <span class="sd">        :type limit: int, optional</span>
 <span class="sd">        :param **kwargs: Additional arguments to pass to raw.get_gene_probes</span>
 <span class="sd">        :return: A DataFrame with information about the probes representing a </span>
-<span class="sd">        gene across all platrofms.</span>
+<span class="sd">          gene across all platrofms.</span>
 <span class="sd">        </span>
-<span class="sd">        The fields of the output DataFrame are:</span>
+<span class="sd">          The fields of the output DataFrame are:</span>
 <span class="sd">            - element_name: Name of the element. Typically the probeset name</span>
 <span class="sd">            - element_description: A free text field providing optional information about the element</span>
 <span class="sd">            - platform_short_name: Shortname of the platform given by Gemma. Typically the GPL identifier.</span>
@@ -892,7 +883,7 @@
 <span class="sd">        :param **kwargs: Additional arguments to pass to raw_get_genes</span>
 <span class="sd">        :return: A DataFrame with the information about the querried genes.</span>
 <span class="sd">        </span>
-<span class="sd">        The fields of the output DataFrame are:</span>
+<span class="sd">          The fields of the output DataFrame are:</span>
 <span class="sd">            - gene_symbol: Symbol for the gene</span>
 <span class="sd">            - gene_ensembl: Ensembl ID for the gene</span>
 <span class="sd">            - gene_NCBI: NCBI id for the gene</span>
@@ -937,11 +928,11 @@
 <span class="sd">        :type **kwargs: TYPE</span>
 <span class="sd">        :return: A DataFrame of annotations</span>
 <span class="sd">        </span>
-<span class="sd">        - ProbeName: Probeset names provided by the platform. Gene symbols for generic annotations</span>
-<span class="sd">        - GeneSymbols: Genes that were found to be aligned to the probe sequence. Note that it is possible for probes to be non-specific. Alignment to multiple genes are indicated with gene symbols separated by &quot;|&quot;s</span>
-<span class="sd">        - GeneNames: Name of the gene</span>
-<span class="sd">        - GOTerms: GO Terms associated with the genes. annotType argument can be used to choose which terms should be included.</span>
-<span class="sd">        - GemmaIDs and NCBIids: respective IDs for the genes.</span>
+<span class="sd">          - ProbeName: Probeset names provided by the platform. Gene symbols for generic annotations</span>
+<span class="sd">          - GeneSymbols: Genes that were found to be aligned to the probe sequence. Note that it is possible for probes to be non-specific. Alignment to multiple genes are indicated with gene symbols separated by &quot;|&quot;s</span>
+<span class="sd">          - GeneNames: Name of the gene</span>
+<span class="sd">          - GOTerms: GO Terms associated with the genes. annotType argument can be used to choose which terms should be included.</span>
+<span class="sd">          - GemmaIDs and NCBIids: respective IDs for the genes.</span>
 <span class="sd">        :rtype: DataFrame</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -970,15 +961,15 @@
 <span class="sd">        :param offset: The offset of the first retrieved result., defaults to 0</span>
 <span class="sd">        :type offset: int, optional</span>
 <span class="sd">        :param limit: Limits the result to specified amount of objects.</span>
-<span class="sd">        Has a maximum value of 100. Use together with offset and the </span>
-<span class="sd">        total_elements attribute in the output to compile all data if needed.</span>
-<span class="sd">        Alternatively get_all_pages function can be used with all functions</span>
-<span class="sd">        including offset and limit parameters, defaults to 20</span>
+<span class="sd">          Has a maximum value of 100. Use together with offset and the </span>
+<span class="sd">          total_elements attribute in the output to compile all data if needed.</span>
+<span class="sd">          Alternatively get_all_pages function can be used with all functions</span>
+<span class="sd">          including offset and limit parameters, defaults to 20</span>
 <span class="sd">        :type limit: int, optional</span>
 <span class="sd">        :param **kwargs: Additional arguments to pass to raw.get_platform_datasets</span>
 <span class="sd">        :return: A DataFrame with information about the queried dataset(s).</span>
 <span class="sd">        </span>
-<span class="sd">        The fields of the DataFrame are:</span>
+<span class="sd">          The fields of the DataFrame are:</span>
 <span class="sd">            - experiment_short_name: Shortname given to the dataset within Gemma. Often corresponds to accession ID</span>
 <span class="sd">            - experiment_name: Full title of the dataset</span>
 <span class="sd">            - experiment_ID: Internal ID of the dataset.</span>
@@ -1039,15 +1030,15 @@
 <span class="sd">        :param offset: The offset of the first retrieved result., defaults to 0</span>
 <span class="sd">        :type offset: int, optional</span>
 <span class="sd">        :param limit: Limits the result to specified amount of objects.</span>
-<span class="sd">        Has a maximum value of 100. Use together with offset and the </span>
-<span class="sd">        total_elements attribute in the output to compile all data if needed.</span>
-<span class="sd">        Alternatively get_all_pages function can be used with all functions</span>
-<span class="sd">        including offset and limit parameters, defaults to 20</span>
+<span class="sd">          Has a maximum value of 100. Use together with offset and the </span>
+<span class="sd">          total_elements attribute in the output to compile all data if needed.</span>
+<span class="sd">          Alternatively get_all_pages function can be used with all functions</span>
+<span class="sd">          including offset and limit parameters, defaults to 20</span>
 <span class="sd">        :type limit: int, optional</span>
 <span class="sd">        :param **kwargs: Additional arguments to pass to raw.get_platform_element_genes</span>
 <span class="sd">        :type **kwargs: TYPE</span>
 <span class="sd">        :return: A DataFrame with the information about querried gene(s).</span>
-<span class="sd">        The fields of the output DataFrame are:</span>
+<span class="sd">          The fields of the output DataFrame are:</span>
 <span class="sd">            - gene_symbol: Symbol for the gene</span>
 <span class="sd">            - gene_ensembl: Ensembl ID for the gene</span>
 <span class="sd">            - gene_NCBI: NCBI id for the gene</span>
@@ -1099,26 +1090,26 @@
 <span class="sd">          &quot;id &lt; 1000&quot;), defaults to None</span>
 <span class="sd">        :type filter: str, optional</span>
 <span class="sd">        :param taxa: A list of taxon common names (e.g. human, mouse, rat). </span>
-<span class="sd">        Providing multiple species will return results for all species. These </span>
-<span class="sd">        are appended to the filter and equivalent to filtering for </span>
-<span class="sd">        taxon.commonName property, defaults to None</span>
+<span class="sd">          Providing multiple species will return results for all species. These </span>
+<span class="sd">          are appended to the filter and equivalent to filtering for </span>
+<span class="sd">          taxon.commonName property, defaults to None</span>
 <span class="sd">        :type taxa: List[str], optional</span>
 <span class="sd">        :param offset: The offset of the first retrieved result., defaults to 0</span>
 <span class="sd">        :type offset: int, optional</span>
 <span class="sd">        :param limit: Limits the result to specified amount of objects.</span>
-<span class="sd">        Has a maximum value of 100. Use together with offset and the </span>
-<span class="sd">        total_elements attribute in the output to compile all data if needed.</span>
-<span class="sd">        Alternatively get_all_pages function can be used with all functions</span>
-<span class="sd">        including offset and limit parameters, defaults to 20</span>
+<span class="sd">          Has a maximum value of 100. Use together with offset and the </span>
+<span class="sd">          total_elements attribute in the output to compile all data if needed.</span>
+<span class="sd">          Alternatively get_all_pages function can be used with all functions</span>
+<span class="sd">          including offset and limit parameters, defaults to 20</span>
 <span class="sd">        :type limit: int, optional</span>
 <span class="sd">        :param sort: Order results by the given property and direction. The &#39;+&#39;</span>
-<span class="sd">        sign indicate ascending order whereas the &#39;-&#39; indicate descending,</span>
-<span class="sd">        defaults to &quot;+id&quot;</span>
+<span class="sd">          sign indicate ascending order whereas the &#39;-&#39; indicate descending,</span>
+<span class="sd">          defaults to &quot;+id&quot;</span>
 <span class="sd">        :type sort: str, optional</span>
 <span class="sd">        :param **kwargs: Additional arguments to raw.get_platforms_by_ids</span>
 <span class="sd">        :return: A DataFrame with information about the platform(s).</span>
 <span class="sd">        </span>
-<span class="sd">        The fields of the output DataFrame are:</span>
+<span class="sd">          The fields of the output DataFrame are:</span>
 
 <span class="sd">            - platform_ID: Internal identifier of the platform</span>
 <span class="sd">            - platform_short_name: Shortname of the platform.</span>
@@ -1177,26 +1168,26 @@
 <span class="sd">          &quot;id &lt; 1000&quot;), defaults to None</span>
 <span class="sd">        :type filter: str, optional</span>
 <span class="sd">        :param taxa: A list of taxon common names (e.g. human, mouse, rat). </span>
-<span class="sd">        Providing multiple species will return results for all species. These </span>
-<span class="sd">        are appended to the filter and equivalent to filtering for </span>
-<span class="sd">        taxon.commonName property, defaults to None</span>
+<span class="sd">          Providing multiple species will return results for all species. These </span>
+<span class="sd">          are appended to the filter and equivalent to filtering for </span>
+<span class="sd">          taxon.commonName property, defaults to None</span>
 <span class="sd">        :type taxa: List[str], optional</span>
 <span class="sd">        :param offset: The offset of the first retrieved result., defaults to 0</span>
 <span class="sd">        :type offset: int, optional</span>
 <span class="sd">        :param limit: Limits the result to specified amount of objects.</span>
-<span class="sd">        Has a maximum value of 100. Use together with offset and the </span>
-<span class="sd">        total_elements attribute in the output to compile all data if needed.</span>
-<span class="sd">        Alternatively get_all_pages function can be used with all functions</span>
-<span class="sd">        including offset and limit parameters, defaults to 20</span>
+<span class="sd">          Has a maximum value of 100. Use together with offset and the </span>
+<span class="sd">          total_elements attribute in the output to compile all data if needed.</span>
+<span class="sd">          Alternatively get_all_pages function can be used with all functions</span>
+<span class="sd">          including offset and limit parameters, defaults to 20</span>
 <span class="sd">        :type limit: int, optional</span>
 <span class="sd">        :param sort: Order results by the given property and direction. The &#39;+&#39;</span>
-<span class="sd">        sign indicate ascending order whereas the &#39;-&#39; indicate descending,</span>
-<span class="sd">        defaults to &quot;+id&quot;</span>
+<span class="sd">          sign indicate ascending order whereas the &#39;-&#39; indicate descending,</span>
+<span class="sd">          defaults to &quot;+id&quot;</span>
 <span class="sd">        :type sort: str, optional</span>
 <span class="sd">        :param **kwargs: Additional arguments to raw.get_platforms_by_ids</span>
 <span class="sd">        :return: A DataFrame with information about the platform(s).</span>
 <span class="sd">        </span>
-<span class="sd">        The fields of the output DataFrame are:</span>
+<span class="sd">          The fields of the output DataFrame are:</span>
 
 <span class="sd">            - platform_ID: Internal identifier of the platform</span>
 <span class="sd">            - platform_short_name: Shortname of the platform.</span>
@@ -1259,16 +1250,16 @@
 <span class="sd">          name, defaults to None</span>
 <span class="sd">        :type platform: Optional[str|int], optional</span>
 <span class="sd">        :param limit: Defaults to 100 with a maximum value of 2000. Limits the</span>
-<span class="sd">        number of returned results. Note that this function does not support</span>
-<span class="sd">        pagination., defaults to 100</span>
+<span class="sd">          number of returned results. Note that this function does not support</span>
+<span class="sd">          pagination., defaults to 100</span>
 <span class="sd">        :type limit: int, optional</span>
 <span class="sd">        :param result_type: The kind of results that should be included in the</span>
-<span class="sd">        output. Can be &quot;experiment&quot;, &quot;gene&quot;, &quot;platform&quot; or a long object type name,</span>
-<span class="sd">        documented in the API documentation., defaults to &quot;experiment&quot;</span>
+<span class="sd">          output. Can be &quot;experiment&quot;, &quot;gene&quot;, &quot;platform&quot; or a long object type name,</span>
+<span class="sd">          documented in the API documentation., defaults to &quot;experiment&quot;</span>
 <span class="sd">        :type result_type: str, optional</span>
 <span class="sd">        :param **kwargs: Additional arguments to raw.search</span>
 <span class="sd">        :return: A list containing the results. Actual results are under the </span>
-<span class="sd">        result_object component as dicts</span>
+<span class="sd">          result_object component as dicts</span>
 <span class="sd">        :rtype: list[sdk.SearchResultValueObjectObject]</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1644,7 +1635,7 @@
                 <span class="k">try</span><span class="p">:</span> 
                     <span class="n">gene_data</span> <span class="o">=</span> <span class="n">pack</span><span class="p">[</span><span class="s1">&#39;exp&#39;</span><span class="p">][[</span><span class="s1">&#39;GeneSymbol&#39;</span><span class="p">,</span> <span class="s1">&#39;NCBIid&#39;</span><span class="p">]]</span>
                 <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-                    <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;WARNING: One or more gene descriptions are missing in Expression table&quot;</span><span class="p">)</span>
+                    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;WARNING: One or more gene descriptions are missing in Expression table&quot;</span><span class="p">)</span>
                     <span class="n">gene_data</span> <span class="o">=</span> <span class="kc">None</span>
                 
                 <span class="n">mda</span> <span class="o">=</span> <span class="p">{</span>
@@ -1730,7 +1721,7 @@
 <span class="sd">        :param **kwargs: </span>
 <span class="sd">        :type **kwargs: TYPE</span>
 <span class="sd">        :raises ValueError: Will return a value error if neither result_sets nor a dataset</span>
-<span class="sd">        is provided</span>
+<span class="sd">          is provided</span>
 <span class="sd">        :return: A list of data frames with differential expression values per result set.</span>
 <span class="sd">        :rtype: List[DataFrame]</span>
 
@@ -1774,7 +1765,7 @@
 
 <div class="viewcode-block" id="GemmaPy.get_all_pages">
 <a class="viewcode-back" href="../../api.html#gemmapy.GemmaPy.get_all_pages">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_all_pages</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fun</span><span class="p">:</span><span class="n">Callable</span><span class="p">,</span><span class="n">step_size</span><span class="p">:</span><span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span><span class="n">DataFrame</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">get_all_pages</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fun</span><span class="p">:</span><span class="n">Callable</span><span class="p">,</span><span class="n">step_size</span><span class="p">:</span><span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">list</span><span class="o">|</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        A convenience function to allow easy iteration over paginated outputs.</span>
 <span class="sd">        If the function returns a DataFrame output will be merged by the rows,</span>
@@ -1791,7 +1782,7 @@
 <span class="sd">        :param **kwargs: arguments for the callable fun</span>
 <span class="sd">        :return: A DataFrame or a list containing all the output depending on </span>
 <span class="sd">          output of the callable</span>
-<span class="sd">        :rtype: Union[list,DataFrame]</span>
+<span class="sd">        :rtype: list|DataFrame</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>        

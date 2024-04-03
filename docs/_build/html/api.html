@@ -190,7 +190,7 @@ the maximum value and the default.</p></li>
 output of the callable</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Union[list,DataFrame]</p>
+<dd class="field-odd"><p>list|DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -227,20 +227,19 @@ children and the terms itself in the output vector</p>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A DataFrame with information about the annotations of the queried dataset.</p>
-</dd>
-</dl>
-<dl class="simple">
-<dt>The fields of the DataFrame are:</dt><dd><ul class="simple">
+<dd class="field-even"><p><p>A DataFrame with information about the annotations of the queried dataset. 
+The fields of the DataFrame are:</p>
+<blockquote>
+<div><ul class="simple">
 <li><p>class_name: Name of the annotation class (e.g. organism part)</p></li>
 <li><p>class_URI: URI for the annotation class</p></li>
 <li><p>term_name: Name of the annotation term (e.g. lung)</p></li>
 <li><p>term_URI: URI for the annotation term</p></li>
 <li><p>object_class: Class of object that the term originated from.</p></li>
 </ul>
+</div></blockquote>
+</p>
 </dd>
-</dl>
-<dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>DataFrame</p>
 </dd>
@@ -260,14 +259,12 @@ children and the terms itself in the output vector</p>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A data table with information about the differential expression</p>
-</dd>
-</dl>
-<p>analysis of the queried dataset. Note that this funciton does not return 
+<dd class="field-even"><p><p>A data table with information about the differential expression
+analysis of the queried dataset. Note that this funciton does not return 
 differential expression values themselves. Use
 get_differential_expression_values to get differential expression
 values (see examples).</p>
-<dl>
+<dl class="simple">
 <dt>The fields of the DataFrame are:</dt><dd><ul class="simple">
 <li><p>result_ID: Result set ID of the differential expression analysis. May represent multiple factors in a single model.</p></li>
 <li><p>contrast_ID: Id of the specific contrast factor. Together with the result.ID they uniquely represent a given contrast.</p></li>
@@ -277,16 +274,17 @@ values (see examples).</p>
 <li><p>factor_ID: ID of the factor</p></li>
 <li><p>baseline_factors: Characteristics of the baseline. This field is a DataFrame</p></li>
 <li><p>experimental_factors: Characteristics of the experimental group. This field is a DataFrame</p></li>
-<li><p>isSubset: True if the result set belong to a subset, False if not.</p></li>
+<li><p>isSubset: True if the result set belong to a subset, False if not. 
+Subsets are created when performing differential expression to avoid 
+unhelpful comparisons.</p></li>
+<li><p>subset_factor: Characteristics of the subset. This field is a DataFrame</p></li>
+<li><p>probes_analyzed: Number of probesets represented in the contrast</p></li>
+<li><p>genes_analyzed: Number of genes represented in the contrast</p></li>
 </ul>
-<p>Subsets are created when performing differential expression to avoid 
-unhelpful comparisons.
-- subset_factor: Characteristics of the subset. This field is a DataFrame
-- probes_analyzed: Number of probesets represented in the contrast
-- genes_analyzed: Number of genes represented in the contrast</p>
 </dd>
 </dl>
-<dl class="field-list simple">
+</p>
+</dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>DataFrame</p>
 </dd>
@@ -312,27 +310,27 @@ unhelpful comparisons.
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>datasets</strong> (<em>List</em><em>[</em><em>str</em><em>|</em><em>int</em><em>]</em>) – A numerical dataset identifier or a dataset short name</p></li>
-<li><p><strong>genes</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]</span>) – An ensembl gene identifier which typically starts with</p></li>
-</ul>
-</dd>
-</dl>
-<p>ensg or an ncbi gene identifier or an official gene symbol approved by 
-hgnc
-:type genes: List[int]
-:type keep_non_specific: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span>
-:param keep_non_specific: If True, results from probesets that are not
-specific to the gene will also be returned., defaults to False
-:type keep_non_specific: bool, optional
-:type consolidate: 
-:param consolidate: An option for gene expression level consolidation. 
+<li><p><strong>genes</strong> (<em>List</em><em>[</em><em>int</em><em>]</em>) – An ensembl gene identifier which typically starts with 
+ensg or an ncbi gene identifier or an official gene symbol approved by 
+hgnc</p></li>
+<li><p><strong>keep_non_specific</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, results from probesets that are not
+specific to the gene will also be returned., defaults to False</p></li>
+<li><p><strong>consolidate</strong> (<em>TYPE</em><em>, </em><em>optional</em>) – An option for gene expression level consolidation. 
 If empty, will return every probe for the genes. “pickmax” to pick the
 probe with the highest expression, “pickvar” to pick the prove with the 
 highest variance and “average” for returning the average expression, 
-defaults to None
-:type consolidate: TYPE, optional
-:param <a href="#id7"><span class="problematic" id="id8">**</span></a>kwargs: Additional arguments to pass to raw.get_dataset_expression_for_genes
-:return: A dict of DataFrames keyed to dataset ids
-:rtype: dict[int:DataFrame]</p>
+defaults to None</p></li>
+<li><p><strong>**kwargs</strong> – <p>Additional arguments to pass to raw.get_dataset_expression_for_genes</p>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A dict of DataFrames keyed to dataset ids</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict[int:DataFrame]</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -401,9 +399,10 @@ that contain expression and sample metada of the requested experiments</p>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><p>A DataFrame with information about the platforms.</p>
-<p>The fields of the DataFrame are:</p>
-<ul class="simple">
+<dd class="field-even"><p><p>A DataFrame with information about the platforms.
+The fields of the DataFrame are:</p>
+<blockquote>
+<div><ul class="simple">
 <li><p>platform_ID: Id number of the platform given by Gemma</p></li>
 <li><p>platform_type: Type of the platform.</p></li>
 <li><p>platform_description: Free text field describing the platform.</p></li>
@@ -415,6 +414,7 @@ that contain expression and sample metada of the requested experiments</p>
 <li><p>taxon_database_name: Underlying database used in Gemma for the taxon</p></li>
 <li><p>taxon_database_ID: ID of the underlying database used in Gemma for the taxon</p></li>
 </ul>
+</div></blockquote>
 </p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
@@ -457,28 +457,30 @@ that contain expression and sample metada of the requested experiments</p>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A DataFrame containing the quantitation types</p>
-</dd>
-</dl>
-<dl>
+<dd class="field-even"><p><p>A DataFrame containing the quantitation types</p>
+<dl class="simple">
 <dt>The fields of the output DataFrame are:</dt><dd><ul class="simple">
-<li><p>id: If of the quantitation type. Any raw quantitation type can be</p></li>
-</ul>
-<p>accessed by get_dataset_raw_expression function using this id.
-- name: Name of the quantitation type
-- description: Description of the quantitation type
-- type: Type of the quantitation type. Either raw or processed. 
-Each dataset will have one processed quantitation type which is the 
-data returned using get_dataset_processed_expression
-- ratio: Whether or not the quanitation type is a ratio of multiple
-quantitation types. Typically TRUE for processed TWOCOLOR quantitation type.
-- preferred: The preferred raw quantitation type. This version is 
-used in generation of the processed data within gemma.
-- recomputed: If TRUE this quantitation type is generated by
-recomputing raw data files Gemma had access to</p>
+<li><dl class="simple">
+<dt>id: If of the quantitation type. Any raw quantitation type can be</dt><dd><p>by get_dataset_raw_expression function using this id.</p>
 </dd>
 </dl>
-<dl class="field-list simple">
+</li>
+<li><p>name: Name of the quantitation type</p></li>
+<li><p>description: Description of the quantitation type</p></li>
+<li><p>type: Type of the quantitation type. Either raw or processed. 
+Each dataset will have one processed quantitation type which is the 
+data returned using get_dataset_processed_expression</p></li>
+<li><p>ratio: Whether or not the quanitation type is a ratio of multiple
+quantitation types. Typically TRUE for processed TWOCOLOR quantitation type.</p></li>
+<li><p>preferred: The preferred raw quantitation type. This version is 
+used in generation of the processed data within gemma.</p></li>
+<li><p>recomputed: If TRUE this quantitation type is generated by
+recomputing raw data files Gemma had access to</p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>DataFrame</p>
 </dd>
@@ -492,16 +494,20 @@ recomputing raw data files Gemma had access to</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>dataset</strong> (<em>int</em><em>|</em><em>str</em>) – A numerical dataset identifier or a dataset short name</p></li>
-<li><p><strong>quantitation_type</strong> (<span class="sphinx_autodoc_typehints-type">[&lt;class ‘int’&gt;]</span>) – Quantitation type id. These can be acquired</p></li>
+<li><p><strong>quantitation_type</strong> (<em>[</em><em>int</em><em>]</em>) – Quantitation type id. These can be acquired 
+using get_dataset_quantitation_types function. This endpoint can only 
+return non-processed quantitation types.</p></li>
+<li><p><strong>**kwargs</strong> – <p>Additional arguments to pass to raw.get_dataset_raw_expression</p>
+</p></li>
 </ul>
 </dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A DataFrame of the expression matrix for the queried dataset</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>DataFrame</p>
+</dd>
 </dl>
-<p>using get_dataset_quantitation_types function. This endpoint can only 
-return non-processed quantitation types.
-:type quantitation_type: [int]
-:param <a href="#id19"><span class="problematic" id="id20">**</span></a>kwargs: Additional arguments to pass to raw.get_dataset_raw_expression
-:return: A DataFrame of the expression matrix for the queried dataset
-:rtype: DataFrame</p>
 </dd></dl>
 
 <dl class="py method">
@@ -517,9 +523,7 @@ return non-processed quantitation types.
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A DataFrame with information about the samples of the queried dataset.</p>
-</dd>
-</dl>
+<dd class="field-even"><p><p>A DataFrame with information about the samples of the queried dataset.</p>
 <dl class="simple">
 <dt>The fields of the DataFrame are:</dt><dd><ul class="simple">
 <li><p>sample_name: Internal name given to the sample.</p></li>
@@ -533,7 +537,8 @@ return non-processed quantitation types.
 </ul>
 </dd>
 </dl>
-<dl class="field-list simple">
+</p>
+</dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>DataFrame</p>
 </dd>
@@ -544,72 +549,45 @@ return non-processed quantitation types.
 <dt class="sig sig-object py" id="gemmapy.GemmaPy.get_datasets">
 <span class="sig-name descname"><span class="pre">get_datasets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">taxa</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uris</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'+id'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.get_datasets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.get_datasets" title="Link to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span></p>
-</dd>
-</dl>
-<dl>
-<dt>A vector of taxon common names (e.g. human, mouse, rat). Providing multiple species will return results for all species. These are appended to the filter and equivalent to filtering for taxon.commonName property, defaults to None</dt><dd><dl class="field-list simple">
-<dt class="field-odd">param taxa<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A list of taxon common names (e.g. human, mouse, rat).</p>
-</dd>
-</dl>
-<p>Providing multiple species will return results for all species. 
-These are appended to the filter and equivalent to filtering for 
-taxon.commonName property, defaults to None
-:type taxa: Optional[List[str]], optional</p>
-</dd>
-</dl>
-<dl class="field-list simple">
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="gemmapy.GemmaPy.get_datasets_by_ids">
-<span class="sig-name descname"><span class="pre">get_datasets_by_ids</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">taxa</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uris</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'+id'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.get_datasets_by_ids"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.get_datasets_by_ids" title="Link to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>dataset</strong> (<em>List</em><em>[</em><em>str</em><em>|</em><em>int</em><em>]</em>) – Numerical dataset identifiers or dataset short names.</p></li>
-<li><p><strong>filter</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</span>) – Filter results by matching expression. Use</p></li>
-</ul>
-</dd>
-</dl>
-<p>filter_properties function to get a list of all available parameters. 
+<li><p><strong>query</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em><em>, </em><em>optional</em>) – The search query. Either plain text (‘traumatic’), or an 
+ontology term URI (’<a class="reference external" href="http://purl.obolibrary.org/obo/UBERON_0002048">http://purl.obolibrary.org/obo/UBERON_0002048</a>’).
+Datasets that contain the given string in their short of full name will 
+also be matched., defaults to None</p></li>
+<li><p><strong>filter</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em><em>, </em><em>optional</em>) – Filter results by matching expression. Use 
+filter_properties function to get a list of all available parameters. 
 These properties can be combined using “and” “or” clauses and may 
 contain common operators such as “=”, “&lt;” or “in”. (e.g. 
 “taxon.commonName = human”, “taxon.commonName in (human,mouse), 
-“id &lt; 1000”), defaults to None
-:type filter: Optional[str], optional
-:type taxa: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]]</span>
-:param taxa: A list of taxon common names (e.g. human, mouse, rat). 
+“id &lt; 1000”), defaults to None</p></li>
+<li><p><strong>taxa</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – A vector of taxon common names (e.g. human, mouse, rat).
+Providing multiple species will return results for all species. These 
+are appended to the filter and equivalent to filtering for 
+taxon.commonName property, defaults to None</p></li>
+<li><p><strong>taxa</strong> – A list of taxon common names (e.g. human, mouse, rat). 
 Providing multiple species will return results for all species. 
 These are appended to the filter and equivalent to filtering for 
-taxon.commonName property, defaults to None
-:type taxa: Optional[List[str]], optional
-:type uris: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]]</span>
-:param uris: A vector of ontology term URIs. Providing multiple terms
+taxon.commonName property, defaults to None</p></li>
+<li><p><strong>uris</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – A vector of ontology term URIs. Providing multiple terms
 will return results containing any of the terms and their children. 
 These are appended to the filter and equivalent to filtering for 
-allCharacteristics.valueUri, defaults to None
-:type uris: Optional[List[str]], optional
-:type offset: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>
-:param offset: The offset of the first retrieved result., defaults to 0
-:type offset: int, optional
-:type limit: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>
-:param limit: Limits the result to specified amount of objects.
+allCharacteristics.valueUri, defaults to None</p></li>
+<li><p><strong>offset</strong> (<em>int</em><em>, </em><em>optional</em>) – The offset of the first retrieved result., defaults to 0</p></li>
+<li><p><strong>limit</strong> (<em>int</em><em>, </em><em>optional</em>) – Limits the result to specified amount of objects.
 Has a maximum value of 100. Use together with offset and the 
 total_elements attribute in the output to compile all data if needed.
 Alternatively get_all_pages function can be used with all functions
-including offset and limit parameters, defaults to 20
-:type limit: int, optional
-:type sort: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>
-:param sort: Order results by the given property and direction. The ‘+’
+including offset and limit parameters, defaults to 20</p></li>
+<li><p><strong>sort</strong> (<em>str</em><em>, </em><em>optional</em>) – Order results by the given property and direction. The ‘+’
 sign indicate ascending order whereas the ‘-’ indicate descending,
-defaults to “+id”
-:type sort: str, optional
-:param <a href="#id25"><span class="problematic" id="id26">**</span></a>kwargs: Additional arguments to pass to raw.get_datasets_by_ids
-:return: A DataFrame with information about the queried dataset(s).</p>
+defaults to “+id”</p></li>
+<li><p><strong>**kwargs</strong> – <p>Additional arguments to pass to raw.get_datasets</p>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p>A DataFrame with information about the queried dataset(s).</p>
 <dl class="simple">
 <dt>The fields of the DataFrame are:</dt><dd><ul class="simple">
 <li><p>experiment_short_name: Shortname given to the dataset within Gemma. Often corresponds to accession ID</p></li>
@@ -637,7 +615,79 @@ defaults to “+id”
 </ul>
 </dd>
 </dl>
-<dl class="field-list simple">
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gemmapy.GemmaPy.get_datasets_by_ids">
+<span class="sig-name descname"><span class="pre">get_datasets_by_ids</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">taxa</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uris</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'+id'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.get_datasets_by_ids"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.get_datasets_by_ids" title="Link to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> (<em>List</em><em>[</em><em>str</em><em>|</em><em>int</em><em>]</em>) – Numerical dataset identifiers or dataset short names.</p></li>
+<li><p><strong>filter</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em><em>, </em><em>optional</em>) – Filter results by matching expression. Use 
+filter_properties function to get a list of all available parameters. 
+These properties can be combined using “and” “or” clauses and may 
+contain common operators such as “=”, “&lt;” or “in”. (e.g. 
+“taxon.commonName = human”, “taxon.commonName in (human,mouse), 
+“id &lt; 1000”), defaults to None</p></li>
+<li><p><strong>taxa</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – A list of taxon common names (e.g. human, mouse, rat). 
+Providing multiple species will return results for all species. 
+These are appended to the filter and equivalent to filtering for 
+taxon.commonName property, defaults to None</p></li>
+<li><p><strong>uris</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – A vector of ontology term URIs. Providing multiple terms
+will return results containing any of the terms and their children. 
+These are appended to the filter and equivalent to filtering for 
+allCharacteristics.valueUri, defaults to None</p></li>
+<li><p><strong>offset</strong> (<em>int</em><em>, </em><em>optional</em>) – The offset of the first retrieved result., defaults to 0</p></li>
+<li><p><strong>limit</strong> (<em>int</em><em>, </em><em>optional</em>) – Limits the result to specified amount of objects.
+Has a maximum value of 100. Use together with offset and the 
+total_elements attribute in the output to compile all data if needed.
+Alternatively get_all_pages function can be used with all functions
+including offset and limit parameters, defaults to 20</p></li>
+<li><p><strong>sort</strong> (<em>str</em><em>, </em><em>optional</em>) – Order results by the given property and direction. The ‘+’
+sign indicate ascending order whereas the ‘-’ indicate descending,
+defaults to “+id”</p></li>
+<li><p><strong>**kwargs</strong> – <p>Additional arguments to pass to raw.get_datasets_by_ids</p>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p>A DataFrame with information about the queried dataset(s).</p>
+<dl class="simple">
+<dt>The fields of the DataFrame are:</dt><dd><ul class="simple">
+<li><p>experiment_short_name: Shortname given to the dataset within Gemma. Often corresponds to accession ID</p></li>
+<li><p>experiment_name: Full title of the dataset</p></li>
+<li><p>experiment_ID: Internal ID of the dataset.</p></li>
+<li><p>experiment_description: Description of the dataset</p></li>
+<li><p>experiment_troubled: Did an automatic process within gemma or a curator mark the dataset as “troubled”</p></li>
+<li><p>experiment_accession: Accession ID of the dataset in the external database it was taken from</p></li>
+<li><p>experiment_database: The name of the database where the dataset was taken from</p></li>
+<li><p>experiment_URI: URI of the original database</p></li>
+<li><p>experiment_sample_count: Number of samples in the dataset</p></li>
+<li><p>experiment_batch_effect: A text field describing whether the dataset has batch effects</p></li>
+<li><p>geeq.batch_corrected: Whether batch correction has been performed on the dataset.</p></li>
+<li><p>geeq.batch_confound: 0 if batch info isn’t available, -1 if batch counfoud is detected, 1 if batch information is available and no batch confound found</p></li>
+<li><p>geeq.batch_effect: -1 if batch p value &lt; 0.0001, 1 if batch p value &gt; 0.1, 0 if otherwise and when there is no batch information is available or when the data is confounded with batches.</p></li>
+<li><p>geeq_raw_data: -1 if no raw data available, 1 if raw data was available. When available, Gemma reprocesses raw data to get expression values and batches</p></li>
+<li><p>geeq_q_score: Data quality score given to the dataset by Gemma.</p></li>
+<li><p>geeq.s_score: Suitability score given to the dataset by Gemma. Refers to factors like batches, platforms and other aspects of experimental design</p></li>
+<li><p>taxon_name: Name of the species</p></li>
+<li><p>taxon_scientific: Scientific name for the taxon</p></li>
+<li><p>taxon_ID: Internal identifier given to the species by Gemma</p></li>
+<li><p>taxon_NCBI: NCBI ID of the taxon</p></li>
+<li><p>taxon_database_name: Underlying database used in Gemma for the taxon</p></li>
+<li><p>taxon_database_ID: ID of the underyling database used in Gemma for the taxon</p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>DataFrame</p>
 </dd>
@@ -687,12 +737,16 @@ will be replaced with human readable contrast information, defaults to False</p>
 </ul>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>ValueError</strong> – Will return a value error if neither result_sets nor a dataset</p>
+<dd class="field-even"><p><strong>ValueError</strong> – Will return a value error if neither result_sets nor a dataset
+is provided</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A list of data frames with differential expression values per result set.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>List[DataFrame]</p>
 </dd>
 </dl>
-<p>is provided
-:return: A list of data frames with differential expression values per result set.
-:rtype: List[DataFrame]</p>
 </dd></dl>
 
 <dl class="py method">
@@ -700,14 +754,16 @@ will be replaced with human readable contrast information, defaults to False</p>
 <span class="sig-name descname"><span class="pre">get_gene_go_terms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gene</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemmapy/gemmapy_api.html#GemmaPy.get_gene_go_terms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gemmapy.GemmaPy.get_gene_go_terms" title="Link to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>gene</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>) – An ensembl gene identifier which typically starts with</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gene</strong> (<em>str</em><em>|</em><em>int</em>) – An ensembl gene identifier which typically starts with 
+ensg or an ncbi gene identifier or an official gene symbol approved by
+hgnc</p></li>
+<li><p><strong>**kwargs</strong> – <p>Additional arguments to pass to raw.get_gene_go_terms</p>
+</p></li>
+</ul>
 </dd>
-</dl>
-<p>ensg or an ncbi gene identifier or an official gene symbol approved by
-hgnc
-:type gene: str|int
-:param <a href="#id31"><span class="problematic" id="id32">**</span></a>kwargs: Additional arguments to pass to raw.get_gene_go_terms
-:return: A DataFrame with information about the GO terms assigned to the queried gene
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p>A DataFrame with information about the GO terms assigned to the queried gene
 The fields of the output DataFrame are:</p>
 <blockquote>
 <div><ul class="simple">
@@ -716,7 +772,8 @@ The fields of the output DataFrame are:</p>
 <li><p>term_URI: URI of the term</p></li>
 </ul>
 </div></blockquote>
-<dl class="field-list simple">
+</p>
+</dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>DataFrame</p>
 </dd>
@@ -735,11 +792,10 @@ The fields of the output DataFrame are:</p>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A DataFrame with information about the physical location of the queried gene</p>
-</dd>
-</dl>
-<dl class="simple">
-<dt>The fields of the output DataFrame are:</dt><dd><ul class="simple">
+<dd class="field-even"><p><p>A DataFrame with information about the physical location of the queried gene
+The fields of the output DataFrame are:</p>
+<blockquote>
+<div><ul class="simple">
 <li><p>chromosome: Name of the chromosome the gene is located</p></li>
 <li><p>strand: Which strand the gene is located</p></li>
 <li><p>nucleotide: Nucleotide number for the gene</p></li>
@@ -751,9 +807,9 @@ The fields of the output DataFrame are:</p>
 <li><p>taxon_database_name: Underlying database used in Gemma for the taxon</p></li>
 <li><p>taxon_database_ID: ID of the underlying database used in Gemma for the taxon</p></li>
 </ul>
+</div></blockquote>
+</p>
 </dd>
-</dl>
-<dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>DataFrame</p>
 </dd>
@@ -766,24 +822,22 @@ The fields of the output DataFrame are:</p>
 <dd><p>Retrieve the probes associated to a genes across all platforms</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>gene</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>) – An ensembl gene identifier which typically starts with</p>
-</dd>
-</dl>
-<p>ensg or an ncbi gene identifier or an official gene symbol approved by 
-hgnc
-:type gene: str|int
-:type offset: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>
-:param offset: The offset of the first retrieved result., defaults to 0
-:type offset: int, optional
-:type limit: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>
-:param limit: Limits the result to specified amount of objects.
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gene</strong> (<em>str</em><em>|</em><em>int</em>) – An ensembl gene identifier which typically starts with
+ensg or an ncbi gene identifier or an official gene symbol approved by 
+hgnc</p></li>
+<li><p><strong>offset</strong> (<em>int</em><em>, </em><em>optional</em>) – The offset of the first retrieved result., defaults to 0</p></li>
+<li><p><strong>limit</strong> (<em>int</em><em>, </em><em>optional</em>) – Limits the result to specified amount of objects.
 Has a maximum value of 100. Use together with offset and the 
 total_elements attribute in the output to compile all data if needed.
 Alternatively get_all_pages function can be used with all functions
-including offset and limit parameters, defaults to 20
-:type limit: int, optional
-:param <a href="#id37"><span class="problematic" id="id38">**</span></a>kwargs: Additional arguments to pass to raw.get_gene_probes
-:return: A DataFrame with information about the probes representing a 
+including offset and limit parameters, defaults to 20</p></li>
+<li><p><strong>**kwargs</strong> – <p>Additional arguments to pass to raw.get_gene_probes</p>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p>A DataFrame with information about the probes representing a 
 gene across all platrofms.</p>
 <dl class="simple">
 <dt>The fields of the output DataFrame are:</dt><dd><ul class="simple">
@@ -804,7 +858,8 @@ gene across all platrofms.</p>
 </ul>
 </dd>
 </dl>
-<dl class="field-list simple">
+</p>
+</dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>DataFrame</p>
 </dd>
@@ -825,9 +880,7 @@ ensg or an ncbi gene identifier or an official gene symbol approved by hgnc</p><
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A DataFrame with the information about the querried genes.</p>
-</dd>
-</dl>
+<dd class="field-even"><p><p>A DataFrame with the information about the querried genes.</p>
 <dl class="simple">
 <dt>The fields of the output DataFrame are:</dt><dd><ul class="simple">
 <li><p>gene_symbol: Symbol for the gene</p></li>
@@ -845,7 +898,8 @@ ensg or an ncbi gene identifier or an official gene symbol approved by hgnc</p><
 </ul>
 </dd>
 </dl>
-<dl class="field-list simple">
+</p>
+</dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>DataFrame</p>
 </dd>
@@ -865,9 +919,7 @@ ensg or an ncbi gene identifier or an official gene symbol approved by hgnc</p><
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A DataFrame of annotations</p>
-</dd>
-</dl>
+<dd class="field-even"><p><p>A DataFrame of annotations</p>
 <ul class="simple">
 <li><p>ProbeName: Probeset names provided by the platform. Gene symbols for generic annotations</p></li>
 <li><p>GeneSymbols: Genes that were found to be aligned to the probe sequence. Note that it is possible for probes to be non-specific. Alignment to multiple genes are indicated with gene symbols separated by “|”s</p></li>
@@ -875,7 +927,8 @@ ensg or an ncbi gene identifier or an official gene symbol approved by hgnc</p><
 <li><p>GOTerms: GO Terms associated with the genes. annotType argument can be used to choose which terms should be included.</p></li>
 <li><p>GemmaIDs and NCBIids: respective IDs for the genes.</p></li>
 </ul>
-<dl class="field-list simple">
+</p>
+</dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>DataFrame</p>
 </dd>
@@ -891,17 +944,17 @@ ensg or an ncbi gene identifier or an official gene symbol approved by hgnc</p><
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>platform</strong> (<em>str</em><em>|</em><em>int</em>) – A platform numerical identifier or a platform short name</p></li>
 <li><p><strong>offset</strong> (<em>int</em><em>, </em><em>optional</em>) – The offset of the first retrieved result., defaults to 0</p></li>
-<li><p><strong>limit</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>) – Limits the result to specified amount of objects.</p></li>
-</ul>
-</dd>
-</dl>
-<p>Has a maximum value of 100. Use together with offset and the 
+<li><p><strong>limit</strong> (<em>int</em><em>, </em><em>optional</em>) – Limits the result to specified amount of objects.
+Has a maximum value of 100. Use together with offset and the 
 total_elements attribute in the output to compile all data if needed.
 Alternatively get_all_pages function can be used with all functions
-including offset and limit parameters, defaults to 20
-:type limit: int, optional
-:param <a href="#id45"><span class="problematic" id="id46">**</span></a>kwargs: Additional arguments to pass to raw.get_platform_datasets
-:return: A DataFrame with information about the queried dataset(s).</p>
+including offset and limit parameters, defaults to 20</p></li>
+<li><p><strong>**kwargs</strong> – <p>Additional arguments to pass to raw.get_platform_datasets</p>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p>A DataFrame with information about the queried dataset(s).</p>
 <dl class="simple">
 <dt>The fields of the DataFrame are:</dt><dd><ul class="simple">
 <li><p>experiment_short_name: Shortname given to the dataset within Gemma. Often corresponds to accession ID</p></li>
@@ -929,7 +982,8 @@ including offset and limit parameters, defaults to 20
 </ul>
 </dd>
 </dl>
-<dl class="field-list simple">
+</p>
+</dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>DataFrame</p>
 </dd>
@@ -946,18 +1000,17 @@ including offset and limit parameters, defaults to 20
 <li><p><strong>platform</strong> (<em>str</em><em>|</em><em>int</em>) – A platform numerical identifier or a platform short name</p></li>
 <li><p><strong>probe</strong> (<em>str</em><em>|</em><em>int</em>) – A probe name or it’s numerical identifier</p></li>
 <li><p><strong>offset</strong> (<em>int</em><em>, </em><em>optional</em>) – The offset of the first retrieved result., defaults to 0</p></li>
-<li><p><strong>limit</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>) – Limits the result to specified amount of objects.</p></li>
-</ul>
-</dd>
-</dl>
-<p>Has a maximum value of 100. Use together with offset and the 
+<li><p><strong>limit</strong> (<em>int</em><em>, </em><em>optional</em>) – Limits the result to specified amount of objects.
+Has a maximum value of 100. Use together with offset and the 
 total_elements attribute in the output to compile all data if needed.
 Alternatively get_all_pages function can be used with all functions
-including offset and limit parameters, defaults to 20
-:type limit: int, optional
-:param <a href="#id47"><span class="problematic" id="id48">**</span></a>kwargs: Additional arguments to pass to raw.get_platform_element_genes
-:type <a href="#id49"><span class="problematic" id="id50">**</span></a>kwargs: TYPE
-:return: A DataFrame with the information about querried gene(s).
+including offset and limit parameters, defaults to 20</p></li>
+<li><p><strong>**kwargs</strong> – <p>Additional arguments to pass to raw.get_platform_element_genes</p>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p>A DataFrame with the information about querried gene(s).
 The fields of the output DataFrame are:</p>
 <blockquote>
 <div><ul class="simple">
@@ -975,7 +1028,8 @@ The fields of the output DataFrame are:</p>
 <li><p>taxon_database_ID: ID of the underlying database used in Gemma for the taxon</p></li>
 </ul>
 </div></blockquote>
-<dl class="field-list simple">
+</p>
+</dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>DataFrame</p>
 </dd>
@@ -995,31 +1049,25 @@ These properties can be combined using “and” “or” clauses and may
 contain common operators such as “=”, “&lt;” or “in”. (e.g. 
 “taxon.commonName = human”, “taxon.commonName in (human,mouse), 
 “id &lt; 1000”), defaults to None</p></li>
-<li><p><strong>taxa</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]]</span>) – A list of taxon common names (e.g. human, mouse, rat).</p></li>
-</ul>
-</dd>
-</dl>
-<p>Providing multiple species will return results for all species. These 
+<li><p><strong>taxa</strong> (<em>List</em><em>[</em><em>str</em><em>]</em><em>, </em><em>optional</em>) – A list of taxon common names (e.g. human, mouse, rat). 
+Providing multiple species will return results for all species. These 
 are appended to the filter and equivalent to filtering for 
-taxon.commonName property, defaults to None
-:type taxa: List[str], optional
-:type offset: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>
-:param offset: The offset of the first retrieved result., defaults to 0
-:type offset: int, optional
-:type limit: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>
-:param limit: Limits the result to specified amount of objects.
+taxon.commonName property, defaults to None</p></li>
+<li><p><strong>offset</strong> (<em>int</em><em>, </em><em>optional</em>) – The offset of the first retrieved result., defaults to 0</p></li>
+<li><p><strong>limit</strong> (<em>int</em><em>, </em><em>optional</em>) – Limits the result to specified amount of objects.
 Has a maximum value of 100. Use together with offset and the 
 total_elements attribute in the output to compile all data if needed.
 Alternatively get_all_pages function can be used with all functions
-including offset and limit parameters, defaults to 20
-:type limit: int, optional
-:type sort: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>
-:param sort: Order results by the given property and direction. The ‘+’
+including offset and limit parameters, defaults to 20</p></li>
+<li><p><strong>sort</strong> (<em>str</em><em>, </em><em>optional</em>) – Order results by the given property and direction. The ‘+’
 sign indicate ascending order whereas the ‘-’ indicate descending,
-defaults to “+id”
-:type sort: str, optional
-:param <a href="#id51"><span class="problematic" id="id52">**</span></a>kwargs: Additional arguments to raw.get_platforms_by_ids
-:return: A DataFrame with information about the platform(s).</p>
+defaults to “+id”</p></li>
+<li><p><strong>**kwargs</strong> – <p>Additional arguments to raw.get_platforms_by_ids</p>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p>A DataFrame with information about the platform(s).</p>
 <p>The fields of the output DataFrame are:</p>
 <blockquote>
 <div><ul class="simple">
@@ -1038,7 +1086,8 @@ defaults to “+id”
 <li><p>taxon_database_ID: ID of the underyling database used in Gemma for the taxon</p></li>
 </ul>
 </div></blockquote>
-<dl class="field-list simple">
+</p>
+</dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>DataFrame</p>
 </dd>
@@ -1059,31 +1108,25 @@ These properties can be combined using “and” “or” clauses and may
 contain common operators such as “=”, “&lt;” or “in”. (e.g. 
 “taxon.commonName = human”, “taxon.commonName in (human,mouse), 
 “id &lt; 1000”), defaults to None</p></li>
-<li><p><strong>taxa</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]]</span>) – A list of taxon common names (e.g. human, mouse, rat).</p></li>
-</ul>
-</dd>
-</dl>
-<p>Providing multiple species will return results for all species. These 
+<li><p><strong>taxa</strong> (<em>List</em><em>[</em><em>str</em><em>]</em><em>, </em><em>optional</em>) – A list of taxon common names (e.g. human, mouse, rat). 
+Providing multiple species will return results for all species. These 
 are appended to the filter and equivalent to filtering for 
-taxon.commonName property, defaults to None
-:type taxa: List[str], optional
-:type offset: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>
-:param offset: The offset of the first retrieved result., defaults to 0
-:type offset: int, optional
-:type limit: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>
-:param limit: Limits the result to specified amount of objects.
+taxon.commonName property, defaults to None</p></li>
+<li><p><strong>offset</strong> (<em>int</em><em>, </em><em>optional</em>) – The offset of the first retrieved result., defaults to 0</p></li>
+<li><p><strong>limit</strong> (<em>int</em><em>, </em><em>optional</em>) – Limits the result to specified amount of objects.
 Has a maximum value of 100. Use together with offset and the 
 total_elements attribute in the output to compile all data if needed.
 Alternatively get_all_pages function can be used with all functions
-including offset and limit parameters, defaults to 20
-:type limit: int, optional
-:type sort: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>
-:param sort: Order results by the given property and direction. The ‘+’
+including offset and limit parameters, defaults to 20</p></li>
+<li><p><strong>sort</strong> (<em>str</em><em>, </em><em>optional</em>) – Order results by the given property and direction. The ‘+’
 sign indicate ascending order whereas the ‘-’ indicate descending,
-defaults to “+id”
-:type sort: str, optional
-:param <a href="#id53"><span class="problematic" id="id54">**</span></a>kwargs: Additional arguments to raw.get_platforms_by_ids
-:return: A DataFrame with information about the platform(s).</p>
+defaults to “+id”</p></li>
+<li><p><strong>**kwargs</strong> – <p>Additional arguments to raw.get_platforms_by_ids</p>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p>A DataFrame with information about the platform(s).</p>
 <p>The fields of the output DataFrame are:</p>
 <blockquote>
 <div><ul class="simple">
@@ -1102,7 +1145,8 @@ defaults to “+id”
 <li><p>taxon_database_ID: ID of the underyling database used in Gemma for the taxon</p></li>
 </ul>
 </div></blockquote>
-<dl class="field-list simple">
+</p>
+</dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>DataFrame</p>
 </dd>
@@ -1121,35 +1165,29 @@ search based on result set properties.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>datasets</strong> (<em>T.Optional</em><em>[</em><em>T.List</em><em>[</em><em>T.Union</em><em>[</em><em>str</em><em>,</em><em>int</em><em>]</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – A numerical dataset identifier or a dataset short name, defaults to None</p></li>
-<li><p><strong>result_sets</strong> (<em>T.Optional</em><em>[</em><em>T.List</em><em>[</em><em>int</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – A result set identifier. Note that result set identifiers are not static and can change when Gemma re-runs analyses internally. Whem using these as inputs, try to make sure you access a currently existing result set ID by basing them on result sets returned for a particular dataset or filter used in get_result_sets, defaults to None</p></li>
-<li><p><strong>filter</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</span>) – Filter results by matching expression. Use</p></li>
-</ul>
-</dd>
-</dl>
-<p>filter_properties function to get a list of all available parameters. 
+<li><p><strong>datasets</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>str</em><em>|</em><em>int</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – A numerical dataset identifier or a dataset short name, defaults to None</p></li>
+<li><p><strong>result_sets</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>int</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – A result set identifier. Note that result set identifiers are not static and can change when Gemma re-runs analyses internally. Whem using these as inputs, try to make sure you access a currently existing result set ID by basing them on result sets returned for a particular dataset or filter used in get_result_sets, defaults to None</p></li>
+<li><p><strong>filter</strong> (<em>str</em><em>, </em><em>optional</em>) – Filter results by matching expression. Use 
+filter_properties function to get a list of all available parameters. 
 These properties can be combined using “and” “or” clauses and may 
 contain common operators such as “=”, “&lt;” or “in”. (e.g. 
 “taxon.commonName = human”, “taxon.commonName in (human,mouse), 
-“id &lt; 1000”), defaults to None
-:type filter: str, optional
-:type offset: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>
-:param offset: The offset of the first retrieved result., defaults to 0
-:type offset: int, optional
-:type limit: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>
-:param limit: Limits the result to specified amount of objects.
+“id &lt; 1000”), defaults to None</p></li>
+<li><p><strong>offset</strong> (<em>int</em><em>, </em><em>optional</em>) – The offset of the first retrieved result., defaults to 0</p></li>
+<li><p><strong>limit</strong> (<em>int</em><em>, </em><em>optional</em>) – Limits the result to specified amount of objects.
 Has a maximum value of 100. Use together with offset and the 
 total_elements attribute in the output to compile all data if needed.
 Alternatively get_all_pages function can be used with all functions
-including offset and limit parameters, defaults to 20
-:type limit: int, optional
-:type sort: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>
-:param sort: Order results by the given property and direction. The ‘+’
+including offset and limit parameters, defaults to 20</p></li>
+<li><p><strong>sort</strong> (<em>str</em><em>, </em><em>optional</em>) – Order results by the given property and direction. The ‘+’
 sign indicate ascending order whereas the ‘-’ indicate descending,
-defaults to “+id”
-:type sort: str, optional
-:param <a href="#id55"><span class="problematic" id="id56">**</span></a>kwargs: Additional arguments to pass to raw.get_result_sets
-:return: A DataFrame with information about the queried result sets. 
+defaults to “+id”</p></li>
+<li><p><strong>**kwargs</strong> – <p>Additional arguments to pass to raw.get_result_sets</p>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p>A DataFrame with information about the queried result sets. 
 Note that this function does not return differential expression values
 themselves</p>
 <dl class="simple">
@@ -1167,7 +1205,8 @@ themselves</p>
 </ul>
 </dd>
 </dl>
-<dl class="field-list simple">
+</p>
+</dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>DataFrame</p>
 </dd>
@@ -1228,19 +1267,18 @@ simplified design table, granting one column to each experimental variable</p>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A DataFrame with annotations matching the given identifiers.</p>
-</dd>
-</dl>
-<dl class="simple">
-<dt>The fields of the DataFrame are:</dt><dd><ul class="simple">
+<dd class="field-even"><p><p>A DataFrame with annotations matching the given identifiers. 
+The fields of the DataFrame are:</p>
+<blockquote>
+<div><ul class="simple">
 <li><p>category_name: Category that the annotation belongs to</p></li>
 <li><p>category_URI: URI for the category_name</p></li>
 <li><p>value_name: Annotation term</p></li>
 <li><p>value_URI: URI for the value_name</p></li>
 </ul>
+</div></blockquote>
+</p>
 </dd>
-</dl>
-<dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>DataFrame</p>
 </dd>
@@ -1263,22 +1301,24 @@ or a taxon identifier that matches either its scientific or common
 name, defaults to None</p></li>
 <li><p><strong>platform</strong> (<em>Optional</em><em>[</em><em>str</em><em>|</em><em>int</em><em>]</em><em>, </em><em>optional</em>) – A platform numerical identifier or a platform short 
 name, defaults to None</p></li>
-<li><p><strong>limit</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>) – Defaults to 100 with a maximum value of 2000. Limits the</p></li>
+<li><p><strong>limit</strong> (<em>int</em><em>, </em><em>optional</em>) – Defaults to 100 with a maximum value of 2000. Limits the
+number of returned results. Note that this function does not support
+pagination., defaults to 100</p></li>
+<li><p><strong>result_type</strong> (<em>str</em><em>, </em><em>optional</em>) – The kind of results that should be included in the
+output. Can be “experiment”, “gene”, “platform” or a long object type name,
+documented in the API documentation., defaults to “experiment”</p></li>
+<li><p><strong>**kwargs</strong> – <p>Additional arguments to raw.search</p>
+</p></li>
 </ul>
 </dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A list containing the results. Actual results are under the 
+result_object component as dicts</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[sdk.SearchResultValueObjectObject]</p>
+</dd>
 </dl>
-<p>number of returned results. Note that this function does not support
-pagination., defaults to 100
-:type limit: int, optional
-:type result_type: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>
-:param result_type: The kind of results that should be included in the
-output. Can be “experiment”, “gene”, “platform” or a long object type name,
-documented in the API documentation., defaults to “experiment”
-:type result_type: str, optional
-:param <a href="#id61"><span class="problematic" id="id62">**</span></a>kwargs: Additional arguments to raw.search
-:return: A list containing the results. Actual results are under the 
-result_object component as dicts
-:rtype: list[sdk.SearchResultValueObjectObject]</p>
 </dd></dl>
 
 </dd></dl>
