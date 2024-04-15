@@ -1,4 +1,7 @@
 import gemmapy
+import pandas
+import numpy as np
+
 api_instance = gemmapy.GemmaPy()
 
 print("Downloading expression data\nEx1")
@@ -29,8 +32,6 @@ print("\n",manic.var)
 
 # -----
 print("\nDifferential expression analyses\nEx1")
-import pandas
-import numpy as np
 de = api_instance.get_differential_expression_values('GSE46416', readableContrasts=True)
 de = de[0]
 # Classify probes for plotting
@@ -58,7 +59,6 @@ with pandas.option_context('display.max_rows', None, 'display.max_columns', None
 
 # -----
 print("\nPlatform Annotations\nEx1")
-import pandas
 api_response = api_instance.get_platform_annotations('GPL96')
 with pandas.option_context('display.max_rows', None, 'display.max_columns', None): print(api_response[:6])
 

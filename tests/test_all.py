@@ -1,46 +1,42 @@
 
 import sys
 import gemmapy
+import pytest
 
 api = gemmapy.GemmaPy()
 
-out = False
-if len(sys.argv)>1 and sys.argv[1].startswith("out"): out = True
-
 # test 8x getDataset... functions
-for f in [s for s in dir(api) if s.startswith('get_dataset')]:
-    print('testing %s...' % f, end='')
+@pytest.mark.parametrize('f', [s for s in dir(api) if s.startswith('get_dataset')])
+def test_get_dataset_functions(f):
     func = getattr(api,f)
-    if not f.endswith('_by_ids'):
-        res = func('GSE46416')
+    if f == 'get_datasets':
+        args = tuple()
+    elif f.endswith('_for_genes'):
+        args = ['GSE46416'], ['BRCA1']
+    elif f.endswith('_by_ids'):
+        args = ['GSE46416'],
     else:
-        res = func(['GSE46416'])
-    print('ok')
-    if out: print(str(res)[:2000])
-    
+        args = 'GSE46416',
+    res = func(*args)
+
 # test 2x former getDataset... functions
-for f in ['get_dataset_differential_expression_analyses','get_differential_expression_values']:
-#    if f.endswith('_values'): continue
-    print('testing %s...' % f, end='')
+def test_get_differential_expression_values():
+    f = 'get_differential_expression_values'
     func = getattr(api,f)
     res = func('GSE46416')
-    print('ok')
-    if out: print(str(res)[:2000])
 
 # test 4x getGene... functions
-for f in [s for s in dir(api) if s.startswith('get_gene')]:
-    print('testing %s...' % f, end='')
+@pytest.mark.parametrize('f', [s for s in dir(api) if s.startswith('get_gene')])
+def test_get_gene_functions(f):
     func = getattr(api,f)
     if not f.endswith('_genes'):
         res = func('DYRK1A')
     else:
         res = func(['DYRK1A'])
-    print('ok')
-    if out: print(str(res)[:2000])
 
 # test 5x getPlatform... functions
-for f in [s for s in dir(api) if s.startswith('get_platform')]:
-    print('testing %s...' % f, end='')
+@pytest.mark.parametrize('f', [s for s in dir(api) if s.startswith('get_platform')])
+def test_get_platform_functions(f):
     func = getattr(api,f)
     if f == 'get_platform_element':
         res = func("GPL1355", ["AFFX_Rat_beta-actin_M_at"])
@@ -50,30 +46,21 @@ for f in [s for s in dir(api) if s.startswith('get_platform')]:
         res = func(["GPL1355"])
     else:
         res = func("GPL1355")
-    print('ok')
-    if out: print(str(res)[:2000])
-
 
 # test 2x search... functions
-for f in [s for s in dir(api) if s.startswith('search')]:
-    print('testing %s...' % f, end='')
+@pytest.mark.parametrize('f', [s for s in dir(api) if s.startswith('search')])
+def test_search_functions(f):
     func = getattr(api,f)
     if f == 'search_annotations':
         res = func(['traumatic'])
     elif f == 'search_datasets':
         res = func(['bipolar'],'human')
-    else:
-        continue
-    print('ok')
-    if out: print(str(res)[:2000])
 
 # test 2x get_tax... functions
-for f in ['get_taxa','get_taxon_datasets']:
-    print('testing %s...' % f, end='')
+@pytest.mark.parametrize('f', ['get_taxa','get_taxon_datasets'])
+def test_get_taxa_functions(f):
     func = getattr(api,f)
     if f.endswith('_datasets'):
-        res = func('worm')
+        res = func('human')
     else:
         res = func()
-    print('ok')
-    if out: print(str(res)[:2000])
