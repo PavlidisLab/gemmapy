@@ -3,12 +3,15 @@ Accessing curated gene expression data with GemmaPy
 ===================================================
 
 ..
- | *Dima Vavilov*, *Guillaume Poirier-Morency*
+ | *Dima Vavilov*, *Guillaume Poirier-Morency*, *B. Ogan Mancarci*
  | *Michael Smith Laboratories, University of British Columbia, Vancouver, Canada*
+
+
 
 
 About Gemma
 -----------
+
 
 `Gemma <https://gemma.msl.ubc.ca/>`_ is a web site, database and a set
 of tools for the meta-analysis, re-use and sharing of genomics data,
@@ -24,11 +27,7 @@ For detailed information on the curation process, read this `page
 `publication
 <https://academic.oup.com/database/article/doi/10.1093/database/baab006/6143045>`_.
 
-Package cheat sheet
------------------------
-.. image:: _static/cheat_sheet.png
-   :align: left
-   :width: 100%
+
 
 Installation instructions
 -------------------------
@@ -46,161 +45,177 @@ and imported: :code:`matplotlib`, :code:`plotnine`, :code:`pandas`, :code:`seabo
 Searching for datasets of interest in Gemma
 -------------------------------------------
 
-The package includes various functions to search for datasets fitting desired criteria.
-
-All datasets belonging to a taxon of interest can be accessed by using :py:func:`~gemmapy.GemmaPy.get_taxon_datasets` while the function :py:func:`~gemmapy.GemmaPy.search_datasets` can be used to further limit the results by a specified query containing key words, experiment names or ontology term URIs
+Using the :py:func:`~gemmapy.GemmaPy.get_datasets` function, datasets fitting various criteria can be accessed.
 
 >>> import gemmapy
->>> api_instance = gemmapy.GemmaPy()
->>> # all human datasets 
->>> api_response = api_instance.get_taxon_datasets(taxon = 'human')
->>> api_response.data[0] # view the object structure
->>> for d in api_response.data[0:6]:
-...     print(d.short_name, d.name, d.taxon.common_name)
-GSE2018 Human Lung Transplant - BAL human
-GSE4036 perro-affy-human-186940 human
-GSE3489 Patterns of gene dysregulation in the frontal cortex of patients with HIV encephalitis human
-GSE1923 Identification of PDGF-dependent patterns of gene expression in U87 glioblastoma cells human
-GSE361 Mammary epithelial cell transduction human
-GSE492 Effect of prostaglandin analogs on aqueous humor outflow human
+>>> api = gemmapy.GemmaPy()
+>>> # accessing all mouse and human datasets
+>>> api.get_datasets(taxa = ['mouse','human']).head()
+  experiment_short_name  ... taxon_database_ID
+0               GSE2018  ...                87
+1               GSE4523  ...                81
+2               GSE4036  ...                87
+3               GSE4034  ...                81
+4               GSE2866  ...                81
+[5 rows x 23 columns]
 
->>> # human datasets mentioning bipolar
->>> api_response = api_instance.search_datasets(['bipolar'],taxon = 'human')
->>> for d in api_response.data[0:6]:
-...     print(d.short_name, d.name, d.taxon.common_name)
-GSE5389 Adult postmortem brain tissue (orbitofrontal cortex) from subjects with bipolar disorder and healthy controls human
-GSE4030 bunge-affy-arabi-162779 human
-GSE5388 Adult postmortem brain tissue (dorsolateral prefrontal cortex) from subjects with bipolar disorder and healthy controls human
-GSE7036 Expression profiling in monozygotic twins discordant for bipolar disorder human
-McLean Hippocampus McLean Hippocampus human
-McLean_PFC McLean_PFC human
+>>> # accessing human datasets with the word "bipolar"
+>>> api.get_datasets(query = 'bipolar', taxa = ['human']).head()
+  experiment_short_name  ... taxon_database_ID
+0             GSE157509  ...                87
+1              GSE66196  ...                87
+2             GSE210064  ...                87
+3              GSE23848  ...                87
+4    McLean Hippocampus  ...                87
+[5 rows x 23 columns]
 
->>> # ontology term URI for the bipolar disorder
->>> api_response = api_instance.search_datasets(['http://purl.obolibrary.org/obo/DOID_3312'], # ontology term URI for the bipolar disorder
-... taxon = 'human')
->>> for d in api_response.data[0:6]:
-...     print(d.short_name, d.name, d.taxon.common_name)
-GSE5389 Adult postmortem brain tissue (orbitofrontal cortex) from subjects with bipolar disorder and healthy controls human
-GSE5388 Adult postmortem brain tissue (dorsolateral prefrontal cortex) from subjects with bipolar disorder and healthy controls human
-GSE7036 Expression profiling in monozygotic twins discordant for bipolar disorder human
-McLean Hippocampus McLean Hippocampus human
-McLean_PFC McLean_PFC human
-stanley_feinberg Stanley consortium collection Cerebellum - Feinberg human
+>>> # accessing human datasets that were annotated with the ontology term for
+>>> # the bipolar disorder. use search_annotations function to search for available
+>>> # annotation terms
+>>> api.get_datasets(taxa = ['human'],
+...    uris = ['http://purl.obolibrary.org/obo/MONDO_0004985']).head()
+  experiment_short_name  ... taxon_database_ID
+0               GSE5389  ...                87
+1               GSE5388  ...                87
+2               GSE7036  ...                87
+3    McLean Hippocampus  ...                87
+4            McLean_PFC  ...                87
+[5 rows x 23 columns]
 
-Note that a single call of these functions will only return 20 results by default and a 100 results maximum, controlled by the limit argument. In order to get all available results, offset argument should be used to make multiple calls.
-
-To see how many available results are there, you can look at the output objects where apart from the data, additional information from the API response is appended.
-
->>> # a quick call with a limit of 1 to get the result count
->>> api_response = api_instance.get_taxon_datasets(taxon = 'human', limit = 1)
->>> print(api_response.total_elements)
-5766
-
-Since the maximum limit is 100 getting all results available will require multiple calls.
-
->>> count = api_response.total_elements
->>> data = []
->>> for ofs in range(0,count,100):
-...     api_response = api_instance.get_taxon_datasets(taxon = 'human',offset = ofs, limit = 100)
-...     data += api_response.data
->>> print(len(data))
-5766
->>> for d in data[0:6]:
-...     print(d.short_name, d.name, d.taxon.common_name)
-GSE2018 Human Lung Transplant - BAL human
-GSE4036 perro-affy-human-186940 human
-GSE3489 Patterns of gene dysregulation in the frontal cortex of patients with HIV encephalitis human
-GSE1923 Identification of PDGF-dependent patterns of gene expression in U87 glioblastoma cells human
-GSE361 Mammary epithelial cell transduction human
-GSE492 Effect of prostaglandin analogs on aqueous humor outflow human
-
-See `Larger queries`_ section for more details. To keep this vignette simpler we will keep using the first 20 results returned by default in examples below.
-
-Information provided about the datasets by these functions include details about the quality and design of the study that can be used to judge if it is suitable for your use case. For instance :code:`geeq.q_score_public_batch_effect` field will be set to -1 if Gemma’s preprocessing has detected batch effects that were unable to be resolved by batch correction and :code:`bio_assay_count` field will include the number of samples used in the experiment.
-
->>> api_response = api_instance.get_taxon_datasets(taxon = 'human')
->>> for d in api_response.data:
-...     if(d.geeq is not None and d.geeq.q_score_public_batch_effect != -1 and d.bio_assay_count>4):
-...         print(d.short_name, d.name, d.taxon.common_name)
-GSE2018 Human Lung Transplant - BAL human
-GSE4036 perro-affy-human-186940 human
-GSE3489 Patterns of gene dysregulation in the frontal cortex of patients with HIV encephalitis human
-GSE1923 Identification of PDGF-dependent patterns of gene expression in U87 glioblastoma cells human
-GSE361 Mammary epithelial cell transduction human
-GSE492 Effect of prostaglandin analogs on aqueous humor outflow human
-GSE713 UV radiation-induced DNA damage human
-GSE833 Amyotrophic lateral sclerosis human
-GSE420 Aortic stiffness human
-GSE430 Effect of left ventricular assist device support on congestive heart failure patients human
-GSE675 Time course analysis of response to HCMV infection human
-GSE712 CVB3-infected HeLa cells (multiple time points) human
-GSE701 Transcriptional response of lymphoblastoid cells to ionizing radiation human
-GSE685 DACH1 inhibits TGF-beta signaling through binding Smad4 human
-GSE593 Uterine Fibroid and Normal Myometrial Expression Profiles- U133 Arrays human
-GSE837 angiogenesis human
-GSE590 USF1 haplotype comparison human
-GSE755 MRI lytic and no lytic lesions human
-GSE994 Effects of cigarette smoke on the human airway epithelial cell transcriptome human
-GSE846 Conversion human
+get_dataset function also includes a filter parameter that allows filtering for
+datasets with specific properties in a more structured manner. A list of the 
+available properties can be accessed using :py:func:`~gemmapy.GemmaPy.filter_properties`.
 
 
-Gemma uses multiple ontologies when annotating datasets and using the term URIs instead of free text to search can lead to more specific results. 
-The :py:func:`~gemmapy.GemmaPy.search_annotations` function allows searching for annotation terms that might be relevant to your query.
+>>> api.filter_properties()['dataset'].head()
+                                     name     type description
+0                     accession.accession   string         NaN
+1              accession.accessionVersion   string         NaN
+2       accession.externalDatabase.ftpUri   string         NaN
+3           accession.externalDatabase.id  integer         NaN
+4  accession.externalDatabase.lastUpdated   string         NaN
 
->>> api_response = api_instance.search_annotations(['bipolar'])
->>> for d in api_response.data[0:6]:
-...     print(d)
-{'category': None, 'category_uri': None, 'value': 'Bipolar', 'value_uri': None}
-{'category': 'disease',
- 'category_uri': 'http://www.ebi.ac.uk/efo/EFO_0000408',
- 'value': 'bipolar I disorder',
- 'value_uri': 'http://purl.obolibrary.org/obo/DOID_14042'}
-{'category': 'disease',
- 'category_uri': 'http://www.ebi.ac.uk/efo/EFO_0000408',
- 'value': 'Bipolar Disorder',
- 'value_uri': 'http://purl.obolibrary.org/obo/DOID_3312'}
-{'category': 'disease',
- 'category_uri': 'http://www.ebi.ac.uk/efo/EFO_0000408',
- 'value': 'bipolar II disoder',
- 'value_uri': 'http://www.ebi.ac.uk/efo/EFO_0009964'}
-{'category': 'disease',
- 'category_uri': 'http://www.ebi.ac.uk/efo/EFO_0000408',
- 'value': 'Bipolar depressed',
- 'value_uri': None}
-{'category': 'disease',
- 'category_uri': 'http://www.ebi.ac.uk/efo/EFO_0000408',
- 'value': 'bipolar disorder not otherwise specified ',
- 'value_uri': ''}
+These properties can be used together to fine tune your results
+
+
+>>> # access human datasets that has bipolar disorder as an experimental factor
+>>> api.get_datasets(taxa = ["human"],
+...    filter = "experimentalDesign.experimentalFactors.factorValues.characteristics.valueUri = http://purl.obolibrary.org/obo/MONDO_0004985").head()
+  experiment_short_name  ... taxon_database_ID
+0               GSE5389  ...                87
+1               GSE5388  ...                87
+2               GSE7036  ...                87
+3            McLean_PFC  ...                87
+4      stanley_feinberg  ...                87
+[5 rows x 23 columns]
+
+
+>>> # all datasets with more than 4 samples annotated for any disease
+>>> api.get_datasets(filter = "bioAssayCount > 4 and allCharacteristics.category = disease").head()
+  experiment_short_name  ... taxon_database_ID
+0               GSE2018  ...                87
+1               GSE4036  ...                87
+2               GSE2866  ...                81
+3               GSE2426  ...                81
+4               GSE2867  ...                81
+[5 rows x 23 columns]
+
+
+>>> # all datasets with ontology terms for Alzheimer's disease and Parkinson's disease
+>>> # this is equivalent to using the uris parameter
+>>> api.get_datasets(filter = 'allCharacteristics.valueUri in (http://purl.obolibrary.org/obo/MONDO_0004975,http://purl.obolibrary.org/obo/MONDO_0005180)').head()
+  experiment_short_name  ... taxon_database_ID
+0               GSE1837  ...                86
+1                 GSE30  ...                81
+2               GSE4788  ...                81
+3               GSE1157  ...                86
+4               GSE1555  ...                81
+[5 rows x 23 columns]
+
+
+
+Note that a single call of these functions will only return 20 results by default 
+and a 100 results maximum, controlled by the limit argument. In order to get all
+available results, use :py:func:`~gemmapy.GemmaPy.get_all_pages`
+
+>>> api.get_all_pages(api.get_datasets,taxa = ['human'])
+     experiment_short_name  ... taxon_database_ID
+0                  GSE2018  ...                87
+1                  GSE4036  ...                87
+2                  GSE3489  ...                87
+3                  GSE1923  ...                87
+4                   GSE361  ...                87
+                   ...  ...               ...
+7697              GSE72747  ...                87
+7698                GSE976  ...                87
+7699              GSE78083  ...                87
+7700            GSE11142.2  ...                87
+7701             GSE2489.2  ...                87
+[7702 rows x 23 columns]
+
+See `Larger queries`_ section for more details. To keep this vignette simpler we will
+keep using the first 20 results returned by default in examples below.
+
+Dataset information provided by get_datasets also includes some quality 
+information that can be used to determine the suitability of any given 
+experiment. For instance experiment.batchEffect column will be set to -1 if 
+Gemma’s preprocessing has detected batch effects that were unable to be resolved 
+by batch correction. More information about these and other fields can be found 
+at the function documentation.
+
+
+>>> df = api.get_datasets(taxa = ['human'],filter = 'bioAssayCount > 4')
+>>> df.loc[df.experiment_batch_effect != -1].head()
+
+Gemma uses multiple ontologies when annotating datasets and using the term URIs
+instead of free text to search can lead to more specific results. 
+:py:func:`~gemmapy.GemmaPy.search_annotations` function allows searching for
+annotation terms that might be relevant to your query.
+
+>>> api.search_annotations(['bipolar']).head()
+   category_name  ...                                     value_URI
+0            NaN  ...          http://www.ebi.ac.uk/efo/EFO_0009963
+1            NaN  ...          http://www.ebi.ac.uk/efo/EFO_0009964
+2            NaN  ...  http://purl.obolibrary.org/obo/MONDO_0004985
+3            NaN  ...     http://purl.obolibrary.org/obo/HP_0007302
+4            NaN  ...    http://purl.obolibrary.org/obo/NBO_0000258
+[5 rows x 4 columns]
+
 
 Downloading expression data
 ---------------------------
 
-Upon identifying datasets of interest, more information about specific ones can be requested. In this example we will be using GSE46416 which includes samples taken from healthy donors along with manic/euthymic phase bipolar disorder patients.
+Upon identifying datasets of interest, more information about specific ones can 
+be requested. In this example we will be using GSE46416 which includes samples 
+taken from healthy donors along with manic/euthymic phase bipolar disorder 
+patients.
 
-The data associated with specific experiments can be accessed by using :py:func:`~gemmapy.GemmaPy.get_datasets_by_ids`.
+The data associated with specific experiments can be accessed by using 
+:py:func:`~gemmapy.GemmaPy.get_datasets_by_ids`.
 
 
->>> data = api_instance.get_datasets_by_ids(['GSE46416']).data[0]
->>> print(data.short_name,data.name, data.id)
-GSE46416 State- and trait-specific gene expression in euthymia and mania 8997
 
+>>> data = api.get_datasets_by_ids(['GSE46416'])
+>>> print(data)
+  experiment_short_name  ... taxon_database_ID
+0              GSE46416  ...                87
+[1 rows x 23 columns]
 
 To access the expression data in a convenient form, you can use
 :py:func:`~gemmapy.GemmaPy.get_dataset_object`. It is a high-level wrapper
-that combines various endpoint calls to return an `anndata
-<https://anndata.readthedocs.io/>`_ (Annotated Data) object of the
-queried dataset for downstream analyses. They include the expression
-matrix along with the experimental design, and ensure the sample names
-match between both when transforming/subsetting data.
+that combines various endpoint calls to return `anndata
+<https://anndata.readthedocs.io/>`_ (Annotated Data) objects or dictionaries.
+These include the expression matrix along with the experimental design, and
+ensure the sample names match between both when transforming/subsetting data.
 
->>> import gemmapy
->>> api_instance = gemmapy.GemmaPy()
->>> adata = api_instance.get_dataset_object("GSE46416")
+
+>>> adata = api.get_dataset_object(["GSE46416"])['8997']  # keys of the output uses Gemma IDs
 >>> print(adata)
-AnnData object with n_obs × n_vars = 21986 × 32
-    obs: 'GeneSymbol', 'GeneName', 'NCBIid'
-    var: 'batch', 'disease'
-    uns: 'title', 'abstract', 'url', 'database', 'accession', 'GemmaQualityScore', 'GemmaSuitabilityScore', 'taxon'
+AnnData object with n_obs × n_vars = 18758 × 32
+    obs: 'GeneSymbol', 'NCBIid'
+    var: 'factor_values', 'disease', 'block'
+    uns: 'title', 'abstract', 'url', 'database', 'accesion', 'GemmaQualityScore', 'GemmaSuitabilityScore', 'taxon'
+
 
 To show how subsetting works, we'll keep the "manic phase" data and the
 :code:`reference_subject_role`\s, which refers to the control samples in Gemma
@@ -208,40 +223,26 @@ datasets.
 
 >>> # Check the levels of the disease factor
 >>> adata.var['disease'].unique()
-array(['reference_subject_role', 'euthymic_phase_|_Bipolar_Disorder_|',
-       'bipolar_disorder_|_manic_phase_|'], dtype=object)
+array(['bipolar disorder has_modifier euthymic phase',
+       'reference subject role',
+       'bipolar disorder has_modifier manic phase'], dtype=object)
 
 >>> # Subset patients during manic phase and controls
->>> manic=adata[:,(adata.var['disease'] == 'reference_subject_role') |
-...               (adata.var['disease'] == 'bipolar_disorder_|_manic_phase_|')].copy()
->>> print(manic)
-AnnData object with n_obs × n_vars = 21986 × 21
-    obs: 'GeneSymbol', 'GeneName', 'NCBIid'
-    var: 'batch', 'disease'
-    uns: 'title', 'abstract', 'url', 'database', 'accession', 'GemmaQualityScore', 'GemmaSuitabilityScore', 'taxon'
->>> print(manic.var)
-                                                 batch                           disease
-Control,1_DE50                       Batch_05_24/11/10            reference_subject_role
-Control,12                           Batch_02_26/11/09            reference_subject_role
-Control,9                            Batch_01_25/11/09            reference_subject_role
-Bipolardisorderpatientmanicphase,5   Batch_05_24/11/10  bipolar_disorder_|_manic_phase_|
-Control,15                           Batch_02_26/11/09            reference_subject_role
-Bipolardisorderpatientmanicphase,31  Batch_04_02/12/09  bipolar_disorder_|_manic_phase_|
-Bipolardisorderpatientmanicphase,29  Batch_03_27/11/09  bipolar_disorder_|_manic_phase_|
-Bipolardisorderpatientmanicphase,35  Batch_04_02/12/09  bipolar_disorder_|_manic_phase_|
-Bipolardisorderpatientmanicphase,18  Batch_02_26/11/09  bipolar_disorder_|_manic_phase_|
-Control,8                            Batch_01_25/11/09            reference_subject_role
-Control,3                            Batch_05_24/11/10            reference_subject_role
-Control,2_DE23                       Batch_05_24/11/10            reference_subject_role
-Control,2_DE40                       Batch_01_25/11/09            reference_subject_role
-Bipolardisorderpatientmanicphase,33  Batch_04_02/12/09  bipolar_disorder_|_manic_phase_|
-Control,4                            Batch_05_24/11/10            reference_subject_role
-Control,1_DE62                       Batch_01_25/11/09            reference_subject_role
-Bipolardisorderpatientmanicphase,10  Batch_01_25/11/09  bipolar_disorder_|_manic_phase_|
-Bipolardisorderpatientmanicphase,37  Batch_04_02/12/09  bipolar_disorder_|_manic_phase_|
-Bipolardisorderpatientmanicphase,23  Batch_03_27/11/09  bipolar_disorder_|_manic_phase_|
-Bipolardisorderpatientmanicphase,16  Batch_02_26/11/09  bipolar_disorder_|_manic_phase_|
-Bipolardisorderpatientmanicphase,21  Batch_03_27/11/09  bipolar_disorder_|_manic_phase_|
+>>> manic=adata[:,(adata.var['disease'] == 'reference subject role') |
+...               (adata.var['disease'] == 'bipolar disorder has_modifier manic phase')].copy()
+>>> manic
+AnnData object with n_obs × n_vars = 18758 × 21
+    obs: 'GeneSymbol', 'NCBIid'
+    var: 'factor_values', 'disease', 'block'
+    uns: 'title', 'abstract', 'url', 'database', 'accesion', 'GemmaQualityScore', 'GemmaSuitabilityScore', 'taxon'
+>>> manic.var.head()
+                                                                              factor_values  ...              block
+Control, 15                                 category  ...                   factor_categ...  ...  Batch_02_26/11/09
+Control, 8                                  category  ...                   factor_categ...  ...  Batch_01_25/11/09
+Bipolar disorder patient manic phase, 21    category  ...                   factor_categ...  ...  Batch_03_27/11/09
+Bipolar disorder patient manic phase, 18    category  ...                   factor_categ...  ...  Batch_02_26/11/09
+Bipolar disorder patient manic phase, 29    category  ...                   factor_categ...  ...  Batch_03_27/11/09
+[5 rows x 3 columns]
 
 Let’s take a look at sample to sample correlation in our subset.
 
