@@ -1225,7 +1225,6 @@ class GemmaPy(object):
 
         """
         
-        
         categories = pd.concat([x[["factor_ID","factor_category","factor_category_URI"]] 
                                 for x in samples.sample_factor_values],
                   ignore_index = True).drop_duplicates()
@@ -1253,19 +1252,23 @@ class GemmaPy(object):
         
         if meta_type =='text':
             design_frame = pd.DataFrame({
-                k:v for k in categories.factor_category for v in text
+                categories.factor_category[i]:text[i] for i in range(len(text))
                 })
         elif meta_type == 'uri':
             design_frame = pd.DataFrame({
-                k:v for k in categories.factor_category_URI for v in factor_URIs
+                categories.factor_category_URI[i]:factor_URIs[i] for i in range(len(factor_URIs))
                 })
         elif meta_type =='both':
+            merged_name = [["|".join([categories.factor_category[i],
+                                      categories.factor_category_URI[i]])] for i in range(len(text))]
+            
+            merged_col = [["|".join([text[i][j],factor_URIs[i][j]]) 
+                           for j in range(len(text[i]))] for i in range(len(text))]
+            
+            
             design_frame = pd.DataFrame({
-                k:v for v in [["|".join([text[i][j],factor_URIs[i][j]]) 
-                               for j in range(len(text[i]))] for i in range(len(text))]
-                for k in ["|".join([x,y]) for x in categories.factor_category 
-                          for y in categories.factor_category_URI]
-                })
+                merged_name[i]:merged_col[i]
+                for i in range(len(text))})
             
         design_frame.insert(loc = 0,column = "factor_values",
                             value = samples.sample_factor_values)
