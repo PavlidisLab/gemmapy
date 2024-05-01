@@ -428,11 +428,11 @@ def process_datasets(d:list):
         "experiment_URI":sub.field_in_list(d,"external_uri"),
         "experiment_sample_count": sub.field_in_list(d,"bio_assay_count"),
         "experiment_last_updated":  sub.field_in_list(d,"last_updated"),
-        "experiment_batch_effect":sub.field_in_list(d,"batch_effect"),
-        "geeq_batch_corrected":sub.field_in_list(d,"geeq","batch_corrected"),
-        "geeq_batch_confound":sub.field_in_list(d,"geeq","q_score_public_batch_confound"),
-        "geeq_batch_effect":sub.field_in_list(d,"geeq","q_score_public_batch_effect"),
-        "geeq_raw_data":sub.field_in_list(d,"geeq","s_score_raw_data"),
+        "experiment_batch_effect_text":sub.field_in_list(d,"batch_effect"),
+        "experiment_batch_corrected":sub.field_in_list(d,"geeq","batch_corrected"),
+        "experiment_batch_confound":sub.field_in_list(d,"geeq","q_score_public_batch_confound"),
+        "experiment_batch_effect":sub.field_in_list(d,"geeq","q_score_public_batch_effect"),
+        "experiment_raw_data":sub.field_in_list(d,"geeq","s_score_raw_data"),
         "geeq_q_score":sub.field_in_list(d,"geeq","public_quality_score"),
         "geeq_s_score":sub.field_in_list(d,"geeq","public_suitability_score")
         })
