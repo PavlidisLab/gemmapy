@@ -3,7 +3,7 @@ Accessing curated gene expression data with GemmaPy
 ===================================================
 
 ..
- | *Dima Vavilov*, *Guillaume Poirier-Morency*, *B. Ogan Mancarci*
+ | *Dima Vavilov*, *Guillaume Poirier-Morency*, *B. Ogan Mancarci*, *Javier Castillo-Arnemann*, *Jordan Sicherman*
  | *Michael Smith Laboratories, University of British Columbia, Vancouver, Canada*
 
 
@@ -252,17 +252,33 @@ Let’s take a look at sample to sample correlation in our subset.
 >>> df = pd.DataFrame(manic.X)
 >>> df.columns = manic.var.index
 >>> corrs = df.corr()
->>> sns.clustermap(corrs)
+>>> plt = sns.clustermap(corrs)
 >>> plt.savefig('ded.png')
 
 .. image:: _static/ded.png
    :align: left
    :width: 100%
 
-Gene expression distributions of bipolar patients during manic phase and controls.
+Sample to sample correlations of bipolar patients during manic phase and controls.
 
-You can also use :py:func:`~gemmapy.GemmaPy.get_dataset_expression` to only get the expression 
-matrix, and :py:func:`~gemmapy.GemmaPy.get_dataset_design` to get the experimental design matrix.
+
+
+You can also use :py:func:`~gemmapy.GemmaPy.get_dataset_processed_expression` to only get the expression 
+matrix, and :py:func:`~gemmapy.GemmaPy.get_dataset_samples` to get the metadata 
+information. The output of this function includes some additional details about 
+a sample such as the original accession ID or whether or not it was determined 
+to be an outlier but it can be simplified to match the design table included in
+the output of get_dataset_object by using :py:func:`~gemmapy.GemmaPy.make_design` on the output.
+ 
+
+>>> api.make_design(api.get_dataset_samples('GSE46416')).drop(columns="factor_values").head()
+                                                                                  disease              block
+sample_name                                                                                                 
+Bipolar disorder patient euthymic phase, 17  bipolar disorder has_modifier euthymic phase  Batch_02_26/11/09
+Bipolar disorder patient euthymic phase, 34  bipolar disorder has_modifier euthymic phase  Batch_04_02/12/09
+Control, 15                                                        reference subject role  Batch_02_26/11/09
+Bipolar disorder patient euthymic phase, 32  bipolar disorder has_modifier euthymic phase  Batch_04_02/12/09
+Control, 8                                                         reference subject role  Batch_01_25/11/09
 
 Platform Annotations
 --------------------
@@ -275,56 +291,25 @@ along with additional annotations such as Gene Ontology terms.
 
 Examples:
 
->>> import gemmapy
->>> import pandas
->>> api_instance = gemmapy.GemmaPy()
->>> api_response = api_instance.get_platform_annotations('GPL96')
->>> with pandas.option_context('display.max_rows', None, 'display.max_columns', None): print(api_response[:6])
-     ProbeName    GeneSymbols                                      GeneNames  \
-0  211750_x_at  TUBA1A|TUBA1C              tubulin alpha 1a|tubulin alpha 1c   
-1    216678_at            NaN                                            NaN   
-2    216345_at         ZSWIM8             zinc finger SWIM-type containing 8   
-3    207273_at            NaN                                            NaN   
-4  216025_x_at         CYP2C9  cytochrome P450 family 2 subfamily C member 9   
-5  218191_s_at         LMBRD1                      LMBR1 domain containing 1   
-                                             GOTerms       GemmaIDs  \
-0  GO:0005737|GO:0000166|GO:0051234|GO:0005856|GO...  172797|360802   
-1                                                NaN            NaN   
-2  GO:0043170|GO:1990234|GO:0044260|GO:0050789|GO...         235733   
-3                                                NaN            NaN   
-4  GO:0005737|GO:0072330|GO:0008203|GO:0008202|GO...          32964   
-5  GO:0043170|GO:0016192|GO:0051234|GO:0044260|GO...         303717   
-      NCBIids  
-0  7846|84790  
-1         NaN  
-2       23053  
-3         NaN  
-4        1559  
-5       55788  
 
->>> api_response = api_instance.get_platform_annotations('Generic_human')
+>>> api.get_platform_annotations('GPL96').head()
+     ProbeName    GeneSymbols  ...       GemmaIDs     NCBIids
+0  211750_x_at  TUBA1C|TUBA1A  ...  360802|172797  84790|7846
+1    216678_at            NaN  ...            NaN         NaN
+2    216345_at         ZSWIM8  ...         235733       23053
+3    207273_at            NaN  ...            NaN         NaN
+4  216025_x_at         CYP2C9  ...          32964        1559
+[5 rows x 6 columns]
+
+>>> api.get_platform_annotations('Generic_human_ncbiIds').head()
 >>> with pandas.option_context('display.max_rows', None, 'display.max_columns', None): print(api_response[:6])
-      ProbeName   GeneSymbols  \
-0         LCN10         LCN10   
-1      STAG3L5P      STAG3L5P   
-2  LOC101059976  LOC101059976   
-3          GAB3          GAB3   
-4  LOC100287155  LOC100287155   
-5        RASSF2        RASSF2   
-                                           GeneNames  \
-0                                       lipocalin 10   
-1                stromal antigen 3-like 5 pseudogene   
-2  arf-GAP with GTPase, ANK repeat and PH domain-...   
-3                  GRB2 associated binding protein 3   
-4                  hypothetical protein LOC100287155   
-5             Ras association domain family member 2   
-                                             GOTerms GemmaIDs    NCBIids  
-0        GO:0005576|GO:0005488|GO:0110165|GO:0036094   441399     414332  
-1                                                NaN  8799043  101735302  
-2                                                NaN  8779607  101059976  
-3  GO:0002573|GO:0032502|GO:0030225|GO:0002521|GO...   389635     139716  
-4                                                NaN  8090381  100287155  
-5  GO:0048585|GO:0005737|GO:0043170|GO:0048584|GO...   201914       9770  
+   ElementName   GeneSymbols  ...    GemmaIDs      NCBIids
+0        55236          UBA6  ...    295849.0      55236.0
+1        79664          ICE2  ...    336840.0      79664.0
+2    100126270      FMR1-AS1  ...   3157248.0  100126270.0
+3    105373684     LINC01818  ...   9235895.0  105373684.0
+4    124900245  LOC124900245  ...  10578422.0  124900245.0
+[5 rows x 6 columns]
 
 If you are interested in a particular gene, you can see which
 platforms include it using
@@ -332,35 +317,22 @@ platforms include it using
 search gene work best with unambigious identifiers rather than symbols.
 
 >>> # lists genes in gemma matching the symbol or identifier
->>> api_response = api_instance.get_genes(['Eno2'])
->>> api_response.data[0] # view the object structure
->>> for d in api_response.data: print("%s %-18s %6d %-30s %-10s %2i %s" %
->>>   (d.official_symbol,d.ensembl_id,d.ncbi_id,d.official_name,
->>>    d.taxon.common_name,d.taxon.id,d.taxon.scientific_name))
-... 
-ENO2 ENSG00000111674      2026 enolase 2                      human       1 Homo sapiens
-Eno2 ENSMUSG00000004267  13807 enolase 2, gamma neuronal      mouse       2 Mus musculus
-Eno2 ENSRNOG00000013141  24334 enolase 2                      rat         3 Rattus norvegicus
-ENO2 None               856579 phosphopyruvate hydratase ENO2 yeast      11 Saccharomyces cerevisiae
-eno2 ENSDARG00000014287 402874 enolase 2                      zebrafish  12 Danio rerio
-
+>>> api.get_genes(['Eno2'])
+  gene_symbol        gene_ensembl  ...  taxon_database_name taxon_database_ID
+0        ENO2     ENSG00000111674  ...                 hg38                87
+1        Eno2  ENSMUSG00000004267  ...                 mm10                81
+2        Eno2  ENSRNOG00000013141  ...                  rn6                86
+[3 rows x 12 columns]
 
 >>> # ncbi id for human ENO2
->>> probs=api_instance.get_gene_probes(2026)
->>> probs.data[0]  # view the object structure
->>> # print only fields of interest
->>> for d in probs.data[0:6]: 
-...   print("%-10s %-12s %-20s %s %s %s %s" % 
-...  (d.name,d.array_design.short_name,d.array_design.name,d.array_design.taxon.common_name,
-...   d.array_design.taxon.id,d.array_design.technology_type,d.array_design.troubled))
-20016      GPL3093      LC-25                human 1 TWOCOLOR False
-20024      GPL3092      LC-19                human 1 TWOCOLOR False
-20024      lymphochip-2 Lymphochip 37k       human 1 TWOCOLOR False
-1639       GPL962       CHUGAI 41K           human 1 TWOCOLOR False
-35850      NHGRI-6.5k   NHGRI-6.5k           human 1 TWOCOLOR False
-201313_at  GPL96        Affymetrix GeneChip Human Genome U133 Array Set HG-U133A human 1 ONECOLOR False
-
-
+>>> api.get_gene_probes("ENSG00000111674").head()
+  element_name  ... taxon_database_ID
+0    201313_at  ...                87
+1    201313_at  ...                87
+2     40193_at  ...                87
+3         1639  ...                87
+4         6621  ...                87
+[5 rows x 14 columns]
 
 Differential expression analyses
 --------------------------------
@@ -375,48 +347,58 @@ their interaction). You can access them using
 explore and visualize the data to find the most
 differentially-expressed genes.
 
-Note that get_differential_expression_values can return multiple differentials per study if a study has multiple factors to contrast. Since GSE46416 only has one extracting the first element of the returned list is all we need.
+Note that :py:func:`~gemmapy.GemmaPy.get_differential_expression_values` can
+return multiple differentials per study if a study has multiple factors to contrast. 
+Since GSE46416 only has one extracting the first element of the returned list is all we need.
 
->>> import gemmapy
->>> import pandas
->>> import numpy as np
->>> api_instance = gemmapy.GemmaPy()
->>> de = api_instance.get_differential_expression_values('GSE46416')
->>> print(de.keys()) # keys correspond to the id of the differential
-dict_keys([550248])
->>> de[list(de.keys())[0]]
-         Probe     NCBIid  ... contrast_113005_tstat contrast_113005_pvalue
-0      2982730       4018  ...               -0.3622               0.719600
-1      2787851     166752  ...                0.7495               0.459000
-2      2477558        NaN  ...                1.2600               0.216600
-3      2910917        NaN  ...                0.9032               0.373100
-4      3983537     140886  ...                1.7660               0.086940
-...        ...        ...  ...                   ...                    ...
-21956  3301011      64318  ...               -1.6210               0.114800
-21957  2461654  100130249  ...               -0.2045               0.839300
-21958  2360346       1141  ...                3.1280               0.003721
-21959  2391172       7293  ...                1.7370               0.091960
-21960  2525718        NaN  ...               -0.7101               0.482700
-[21961 rows x 13 columns]
+>>> dif_exp = api.get_differential_expression_values('GSE46416')
+>>> dif_exp
+{550248:          Probe     NCBIid  ... contrast_113005_tstat contrast_113005_pvalue
+ 0      2982730       4018  ...               -0.3622                 0.7196
+ 1      2787851     166752  ...                0.7495                 0.4590
+ 2      2477558        NaN  ...                1.2604                 0.2166
+ 3      2910917        NaN  ...                0.9032                 0.3731
+ 4      3983537     140886  ...                1.7656                 0.0869
+       ...        ...  ...                   ...                    ...
+ 21956  3301011      64318  ...               -1.6208                 0.1148
+ 21957  2461654  100130249  ...               -0.2045                 0.8393
+ 21958  2360346       1141  ...                3.1278                 0.0037
+ 21959  2391172       7293  ...                1.7369                 0.0920
+ 21960  2525718        NaN  ...               -0.7101                 0.4827
+ [21961 rows x 13 columns]}
 
-By default the columns names of the output correspond to contrast IDs. To see what conditions these IDs correspond to we can either use :py:func:`~gemmapy.GemmaPy.get_dataset_differential_expression_analyses` to get the metadata about differentials of a given dataset, or :code:`setreadableContrasts` argument of :py:func:`~gemmapy.GemmaPy.get_differential_expression_values` to :code:`True`. The former approach is usually better for a large scale systematic analysis while the latter is easier to read in an interactive session.
 
-:py:func:`~gemmapy.GemmaPy.get_dataset_differential_expression_analyses` function returns metadata about the differentials.
+By default the columns names of the output correspond to contrast IDs. To see 
+what conditions these IDs correspond to we can either use 
+:py:func:`~gemmapy.GemmaPy.get_dataset_differential_expression_analyses` to
+get the metadata about differentials of a given dataset, or
+:code:`readable_contrasts` argument of 
+:py:func:`~gemmapy.GemmaPy.get_differential_expression_values` to :code:`True`.
+The former approach is usually better for a large scale systematic analysis 
+while the latter is easier to read in an interactive session.
 
->>> contrasts = api_instance.get_dataset_differential_expression_analyses("GSE46416")
->>> for d in contrasts.data:
->>>     for r in d.result_sets:
->>>         for f in r.experimental_factors:
->>>             for v in f.values:
->>>                 print(r.id, v.id, v.factor_value)
-550248 113004 bipolar disorder, manic phase
-550248 113006 reference subject role
-550248 113005 euthymic phase, Bipolar Disorder
+:py:func:`~gemmapy.GemmaPy.get_dataset_differential_expression_analyses` 
+function returns metadata about the differentials.
 
-:code:`id` of the :code:`values` field in the :code:`experimental_factors` corresponds to the column names in the output
-of :py:func:`~gemmapy.GemmaPy.get_differential_expression_values` while the :code:`id` of the :code:`result_sets` corresponds to the name of the differential in the output dictionary. Using them together will let one to access differentially expressed gene counts for each condition contrast.
+>>> contrasts = api.get_dataset_differential_expression_analyses("GSE46416")
+>>> contrasts
+   result_ID contrast_ID  ...  probes_analyzed genes_analyzed
+0     550248      113004  ...            21961          18959
+1     550248      113005  ...            21961          18959
+[2 rows x 12 columns]
+
+:code:`contrast_ID` column corresponds to the column names in the output of 
+:py:func:`~gemmapy.GemmaPy.get_differential_expression_values` while :code:`result_ID`
+corresponds to the name of the differential in the output object. Using them 
+together will let one to access differentially expressed gene counts for each
+condition contrast
+
+>>> 
 
 >>> import statsmodels.stats.multitest as multi
+>>> 
+
+
 >>> for d in contrasts.data:
 ...     for r in d.result_sets:
 ...         for f in r.experimental_factors:
@@ -520,7 +502,6 @@ Alternatively we, since we are only looking at one dataset and one contrast manu
 ...
 >>> # Volcano plot for bipolar patients vs controls
 >>> de['-log10(p-value)'] = -np.log10(de['contrast_bipolar disorder, manic phase_pvalue'])
->>> import matplotlib.pyplot as plt
 >>> from plotnine import *
 >>> plt.figure(figsize=(10,6))
 >>> plot=(ggplot(de)
@@ -602,3 +583,139 @@ GSE12649 ExperimentTag   organism part   prefrontal cortex
 GSE12649 BioMaterial     disease         Bipolar Disorder
 GSE12649 BioMaterial     disease         schizophrenia  
 --
+
+
+Raw endpoints
+------------------
+
+The previous version of gemmapy exposed raw API endpoints directly while this
+version processes the api output into pandas DataFrames for most cases. The old
+raw outputs are still accessible however under the :code:`raw` component of the
+GemmaPy instance. In general these functions take the same arguments (with the exception
+of taxa and uris arguments for anything that accepts a filter and result_sets argument
+of :py:func:`~gemmapy.GemmaPy.get_result_sets`)
+
+
+>>> api.raw.get_datasets_by_ids([1])
+{'data': [{'accession': 'GSE2018',
+           'batch_confound': None,
+           'batch_effect': 'NO_BATCH_EFFECT_SUCCESS',
+           'batch_effect_statistics': 'This data set may have a batch artifact '
+                                      '(PC 2), p=0.69477',
+           'bio_assay_count': 34,
+           'curation_note': None,
+           'description': 'Bronchoalveolar lavage samples collected from lung '
+                          'transplant recipients.  Numeric portion of sample '
+                          'name is an arbitrary patient ID and AxBx number '
+                          'indicates the perivascular (A) and bronchiolar (B) '
+                          'scores from biopsies collected on the same day as '
+                          'the BAL fluid was collected.  Several patients have '
+                          'more than one sample in this series and can be '
+                          'determined by patient number followed by a lower '
+                          'case letter.  Acute rejection state is determined '
+                          'by the combined A and B score - specifically, a '
+                          'combined AB score of 2 or greater is considered an '
+                          'acute rejection.',
+           'external_database': 'GEO',
+           'external_database_uri': 'http://www.ncbi.nlm.nih.gov/geo/',
+           'external_uri': 'https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE2018',
+           'geeq': {'batch_corrected': False,
+                    'corr_mat_issues': '2',
+                    'id': 557,
+                    'no_vectors': False,
+                    'public_quality_score': 0.9976340682316643,
+                    'public_suitability_score': 0.875,
+                    'q_score_batch_info': 1.0,
+                    'q_score_outliers': 1.0,
+                    'q_score_platforms_tech': 1.0,
+                    'q_score_public_batch_confound': 1.0,
+                    'q_score_public_batch_effect': 1.0,
+                    'q_score_replicates': 1.0,
+                    'q_score_sample_correlation_variance': 3.716509481654169e-05,
+                    'q_score_sample_mean_correlation': 0.9822784200037354,
+                    'q_score_sample_median_correlation': 0.9834384776216498,
+                    'replicates_issues': '0',
+                    's_score_avg_platform_popularity': 1.0,
+                    's_score_avg_platform_size': 0.0,
+                    's_score_missing_values': 1.0,
+                    's_score_platform_amount': 1.0,
+                    's_score_platform_tech_multi': 1.0,
+                    's_score_publication': 1.0,
+                    's_score_raw_data': 1.0,
+                    's_score_sample_size': 1.0},
+           'id': 1,
+           'last_needs_attention_event': {'_date': datetime.datetime(2018, 10, 2, 20, 57, 53, tzinfo=tzutc()),
+                                          'action': 'U',
+                                          'action_name': 'Update',
+                                          'detail': None,
+                                          'event_type_name': 'DoesNotNeedAttentionEvent',
+                                          'id': 25176178,
+                                          'note': 'Does not need attention.',
+                                          'performer': 'amansharma'},
+           'last_note_update_event': None,
+           'last_troubled_event': None,
+           'last_updated': datetime.datetime(2024, 2, 10, 8, 31, 41, 417000, tzinfo=tzutc()),
+           'metadata': None,
+           'name': 'Human Lung Transplant - BAL',
+           'needs_attention': False,
+           'number_of_array_designs': 1,
+           'number_of_bio_assays': 34,
+           'number_of_processed_expression_vectors': 22283,
+           'short_name': 'GSE2018',
+           'source': '',
+           'taxon': {'common_name': 'human',
+                     'external_database': {'description': 'Genome Reference '
+                                                          'Consortium Human '
+                                                          'GRCh38.p13 '
+                                                          '(GCA_000001405.28)',
+                                           'external_databases': [{'description': None,
+                                                                   'external_databases': [],
+                                                                   'id': 94,
+                                                                   'last_updated': datetime.datetime(2022, 6, 30, 7, 0, tzinfo=tzutc()),
+                                                                   'name': 'hg38 '
+                                                                           'annotations',
+                                                                   'release_url': 'https://www.ncbi.nlm.nih.gov/datasets/genome/GCA_000001405.28/',
+                                                                   'release_version': 'GRCh38.p13',
+                                                                   'uri': 'https://hgdownload.cse.ucsc.edu/goldenpath/hg38/database/'},
+                                                                  {'description': 'Annotations '
+                                                                                  'provided '
+                                                                                  'by '
+                                                                                  'NCBI '
+                                                                                  'Genome '
+                                                                                  'and '
+                                                                                  'used '
+                                                                                  'by '
+                                                                                  'the '
+                                                                                  'RNA-Seq '
+                                                                                  'pipeline '
+                                                                                  'for '
+                                                                                  'human '
+                                                                                  'data.',
+                                                                   'external_databases': [],
+                                                                   'id': 124,
+                                                                   'last_updated': datetime.datetime(2023, 1, 17, 20, 27, 55, 59000, tzinfo=tzutc()),
+                                                                   'name': 'hg38 '
+                                                                           'RNA-Seq '
+                                                                           'annotations',
+                                                                   'release_url': 'https://ftp.ncbi.nlm.nih.gov/genomes/all/annotation_releases/9606/110/',
+                                                                   'release_version': '110',
+                                                                   'uri': 'https://www.ncbi.nlm.nih.gov/datasets/genome/GCF_000001405.40/'}],
+                                           'id': 87,
+                                           'last_updated': datetime.datetime(2022, 6, 30, 7, 0, tzinfo=tzutc()),
+                                           'name': 'hg38',
+                                           'release_url': 'https://www.ncbi.nlm.nih.gov/datasets/genome/GCA_000001405.28/',
+                                           'release_version': 'GRCh38.p13',
+                                           'uri': 'https://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38'},
+                     'id': 1,
+                     'ncbi_id': 9606,
+                     'scientific_name': 'Homo sapiens'},
+           'taxon_id': 1,
+           'technology_type': None,
+           'trouble_details': 'No trouble details provided.',
+           'troubled': False}],
+ 'filter': 'id = 1',
+ 'group_by': ['id'],
+ 'limit': 20,
+ 'offset': 0,
+ 'sort': {'direction': '+', 'order_by': 'id'},
+ 'total_elements': 1}
