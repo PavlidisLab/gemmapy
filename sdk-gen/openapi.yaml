@@ -1824,15 +1824,15 @@ paths:
             type: string
             enum:
             - ubic.gemma.model.expression.experiment.ExpressionExperiment
-            - ubic.gemma.model.genome.biosequence.BioSequence
-            - ubic.gemma.model.expression.designElement.CompositeSequence
             - ubic.gemma.model.genome.Gene
-            - ubic.gemma.model.genome.gene.GeneSet
-            - ubic.gemma.model.common.description.BibliographicReference
-            - ubic.gemma.model.analysis.expression.ExpressionExperimentSet
-            - ubic.gemma.model.association.phenotype.PhenotypeAssociation
             - ubic.gemma.model.expression.BlacklistedEntity
             - ubic.gemma.model.expression.arrayDesign.ArrayDesign
+            - ubic.gemma.model.analysis.expression.ExpressionExperimentSet
+            - ubic.gemma.model.genome.gene.GeneSet
+            - ubic.gemma.model.expression.designElement.CompositeSequence
+            - ubic.gemma.model.genome.biosequence.BioSequence
+            - ubic.gemma.model.common.description.BibliographicReference
+            - ubic.gemma.model.association.phenotype.PhenotypeAssociation
       - name: limit
         in: query
         description: Maximum number of search results to return; capped at 2000 unless
@@ -2642,6 +2642,9 @@ components:
           type: string
         type:
           type: string
+          enum:
+          - categorical
+          - continuous
         values:
           type: array
           items:
@@ -2800,8 +2803,23 @@ components:
           type: string
         type:
           type: string
+          enum:
+          - ABSOLUTE
+          - CHANGE
         representation:
           type: string
+          enum:
+          - DOUBLE
+          - INT
+          - LONG
+          - CHAR
+          - BOOLEAN
+          - STRING
+          - INTARRAY
+          - DOUBLEARRAY
+          - CHARARRAY
+          - BOOLEANARRAY
+          - STRINGARRAY
     ResponseDataObjectDifferentialExpressionAnalysisResultSetValueObject:
       type: object
       properties:
@@ -3216,6 +3234,11 @@ components:
           format: date-time
         action:
           type: string
+          enum:
+          - C
+          - R
+          - U
+          - D
         note:
           type: string
         detail:
@@ -3258,6 +3281,16 @@ components:
           type: string
         batchEffect:
           type: string
+          enum:
+          - NO_BATCH_INFO
+          - SINGLETON_BATCHES_FAILURE
+          - UNINFORMATIVE_HEADERS_FAILURE
+          - PROBLEMATIC_BATCH_INFO_FAILURE
+          - BATCH_EFFECT_FAILURE
+          - BATCH_CORRECTED_SUCCESS
+          - SINGLE_BATCH_SUCCESS
+          - BATCH_EFFECT_UNDETERMINED_FAILURE
+          - NO_BATCH_EFFECT_SUCCESS
         batchEffectStatistics:
           type: string
         externalDatabase:
@@ -3276,12 +3309,12 @@ components:
           type: string
         technologyType:
           type: string
-        taxonId:
-          type: integer
-          format: int64
         bioAssayCount:
           type: integer
           format: int32
+        taxonId:
+          type: integer
+          format: int64
         troubleDetails:
           type: string
         numberOfArrayDesigns:
@@ -4995,6 +5028,41 @@ components:
           type: string
         evidenceCode:
           type: string
+          enum:
+          - IC
+          - IDA
+          - IEA
+          - IEP
+          - IGI
+          - IMP
+          - IPI
+          - ISS
+          - NAS
+          - ND
+          - RCA
+          - TAS
+          - NR
+          - EXP
+          - ISA
+          - ISM
+          - IGC
+          - ISO
+          - IIA
+          - IBA
+          - IBD
+          - IKR
+          - IRD
+          - IMR
+          - IED
+          - IAGP
+          - IPM
+          - QTM
+          - HDA
+          - HEP
+          - HGI
+          - HMP
+          - HTP
+          - OTHER
         objectClass:
           type: string
     ResponseDataObjectSetAnnotationValueObject:
@@ -5088,6 +5156,13 @@ components:
           $ref: '#/components/schemas/AuditEventValueObject'
         color:
           type: string
+          enum:
+          - TWOCOLOR
+          - DUALMODE
+          - ONECOLOR
+          - SEQUENCING
+          - GENELIST
+          - OTHER
         description:
           type: string
         expressionExperimentCount:
@@ -5103,6 +5178,13 @@ components:
           type: string
         technologyType:
           type: string
+          enum:
+          - TWOCOLOR
+          - DUALMODE
+          - ONECOLOR
+          - SEQUENCING
+          - GENELIST
+          - OTHER
         releaseVersion:
           type: string
         releaseUrl:
@@ -5113,10 +5195,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/DatabaseEntryValueObject'
-        numberOfExpressionExperiments:
+        taxonID:
           type: integer
           format: int64
-        taxonID:
+        numberOfExpressionExperiments:
           type: integer
           format: int64
         troubleDetails:
@@ -5143,6 +5225,10 @@ components:
           type: string
         generalType:
           type: string
+          enum:
+          - QUANTITATIVE
+          - CATEGORICAL
+          - UNKNOWN
         isBackground:
           type: boolean
         isBackgroundSubtracted:
@@ -5163,10 +5249,45 @@ components:
           type: string
         representation:
           type: string
+          enum:
+          - DOUBLE
+          - INT
+          - LONG
+          - CHAR
+          - BOOLEAN
+          - STRING
+          - INTARRAY
+          - DOUBLEARRAY
+          - CHARARRAY
+          - BOOLEANARRAY
+          - STRINGARRAY
         scale:
           type: string
+          enum:
+          - LINEAR
+          - LN
+          - LOG2
+          - LOG10
+          - LOG1P
+          - LOGBASEUNKNOWN
+          - FOLDCHANGE
+          - OTHER
+          - UNSCALED
+          - PERCENT1
+          - PERCENT
+          - COUNT
         type:
           type: string
+          enum:
+          - PRESENTABSENT
+          - FAILED
+          - AMOUNT
+          - CONFIDENCEINDICATOR
+          - CORRELATION
+          - COUNT
+          - COORDINATE
+          - ZSCORE
+          - OTHER
         vectorType:
           type: string
     ResponseDataObjectSetQuantitationTypeValueObject:
@@ -5382,6 +5503,21 @@ components:
           $ref: '#/components/schemas/TaxonValueObject'
         type:
           type: string
+          enum:
+          - AFFY_TARGET
+          - AFFY_PROBE
+          - EST
+          - mRNA
+          - REFSEQ
+          - BAC
+          - WHOLE_GENOME
+          - WHOLE_CHROMOSOME
+          - DNA
+          - OTHER
+          - ORF
+          - AFFY_COLLAPSED
+          - OLIGO
+          - DUMMY
     CitationValueObject:
       type: object
       properties:
@@ -5481,6 +5617,16 @@ components:
           type: string
         batchEffect:
           type: string
+          enum:
+          - NO_BATCH_INFO
+          - SINGLETON_BATCHES_FAILURE
+          - UNINFORMATIVE_HEADERS_FAILURE
+          - PROBLEMATIC_BATCH_INFO_FAILURE
+          - BATCH_EFFECT_FAILURE
+          - BATCH_CORRECTED_SUCCESS
+          - SINGLE_BATCH_SUCCESS
+          - BATCH_EFFECT_UNDETERMINED_FAILURE
+          - NO_BATCH_EFFECT_SUCCESS
         batchEffectStatistics:
           type: string
         externalDatabase:
@@ -5501,12 +5647,12 @@ components:
           type: string
         searchResult:
           $ref: '#/components/schemas/SearchResultValueObjectExpressionExperimentValueObject'
-        taxonId:
-          type: integer
-          format: int64
         bioAssayCount:
           type: integer
           format: int32
+        taxonId:
+          type: integer
+          format: int64
         troubleDetails:
           type: string
         numberOfArrayDesigns:
@@ -5726,6 +5872,41 @@ components:
           type: string
         evidenceCode:
           type: string
+          enum:
+          - IC
+          - IDA
+          - IEA
+          - IEP
+          - IGI
+          - IMP
+          - IPI
+          - ISS
+          - NAS
+          - ND
+          - RCA
+          - TAS
+          - NR
+          - EXP
+          - ISA
+          - ISM
+          - IGC
+          - ISO
+          - IIA
+          - IBA
+          - IBD
+          - IKR
+          - IRD
+          - IMR
+          - IED
+          - IAGP
+          - IPM
+          - QTM
+          - HDA
+          - HEP
+          - HGI
+          - HMP
+          - HTP
+          - OTHER
         numberOfExpressionExperiments:
           type: integer
           format: int64
@@ -5840,6 +6021,13 @@ components:
           $ref: '#/components/schemas/AuditEventValueObject'
         color:
           type: string
+          enum:
+          - TWOCOLOR
+          - DUALMODE
+          - ONECOLOR
+          - SEQUENCING
+          - GENELIST
+          - OTHER
         description:
           type: string
         isMerged:
@@ -5852,6 +6040,13 @@ components:
           type: string
         technologyType:
           type: string
+          enum:
+          - TWOCOLOR
+          - DUALMODE
+          - ONECOLOR
+          - SEQUENCING
+          - GENELIST
+          - OTHER
         releaseVersion:
           type: string
         releaseUrl:
@@ -7229,15 +7424,15 @@ components:
         type: string
         enum:
         - ubic.gemma.model.expression.experiment.ExpressionExperiment
-        - ubic.gemma.model.genome.biosequence.BioSequence
-        - ubic.gemma.model.expression.designElement.CompositeSequence
         - ubic.gemma.model.genome.Gene
-        - ubic.gemma.model.genome.gene.GeneSet
-        - ubic.gemma.model.common.description.BibliographicReference
-        - ubic.gemma.model.analysis.expression.ExpressionExperimentSet
-        - ubic.gemma.model.association.phenotype.PhenotypeAssociation
         - ubic.gemma.model.expression.BlacklistedEntity
         - ubic.gemma.model.expression.arrayDesign.ArrayDesign
+        - ubic.gemma.model.analysis.expression.ExpressionExperimentSet
+        - ubic.gemma.model.genome.gene.GeneSet
+        - ubic.gemma.model.expression.designElement.CompositeSequence
+        - ubic.gemma.model.genome.biosequence.BioSequence
+        - ubic.gemma.model.common.description.BibliographicReference
+        - ubic.gemma.model.association.phenotype.PhenotypeAssociation
     ResponseDataObjectListTaxonValueObject:
       type: object
       properties:
