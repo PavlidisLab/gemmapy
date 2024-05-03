@@ -11,7 +11,7 @@ import pandas as pd
 import numpy as np
 import typing as T
 import warnings
-from gemmapy import subprocessors as sub
+from gemmapy import _subprocessors as sub
 import itertools as it
 import re
 
@@ -225,8 +225,6 @@ def process_DifferentialExpressionAnalysisResultSetValueObject(d:list,api):
             ids = [[x,y] for x in ids[0] for y in ids[1]]
 
             factor_ids = sub.field_in_list(x.experimental_factors,'id')
-            
-            
             
             all_sets = api.raw.get_result_sets(datasets = [experiment_ID])
             non_interaction_sets = list(filter(lambda y: len(y.experimental_factors)==1,all_sets.data))

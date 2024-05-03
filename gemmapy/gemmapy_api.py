@@ -3,10 +3,10 @@
 Gemma python API (https://gemma.msl.ubc.ca/rest/v2/)
 """
 
-from   gemmapy import sdk
-from gemmapy import processors as ps
-from gemmapy import validators as vs
-from gemmapy import subprocessors as sub
+from gemmapy import sdk
+from gemmapy import _processors as ps
+from gemmapy import _validators as vs
+from gemmapy import _subprocessors as sub
 from typing import Optional, List, Callable
 from pandas import DataFrame
 import pandas as pd
