@@ -226,8 +226,17 @@ def process_DifferentialExpressionAnalysisResultSetValueObject(d:list,api):
 
             factor_ids = sub.field_in_list(x.experimental_factors,'id')
             
+                        
+            subset_factor = sub.process_FactorValueValueObject(x.analysis.subset_factor_value)
+            
             all_sets = api.raw.get_result_sets(datasets = [experiment_ID])
-            non_interaction_sets = list(filter(lambda y: len(y.experimental_factors)==1,all_sets.data))
+            
+            all_sets = [y for y in all_sets.data if 
+                        subset_factor.ID.isin(
+                            sub.process_FactorValueValueObject(y.analysis.subset_factor_value).ID).all()]
+            
+            
+            non_interaction_sets = list(filter(lambda y: len(y.experimental_factors)==1,all_sets))
             baseline_ids = sub.field_in_list(non_interaction_sets,"baseline_group",'id')
             
             relevant_ids = [x for x in ids if not any(sub.list_in_list(x, baseline_ids))]
