@@ -143,6 +143,12 @@ class MeasurementValueObject(object):
         :param type: The type of this MeasurementValueObject.  # noqa: E501
         :type: str
         """
+        allowed_values = ["ABSOLUTE", "CHANGE"]  # noqa: E501
+        if type not in allowed_values:
+            raise ValueError(
+                "Invalid value for `type` ({0}), must be one of {1}"  # noqa: E501
+                .format(type, allowed_values)
+            )
 
         self._type = type
 
@@ -164,6 +170,12 @@ class MeasurementValueObject(object):
         :param representation: The representation of this MeasurementValueObject.  # noqa: E501
         :type: str
         """
+        allowed_values = ["DOUBLE", "INT", "LONG", "CHAR", "BOOLEAN", "STRING", "INTARRAY", "DOUBLEARRAY", "CHARARRAY", "BOOLEANARRAY", "STRINGARRAY"]  # noqa: E501
+        if representation not in allowed_values:
+            raise ValueError(
+                "Invalid value for `representation` ({0}), must be one of {1}"  # noqa: E501
+                .format(representation, allowed_values)
+            )
 
         self._representation = representation
 

@@ -177,6 +177,12 @@ class QuantitationTypeValueObject(object):
         :param general_type: The general_type of this QuantitationTypeValueObject.  # noqa: E501
         :type: str
         """
+        allowed_values = ["QUANTITATIVE", "CATEGORICAL", "UNKNOWN"]  # noqa: E501
+        if general_type not in allowed_values:
+            raise ValueError(
+                "Invalid value for `general_type` ({0}), must be one of {1}"  # noqa: E501
+                .format(general_type, allowed_values)
+            )
 
         self._general_type = general_type
 
@@ -387,6 +393,12 @@ class QuantitationTypeValueObject(object):
         :param representation: The representation of this QuantitationTypeValueObject.  # noqa: E501
         :type: str
         """
+        allowed_values = ["DOUBLE", "INT", "LONG", "CHAR", "BOOLEAN", "STRING", "INTARRAY", "DOUBLEARRAY", "CHARARRAY", "BOOLEANARRAY", "STRINGARRAY"]  # noqa: E501
+        if representation not in allowed_values:
+            raise ValueError(
+                "Invalid value for `representation` ({0}), must be one of {1}"  # noqa: E501
+                .format(representation, allowed_values)
+            )
 
         self._representation = representation
 
@@ -408,6 +420,12 @@ class QuantitationTypeValueObject(object):
         :param scale: The scale of this QuantitationTypeValueObject.  # noqa: E501
         :type: str
         """
+        allowed_values = ["LINEAR", "LN", "LOG2", "LOG10", "LOG1P", "LOGBASEUNKNOWN", "FOLDCHANGE", "OTHER", "UNSCALED", "PERCENT1", "PERCENT", "COUNT"]  # noqa: E501
+        if scale not in allowed_values:
+            raise ValueError(
+                "Invalid value for `scale` ({0}), must be one of {1}"  # noqa: E501
+                .format(scale, allowed_values)
+            )
 
         self._scale = scale
 
@@ -429,6 +447,12 @@ class QuantitationTypeValueObject(object):
         :param type: The type of this QuantitationTypeValueObject.  # noqa: E501
         :type: str
         """
+        allowed_values = ["PRESENTABSENT", "FAILED", "AMOUNT", "CONFIDENCEINDICATOR", "CORRELATION", "COUNT", "COORDINATE", "ZSCORE", "OTHER"]  # noqa: E501
+        if type not in allowed_values:
+            raise ValueError(
+                "Invalid value for `type` ({0}), must be one of {1}"  # noqa: E501
+                .format(type, allowed_values)
+            )
 
         self._type = type
 

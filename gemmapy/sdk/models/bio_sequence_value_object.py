@@ -268,6 +268,12 @@ class BioSequenceValueObject(object):
         :param type: The type of this BioSequenceValueObject.  # noqa: E501
         :type: str
         """
+        allowed_values = ["AFFY_TARGET", "AFFY_PROBE", "EST", "mRNA", "REFSEQ", "BAC", "WHOLE_GENOME", "WHOLE_CHROMOSOME", "DNA", "OTHER", "ORF", "AFFY_COLLAPSED", "OLIGO", "DUMMY"]  # noqa: E501
+        if type not in allowed_values:
+            raise ValueError(
+                "Invalid value for `type` ({0}), must be one of {1}"  # noqa: E501
+                .format(type, allowed_values)
+            )
 
         self._type = type
 

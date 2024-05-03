@@ -1823,15 +1823,15 @@ paths:
           items:
             type: string
             enum:
+            - ubic.gemma.model.expression.arrayDesign.ArrayDesign
             - ubic.gemma.model.expression.experiment.ExpressionExperiment
             - ubic.gemma.model.genome.Gene
-            - ubic.gemma.model.expression.BlacklistedEntity
-            - ubic.gemma.model.expression.arrayDesign.ArrayDesign
-            - ubic.gemma.model.analysis.expression.ExpressionExperimentSet
-            - ubic.gemma.model.genome.gene.GeneSet
-            - ubic.gemma.model.expression.designElement.CompositeSequence
-            - ubic.gemma.model.genome.biosequence.BioSequence
             - ubic.gemma.model.common.description.BibliographicReference
+            - ubic.gemma.model.expression.BlacklistedEntity
+            - ubic.gemma.model.expression.designElement.CompositeSequence
+            - ubic.gemma.model.genome.gene.GeneSet
+            - ubic.gemma.model.analysis.expression.ExpressionExperimentSet
+            - ubic.gemma.model.genome.biosequence.BioSequence
             - ubic.gemma.model.association.phenotype.PhenotypeAssociation
       - name: limit
         in: query
@@ -3243,9 +3243,9 @@ components:
           type: string
         detail:
           type: string
-        actionName:
-          type: string
         eventTypeName:
+          type: string
+        actionName:
           type: string
     ExpressionExperimentValueObject:
       type: object
@@ -3309,12 +3309,12 @@ components:
           type: string
         technologyType:
           type: string
-        bioAssayCount:
-          type: integer
-          format: int32
         taxonId:
           type: integer
           format: int64
+        bioAssayCount:
+          type: integer
+          format: int32
         troubleDetails:
           type: string
         numberOfArrayDesigns:
@@ -5647,12 +5647,12 @@ components:
           type: string
         searchResult:
           $ref: '#/components/schemas/SearchResultValueObjectExpressionExperimentValueObject'
-        bioAssayCount:
-          type: integer
-          format: int32
         taxonId:
           type: integer
           format: int64
+        bioAssayCount:
+          type: integer
+          format: int32
         troubleDetails:
           type: string
         numberOfArrayDesigns:
@@ -7423,15 +7423,15 @@ components:
       items:
         type: string
         enum:
+        - ubic.gemma.model.expression.arrayDesign.ArrayDesign
         - ubic.gemma.model.expression.experiment.ExpressionExperiment
         - ubic.gemma.model.genome.Gene
-        - ubic.gemma.model.expression.BlacklistedEntity
-        - ubic.gemma.model.expression.arrayDesign.ArrayDesign
-        - ubic.gemma.model.analysis.expression.ExpressionExperimentSet
-        - ubic.gemma.model.genome.gene.GeneSet
-        - ubic.gemma.model.expression.designElement.CompositeSequence
-        - ubic.gemma.model.genome.biosequence.BioSequence
         - ubic.gemma.model.common.description.BibliographicReference
+        - ubic.gemma.model.expression.BlacklistedEntity
+        - ubic.gemma.model.expression.designElement.CompositeSequence
+        - ubic.gemma.model.genome.gene.GeneSet
+        - ubic.gemma.model.analysis.expression.ExpressionExperimentSet
+        - ubic.gemma.model.genome.biosequence.BioSequence
         - ubic.gemma.model.association.phenotype.PhenotypeAssociation
     ResponseDataObjectListTaxonValueObject:
       type: object

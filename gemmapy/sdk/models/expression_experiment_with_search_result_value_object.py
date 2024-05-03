@@ -478,6 +478,12 @@ class ExpressionExperimentWithSearchResultValueObject(object):
         :param batch_effect: The batch_effect of this ExpressionExperimentWithSearchResultValueObject.  # noqa: E501
         :type: str
         """
+        allowed_values = ["NO_BATCH_INFO", "SINGLETON_BATCHES_FAILURE", "UNINFORMATIVE_HEADERS_FAILURE", "PROBLEMATIC_BATCH_INFO_FAILURE", "BATCH_EFFECT_FAILURE", "BATCH_CORRECTED_SUCCESS", "SINGLE_BATCH_SUCCESS", "BATCH_EFFECT_UNDETERMINED_FAILURE", "NO_BATCH_EFFECT_SUCCESS"]  # noqa: E501
+        if batch_effect not in allowed_values:
+            raise ValueError(
+                "Invalid value for `batch_effect` ({0}), must be one of {1}"  # noqa: E501
+                .format(batch_effect, allowed_values)
+            )
 
         self._batch_effect = batch_effect
 

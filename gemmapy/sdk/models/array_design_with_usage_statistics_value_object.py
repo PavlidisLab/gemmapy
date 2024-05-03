@@ -338,6 +338,12 @@ class ArrayDesignWithUsageStatisticsValueObject(object):
         :param color: The color of this ArrayDesignWithUsageStatisticsValueObject.  # noqa: E501
         :type: str
         """
+        allowed_values = ["TWOCOLOR", "DUALMODE", "ONECOLOR", "SEQUENCING", "GENELIST", "OTHER"]  # noqa: E501
+        if color not in allowed_values:
+            raise ValueError(
+                "Invalid value for `color` ({0}), must be one of {1}"  # noqa: E501
+                .format(color, allowed_values)
+            )
 
         self._color = color
 
@@ -464,6 +470,12 @@ class ArrayDesignWithUsageStatisticsValueObject(object):
         :param technology_type: The technology_type of this ArrayDesignWithUsageStatisticsValueObject.  # noqa: E501
         :type: str
         """
+        allowed_values = ["TWOCOLOR", "DUALMODE", "ONECOLOR", "SEQUENCING", "GENELIST", "OTHER"]  # noqa: E501
+        if technology_type not in allowed_values:
+            raise ValueError(
+                "Invalid value for `technology_type` ({0}), must be one of {1}"  # noqa: E501
+                .format(technology_type, allowed_values)
+            )
 
         self._technology_type = technology_type
 
