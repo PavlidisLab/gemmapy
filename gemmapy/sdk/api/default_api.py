@@ -1503,7 +1503,7 @@ class DefaultApi(object):
         >>> thread = api.get_datasets(async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param QueryArg query:
         :param FilterArgExpressionExperiment filter:
         :param int offset:
@@ -1528,7 +1528,7 @@ class DefaultApi(object):
         >>> thread = api.get_datasets_with_http_info(async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param QueryArg query:
         :param FilterArgExpressionExperiment filter:
         :param int offset:
@@ -1609,11 +1609,8 @@ class DefaultApi(object):
         >>> thread = api.get_datasets_annotations_usage_statistics(async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param QueryArg query:
-
-
-
         :param FilterArgExpressionExperiment filter:
         :param list[str] exclude: List of fields to exclude from the payload. Only `parentTerms` can be excluded.
         :param int limit: Maximum number of annotations to returned; capped at 5000.
@@ -1639,7 +1636,7 @@ class DefaultApi(object):
         >>> thread = api.get_datasets_annotations_usage_statistics_with_http_info(async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param QueryArg query:
         :param FilterArgExpressionExperiment filter:
         :param list[str] exclude: List of fields to exclude from the payload. Only `parentTerms` can be excluded.
@@ -1834,7 +1831,7 @@ class DefaultApi(object):
         >>> thread = api.get_datasets_categories_usage_statistics(async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param QueryArg query:
         :param FilterArgExpressionExperiment filter:
         :param int limit:
@@ -1858,7 +1855,7 @@ class DefaultApi(object):
         >>> thread = api.get_datasets_categories_usage_statistics_with_http_info(async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param QueryArg query:
         :param FilterArgExpressionExperiment filter:
         :param int limit:
@@ -1933,7 +1930,7 @@ class DefaultApi(object):
         >>> thread = api.get_datasets_platforms_usage_statistics(async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param QueryArg query:
         :param FilterArgExpressionExperiment filter:
         :param int limit:
@@ -1957,7 +1954,7 @@ class DefaultApi(object):
         >>> thread = api.get_datasets_platforms_usage_statistics_with_http_info(async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param QueryArg query:
         :param FilterArgExpressionExperiment filter:
         :param int limit:
@@ -2031,7 +2028,7 @@ class DefaultApi(object):
         >>> thread = api.get_datasets_taxa_usage_statistics(async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param QueryArg query:
         :param FilterArgExpressionExperiment filter:
         :return: QueriedAndFilteredResponseDataObjectTaxonWithUsageStatisticsValueObject
@@ -2053,7 +2050,7 @@ class DefaultApi(object):
         >>> thread = api.get_datasets_taxa_usage_statistics_with_http_info(async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param QueryArg query:
         :param FilterArgExpressionExperiment filter:
         :return: QueriedAndFilteredResponseDataObjectTaxonWithUsageStatisticsValueObject
@@ -2606,7 +2603,7 @@ class DefaultApi(object):
         >>> thread = api.get_number_of_datasets(async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param QueryArg query:
         :param FilterArgExpressionExperiment filter:
         :return: ResponseDataObjectLong
@@ -2628,7 +2625,7 @@ class DefaultApi(object):
         >>> thread = api.get_number_of_datasets_with_http_info(async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param QueryArg query:
         :param FilterArgExpressionExperiment filter:
         :return: ResponseDataObjectLong
@@ -4409,7 +4406,7 @@ class DefaultApi(object):
         >>> thread = api.search(async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param QueryArg query:
         :param Taxon2 taxon:
         :param Platform5 platform:
@@ -4435,7 +4432,7 @@ class DefaultApi(object):
         >>> thread = api.search_with_http_info(async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param QueryArg query:
         :param Taxon2 taxon:
         :param Platform5 platform:
@@ -4520,7 +4517,7 @@ class DefaultApi(object):
         >>> thread = api.search_annotations(async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param list[str] query: A comma-delimited list of keywords to find annotations.
         :return: ResponseDataObjectListAnnotationSearchResultValueObject
                  If the method is called asynchronously,
@@ -4541,7 +4538,7 @@ class DefaultApi(object):
         >>> thread = api.search_annotations_with_http_info(async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param list[str] query: A comma-delimited list of keywords to find annotations.
         :return: ResponseDataObjectListAnnotationSearchResultValueObject
                  If the method is called asynchronously,
@@ -4611,7 +4608,7 @@ class DefaultApi(object):
         >>> thread = api.search_annotations_by_path_query(query, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param list[str] query: A comma-delimited list of keywords to find annotations. (required)
         :return: ResponseDataObjectListAnnotationSearchResultValueObject
                  If the method is called asynchronously,
@@ -4633,7 +4630,7 @@ class DefaultApi(object):
         >>> thread = api.search_annotations_by_path_query_with_http_info(query, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param list[str] query: A comma-delimited list of keywords to find annotations. (required)
         :return: ResponseDataObjectListAnnotationSearchResultValueObject
                  If the method is called asynchronously,
@@ -4707,8 +4704,7 @@ class DefaultApi(object):
         >>> thread = api.search_datasets(async_req=True)
         >>> result = thread.get()
 
-
-        :param bool async_req:
+        :param async_req bool
         :param list[str] query: A comma-delimited list of keywords to find annotations. Matching datasets for each query are intersected.
         :param FilterArgExpressionExperiment filter:
         :param int offset:
@@ -4734,7 +4730,7 @@ class DefaultApi(object):
         >>> thread = api.search_datasets_with_http_info(async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param list[str] query: A comma-delimited list of keywords to find annotations. Matching datasets for each query are intersected.
         :param FilterArgExpressionExperiment filter:
         :param int offset:
@@ -4816,7 +4812,7 @@ class DefaultApi(object):
         >>> thread = api.search_datasets_by_query_in_path(query, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param list[str] query: A comma-delimited list of keywords to find annotations. Matching datasets for each query are intersected. (required)
         :param FilterArgExpressionExperiment filter:
         :param int offset:
@@ -4842,7 +4838,7 @@ class DefaultApi(object):
         >>> thread = api.search_datasets_by_query_in_path_with_http_info(query, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param list[str] query: A comma-delimited list of keywords to find annotations. Matching datasets for each query are intersected. (required)
         :param FilterArgExpressionExperiment filter:
         :param int offset:
