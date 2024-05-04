@@ -38,11 +38,10 @@ class DefaultApi(object):
         The payload contains a list of featured external databases that Gemma uses under the `externalDatabases` field. Those are mainly genomic references and sources of gene annotations.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_api_info(async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :return: ResponseDataObjectApiInfoValueObject
                  If the method is called asynchronously,
                  returns the request thread.
@@ -60,11 +59,10 @@ class DefaultApi(object):
         The payload contains a list of featured external databases that Gemma uses under the `externalDatabases` field. Those are mainly genomic references and sources of gene annotations.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_api_info_with_http_info(async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :return: ResponseDataObjectApiInfoValueObject
                  If the method is called asynchronously,
                  returns the request thread.
@@ -126,11 +124,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_dataset_annotations(dataset, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param Dataset dataset: (required)
         :return: ResponseDataObjectSetAnnotationValueObject
                  If the method is called asynchronously,
@@ -148,11 +145,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_dataset_annotations_with_http_info(dataset, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param Dataset dataset: (required)
         :return: ResponseDataObjectSetAnnotationValueObject
                  If the method is called asynchronously,
@@ -221,11 +217,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_dataset_design(dataset, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param Dataset1 dataset: (required)
         :return: str
                  If the method is called asynchronously,
@@ -243,11 +238,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_dataset_design_with_http_info(dataset, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param Dataset1 dataset: (required)
         :return: str
                  If the method is called asynchronously,
@@ -316,11 +310,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_dataset_differential_expression(datasets, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param list[object] datasets: (required)
         :param int diff_ex_set:
         :param float threshold:
@@ -343,11 +336,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_dataset_differential_expression_with_http_info(datasets, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param list[object] datasets: (required)
         :param int diff_ex_set:
         :param float threshold:
@@ -432,11 +424,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_dataset_differential_expression_analyses(dataset, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param Dataset2 dataset: (required)
         :param int offset:
         :param int limit:
@@ -456,11 +447,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_dataset_differential_expression_analyses_with_http_info(dataset, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param Dataset2 dataset: (required)
         :param int offset:
         :param int limit:
@@ -535,11 +525,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_dataset_differential_expression_analyses_result_sets(dataset, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param Dataset3 dataset: (required)
         :return: None
                  If the method is called asynchronously,
@@ -557,11 +546,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_dataset_differential_expression_analyses_result_sets_with_http_info(dataset, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param Dataset3 dataset: (required)
         :return: None
                  If the method is called asynchronously,
@@ -631,11 +619,10 @@ class DefaultApi(object):
         This endpoint is deprecated and getDatasetProcessedExpression() should be used instead.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_dataset_expression(dataset, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param Dataset4 dataset: (required)
         :param bool filter:
         :return: None
@@ -655,11 +642,10 @@ class DefaultApi(object):
         This endpoint is deprecated and getDatasetProcessedExpression() should be used instead.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_dataset_expression_with_http_info(dataset, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param Dataset4 dataset: (required)
         :param bool filter:
         :return: None
@@ -731,11 +717,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_dataset_expression_for_genes(datasets, genes, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param list[object] datasets: (required)
         :param list[object] genes: (required)
         :param bool keep_non_specific:
@@ -756,11 +741,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_dataset_expression_for_genes_with_http_info(datasets, genes, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param list[object] datasets: (required)
         :param list[object] genes: (required)
         :param bool keep_non_specific:
@@ -844,11 +828,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_dataset_expression_pca(datasets, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param list[object] datasets: (required)
         :param int component:
         :param int limit:
@@ -870,11 +853,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_dataset_expression_pca_with_http_info(datasets, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param list[object] datasets: (required)
         :param int component:
         :param int limit:
@@ -956,11 +938,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_dataset_platforms(dataset, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param Dataset5 dataset: (required)
         :return: ResponseDataObjectListArrayDesignValueObject
                  If the method is called asynchronously,
@@ -978,11 +959,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_dataset_platforms_with_http_info(dataset, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param Dataset5 dataset: (required)
         :return: ResponseDataObjectListArrayDesignValueObject
                  If the method is called asynchronously,
@@ -1051,11 +1031,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_dataset_processed_expression(dataset, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param Dataset6 dataset: (required)
         :return: str
                  If the method is called asynchronously,
@@ -1073,11 +1052,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_dataset_processed_expression_with_http_info(dataset, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param Dataset6 dataset: (required)
         :return: str
                  If the method is called asynchronously,
@@ -1146,11 +1124,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_dataset_quantitation_types(dataset, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param Dataset7 dataset: (required)
         :return: ResponseDataObjectSetQuantitationTypeValueObject
                  If the method is called asynchronously,
@@ -1168,11 +1145,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_dataset_quantitation_types_with_http_info(dataset, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param Dataset7 dataset: (required)
         :return: ResponseDataObjectSetQuantitationTypeValueObject
                  If the method is called asynchronously,
@@ -1241,11 +1217,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_dataset_raw_expression(dataset, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param Dataset8 dataset: (required)
         :param QuantitationType quantitation_type:
         :return: str
@@ -1264,11 +1239,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_dataset_raw_expression_with_http_info(dataset, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param Dataset8 dataset: (required)
         :param QuantitationType quantitation_type:
         :return: str
@@ -1340,11 +1314,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_dataset_samples(dataset, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param Dataset9 dataset: (required)
         :return: ResponseDataObjectListBioAssayValueObject
                  If the method is called asynchronously,
@@ -1362,11 +1335,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_dataset_samples_with_http_info(dataset, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param Dataset9 dataset: (required)
         :return: ResponseDataObjectListBioAssayValueObject
                  If the method is called asynchronously,
@@ -1435,11 +1407,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_dataset_svd(dataset, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param Dataset10 dataset: (required)
         :return: ResponseDataObjectSimpleSVDValueObject
                  If the method is called asynchronously,
@@ -1457,11 +1428,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_dataset_svd_with_http_info(dataset, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param Dataset10 dataset: (required)
         :return: ResponseDataObjectSimpleSVDValueObject
                  If the method is called asynchronously,
@@ -1530,7 +1500,6 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_datasets(async_req=True)
         >>> result = thread.get()
 
@@ -1556,7 +1525,6 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_datasets_with_http_info(async_req=True)
         >>> result = thread.get()
 
@@ -1638,12 +1606,14 @@ class DefaultApi(object):
         Usage statistics are aggregated across experiment tags, samples and factor values mentioned in the experimental design.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_datasets_annotations_usage_statistics(async_req=True)
         >>> result = thread.get()
 
         :param bool async_req:
         :param QueryArg query:
+
+
+
         :param FilterArgExpressionExperiment filter:
         :param list[str] exclude: List of fields to exclude from the payload. Only `parentTerms` can be excluded.
         :param int limit: Maximum number of annotations to returned; capped at 5000.
@@ -1666,7 +1636,6 @@ class DefaultApi(object):
         Usage statistics are aggregated across experiment tags, samples and factor values mentioned in the experimental design.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_datasets_annotations_usage_statistics_with_http_info(async_req=True)
         >>> result = thread.get()
 
@@ -1751,11 +1720,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_datasets_by_ids(dataset, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param list[object] dataset: (required)
         :param FilterArgExpressionExperiment filter:
         :param int offset:
@@ -1777,11 +1745,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_datasets_by_ids_with_http_info(dataset, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param list[object] dataset: (required)
         :param FilterArgExpressionExperiment filter:
         :param int offset:
@@ -1864,7 +1831,6 @@ class DefaultApi(object):
         Usage statistics are aggregated across experiment tags, samples and factor values mentioned in the experimental design.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_datasets_categories_usage_statistics(async_req=True)
         >>> result = thread.get()
 
@@ -1889,7 +1855,6 @@ class DefaultApi(object):
         Usage statistics are aggregated across experiment tags, samples and factor values mentioned in the experimental design.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_datasets_categories_usage_statistics_with_http_info(async_req=True)
         >>> result = thread.get()
 
@@ -1965,7 +1930,6 @@ class DefaultApi(object):
         Usage statistics are aggregated across experiment tags, samples and factor values mentioned in the experimental design.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_datasets_platforms_usage_statistics(async_req=True)
         >>> result = thread.get()
 
@@ -1990,7 +1954,6 @@ class DefaultApi(object):
         Usage statistics are aggregated across experiment tags, samples and factor values mentioned in the experimental design.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_datasets_platforms_usage_statistics_with_http_info(async_req=True)
         >>> result = thread.get()
 
@@ -2065,7 +2028,6 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_datasets_taxa_usage_statistics(async_req=True)
         >>> result = thread.get()
 
@@ -2088,7 +2050,6 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_datasets_taxa_usage_statistics_with_http_info(async_req=True)
         >>> result = thread.get()
 
@@ -2160,11 +2121,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_gene_go_terms(gene, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param Gene gene: (required)
         :return: ResponseDataObjectListGeneOntologyTermValueObject
                  If the method is called asynchronously,
@@ -2182,11 +2142,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_gene_go_terms_with_http_info(gene, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param Gene gene: (required)
         :return: ResponseDataObjectListGeneOntologyTermValueObject
                  If the method is called asynchronously,
@@ -2255,11 +2214,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_gene_locations(gene, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param Gene1 gene: (required)
         :return: ResponseDataObjectListPhysicalLocationValueObject
                  If the method is called asynchronously,
@@ -2277,11 +2235,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_gene_locations_with_http_info(gene, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param Gene1 gene: (required)
         :return: ResponseDataObjectListPhysicalLocationValueObject
                  If the method is called asynchronously,
@@ -2350,11 +2307,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_gene_locations_in_taxon(taxon, gene, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param Taxon3 taxon: (required)
         :param Gene3 gene: (required)
         :return: ResponseDataObjectListPhysicalLocationValueObject
@@ -2373,11 +2329,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_gene_locations_in_taxon_with_http_info(taxon, gene, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param Taxon3 taxon: (required)
         :param Gene3 gene: (required)
         :return: ResponseDataObjectListPhysicalLocationValueObject
@@ -2453,11 +2408,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_gene_probes(gene, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param Gene2 gene: (required)
         :param int offset:
         :param int limit:
@@ -2477,11 +2431,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_gene_probes_with_http_info(gene, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param Gene2 gene: (required)
         :param int offset:
         :param int limit:
@@ -2556,11 +2509,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_genes(genes, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param list[object] genes: (required)
         :return: ResponseDataObjectListGeneValueObject
                  If the method is called asynchronously,
@@ -2578,11 +2530,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_genes_with_http_info(genes, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param list[object] genes: (required)
         :return: ResponseDataObjectListGeneValueObject
                  If the method is called asynchronously,
@@ -2652,7 +2603,6 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_number_of_datasets(async_req=True)
         >>> result = thread.get()
 
@@ -2675,7 +2625,6 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_number_of_datasets_with_http_info(async_req=True)
         >>> result = thread.get()
 
@@ -2747,11 +2696,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_number_of_platforms(async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param FilterArgArrayDesign filter:
         :return: ResponseDataObjectLong
                  If the method is called asynchronously,
@@ -2769,11 +2717,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_number_of_platforms_with_http_info(async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param FilterArgArrayDesign filter:
         :return: ResponseDataObjectLong
                  If the method is called asynchronously,
@@ -2838,11 +2785,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_number_of_result_sets(async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param FilterArgExpressionAnalysisResultSet filter:
         :return: ResponseDataObjectLong
                  If the method is called asynchronously,
@@ -2860,11 +2806,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_number_of_result_sets_with_http_info(async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param FilterArgExpressionAnalysisResultSet filter:
         :return: ResponseDataObjectLong
                  If the method is called asynchronously,
@@ -2929,11 +2874,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_platform_annotations(platform, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param Platform platform: (required)
         :return: str
                  If the method is called asynchronously,
@@ -2951,11 +2895,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_platform_annotations_with_http_info(platform, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param Platform platform: (required)
         :return: str
                  If the method is called asynchronously,
@@ -3024,11 +2967,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_platform_datasets(platform, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param Platform1 platform: (required)
         :param int offset:
         :param int limit:
@@ -3048,11 +2990,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_platform_datasets_with_http_info(platform, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param Platform1 platform: (required)
         :param int offset:
         :param int limit:
@@ -3127,11 +3068,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_platform_element(platform, probes, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param Platform2 platform: (required)
         :param list[object] probes: (required)
         :param int offset:
@@ -3152,11 +3092,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_platform_element_with_http_info(platform, probes, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param Platform2 platform: (required)
         :param list[object] probes: (required)
         :param int offset:
@@ -3239,11 +3178,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_platform_element_genes(platform, probe, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param Platform3 platform: (required)
         :param Probe probe: (required)
         :param int offset:
@@ -3264,11 +3202,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_platform_element_genes_with_http_info(platform, probe, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param Platform3 platform: (required)
         :param Probe probe: (required)
         :param int offset:
@@ -3350,11 +3287,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_platform_elements(platform, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param Platform4 platform: (required)
         :param int offset:
         :param int limit:
@@ -3374,11 +3310,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_platform_elements_with_http_info(platform, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param Platform4 platform: (required)
         :param int offset:
         :param int limit:
@@ -3453,11 +3388,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_platforms(async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param FilterArgArrayDesign filter:
         :param int offset:
         :param int limit:
@@ -3478,11 +3412,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_platforms_with_http_info(async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param FilterArgArrayDesign filter:
         :param int offset:
         :param int limit:
@@ -3556,11 +3489,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_platforms_by_ids(platform, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param list[object] platform: (required)
         :param FilterArgArrayDesign filter:
         :param int offset:
@@ -3582,11 +3514,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_platforms_by_ids_with_http_info(platform, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param list[object] platform: (required)
         :param FilterArgArrayDesign filter:
         :param int offset:
@@ -3668,11 +3599,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_result_set(result_set, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param int result_set: (required)
         :return: ResponseDataObjectDifferentialExpressionAnalysisResultSetValueObject
                  If the method is called asynchronously,
@@ -3690,11 +3620,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_result_set_with_http_info(result_set, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param int result_set: (required)
         :return: ResponseDataObjectDifferentialExpressionAnalysisResultSetValueObject
                  If the method is called asynchronously,
@@ -3763,11 +3692,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_result_set_as_tsv(result_set_, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param int result_set_: (required)
         :return: str
                  If the method is called asynchronously,
@@ -3785,11 +3713,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_result_set_as_tsv_with_http_info(result_set_, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param int result_set_: (required)
         :return: str
                  If the method is called asynchronously,
@@ -3858,11 +3785,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_result_sets(async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param list[object] datasets:
         :param list[object] database_entries:
         :param FilterArgExpressionAnalysisResultSet filter:
@@ -3885,11 +3811,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_result_sets_with_http_info(async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param list[object] datasets:
         :param list[object] database_entries:
         :param FilterArgExpressionAnalysisResultSet filter:
@@ -3971,11 +3896,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_taxa(async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :return: ResponseDataObjectListTaxonValueObject
                  If the method is called asynchronously,
                  returns the request thread.
@@ -3992,11 +3916,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_taxa_with_http_info(async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :return: ResponseDataObjectListTaxonValueObject
                  If the method is called asynchronously,
                  returns the request thread.
@@ -4058,11 +3981,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_taxa_by_ids(taxa, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param list[object] taxa: (required)
         :return: ResponseDataObjectListTaxonValueObject
                  If the method is called asynchronously,
@@ -4080,11 +4002,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_taxa_by_ids_with_http_info(taxa, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param list[object] taxa: (required)
         :return: ResponseDataObjectListTaxonValueObject
                  If the method is called asynchronously,
@@ -4154,11 +4075,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_taxon_datasets(taxon, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param Taxon4 taxon: (required)
         :param FilterArgExpressionExperiment filter:
         :param int offset:
@@ -4180,11 +4100,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_taxon_datasets_with_http_info(taxon, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param Taxon4 taxon: (required)
         :param FilterArgExpressionExperiment filter:
         :param int offset:
@@ -4265,11 +4184,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_taxon_genes(taxon, gene, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param Taxon5 taxon: (required)
         :param Gene4 gene: (required)
         :return: ResponseDataObjectListGeneValueObject
@@ -4288,11 +4206,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_taxon_genes_with_http_info(taxon, gene, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param Taxon5 taxon: (required)
         :param Gene4 gene: (required)
         :return: ResponseDataObjectListGeneValueObject
@@ -4368,11 +4285,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_taxon_genes_overlapping_chromosome(taxon, chromosome, start, size, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param Taxon6 taxon: (required)
         :param str chromosome: (required)
         :param int start: (required)
@@ -4394,11 +4310,10 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.get_taxon_genes_overlapping_chromosome_with_http_info(taxon, chromosome, start, size, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param Taxon6 taxon: (required)
         :param str chromosome: (required)
         :param int start: (required)
@@ -4491,7 +4406,6 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.search(async_req=True)
         >>> result = thread.get()
 
@@ -4518,7 +4432,6 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.search_with_http_info(async_req=True)
         >>> result = thread.get()
 
@@ -4604,7 +4517,6 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.search_annotations(async_req=True)
         >>> result = thread.get()
 
@@ -4626,7 +4538,6 @@ class DefaultApi(object):
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.search_annotations_with_http_info(async_req=True)
         >>> result = thread.get()
 
@@ -4697,7 +4608,6 @@ class DefaultApi(object):
         This is deprecated in favour of passing `query` as a query parameter.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.search_annotations_by_path_query(query, async_req=True)
         >>> result = thread.get()
 
@@ -4720,7 +4630,6 @@ class DefaultApi(object):
         This is deprecated in favour of passing `query` as a query parameter.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.search_annotations_by_path_query_with_http_info(query, async_req=True)
         >>> result = thread.get()
 
@@ -4795,9 +4704,9 @@ class DefaultApi(object):
         This is deprecated in favour of the [/datasets](#/default/getDatasets) endpoint. Use the `AND` operator to intersect the results of multiple queries.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.search_datasets(async_req=True)
         >>> result = thread.get()
+
 
         :param bool async_req:
         :param list[str] query: A comma-delimited list of keywords to find annotations. Matching datasets for each query are intersected.
@@ -4822,7 +4731,6 @@ class DefaultApi(object):
         This is deprecated in favour of the [/datasets](#/default/getDatasets) endpoint. Use the `AND` operator to intersect the results of multiple queries.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.search_datasets_with_http_info(async_req=True)
         >>> result = thread.get()
 
@@ -4905,7 +4813,6 @@ class DefaultApi(object):
         This is deprecated in favour of passing `query` as a query parameter.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.search_datasets_by_query_in_path(query, async_req=True)
         >>> result = thread.get()
 
@@ -4932,7 +4839,6 @@ class DefaultApi(object):
         This is deprecated in favour of passing `query` as a query parameter.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.search_datasets_by_query_in_path_with_http_info(query, async_req=True)
         >>> result = thread.get()
 
@@ -5019,11 +4925,10 @@ class DefaultApi(object):
         This is deprecated in favour of the [/datasets](#/default/getDatasets) endpoint with a `query` parameter and a `filter` parameter with `taxon.id = {taxon} or taxon.commonName = {taxon} or taxon.scientificName = {taxon}` to restrict the taxon instead.  Use the `AND` operator to intersect the results of multiple queries.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.search_taxon_datasets(taxon, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param Taxon taxon: (required)
         :param list[str] query: A comma-delimited list of keywords to find annotations. Matching datasets for each query are intersected.
         :param FilterArgExpressionExperiment filter:
@@ -5047,11 +4952,10 @@ class DefaultApi(object):
         This is deprecated in favour of the [/datasets](#/default/getDatasets) endpoint with a `query` parameter and a `filter` parameter with `taxon.id = {taxon} or taxon.commonName = {taxon} or taxon.scientificName = {taxon}` to restrict the taxon instead.  Use the `AND` operator to intersect the results of multiple queries.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.search_taxon_datasets_with_http_info(taxon, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param Taxon taxon: (required)
         :param list[str] query: A comma-delimited list of keywords to find annotations. Matching datasets for each query are intersected.
         :param FilterArgExpressionExperiment filter:
@@ -5137,11 +5041,10 @@ class DefaultApi(object):
         This is deprecated in favour of passing `query` as a query parameter.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.search_taxon_datasets_by_query_in_path(taxon, query, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param Taxon1 taxon: (required)
         :param list[str] query: A comma-delimited list of keywords to find annotations. Matching datasets for each query are intersected. (required)
         :param FilterArgExpressionExperiment filter:
@@ -5165,11 +5068,10 @@ class DefaultApi(object):
         This is deprecated in favour of passing `query` as a query parameter.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-
         >>> thread = api.search_taxon_datasets_by_query_in_path_with_http_info(taxon, query, async_req=True)
         >>> result = thread.get()
 
-        :param bool async_req:
+        :param async_req bool
         :param Taxon1 taxon: (required)
         :param list[str] query: A comma-delimited list of keywords to find annotations. Matching datasets for each query are intersected. (required)
         :param FilterArgExpressionExperiment filter:

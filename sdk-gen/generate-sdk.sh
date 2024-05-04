@@ -1,3 +1,4 @@
+#!/bin/sh
 swagger_version=3.0.55
 gemmapy_version=0.0.2
 temp_sdk_dir=$(mktemp -d)
@@ -10,3 +11,4 @@ curl "https://repo1.maven.org/maven2/io/swagger/codegen/v3/swagger-codegen-cli/$
 echo "SDK will be generated in $temp_sdk_dir..."
 java -jar swagger-codegen-cli.jar generate -i "$script_dir/openapi.yaml" -l python -t "$script_dir/templ" -DpackageName=gemmapy.sdk -o "$temp_sdk_dir" --http-user-agent "gemmapy/$gemmapy_version"
 rsync -av --delete "$temp_sdk_dir/gemmapy/sdk/" "$script_dir/../gemmapy/sdk/"
+
