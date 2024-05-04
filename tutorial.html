@@ -1,19 +1,16 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="./">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Accessing curated gene expression data with GemmaPy &#8212; GemmaPy 0.0.1 documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="_static/doctools.js"></script>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=fcb5b4b3" />
+    <script src="_static/documentation_options.js?v=d45e8c67"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="API Reference" href="api.html" />
@@ -21,8 +18,9 @@
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
+
   
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+  
 
   </head><body>
   
@@ -35,9 +33,9 @@
           <div class="body" role="main">
             
   <section id="accessing-curated-gene-expression-data-with-gemmapy">
-<h1>Accessing curated gene expression data with GemmaPy<a class="headerlink" href="#accessing-curated-gene-expression-data-with-gemmapy" title="Permalink to this heading">¶</a></h1>
+<h1>Accessing curated gene expression data with GemmaPy<a class="headerlink" href="#accessing-curated-gene-expression-data-with-gemmapy" title="Link to this heading">¶</a></h1>
 <section id="about-gemma">
-<h2>About Gemma<a class="headerlink" href="#about-gemma" title="Permalink to this heading">¶</a></h2>
+<h2>About Gemma<a class="headerlink" href="#about-gemma" title="Link to this heading">¶</a></h2>
 <p><a class="reference external" href="https://gemma.msl.ubc.ca/">Gemma</a> is a web site, database and a set
 of tools for the meta-analysis, re-use and sharing of genomics data,
 currently primarily targeted at the analysis of gene expression
@@ -50,137 +48,305 @@ cross-platform comparisons and meta-analyses.</p>
 <a class="reference external" href="https://academic.oup.com/database/article/doi/10.1093/database/baab006/6143045">publication</a>.</p>
 </section>
 <section id="installation-instructions">
-<h2>Installation instructions<a class="headerlink" href="#installation-instructions" title="Permalink to this heading">¶</a></h2>
+<h2>Installation instructions<a class="headerlink" href="#installation-instructions" title="Link to this heading">¶</a></h2>
 <p>The package requires Python3.6+.</p>
 <ol class="arabic">
 <li><p>Install it from a local copy</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone git@github.com:PavlidisLab/gemmapy.git
-<span class="nb">cd</span> gemmapy
-pip install .
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>git@github.com:PavlidisLab/gemmapy.git
+<span class="nb">cd</span><span class="w"> </span>gemmapy
+pip<span class="w"> </span>install<span class="w"> </span>.
 </pre></div>
 </div>
 </li>
 <li><p>Install it from PyPI</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install gemmapy
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>gemmapy
 </pre></div>
 </div>
 </li>
 </ol>
 </section>
 <section id="additional-packages">
-<h2>Additional packages<a class="headerlink" href="#additional-packages" title="Permalink to this heading">¶</a></h2>
+<h2>Additional packages<a class="headerlink" href="#additional-packages" title="Link to this heading">¶</a></h2>
 <p>For the purpose of making plots in this tutorial the following packages should be installed
-and imported: <code class="code docutils literal notranslate"><span class="pre">matplotlib</span></code>, <code class="code docutils literal notranslate"><span class="pre">plotnine</span></code>.</p>
+and imported: <code class="code docutils literal notranslate"><span class="pre">matplotlib</span></code>, <code class="code docutils literal notranslate"><span class="pre">plotnine</span></code>, <code class="code docutils literal notranslate"><span class="pre">pandas</span></code>, <code class="code docutils literal notranslate"><span class="pre">seaborn</span></code>, <code class="code docutils literal notranslate"><span class="pre">statsmodels</span></code>.</p>
 </section>
-<section id="downloading-expression-data">
-<h2>Downloading expression data<a class="headerlink" href="#downloading-expression-data" title="Permalink to this heading">¶</a></h2>
-<p>The main goal of this wrapper is to enable easy access to Gemma’s curated
-datasets for downstream analyses or meta-analyses combining multiple
-datasets.  In this example, we want to find datasets that are associated
-with bipolar disorder, and we are only interested in human data.  In
-addition, we will subset our results to datasets that have been batch
-corrected.</p>
+<section id="searching-for-datasets-of-interest-in-gemma">
+<h2>Searching for datasets of interest in Gemma<a class="headerlink" href="#searching-for-datasets-of-interest-in-gemma" title="Link to this heading">¶</a></h2>
+<p>Using the <a class="reference internal" href="api.html#gemmapy.GemmaPy.get_datasets" title="gemmapy.GemmaPy.get_datasets"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_datasets()</span></code></a> function, datasets fitting various criteria can be accessed.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">gemmapy</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">api_instance</span> <span class="o">=</span> <span class="n">gemmapy</span><span class="o">.</span><span class="n">GemmaPy</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">api_response</span> <span class="o">=</span> <span class="n">api_instance</span><span class="o">.</span><span class="n">search_datasets</span><span class="p">([</span><span class="s2">&quot;bipolar&quot;</span><span class="p">],</span> <span class="n">taxon</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">api_response</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># view the object structure</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">api_response</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
-<span class="gp">... </span>  <span class="k">if</span> <span class="n">d</span><span class="o">.</span><span class="n">geeq</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span>  <span class="n">d</span><span class="o">.</span><span class="n">geeq</span><span class="o">.</span><span class="n">batch_corrected</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">short_name</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">bio_assay_count</span><span class="p">)</span>
-<span class="gp">...</span>
-<span class="go">GSE35974 Expression data from the human cerebellum brain 144</span>
-<span class="go">GSE46416 State- and trait-specific gene expression in euthymia and mania 32</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">api</span> <span class="o">=</span> <span class="n">gemmapy</span><span class="o">.</span><span class="n">GemmaPy</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># accessing all mouse and human datasets</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">api</span><span class="o">.</span><span class="n">get_datasets</span><span class="p">(</span><span class="n">taxa</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;mouse&#39;</span><span class="p">,</span><span class="s1">&#39;human&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<span class="go">  experiment_short_name  ... taxon_database_ID</span>
+<span class="go">0               GSE2018  ...                87</span>
+<span class="go">1               GSE4523  ...                81</span>
+<span class="go">2               GSE4036  ...                87</span>
+<span class="go">3               GSE4034  ...                81</span>
+<span class="go">4               GSE2866  ...                81</span>
+<span class="go">[5 rows x 23 columns]</span>
 </pre></div>
 </div>
-<p>We are left with two datasets. For simplicity, we’ll pick
-<a class="reference external" href="https://gemma.msl.ubc.ca/expressionExperiment/showExpressionExperiment.html?id=8997">GSE46416</a>
-since it has the smaller number of samples. Now that we have the ID
-for our experiment, we can fetch the data associated with it.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">api_response</span> <span class="o">=</span> <span class="n">api_instance</span><span class="o">.</span><span class="n">get_datasets_by_ids</span><span class="p">([</span><span class="s2">&quot;GSE46416&quot;</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">api_response</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
-<span class="gp">... </span>  <span class="nb">print</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">short_name</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
-<span class="gp">...</span>
-<span class="go">GSE46416 State- and trait-specific gene expression in euthymia and mania 8997</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">description</span><span class="p">)</span>
-<span class="go">Gene expression profiles of bipolar disorder (BD) patients were assessed during both a manic and a euthymic phase and compared both intra-individually, and with the gene expression profiles of controls.</span>
-<span class="go">Last Updated (by provider): Sep 05 2014</span>
-<span class="go">Contributors:  Christian C Witt Benedikt Brors Dilafruz Juraeva Jens Treutlein Carsten Sticht Stephanie H Witt Jana Strohmaier Helene Dukal Josef Frank Franziska Degenhardt Markus M Nöthen Sven Cichon Maren Lang Marcella Rietschel Sandra Meier Manuel Mattheisen</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># accessing human datasets with the word &quot;bipolar&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">api</span><span class="o">.</span><span class="n">get_datasets</span><span class="p">(</span><span class="n">query</span> <span class="o">=</span> <span class="s1">&#39;bipolar&#39;</span><span class="p">,</span> <span class="n">taxa</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;human&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<span class="go">  experiment_short_name  ... taxon_database_ID</span>
+<span class="go">0             GSE157509  ...                87</span>
+<span class="go">1              GSE66196  ...                87</span>
+<span class="go">2             GSE210064  ...                87</span>
+<span class="go">3              GSE23848  ...                87</span>
+<span class="go">4    McLean Hippocampus  ...                87</span>
+<span class="go">[5 rows x 23 columns]</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># accessing human datasets that were annotated with the ontology term for</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># the bipolar disorder. use search_annotations function to search for available</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># annotation terms</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">api</span><span class="o">.</span><span class="n">get_datasets</span><span class="p">(</span><span class="n">taxa</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;human&#39;</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="n">uris</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;http://purl.obolibrary.org/obo/MONDO_0004985&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<span class="go">  experiment_short_name  ... taxon_database_ID</span>
+<span class="go">0               GSE5389  ...                87</span>
+<span class="go">1               GSE5388  ...                87</span>
+<span class="go">2               GSE7036  ...                87</span>
+<span class="go">3    McLean Hippocampus  ...                87</span>
+<span class="go">4            McLean_PFC  ...                87</span>
+<span class="go">[5 rows x 23 columns]</span>
+</pre></div>
+</div>
+<p>get_dataset function also includes a filter parameter that allows filtering for
+datasets with specific properties in a more structured manner. A list of the
+available properties can be accessed using <a class="reference internal" href="api.html#gemmapy.GemmaPy.filter_properties" title="gemmapy.GemmaPy.filter_properties"><code class="xref py py-func docutils literal notranslate"><span class="pre">filter_properties()</span></code></a>.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">api</span><span class="o">.</span><span class="n">filter_properties</span><span class="p">()[</span><span class="s1">&#39;dataset&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<span class="go">                                     name     type description</span>
+<span class="go">0                     accession.accession   string         NaN</span>
+<span class="go">1              accession.accessionVersion   string         NaN</span>
+<span class="go">2       accession.externalDatabase.ftpUri   string         NaN</span>
+<span class="go">3           accession.externalDatabase.id  integer         NaN</span>
+<span class="go">4  accession.externalDatabase.lastUpdated   string         NaN</span>
+</pre></div>
+</div>
+<p>These properties can be used together to fine tune your results</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># access human datasets that has bipolar disorder as an experimental factor</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">api</span><span class="o">.</span><span class="n">get_datasets</span><span class="p">(</span><span class="n">taxa</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;human&quot;</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="nb">filter</span> <span class="o">=</span> <span class="s2">&quot;experimentalDesign.experimentalFactors.factorValues.characteristics.valueUri = http://purl.obolibrary.org/obo/MONDO_0004985&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<span class="go">  experiment_short_name  ... taxon_database_ID</span>
+<span class="go">0               GSE5389  ...                87</span>
+<span class="go">1               GSE5388  ...                87</span>
+<span class="go">2               GSE7036  ...                87</span>
+<span class="go">3            McLean_PFC  ...                87</span>
+<span class="go">4      stanley_feinberg  ...                87</span>
+<span class="go">[5 rows x 23 columns]</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># all datasets with more than 4 samples annotated for any disease</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">api</span><span class="o">.</span><span class="n">get_datasets</span><span class="p">(</span><span class="nb">filter</span> <span class="o">=</span> <span class="s2">&quot;bioAssayCount &gt; 4 and allCharacteristics.category = disease&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<span class="go">  experiment_short_name  ... taxon_database_ID</span>
+<span class="go">0               GSE2018  ...                87</span>
+<span class="go">1               GSE4036  ...                87</span>
+<span class="go">2               GSE2866  ...                81</span>
+<span class="go">3               GSE2426  ...                81</span>
+<span class="go">4               GSE2867  ...                81</span>
+<span class="go">[5 rows x 23 columns]</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># all datasets with ontology terms for Alzheimer&#39;s disease and Parkinson&#39;s disease</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># this is equivalent to using the uris parameter</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">api</span><span class="o">.</span><span class="n">get_datasets</span><span class="p">(</span><span class="nb">filter</span> <span class="o">=</span> <span class="s1">&#39;allCharacteristics.valueUri in (http://purl.obolibrary.org/obo/MONDO_0004975,http://purl.obolibrary.org/obo/MONDO_0005180)&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<span class="go">  experiment_short_name  ... taxon_database_ID</span>
+<span class="go">0               GSE1837  ...                86</span>
+<span class="go">1                 GSE30  ...                81</span>
+<span class="go">2               GSE4788  ...                81</span>
+<span class="go">3               GSE1157  ...                86</span>
+<span class="go">4               GSE1555  ...                81</span>
+<span class="go">[5 rows x 23 columns]</span>
+</pre></div>
+</div>
+<p>Note that a single call of these functions will only return 20 results by default
+and a 100 results maximum, controlled by the limit argument. In order to get all
+available results, use <a class="reference internal" href="api.html#gemmapy.GemmaPy.get_all_pages" title="gemmapy.GemmaPy.get_all_pages"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_all_pages()</span></code></a></p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">api</span><span class="o">.</span><span class="n">get_all_pages</span><span class="p">(</span><span class="n">api</span><span class="o">.</span><span class="n">get_datasets</span><span class="p">,</span><span class="n">taxa</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;human&#39;</span><span class="p">])</span>
+<span class="go">     experiment_short_name  ... taxon_database_ID</span>
+<span class="go">0                  GSE2018  ...                87</span>
+<span class="go">1                  GSE4036  ...                87</span>
+<span class="go">2                  GSE3489  ...                87</span>
+<span class="go">3                  GSE1923  ...                87</span>
+<span class="go">4                   GSE361  ...                87</span>
+<span class="go">                   ...  ...               ...</span>
+<span class="go">7697              GSE72747  ...                87</span>
+<span class="go">7698                GSE976  ...                87</span>
+<span class="go">7699              GSE78083  ...                87</span>
+<span class="go">7700            GSE11142.2  ...                87</span>
+<span class="go">7701             GSE2489.2  ...                87</span>
+<span class="go">[7702 rows x 23 columns]</span>
+</pre></div>
+</div>
+<p>See <a class="reference internal" href="#larger-queries">Larger queries</a> section for more details. To keep this vignette simpler we will
+keep using the first 20 results returned by default in examples below.</p>
+<p>Dataset information provided by get_datasets also includes some quality
+information that can be used to determine the suitability of any given
+experiment. For instance experiment.batchEffect column will be set to -1 if
+Gemma’s preprocessing has detected batch effects that were unable to be resolved
+by batch correction. More information about these and other fields can be found
+at the function documentation.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">get_datasets</span><span class="p">(</span><span class="n">taxa</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;human&#39;</span><span class="p">],</span><span class="nb">filter</span> <span class="o">=</span> <span class="s1">&#39;bioAssayCount &gt; 4&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">experiment_batch_effect</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Gemma uses multiple ontologies when annotating datasets and using the term URIs
+instead of free text to search can lead to more specific results.
+<a class="reference internal" href="api.html#gemmapy.GemmaPy.search_annotations" title="gemmapy.GemmaPy.search_annotations"><code class="xref py py-func docutils literal notranslate"><span class="pre">search_annotations()</span></code></a> function allows searching for
+annotation terms that might be relevant to your query.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">api</span><span class="o">.</span><span class="n">search_annotations</span><span class="p">([</span><span class="s1">&#39;bipolar&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<span class="go">   category_name  ...                                     value_URI</span>
+<span class="go">0            NaN  ...          http://www.ebi.ac.uk/efo/EFO_0009963</span>
+<span class="go">1            NaN  ...          http://www.ebi.ac.uk/efo/EFO_0009964</span>
+<span class="go">2            NaN  ...  http://purl.obolibrary.org/obo/MONDO_0004985</span>
+<span class="go">3            NaN  ...     http://purl.obolibrary.org/obo/HP_0007302</span>
+<span class="go">4            NaN  ...    http://purl.obolibrary.org/obo/NBO_0000258</span>
+<span class="go">[5 rows x 4 columns]</span>
+</pre></div>
+</div>
+</section>
+<section id="downloading-expression-data">
+<h2>Downloading expression data<a class="headerlink" href="#downloading-expression-data" title="Link to this heading">¶</a></h2>
+<p>Upon identifying datasets of interest, more information about specific ones can
+be requested. In this example we will be using GSE46416 which includes samples
+taken from healthy donors along with manic/euthymic phase bipolar disorder
+patients.</p>
+<p>The data associated with specific experiments can be accessed by using
+<a class="reference internal" href="api.html#gemmapy.GemmaPy.get_datasets_by_ids" title="gemmapy.GemmaPy.get_datasets_by_ids"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_datasets_by_ids()</span></code></a>.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">get_datasets_by_ids</span><span class="p">([</span><span class="s1">&#39;GSE46416&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="go">  experiment_short_name  ... taxon_database_ID</span>
+<span class="go">0              GSE46416  ...                87</span>
+<span class="go">[1 rows x 23 columns]</span>
 </pre></div>
 </div>
 <p>To access the expression data in a convenient form, you can use
 <a class="reference internal" href="api.html#gemmapy.GemmaPy.get_dataset_object" title="gemmapy.GemmaPy.get_dataset_object"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_dataset_object()</span></code></a>. It is a high-level wrapper
-that combines various endpoint calls to return an <a class="reference external" href="https://anndata.readthedocs.io/">anndata</a> (Annotated Data) object of the
-queried dataset for downstream analyses. They include the expression
-matrix along with the experimental design, and ensure the sample names
-match between both when transforming/subsetting data.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">adata</span> <span class="o">=</span> <span class="n">api_instance</span><span class="o">.</span><span class="n">get_dataset_object</span><span class="p">(</span><span class="s2">&quot;GSE46416&quot;</span><span class="p">)</span>
+that combines various endpoint calls to return <a class="reference external" href="https://anndata.readthedocs.io/">anndata</a> (Annotated Data) objects or dictionaries.
+These include the expression matrix along with the experimental design, and
+ensure the sample names match between both when transforming/subsetting data.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">adata</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">get_dataset_object</span><span class="p">([</span><span class="s2">&quot;GSE46416&quot;</span><span class="p">])[</span><span class="s1">&#39;8997&#39;</span><span class="p">]</span>  <span class="c1"># keys of the output uses Gemma IDs</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">adata</span><span class="p">)</span>
-<span class="go">AnnData object with n_obs × n_vars = 21986 × 32</span>
-<span class="go">    obs: &#39;GeneSymbol&#39;, &#39;GeneName&#39;, &#39;NCBIid&#39;</span>
-<span class="go">    var: &#39;batch&#39;, &#39;disease&#39;</span>
-<span class="go">    uns: &#39;title&#39;, &#39;abstract&#39;, &#39;url&#39;, &#39;database&#39;, &#39;accession&#39;, &#39;GemmaQualityScore&#39;, &#39;GemmaSuitabilityScore&#39;, &#39;taxon&#39;</span>
+<span class="go">AnnData object with n_obs × n_vars = 18758 × 32</span>
+<span class="go">    obs: &#39;GeneSymbol&#39;, &#39;NCBIid&#39;</span>
+<span class="go">    var: &#39;factor_values&#39;, &#39;disease&#39;, &#39;block&#39;</span>
+<span class="go">    uns: &#39;title&#39;, &#39;abstract&#39;, &#39;url&#39;, &#39;database&#39;, &#39;accesion&#39;, &#39;GemmaQualityScore&#39;, &#39;GemmaSuitabilityScore&#39;, &#39;taxon&#39;</span>
 </pre></div>
 </div>
-<p>To show how subsetting works, we’ll keep the manic phase data and the
+<p>To show how subsetting works, we’ll keep the “manic phase” data and the
 <code class="code docutils literal notranslate"><span class="pre">reference_subject_role</span></code>s, which refers to the control samples in Gemma
 datasets.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Check the levels of the disease factor</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">adata</span><span class="o">.</span><span class="n">var</span><span class="p">[</span><span class="s1">&#39;disease&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
-<span class="go">array([&#39;reference_subject_role&#39;, &#39;euthymic_phase_|_Bipolar_Disorder_|&#39;,</span>
-<span class="go">       &#39;bipolar_disorder_|_manic_phase_|&#39;], dtype=object)</span>
+<span class="go">array([&#39;bipolar disorder has_modifier euthymic phase&#39;,</span>
+<span class="go">       &#39;reference subject role&#39;,</span>
+<span class="go">       &#39;bipolar disorder has_modifier manic phase&#39;], dtype=object)</span>
 </pre></div>
 </div>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Subset patients during manic phase and controls</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">manic</span><span class="o">=</span><span class="n">adata</span><span class="p">[:,(</span><span class="n">adata</span><span class="o">.</span><span class="n">var</span><span class="p">[</span><span class="s1">&#39;disease&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;reference_subject_role&#39;</span><span class="p">)</span> <span class="o">|</span>
-<span class="gp">... </span>              <span class="p">(</span><span class="n">adata</span><span class="o">.</span><span class="n">var</span><span class="p">[</span><span class="s1">&#39;disease&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;bipolar_disorder_|_manic_phase_|&#39;</span><span class="p">)]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">manic</span><span class="p">)</span>
-<span class="go">AnnData object with n_obs × n_vars = 21986 × 21</span>
-<span class="go">    obs: &#39;GeneSymbol&#39;, &#39;GeneName&#39;, &#39;NCBIid&#39;</span>
-<span class="go">    var: &#39;batch&#39;, &#39;disease&#39;</span>
-<span class="go">    uns: &#39;title&#39;, &#39;abstract&#39;, &#39;url&#39;, &#39;database&#39;, &#39;accession&#39;, &#39;GemmaQualityScore&#39;, &#39;GemmaSuitabilityScore&#39;, &#39;taxon&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">manic</span><span class="o">.</span><span class="n">var</span><span class="p">)</span>
-<span class="go">                                                 batch                           disease</span>
-<span class="go">Control,1_DE50                       Batch_05_24/11/10            reference_subject_role</span>
-<span class="go">Control,12                           Batch_02_26/11/09            reference_subject_role</span>
-<span class="go">Control,9                            Batch_01_25/11/09            reference_subject_role</span>
-<span class="go">Bipolardisorderpatientmanicphase,5   Batch_05_24/11/10  bipolar_disorder_|_manic_phase_|</span>
-<span class="go">Control,15                           Batch_02_26/11/09            reference_subject_role</span>
-<span class="go">Bipolardisorderpatientmanicphase,31  Batch_04_02/12/09  bipolar_disorder_|_manic_phase_|</span>
-<span class="go">Bipolardisorderpatientmanicphase,29  Batch_03_27/11/09  bipolar_disorder_|_manic_phase_|</span>
-<span class="go">Bipolardisorderpatientmanicphase,35  Batch_04_02/12/09  bipolar_disorder_|_manic_phase_|</span>
-<span class="go">Bipolardisorderpatientmanicphase,18  Batch_02_26/11/09  bipolar_disorder_|_manic_phase_|</span>
-<span class="go">Control,8                            Batch_01_25/11/09            reference_subject_role</span>
-<span class="go">Control,3                            Batch_05_24/11/10            reference_subject_role</span>
-<span class="go">Control,2_DE23                       Batch_05_24/11/10            reference_subject_role</span>
-<span class="go">Control,2_DE40                       Batch_01_25/11/09            reference_subject_role</span>
-<span class="go">Bipolardisorderpatientmanicphase,33  Batch_04_02/12/09  bipolar_disorder_|_manic_phase_|</span>
-<span class="go">Control,4                            Batch_05_24/11/10            reference_subject_role</span>
-<span class="go">Control,1_DE62                       Batch_01_25/11/09            reference_subject_role</span>
-<span class="go">Bipolardisorderpatientmanicphase,10  Batch_01_25/11/09  bipolar_disorder_|_manic_phase_|</span>
-<span class="go">Bipolardisorderpatientmanicphase,37  Batch_04_02/12/09  bipolar_disorder_|_manic_phase_|</span>
-<span class="go">Bipolardisorderpatientmanicphase,23  Batch_03_27/11/09  bipolar_disorder_|_manic_phase_|</span>
-<span class="go">Bipolardisorderpatientmanicphase,16  Batch_02_26/11/09  bipolar_disorder_|_manic_phase_|</span>
-<span class="go">Bipolardisorderpatientmanicphase,21  Batch_03_27/11/09  bipolar_disorder_|_manic_phase_|</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">manic</span><span class="o">=</span><span class="n">adata</span><span class="p">[:,(</span><span class="n">adata</span><span class="o">.</span><span class="n">var</span><span class="p">[</span><span class="s1">&#39;disease&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;reference subject role&#39;</span><span class="p">)</span> <span class="o">|</span>
+<span class="gp">... </span>              <span class="p">(</span><span class="n">adata</span><span class="o">.</span><span class="n">var</span><span class="p">[</span><span class="s1">&#39;disease&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;bipolar disorder has_modifier manic phase&#39;</span><span class="p">)]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">manic</span>
+<span class="go">AnnData object with n_obs × n_vars = 18758 × 21</span>
+<span class="go">    obs: &#39;GeneSymbol&#39;, &#39;NCBIid&#39;</span>
+<span class="go">    var: &#39;factor_values&#39;, &#39;disease&#39;, &#39;block&#39;</span>
+<span class="go">    uns: &#39;title&#39;, &#39;abstract&#39;, &#39;url&#39;, &#39;database&#39;, &#39;accesion&#39;, &#39;GemmaQualityScore&#39;, &#39;GemmaSuitabilityScore&#39;, &#39;taxon&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">manic</span><span class="o">.</span><span class="n">var</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<span class="go">                                                                              factor_values  ...              block</span>
+<span class="go">Control, 15                                 category  ...                   factor_categ...  ...  Batch_02_26/11/09</span>
+<span class="go">Control, 8                                  category  ...                   factor_categ...  ...  Batch_01_25/11/09</span>
+<span class="go">Bipolar disorder patient manic phase, 21    category  ...                   factor_categ...  ...  Batch_03_27/11/09</span>
+<span class="go">Bipolar disorder patient manic phase, 18    category  ...                   factor_categ...  ...  Batch_02_26/11/09</span>
+<span class="go">Bipolar disorder patient manic phase, 29    category  ...                   factor_categ...  ...  Batch_03_27/11/09</span>
+<span class="go">[5 rows x 3 columns]</span>
 </pre></div>
 </div>
-<p>Let’s check the expression for every sample to make sure they look OK:</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Plot Expression matrix</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">manic</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="n">sym</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">([])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Samples&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Expression&#39;</span><span class="p">)</span>
+<p>Let’s take a look at sample to sample correlation in our subset.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># get expression data frame</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">manic</span><span class="o">.</span><span class="n">X</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">manic</span><span class="o">.</span><span class="n">var</span><span class="o">.</span><span class="n">index</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">corrs</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">corr</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">clustermap</span><span class="p">(</span><span class="n">corrs</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;ded.png&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="_images/ded.png"><img alt="_images/ded.png" class="align-left" src="_images/ded.png" style="width: 100%;" /></a>
-<p>Gene expression distributions of bipolar patients during manic phase and controls.</p>
-<p>You can also use <a class="reference internal" href="api.html#gemmapy.GemmaPy.get_dataset_expression" title="gemmapy.GemmaPy.get_dataset_expression"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_dataset_expression()</span></code></a> to only get the expression
-matrix, and <a class="reference internal" href="api.html#gemmapy.GemmaPy.get_dataset_design" title="gemmapy.GemmaPy.get_dataset_design"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_dataset_design()</span></code></a> to get the experimental design matrix.</p>
+<p>Sample to sample correlations of bipolar patients during manic phase and controls.</p>
+<p>You can also use <a class="reference internal" href="api.html#gemmapy.GemmaPy.get_dataset_processed_expression" title="gemmapy.GemmaPy.get_dataset_processed_expression"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_dataset_processed_expression()</span></code></a> to only get the expression
+matrix, and <a class="reference internal" href="api.html#gemmapy.GemmaPy.get_dataset_samples" title="gemmapy.GemmaPy.get_dataset_samples"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_dataset_samples()</span></code></a> to get the metadata
+information. The output of this function includes some additional details about
+a sample such as the original accession ID or whether or not it was determined
+to be an outlier but it can be simplified to match the design table included in
+the output of get_dataset_object by using <a class="reference internal" href="api.html#gemmapy.GemmaPy.make_design" title="gemmapy.GemmaPy.make_design"><code class="xref py py-func docutils literal notranslate"><span class="pre">make_design()</span></code></a> on the output.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">api</span><span class="o">.</span><span class="n">make_design</span><span class="p">(</span><span class="n">api</span><span class="o">.</span><span class="n">get_dataset_samples</span><span class="p">(</span><span class="s1">&#39;GSE46416&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="s2">&quot;factor_values&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<span class="go">                                                                                  disease              block</span>
+<span class="go">sample_name</span>
+<span class="go">Bipolar disorder patient euthymic phase, 17  bipolar disorder has_modifier euthymic phase  Batch_02_26/11/09</span>
+<span class="go">Bipolar disorder patient euthymic phase, 34  bipolar disorder has_modifier euthymic phase  Batch_04_02/12/09</span>
+<span class="go">Control, 15                                                        reference subject role  Batch_02_26/11/09</span>
+<span class="go">Bipolar disorder patient euthymic phase, 32  bipolar disorder has_modifier euthymic phase  Batch_04_02/12/09</span>
+<span class="go">Control, 8                                                         reference subject role  Batch_01_25/11/09</span>
+</pre></div>
+</div>
+</section>
+<section id="platform-annotations">
+<h2>Platform Annotations<a class="headerlink" href="#platform-annotations" title="Link to this heading">¶</a></h2>
+<p>Expression data in Gemma comes with annotations for the gene each
+expression profile corresponds to. Using the
+<a class="reference internal" href="api.html#gemmapy.GemmaPy.get_platform_annotations" title="gemmapy.GemmaPy.get_platform_annotations"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_platform_annotations()</span></code></a> function, these
+annotations can be retrieved independently of the expression data,
+along with additional annotations such as Gene Ontology terms.</p>
+<p>Examples:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">api</span><span class="o">.</span><span class="n">get_platform_annotations</span><span class="p">(</span><span class="s1">&#39;GPL96&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<span class="go">     ProbeName    GeneSymbols  ...       GemmaIDs     NCBIids</span>
+<span class="go">0  211750_x_at  TUBA1C|TUBA1A  ...  360802|172797  84790|7846</span>
+<span class="go">1    216678_at            NaN  ...            NaN         NaN</span>
+<span class="go">2    216345_at         ZSWIM8  ...         235733       23053</span>
+<span class="go">3    207273_at            NaN  ...            NaN         NaN</span>
+<span class="go">4  216025_x_at         CYP2C9  ...          32964        1559</span>
+<span class="go">[5 rows x 6 columns]</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">api</span><span class="o">.</span><span class="n">get_platform_annotations</span><span class="p">(</span><span class="s1">&#39;Generic_human_ncbiIds&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">pandas</span><span class="o">.</span><span class="n">option_context</span><span class="p">(</span><span class="s1">&#39;display.max_rows&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;display.max_columns&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span> <span class="nb">print</span><span class="p">(</span><span class="n">api_response</span><span class="p">[:</span><span class="mi">6</span><span class="p">])</span>
+<span class="go">   ElementName   GeneSymbols  ...    GemmaIDs      NCBIids</span>
+<span class="go">0        55236          UBA6  ...    295849.0      55236.0</span>
+<span class="go">1        79664          ICE2  ...    336840.0      79664.0</span>
+<span class="go">2    100126270      FMR1-AS1  ...   3157248.0  100126270.0</span>
+<span class="go">3    105373684     LINC01818  ...   9235895.0  105373684.0</span>
+<span class="go">4    124900245  LOC124900245  ...  10578422.0  124900245.0</span>
+<span class="go">[5 rows x 6 columns]</span>
+</pre></div>
+</div>
+<p>If you are interested in a particular gene, you can see which
+platforms include it using
+<a class="reference internal" href="api.html#gemmapy.GemmaPy.get_gene_probes" title="gemmapy.GemmaPy.get_gene_probes"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_gene_probes()</span></code></a>. Note that functions to
+search gene work best with unambigious identifiers rather than symbols.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># lists genes in gemma matching the symbol or identifier</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">api</span><span class="o">.</span><span class="n">get_genes</span><span class="p">([</span><span class="s1">&#39;Eno2&#39;</span><span class="p">])</span>
+<span class="go">  gene_symbol        gene_ensembl  ...  taxon_database_name taxon_database_ID</span>
+<span class="go">0        ENO2     ENSG00000111674  ...                 hg38                87</span>
+<span class="go">1        Eno2  ENSMUSG00000004267  ...                 mm10                81</span>
+<span class="go">2        Eno2  ENSRNOG00000013141  ...                  rn6                86</span>
+<span class="go">[3 rows x 12 columns]</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># ncbi id for human ENO2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">api</span><span class="o">.</span><span class="n">get_gene_probes</span><span class="p">(</span><span class="s2">&quot;ENSG00000111674&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<span class="go">  element_name  ... taxon_database_ID</span>
+<span class="go">0    201313_at  ...                87</span>
+<span class="go">1    201313_at  ...                87</span>
+<span class="go">2     40193_at  ...                87</span>
+<span class="go">3         1639  ...                87</span>
+<span class="go">4         6621  ...                87</span>
+<span class="go">[5 rows x 14 columns]</span>
+</pre></div>
+</div>
 </section>
 <section id="differential-expression-analyses">
-<h2>Differential expression analyses<a class="headerlink" href="#differential-expression-analyses" title="Permalink to this heading">¶</a></h2>
+<h2>Differential expression analyses<a class="headerlink" href="#differential-expression-analyses" title="Link to this heading">¶</a></h2>
 <p>Gemma contains precomputed differential expression analyses for most
 of its datasets. Analyses can involve more than one factor, such as
 “sex” as well as “disease”. Some datasets contain more than one
@@ -190,102 +356,204 @@ their interaction). You can access them using
 <a class="reference internal" href="api.html#gemmapy.GemmaPy.get_differential_expression_values" title="gemmapy.GemmaPy.get_differential_expression_values"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_differential_expression_values()</span></code></a>. From here on, we can
 explore and visualize the data to find the most
 differentially-expressed genes.</p>
-<p>Note that
-<a class="reference internal" href="api.html#gemmapy.GemmaPy.get_differential_expression_values" title="gemmapy.GemmaPy.get_differential_expression_values"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_differential_expression_values()</span></code></a> has the
-argument <code class="code docutils literal notranslate"><span class="pre">readableContrasts</span></code>. By default this is set to <code class="code docutils literal notranslate"><span class="pre">False</span></code>,
-resulting in the output columns being named based on the contrast IDs
-rather the more human readable columns used below. These contrast IDs
-can be used together with
-<a class="reference internal" href="api.html#gemmapy.GemmaPy.get_dataset_differential_expression_analyses" title="gemmapy.GemmaPy.get_dataset_differential_expression_analyses"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_dataset_differential_expression_analyses()</span></code></a>
-during a systematic analysis.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">gemmapy</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">api_instance</span> <span class="o">=</span> <span class="n">gemmapy</span><span class="o">.</span><span class="n">GemmaPy</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">de</span> <span class="o">=</span> <span class="n">api_instance</span><span class="o">.</span><span class="n">get_differential_expression_values</span><span class="p">(</span><span class="s1">&#39;GSE46416&#39;</span><span class="p">,</span> <span class="n">readableContrasts</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">de</span> <span class="o">=</span> <span class="n">de</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="gp">...</span>
+<p>Note that <a class="reference internal" href="api.html#gemmapy.GemmaPy.get_differential_expression_values" title="gemmapy.GemmaPy.get_differential_expression_values"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_differential_expression_values()</span></code></a> can
+return multiple differentials per study if a study has multiple factors to contrast.
+Since GSE46416 only has one extracting the first element of the returned list is all we need.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">dif_exp</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">get_differential_expression_values</span><span class="p">(</span><span class="s1">&#39;GSE46416&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dif_exp</span><span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">dif_exp</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">0</span><span class="p">]]</span>
+<span class="go">{550248:          Probe     NCBIid  ... contrast_113005_tstat contrast_113005_pvalue</span>
+<span class="go"> 0      2982730       4018  ...               -0.3622                 0.7196</span>
+<span class="go"> 1      2787851     166752  ...                0.7495                 0.4590</span>
+<span class="go"> 2      2477558        NaN  ...                1.2604                 0.2166</span>
+<span class="go"> 3      2910917        NaN  ...                0.9032                 0.3731</span>
+<span class="go"> 4      3983537     140886  ...                1.7656                 0.0869</span>
+<span class="go">       ...        ...  ...                   ...                    ...</span>
+<span class="go"> 21956  3301011      64318  ...               -1.6208                 0.1148</span>
+<span class="go"> 21957  2461654  100130249  ...               -0.2045                 0.8393</span>
+<span class="go"> 21958  2360346       1141  ...                3.1278                 0.0037</span>
+<span class="go"> 21959  2391172       7293  ...                1.7369                 0.0920</span>
+<span class="go"> 21960  2525718        NaN  ...               -0.7101                 0.4827</span>
+<span class="go"> [21961 rows x 13 columns]}</span>
+</pre></div>
+</div>
+<p>By default the columns names of the output correspond to contrast IDs. To see
+what conditions these IDs correspond to we can either use
+<a class="reference internal" href="api.html#gemmapy.GemmaPy.get_dataset_differential_expression_analyses" title="gemmapy.GemmaPy.get_dataset_differential_expression_analyses"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_dataset_differential_expression_analyses()</span></code></a> to
+get the metadata about differentials of a given dataset, or
+<code class="code docutils literal notranslate"><span class="pre">readable_contrasts</span></code> argument of
+<a class="reference internal" href="api.html#gemmapy.GemmaPy.get_differential_expression_values" title="gemmapy.GemmaPy.get_differential_expression_values"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_differential_expression_values()</span></code></a> to <code class="code docutils literal notranslate"><span class="pre">True</span></code>.
+The former approach is usually better for a large scale systematic analysis
+while the latter is easier to read in an interactive session.</p>
+<p><a class="reference internal" href="api.html#gemmapy.GemmaPy.get_dataset_differential_expression_analyses" title="gemmapy.GemmaPy.get_dataset_differential_expression_analyses"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_dataset_differential_expression_analyses()</span></code></a>
+function returns metadata about the differentials.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">contrasts</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">get_dataset_differential_expression_analyses</span><span class="p">(</span><span class="s2">&quot;GSE46416&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">contrasts</span>
+<span class="go">   result_ID contrast_ID  ...  probes_analyzed genes_analyzed</span>
+<span class="go">0     550248      113004  ...            21961          18959</span>
+<span class="go">1     550248      113005  ...            21961          18959</span>
+<span class="go">[2 rows x 12 columns]</span>
+</pre></div>
+</div>
+<p><code class="code docutils literal notranslate"><span class="pre">contrast_ID</span></code> column corresponds to the column names in the output of
+<a class="reference internal" href="api.html#gemmapy.GemmaPy.get_differential_expression_values" title="gemmapy.GemmaPy.get_differential_expression_values"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_differential_expression_values()</span></code></a> while <code class="code docutils literal notranslate"><span class="pre">result_ID</span></code>
+corresponds to the name of the differential in the output object. Using them
+together will let one to access differentially expressed gene counts for each
+condition contrast</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">statsmodels.stats.multitest</span> <span class="k">as</span> <span class="nn">multi</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dif_exp_genes</span> <span class="o">=</span> <span class="p">[</span>
+<span class="gp">... </span>   <span class="nb">sum</span><span class="p">(</span><span class="n">multi</span><span class="o">.</span><span class="n">multipletests</span><span class="p">(</span>
+<span class="gp">... </span>       <span class="n">dif_exp</span><span class="p">[</span><span class="n">contrasts</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="p">,]</span><span class="o">.</span><span class="n">result_ID</span><span class="p">][</span>
+<span class="gp">... </span>           <span class="s2">&quot;contrast_&quot;</span> <span class="o">+</span> <span class="n">contrasts</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="p">,]</span><span class="o">.</span><span class="n">contrast_ID</span> <span class="o">+</span> <span class="s2">&quot;_pvalue&quot;</span>
+<span class="gp">... </span>           <span class="p">],</span>
+<span class="gp">... </span>       <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;fdr_bh&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">contrasts</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">contrasts</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">n_diff</span><span class="o">=</span> <span class="n">dif_exp_genes</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">contrasts</span>
+<span class="go">   result_ID contrast_ID  ...  probes_analyzed genes_analyzed</span>
+<span class="go">0     550248      113004  ...            21961          18959</span>
+<span class="go">1     550248      113005  ...            21961          18959</span>
+<span class="go">[2 rows x 12 columns]</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># baseline factors of the contrasts</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">summary</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">contrasts</span><span class="o">.</span><span class="n">baseline_factors</span><span class="p">]</span>
+<span class="go">[0    reference subject role</span>
+<span class="go"> Name: summary, dtype: object,</span>
+<span class="go"> 0    reference subject role</span>
+<span class="go"> Name: summary, dtype: object]</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># experimental factors of the contrasts</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">summary</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">contrasts</span><span class="o">.</span><span class="n">experimental_factors</span><span class="p">]</span>
+<span class="go">[0    bipolar disorder has_modifier manic phase</span>
+<span class="go"> Name: summary, dtype: object,</span>
+<span class="go"> 0    bipolar disorder has_modifier euthymic phase</span>
+<span class="go"> Name: summary, dtype: object]</span>
+</pre></div>
+</div>
+<p>Alternatively we, since we are only looking at one dataset and one contrast manually, we can simply use readable_contrasts.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">de</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">get_differential_expression_values</span><span class="p">(</span><span class="s1">&#39;GSE46416&#39;</span><span class="p">,</span><span class="n">readable_contrasts</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">de</span> <span class="o">=</span> <span class="n">de</span><span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">de</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">0</span><span class="p">]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">de</span><span class="p">)</span>
+<span class="go">         Probe  ... contrast_bipolar disorder has_modifier euthymic phase_pvalue</span>
+<span class="go">0      2982730  ...                                             0.7196</span>
+<span class="go">1      2787851  ...                                             0.4590</span>
+<span class="go">2      2477558  ...                                             0.2166</span>
+<span class="go">3      2910917  ...                                             0.3731</span>
+<span class="go">4      3983537  ...                                             0.0869</span>
+<span class="go">       ...  ...                                                ...</span>
+<span class="go">21956  3301011  ...                                             0.1148</span>
+<span class="go">21957  2461654  ...                                             0.8393</span>
+<span class="go">21958  2360346  ...                                             0.0037</span>
+<span class="go">21959  2391172  ...                                             0.0920</span>
+<span class="go">21960  2525718  ...                                             0.4827</span>
+<span class="go">[21961 rows x 13 columns]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Classify probes for plotting</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">de</span><span class="p">[</span><span class="s1">&#39;diffexpr&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;No&#39;</span>   <span class="c1"># add extra column</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">de</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">de</span><span class="p">[</span><span class="s1">&#39;contrast_bipolar disorder, manic phase_logFoldChange&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">&amp;</span>
-<span class="gp">... </span>       <span class="p">(</span><span class="n">de</span><span class="p">[</span><span class="s1">&#39;contrast_bipolar disorder, manic phase_pvalue&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">0.05</span><span class="p">),</span><span class="s1">&#39;diffexpr&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Up&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">de</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">de</span><span class="p">[</span><span class="s1">&#39;contrast_bipolar disorder, manic phase_logFoldChange&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">)</span> <span class="o">&amp;</span>
-<span class="gp">... </span>       <span class="p">(</span><span class="n">de</span><span class="p">[</span><span class="s1">&#39;contrast_bipolar disorder, manic phase_pvalue&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">0.05</span><span class="p">),</span><span class="s1">&#39;diffexpr&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Down&#39;</span>
-<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">de</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">de</span><span class="p">[</span><span class="s1">&#39;contrast_bipolar disorder has_modifier manic phase_logFoldChange&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">&amp;</span>
+<span class="gp">... </span>       <span class="p">(</span><span class="n">de</span><span class="p">[</span><span class="s1">&#39;contrast_bipolar disorder has_modifier manic phase_pvalue&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">0.05</span><span class="p">),</span><span class="s1">&#39;diffexpr&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Up&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">de</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">de</span><span class="p">[</span><span class="s1">&#39;contrast_bipolar disorder has_modifier manic phase_logFoldChange&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">)</span> <span class="o">&amp;</span>
+<span class="gp">... </span>       <span class="p">(</span><span class="n">de</span><span class="p">[</span><span class="s1">&#39;contrast_bipolar disorder has_modifier manic phase_pvalue&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">0.05</span><span class="p">),</span><span class="s1">&#39;diffexpr&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Down&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Upregulated probes</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">de_up</span> <span class="o">=</span> <span class="n">de</span><span class="p">[</span><span class="n">de</span><span class="p">[</span><span class="s1">&#39;diffexpr&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;Up&#39;</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">de_up</span> <span class="o">=</span> <span class="n">de_up</span><span class="p">[[</span><span class="s1">&#39;Probe&#39;</span><span class="p">,</span><span class="s1">&#39;GeneSymbol&#39;</span><span class="p">,</span> <span class="s1">&#39;contrast_bipolar disorder, manic phase_pvalue&#39;</span><span class="p">,</span>
-<span class="gp">... </span>        <span class="s1">&#39;contrast_bipolar disorder, manic phase_logFoldChange&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span>
-<span class="gp">... </span>        <span class="s1">&#39;contrast_bipolar disorder, manic phase_pvalue&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">pandas</span><span class="o">.</span><span class="n">option_context</span><span class="p">(</span><span class="s1">&#39;display.max_rows&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;display.max_columns&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">de_up</span> <span class="o">=</span> <span class="n">de_up</span><span class="p">[[</span><span class="s1">&#39;Probe&#39;</span><span class="p">,</span><span class="s1">&#39;GeneSymbol&#39;</span><span class="p">,</span> <span class="s1">&#39;contrast_bipolar disorder has_modifier manic phase_pvalue&#39;</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="s1">&#39;contrast_bipolar disorder has_modifier manic phase_logFoldChange&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span>
+<span class="gp">... </span>        <span class="s1">&#39;contrast_bipolar disorder has_modifier manic phase_pvalue&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">pd</span><span class="o">.</span><span class="n">option_context</span><span class="p">(</span><span class="s1">&#39;display.max_rows&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;display.max_columns&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
 <span class="gp">... </span>        <span class="nb">print</span><span class="p">(</span><span class="n">de_up</span><span class="p">[:</span><span class="mi">10</span><span class="p">])</span>
-<span class="go">         Probe GeneSymbol  contrast_bipolar disorder, manic phase_pvalue  \</span>
-<span class="go">18835  2319550       RBP7                                       0.000086</span>
-<span class="go">4913   2548699     CYP1B1                                       0.000103</span>
-<span class="go">11877  3907190       SLPI                                       0.000333</span>
-<span class="go">6917   3629103      PCLAF                                       0.000518</span>
-<span class="go">6188   3545525      SLIRP                                       0.000565</span>
-<span class="go">2065   3146433      COX6C                                       0.000920</span>
-<span class="go">4839   2538349        NaN                                       0.001253</span>
-<span class="go">407    2899102       H3C3                                       0.001269</span>
-<span class="go">18009  3635198     BCL2A1                                       0.001800</span>
-<span class="go">18588  2633191      GPR15                                       0.002410</span>
-<span class="go">       contrast_bipolar disorder, manic phase_logFoldChange</span>
-<span class="go">18835                                              1.074</span>
-<span class="go">4913                                               1.322</span>
-<span class="go">11877                                              1.056</span>
-<span class="go">6917                                               1.278</span>
-<span class="go">6188                                               1.349</span>
-<span class="go">2065                                               1.467</span>
-<span class="go">4839                                               1.073</span>
-<span class="go">407                                                1.026</span>
-<span class="go">18009                                              1.080</span>
-<span class="go">18588                                              1.205</span>
+<span class="go">         Probe GeneSymbol  \</span>
+<span class="go">18835  2319550       RBP7</span>
+<span class="go">4913   2548699     CYP1B1</span>
+<span class="go">11877  3907190       SLPI</span>
+<span class="go">6917   3629103      PCLAF</span>
+<span class="go">6188   3545525      SLIRP</span>
+<span class="go">2065   3146433      COX6C</span>
+<span class="go">407    2899102       H3C3</span>
+<span class="go">4839   2538349        NaN</span>
+<span class="go">18009  3635198     BCL2A1</span>
+<span class="go">18588  2633191      GPR15</span>
 </pre></div>
 </div>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Downregulated probes</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">de_dn</span> <span class="o">=</span> <span class="n">de</span><span class="p">[</span><span class="n">de</span><span class="p">[</span><span class="s1">&#39;diffexpr&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;Down&#39;</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">de_dn</span> <span class="o">=</span> <span class="n">de_dn</span><span class="p">[[</span><span class="s1">&#39;Probe&#39;</span><span class="p">,</span><span class="s1">&#39;GeneSymbol&#39;</span><span class="p">,</span> <span class="s1">&#39;contrast_bipolar disorder, manic phase_pvalue&#39;</span><span class="p">,</span>
-<span class="gp">&gt;&gt;&gt; </span>        <span class="s1">&#39;contrast_bipolar disorder, manic phase_logFoldChange&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span>
-<span class="gp">&gt;&gt;&gt; </span>        <span class="s1">&#39;contrast_bipolar disorder, manic phase_pvalue&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">pandas</span><span class="o">.</span><span class="n">option_context</span><span class="p">(</span><span class="s1">&#39;display.max_rows&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;display.max_columns&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
-<span class="gp">... </span>        <span class="nb">print</span><span class="p">(</span><span class="n">de_dn</span><span class="p">[:</span><span class="mi">10</span><span class="p">])</span>
-<span class="go">         Probe GeneSymbol  contrast_bipolar disorder, manic phase_pvalue  \</span>
-<span class="go">18856  2775390        NaN                                       0.000002</span>
-<span class="go">5641   3760268        NaN                                       0.000012</span>
-<span class="go">18194  3124344        NaN                                       0.000139</span>
-<span class="go">1742   3673179        NaN                                       0.000158</span>
-<span class="go">10623  3245871      WDFY4                                       0.000168</span>
-<span class="go">15046  3022689   SND1-IT1                                       0.000227</span>
-<span class="go">9240   2679014        NaN                                       0.000298</span>
-<span class="go">499    4019758        NaN                                       0.000355</span>
-<span class="go">526    3336402      RBM14                                       0.000361</span>
-<span class="go">9901   2880955        NaN                                       0.000374</span>
-<span class="go">       contrast_bipolar disorder, manic phase_logFoldChange</span>
-<span class="go">18856                                             -1.556</span>
-<span class="go">5641                                              -1.851</span>
-<span class="go">18194                                             -1.037</span>
-<span class="go">1742                                              -1.034</span>
-<span class="go">10623                                             -1.157</span>
-<span class="go">15046                                             -1.220</span>
-<span class="go">9240                                              -1.175</span>
-<span class="go">499                                               -1.405</span>
-<span class="go">526                                               -1.071</span>
-<span class="go">9901                                              -1.522</span>
-</pre></div>
-</div>
+<blockquote>
+<div><p>contrast_bipolar disorder has_modifier manic phase_pvalue  </p>
+</div></blockquote>
+<p>18835                                           0.000086
+4913                                            0.000100
+11877                                           0.000300
+6917                                            0.000500
+6188                                            0.000600
+2065                                            0.000900
+407                                             0.001300
+4839                                            0.001300
+18009                                           0.001800
+18588                                           0.002400</p>
+<blockquote>
+<div><p>contrast_bipolar disorder has_modifier manic phase_logFoldChange</p>
+</div></blockquote>
+<p>18835                                             1.0740
+4913                                              1.3225
+11877                                             1.0558
+6917                                              1.2783
+6188                                              1.3490
+2065                                              1.4670
+407                                               1.0260
+4839                                              1.0731
+18009                                             1.0798
+18588                                             1.2046
+&gt;&gt;&gt; # Downregulated probes
+&gt;&gt;&gt; de_dn = de[de[‘diffexpr’]==’Down’]
+&gt;&gt;&gt; de_dn = de_dn[[‘Probe’,’GeneSymbol’, ‘contrast_bipolar disorder has_modifier manic phase_pvalue’,
+…         ‘contrast_bipolar disorder has_modifier manic phase_logFoldChange’]].sort_values(
+…         ‘contrast_bipolar disorder has_modifier manic phase_pvalue’)
+&gt;&gt;&gt; with pd.option_context(‘display.max_rows’, None, ‘display.max_columns’, None):
+…         print(de_dn[:10])</p>
+<blockquote>
+<div><p>Probe GeneSymbol  </p>
+</div></blockquote>
+<p>18856  2775390        NaN
+5641   3760268        NaN
+18194  3124344        NaN
+15046  3022689   SND1-IT1
+10623  3245871      WDFY4
+1742   3673179        NaN
+9240   2679014        NaN
+15821  3767230        NaN
+9879   2880957        NaN
+526    3336402      RBM14</p>
+<blockquote>
+<div><p>contrast_bipolar disorder has_modifier manic phase_pvalue  </p>
+</div></blockquote>
+<p>18856                                           0.000002
+5641                                            0.000012
+18194                                           0.000100
+15046                                           0.000200
+10623                                           0.000200
+1742                                            0.000200
+9240                                            0.000300
+15821                                           0.000400
+9879                                            0.000400
+526                                             0.000400</p>
+<blockquote>
+<div><p>contrast_bipolar disorder has_modifier manic phase_logFoldChange</p>
+</div></blockquote>
+<p>18856                                            -1.5558
+5641                                             -1.8506
+18194                                            -1.0370
+15046                                            -1.2199
+10623                                            -1.1569
+1742                                             -1.0340
+9240                                             -1.1752
+15821                                            -1.0320
+9879                                             -1.1755
+526                                              -1.0711</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Add gene symbols as labels to DE genes</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">de</span><span class="p">[</span><span class="s1">&#39;delabel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">de</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">de</span><span class="p">[</span><span class="s1">&#39;diffexpr&#39;</span><span class="p">]</span><span class="o">!=</span><span class="s1">&#39;No&#39;</span><span class="p">,</span><span class="s1">&#39;delabel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">de</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">de</span><span class="p">[</span><span class="s1">&#39;diffexpr&#39;</span><span class="p">]</span><span class="o">!=</span><span class="s1">&#39;No&#39;</span><span class="p">,</span><span class="s1">&#39;GeneSymbol&#39;</span><span class="p">]</span>
-<span class="gp">...</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Volcano plot for bipolar patients vs controls</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">de</span><span class="p">[</span><span class="s1">&#39;-log10(p-value)&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">de</span><span class="p">[</span><span class="s1">&#39;contrast_bipolar disorder, manic phase_pvalue&#39;</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">de</span><span class="p">[</span><span class="s1">&#39;-log10(p-value)&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">de</span><span class="p">[</span><span class="s1">&#39;contrast_bipolar disorder has_modifier manic phase_pvalue&#39;</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">plotnine</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span><span class="o">=</span><span class="p">(</span><span class="n">ggplot</span><span class="p">(</span><span class="n">de</span><span class="p">)</span>
 <span class="gp">... </span><span class="o">+</span><span class="n">aes</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">x</span><span class="o">=</span><span class="s1">&#39;contrast_bipolar disorder, manic phase_logFoldChange&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">x</span><span class="o">=</span><span class="s1">&#39;contrast_bipolar disorder has_modifier manic phase_logFoldChange&#39;</span><span class="p">,</span>
 <span class="gp">... </span>    <span class="n">y</span><span class="o">=</span><span class="s1">&#39;-log10(p-value)&#39;</span><span class="p">,</span>
 <span class="gp">... </span>    <span class="n">color</span><span class="o">=</span><span class="s1">&#39;diffexpr&#39;</span><span class="p">,</span>
 <span class="gp">... </span>    <span class="n">labels</span><span class="o">=</span><span class="s1">&#39;delabel&#39;</span>
@@ -301,180 +569,213 @@ during a systematic analysis.</p>
 </div>
 <img alt="_images/dea.png" src="_images/dea.png" />
 <p>Differentially-expressed genes in bipolar patients during manic phase versus controls.</p>
-<p>Setting <code class="code docutils literal notranslate"><span class="pre">readableContrasts=FALSE</span></code> (default) will allow easier
-programmatic access to differentials. For instance, lets get the
-number of differentially expressed genes for each contrast returned by
-<a class="reference internal" href="api.html#gemmapy.GemmaPy.get_dataset_differential_expression_analyses" title="gemmapy.GemmaPy.get_dataset_differential_expression_analyses"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_dataset_differential_expression_analyses()</span></code></a> for a study.</p>
-</section>
-<section id="platform-annotations">
-<h2>Platform Annotations<a class="headerlink" href="#platform-annotations" title="Permalink to this heading">¶</a></h2>
-<p>Expression data in Gemma comes with annotations for the gene each
-expression profile corresponds to. Using the
-<a class="reference internal" href="api.html#gemmapy.GemmaPy.get_platform_annotations" title="gemmapy.GemmaPy.get_platform_annotations"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_platform_annotations()</span></code></a> function, these
-annotations can be retrieved independently of the expression data,
-along with additional annotations such as Gene Ontology terms.</p>
-<p>Examples:</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">gemmapy</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">api_instance</span> <span class="o">=</span> <span class="n">gemmapy</span><span class="o">.</span><span class="n">GemmaPy</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">api_response</span> <span class="o">=</span> <span class="n">api_instance</span><span class="o">.</span><span class="n">get_platform_annotations</span><span class="p">(</span><span class="s1">&#39;GPL96&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">pandas</span><span class="o">.</span><span class="n">option_context</span><span class="p">(</span><span class="s1">&#39;display.max_rows&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;display.max_columns&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span> <span class="nb">print</span><span class="p">(</span><span class="n">api_response</span><span class="p">[:</span><span class="mi">6</span><span class="p">])</span>
-<span class="go">     ProbeName    GeneSymbols                                      GeneNames  \</span>
-<span class="go">0  211750_x_at  TUBA1A|TUBA1C              tubulin alpha 1a|tubulin alpha 1c</span>
-<span class="go">1    216678_at            NaN                                            NaN</span>
-<span class="go">2    216345_at         ZSWIM8             zinc finger SWIM-type containing 8</span>
-<span class="go">3    207273_at            NaN                                            NaN</span>
-<span class="go">4  216025_x_at         CYP2C9  cytochrome P450 family 2 subfamily C member 9</span>
-<span class="go">5  218191_s_at         LMBRD1                      LMBR1 domain containing 1</span>
-<span class="go">                                             GOTerms       GemmaIDs  \</span>
-<span class="go">0  GO:0005737|GO:0000166|GO:0051234|GO:0005856|GO...  172797|360802</span>
-<span class="go">1                                                NaN            NaN</span>
-<span class="go">2  GO:0043170|GO:1990234|GO:0044260|GO:0050789|GO...         235733</span>
-<span class="go">3                                                NaN            NaN</span>
-<span class="go">4  GO:0005737|GO:0072330|GO:0008203|GO:0008202|GO...          32964</span>
-<span class="go">5  GO:0043170|GO:0016192|GO:0051234|GO:0044260|GO...         303717</span>
-<span class="go">      NCBIids</span>
-<span class="go">0  7846|84790</span>
-<span class="go">1         NaN</span>
-<span class="go">2       23053</span>
-<span class="go">3         NaN</span>
-<span class="go">4        1559</span>
-<span class="go">5       55788</span>
-</pre></div>
-</div>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">api_response</span> <span class="o">=</span> <span class="n">api_instance</span><span class="o">.</span><span class="n">get_platform_annotations</span><span class="p">(</span><span class="s1">&#39;Generic_human&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">pandas</span><span class="o">.</span><span class="n">option_context</span><span class="p">(</span><span class="s1">&#39;display.max_rows&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;display.max_columns&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span> <span class="nb">print</span><span class="p">(</span><span class="n">api_response</span><span class="p">[:</span><span class="mi">6</span><span class="p">])</span>
-<span class="go">      ProbeName   GeneSymbols  \</span>
-<span class="go">0         LCN10         LCN10</span>
-<span class="go">1      STAG3L5P      STAG3L5P</span>
-<span class="go">2  LOC101059976  LOC101059976</span>
-<span class="go">3          GAB3          GAB3</span>
-<span class="go">4  LOC100287155  LOC100287155</span>
-<span class="go">5        RASSF2        RASSF2</span>
-<span class="go">                                           GeneNames  \</span>
-<span class="go">0                                       lipocalin 10</span>
-<span class="go">1                stromal antigen 3-like 5 pseudogene</span>
-<span class="go">2  arf-GAP with GTPase, ANK repeat and PH domain-...</span>
-<span class="go">3                  GRB2 associated binding protein 3</span>
-<span class="go">4                  hypothetical protein LOC100287155</span>
-<span class="go">5             Ras association domain family member 2</span>
-<span class="go">                                             GOTerms GemmaIDs    NCBIids</span>
-<span class="go">0        GO:0005576|GO:0005488|GO:0110165|GO:0036094   441399     414332</span>
-<span class="go">1                                                NaN  8799043  101735302</span>
-<span class="go">2                                                NaN  8779607  101059976</span>
-<span class="go">3  GO:0002573|GO:0032502|GO:0030225|GO:0002521|GO...   389635     139716</span>
-<span class="go">4                                                NaN  8090381  100287155</span>
-<span class="go">5  GO:0048585|GO:0005737|GO:0043170|GO:0048584|GO...   201914       9770</span>
-</pre></div>
-</div>
-<p>If you are interested in a particular gene, you can see which
-platforms include it using
-<a class="reference internal" href="api.html#gemmapy.GemmaPy.get_gene_probes" title="gemmapy.GemmaPy.get_gene_probes"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_gene_probes()</span></code></a>. Note that functions to
-search gene work best with unambigious identifiers rather than symbols.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># lists genes in gemma matching the symbol or identifier</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">api_response</span> <span class="o">=</span> <span class="n">api_instance</span><span class="o">.</span><span class="n">get_genes</span><span class="p">([</span><span class="s1">&#39;Eno2&#39;</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">api_response</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># view the object structure</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">api_response</span><span class="o">.</span><span class="n">data</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> </span><span class="si">%-18s</span><span class="s2"> </span><span class="si">%6d</span><span class="s2"> </span><span class="si">%-30s</span><span class="s2"> </span><span class="si">%-10s</span><span class="s2"> </span><span class="si">%2i</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span>
-<span class="gp">&gt;&gt;&gt; </span>  <span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">official_symbol</span><span class="p">,</span><span class="n">d</span><span class="o">.</span><span class="n">ensembl_id</span><span class="p">,</span><span class="n">d</span><span class="o">.</span><span class="n">ncbi_id</span><span class="p">,</span><span class="n">d</span><span class="o">.</span><span class="n">official_name</span><span class="p">,</span>
-<span class="gp">&gt;&gt;&gt; </span>   <span class="n">d</span><span class="o">.</span><span class="n">taxon</span><span class="o">.</span><span class="n">common_name</span><span class="p">,</span><span class="n">d</span><span class="o">.</span><span class="n">taxon</span><span class="o">.</span><span class="n">id</span><span class="p">,</span><span class="n">d</span><span class="o">.</span><span class="n">taxon</span><span class="o">.</span><span class="n">scientific_name</span><span class="p">))</span>
-<span class="gp">...</span>
-<span class="go">ENO2 ENSG00000111674      2026 enolase 2                      human       1 Homo sapiens</span>
-<span class="go">Eno2 ENSMUSG00000004267  13807 enolase 2, gamma neuronal      mouse       2 Mus musculus</span>
-<span class="go">Eno2 ENSRNOG00000013141  24334 enolase 2                      rat         3 Rattus norvegicus</span>
-<span class="go">ENO2 None               856579 phosphopyruvate hydratase ENO2 yeast      11 Saccharomyces cerevisiae</span>
-<span class="go">eno2 ENSDARG00000014287 402874 enolase 2                      zebrafish  12 Danio rerio</span>
-</pre></div>
-</div>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># ncbi id for human ENO2</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">probs</span><span class="o">=</span><span class="n">api_instance</span><span class="o">.</span><span class="n">get_gene_probes</span><span class="p">(</span><span class="mi">2026</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">probs</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># view the object structure</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># print only fields of interest</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">probs</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">6</span><span class="p">]:</span>
-<span class="gp">... </span>  <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%-10s</span><span class="s2"> </span><span class="si">%-12s</span><span class="s2"> </span><span class="si">%-20s</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span>
-<span class="gp">... </span> <span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">name</span><span class="p">,</span><span class="n">d</span><span class="o">.</span><span class="n">array_design</span><span class="o">.</span><span class="n">short_name</span><span class="p">,</span><span class="n">d</span><span class="o">.</span><span class="n">array_design</span><span class="o">.</span><span class="n">name</span><span class="p">,</span><span class="n">d</span><span class="o">.</span><span class="n">array_design</span><span class="o">.</span><span class="n">taxon</span><span class="o">.</span><span class="n">common_name</span><span class="p">,</span>
-<span class="gp">... </span>  <span class="n">d</span><span class="o">.</span><span class="n">array_design</span><span class="o">.</span><span class="n">taxon</span><span class="o">.</span><span class="n">id</span><span class="p">,</span><span class="n">d</span><span class="o">.</span><span class="n">array_design</span><span class="o">.</span><span class="n">technology_type</span><span class="p">,</span><span class="n">d</span><span class="o">.</span><span class="n">array_design</span><span class="o">.</span><span class="n">troubled</span><span class="p">))</span>
-<span class="go">20016      GPL3093      LC-25                human 1 TWOCOLOR False</span>
-<span class="go">20024      GPL3092      LC-19                human 1 TWOCOLOR False</span>
-<span class="go">20024      lymphochip-2 Lymphochip 37k       human 1 TWOCOLOR False</span>
-<span class="go">1639       GPL962       CHUGAI 41K           human 1 TWOCOLOR False</span>
-<span class="go">35850      NHGRI-6.5k   NHGRI-6.5k           human 1 TWOCOLOR False</span>
-<span class="go">201313_at  GPL96        Affymetrix GeneChip Human Genome U133 Array Set HG-U133A human 1 ONECOLOR False</span>
-</pre></div>
-</div>
 </section>
 <section id="larger-queries">
-<h2>Larger queries<a class="headerlink" href="#larger-queries" title="Permalink to this heading">¶</a></h2>
-<p>Some endpoints accept multiple identifiers in a single
-function call. For example, getting information on 2 datasets at the
-same time.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">gemmapy</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">api_instance</span> <span class="o">=</span> <span class="n">gemmapy</span><span class="o">.</span><span class="n">GemmaPy</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">api_response</span> <span class="o">=</span> <span class="n">api_instance</span><span class="o">.</span><span class="n">get_datasets_by_ids</span><span class="p">([</span><span class="s2">&quot;GSE35974&quot;</span><span class="p">,</span><span class="s2">&quot;GSE46416&quot;</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">api_response</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># view the object structure</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">api_response</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
-<span class="gp">... </span>  <span class="nb">print</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">short_name</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">accession</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">bio_assay_count</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">taxon</span><span class="o">.</span><span class="n">common_name</span><span class="p">)</span>
-<span class="gp">...</span>
-<span class="go">GSE35974 Expression data from the human cerebellum brain 5939 GSE35974 144 human</span>
-<span class="go">GSE46416 State- and trait-specific gene expression in euthymia and mania 8997 GSE46416 32 human</span>
+<h2>Larger queries<a class="headerlink" href="#larger-queries" title="Link to this heading">¶</a></h2>
+<p>To query large amounts of data, the API has a pagination system which uses the
+limit and offset parameters. To avoid overloading the server, calls are limited
+to a maximum of 100 entries, so the offset allows you to get the next batch of
+entries in the next call(s).</p>
+<p>To simplify the process of accessing all available data, gemmapy includes the
+<a class="reference internal" href="api.html#gemmapy.GemmaPy.get_all_pages" title="gemmapy.GemmaPy.get_all_pages"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_all_pages()</span></code></a> function which can use the output
+from one page to make all the follow up requests</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">api</span><span class="o">.</span><span class="n">get_all_pages</span><span class="p">(</span><span class="n">api</span><span class="o">.</span><span class="n">get_platforms</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<span class="go">   platform_ID platform_short_name  ... taxon_database_name taxon_database_ID</span>
+<span class="go">0            1               GPL96  ...                hg38              87.0</span>
+<span class="go">1            2             GPL1355  ...                 rn6              86.0</span>
+<span class="go">2            3             GPL1261  ...                mm10              81.0</span>
+<span class="go">3            4              GPL570  ...                hg38              87.0</span>
+<span class="go">4            5               GPL81  ...                mm10              81.0</span>
+<span class="go">[5 rows x 13 columns]</span>
 </pre></div>
 </div>
-<p>To query large amounts of data, the API has a pagination system which
-uses the <code class="code docutils literal notranslate"><span class="pre">limit</span></code> and <code class="code docutils literal notranslate"><span class="pre">offset</span></code> parameters. To avoid overloading the server,
-calls are limited to a maximum of 100 entries, so the offset allows
-you to get the next batch of entries in the next call(s). For
-simplicity, this example shows how pagination works with 5 entries per
-query.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">ofs</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">10</span><span class="p">]:</span>
-<span class="gp">... </span>    <span class="n">api_response</span><span class="o">=</span><span class="n">api_instance</span><span class="o">.</span><span class="n">get_platforms_by_ids</span><span class="p">([],</span><span class="n">offset</span><span class="o">=</span><span class="n">ofs</span><span class="p">,</span><span class="n">limit</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
-<span class="gp">... </span>    <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">api_response</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
-<span class="gp">... </span>        <span class="nb">print</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">short_name</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">taxon</span><span class="o">.</span><span class="n">common_name</span><span class="p">)</span>
-<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;--&#39;</span><span class="p">)</span>
-<span class="gp">...</span>
-<span class="go">1 GPL96 human</span>
-<span class="go">2 GPL1355 rat</span>
-<span class="go">3 GPL1261 mouse</span>
-<span class="go">4 GPL570 human</span>
-<span class="go">5 GPL81 mouse</span>
-<span class="go">--</span>
-<span class="go">6 GPL85 rat</span>
-<span class="go">7 GPL339 mouse</span>
-<span class="go">8 GPL91 human</span>
-<span class="go">9 GPL890 rat</span>
-<span class="go">10 GPL1406 mouse</span>
-<span class="go">--</span>
-<span class="go">11 GPL891 mouse</span>
-<span class="go">12 GPL82 mouse</span>
-<span class="go">13 GPL560 mouse</span>
-<span class="go">14 GPL1073 mouse</span>
-<span class="go">16 GPL369 mouse</span>
-<span class="go">--</span>
+<p>Alternative way to access all pages is to do so manually. To see how many
+available results are there, you can look at the attributes component of the output
+objects where additional information from the API response is appended.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">platform_count</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">get_platforms</span><span class="p">()</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="s1">&#39;total_elements&#39;</span><span class="p">]</span>
+<span class="go">637</span>
 </pre></div>
 </div>
-<p>The rest of the endpoints only support a single identifier:</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">api_response</span> <span class="o">=</span> <span class="n">api_instance</span><span class="o">.</span><span class="n">get_dataset_annotations</span><span class="p">([</span><span class="s2">&quot;GSE35974&quot;</span><span class="p">,</span><span class="s2">&quot;GSE12649&quot;</span><span class="p">])</span>
+<p>After which you can use offset to access all available platforms.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">all_platforms</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">platform_count</span><span class="p">,</span><span class="mi">100</span><span class="p">):</span>
+<span class="gp">... </span>   <span class="n">all_platforms</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">api</span><span class="o">.</span><span class="n">get_platforms</span><span class="p">(</span><span class="n">offset</span> <span class="o">=</span> <span class="n">i</span><span class="p">,</span> <span class="n">limit</span> <span class="o">=</span> <span class="mi">100</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">all_platforms</span><span class="p">)</span>
+<span class="go">    platform_ID  platform_short_name  ... taxon_database_name taxon_database_ID</span>
+<span class="go">0             1                GPL96  ...                hg38              87.0</span>
+<span class="go">1             2              GPL1355  ...                 rn6              86.0</span>
+<span class="go">2             3              GPL1261  ...                mm10              81.0</span>
+<span class="go">3             4               GPL570  ...                hg38              87.0</span>
+<span class="go">4             5                GPL81  ...                mm10              81.0</span>
+<span class="go">..          ...                  ...  ...                 ...               ...</span>
+<span class="go">32         1327             GPL11044  ...                mm10              81.0</span>
+<span class="go">33         1328              GPL7182  ...                hg38              87.0</span>
+<span class="go">34         1330             GPL33408  ...                 rn6              86.0</span>
+<span class="go">35         1331             GPL32159  ...                mm10              81.0</span>
+<span class="go">36         1332  014850_4x44K_Merged  ...                hg38              87.0</span>
+<span class="go">[637 rows x 13 columns]</span>
+</pre></div>
+</div>
+<p>Many endpoints only support a single identifier:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">api</span><span class="o">.</span><span class="n">get_dataset_annotations</span><span class="p">([</span><span class="s2">&quot;GSE35974&quot;</span><span class="p">,</span><span class="s2">&quot;GSE12649&quot;</span><span class="p">])</span>
 <span class="go">...Error Traceback...</span>
 </pre></div>
 </div>
 <p>In these cases, you will have to loop over all the identifiers you
 wish to query and send separate requests:</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">dataset</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;GSE35974&quot;</span><span class="p">,</span><span class="s2">&quot;GSE12649&quot;</span><span class="p">]:</span>
-<span class="gp">... </span>    <span class="n">api_response</span> <span class="o">=</span> <span class="n">api_instance</span><span class="o">.</span><span class="n">get_dataset_annotations</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
-<span class="gp">... </span>    <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">api_response</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
-<span class="gp">... </span>        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> </span><span class="si">%-15s</span><span class="s1"> </span><span class="si">%-15s</span><span class="s1"> </span><span class="si">%-15s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">object_class</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">class_name</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">term_name</span><span class="p">))</span>
-<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;--&#39;</span><span class="p">)</span>
-<span class="gp">...</span>
-<span class="go">GSE35974 BioMaterial     biological sex  male</span>
-<span class="go">GSE35974 FactorValue     disease         schizophrenia</span>
-<span class="go">GSE35974 FactorValue     disease         Bipolar Disorder</span>
-<span class="go">GSE35974 BioMaterial     biological sex  female</span>
-<span class="go">GSE35974 FactorValue     disease         mental depression</span>
-<span class="go">GSE35974 ExperimentTag   organism part   cerebellum</span>
-<span class="go">--</span>
-<span class="go">GSE12649 BioMaterial     organism part   reference subject role</span>
-<span class="go">GSE12649 ExperimentTag   organism part   prefrontal cortex</span>
-<span class="go">GSE12649 BioMaterial     disease         Bipolar Disorder</span>
-<span class="go">GSE12649 BioMaterial     disease         schizophrenia</span>
-<span class="go">--</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">annots</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">dataset</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;GSE35974&quot;</span><span class="p">,</span><span class="s2">&quot;GSE12649&quot;</span><span class="p">]:</span>
+<span class="gp">... </span>  <span class="n">annots</span><span class="p">[</span><span class="n">dataset</span><span class="p">]</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">get_dataset_annotations</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">annots</span>
+<span class="go">{&#39;GSE35974&#39;:        class_name  ...   object_class</span>
+<span class="go"> 0  biological sex  ...    BioMaterial</span>
+<span class="go"> 1         disease  ...    FactorValue</span>
+<span class="go"> 2         disease  ...    FactorValue</span>
+<span class="go"> 3  biological sex  ...    BioMaterial</span>
+<span class="go"> 4       labelling  ...    BioMaterial</span>
+<span class="go"> 5         disease  ...    FactorValue</span>
+<span class="go"> 6   organism part  ...  ExperimentTag</span>
+<span class="go"> [7 rows x 5 columns],</span>
+<span class="go"> &#39;GSE12649&#39;:       class_name  ...   object_class</span>
+<span class="go"> 0        disease  ...    FactorValue</span>
+<span class="go"> 1      labelling  ...    BioMaterial</span>
+<span class="go"> 2        disease  ...    FactorValue</span>
+<span class="go"> 3  organism part  ...  ExperimentTag</span>
+<span class="go"> [4 rows x 5 columns]}</span>
+</pre></div>
+</div>
+</section>
+<section id="raw-endpoints">
+<h2>Raw endpoints<a class="headerlink" href="#raw-endpoints" title="Link to this heading">¶</a></h2>
+<p>The previous version of gemmapy exposed raw API endpoints directly while this
+version processes the api output into pandas DataFrames for most cases. The old
+raw outputs are still accessible however under the <code class="code docutils literal notranslate"><span class="pre">raw</span></code> component of the
+GemmaPy instance. In general these functions take the same arguments (with the exception
+of taxa and uris arguments for anything that accepts a filter and result_sets argument
+of <a class="reference internal" href="api.html#gemmapy.GemmaPy.get_result_sets" title="gemmapy.GemmaPy.get_result_sets"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_result_sets()</span></code></a>)</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">api</span><span class="o">.</span><span class="n">raw</span><span class="o">.</span><span class="n">get_datasets_by_ids</span><span class="p">([</span><span class="mi">1</span><span class="p">])</span>
+<span class="go">{&#39;data&#39;: [{&#39;accession&#39;: &#39;GSE2018&#39;,</span>
+<span class="go">           &#39;batch_confound&#39;: None,</span>
+<span class="go">           &#39;batch_effect&#39;: &#39;NO_BATCH_EFFECT_SUCCESS&#39;,</span>
+<span class="go">           &#39;batch_effect_statistics&#39;: &#39;This data set may have a batch artifact &#39;</span>
+<span class="go">                                      &#39;(PC 2), p=0.69477&#39;,</span>
+<span class="go">           &#39;bio_assay_count&#39;: 34,</span>
+<span class="go">           &#39;curation_note&#39;: None,</span>
+<span class="go">           &#39;description&#39;: &#39;Bronchoalveolar lavage samples collected from lung &#39;</span>
+<span class="go">                          &#39;transplant recipients.  Numeric portion of sample &#39;</span>
+<span class="go">                          &#39;name is an arbitrary patient ID and AxBx number &#39;</span>
+<span class="go">                          &#39;indicates the perivascular (A) and bronchiolar (B) &#39;</span>
+<span class="go">                          &#39;scores from biopsies collected on the same day as &#39;</span>
+<span class="go">                          &#39;the BAL fluid was collected.  Several patients have &#39;</span>
+<span class="go">                          &#39;more than one sample in this series and can be &#39;</span>
+<span class="go">                          &#39;determined by patient number followed by a lower &#39;</span>
+<span class="go">                          &#39;case letter.  Acute rejection state is determined &#39;</span>
+<span class="go">                          &#39;by the combined A and B score - specifically, a &#39;</span>
+<span class="go">                          &#39;combined AB score of 2 or greater is considered an &#39;</span>
+<span class="go">                          &#39;acute rejection.&#39;,</span>
+<span class="go">           &#39;external_database&#39;: &#39;GEO&#39;,</span>
+<span class="go">           &#39;external_database_uri&#39;: &#39;http://www.ncbi.nlm.nih.gov/geo/&#39;,</span>
+<span class="go">           &#39;external_uri&#39;: &#39;https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE2018&#39;,</span>
+<span class="go">           &#39;geeq&#39;: {&#39;batch_corrected&#39;: False,</span>
+<span class="go">                    &#39;corr_mat_issues&#39;: &#39;2&#39;,</span>
+<span class="go">                    &#39;id&#39;: 557,</span>
+<span class="go">                    &#39;no_vectors&#39;: False,</span>
+<span class="go">                    &#39;public_quality_score&#39;: 0.9976340682316643,</span>
+<span class="go">                    &#39;public_suitability_score&#39;: 0.875,</span>
+<span class="go">                    &#39;q_score_batch_info&#39;: 1.0,</span>
+<span class="go">                    &#39;q_score_outliers&#39;: 1.0,</span>
+<span class="go">                    &#39;q_score_platforms_tech&#39;: 1.0,</span>
+<span class="go">                    &#39;q_score_public_batch_confound&#39;: 1.0,</span>
+<span class="go">                    &#39;q_score_public_batch_effect&#39;: 1.0,</span>
+<span class="go">                    &#39;q_score_replicates&#39;: 1.0,</span>
+<span class="go">                    &#39;q_score_sample_correlation_variance&#39;: 3.716509481654169e-05,</span>
+<span class="go">                    &#39;q_score_sample_mean_correlation&#39;: 0.9822784200037354,</span>
+<span class="go">                    &#39;q_score_sample_median_correlation&#39;: 0.9834384776216498,</span>
+<span class="go">                    &#39;replicates_issues&#39;: &#39;0&#39;,</span>
+<span class="go">                    &#39;s_score_avg_platform_popularity&#39;: 1.0,</span>
+<span class="go">                    &#39;s_score_avg_platform_size&#39;: 0.0,</span>
+<span class="go">                    &#39;s_score_missing_values&#39;: 1.0,</span>
+<span class="go">                    &#39;s_score_platform_amount&#39;: 1.0,</span>
+<span class="go">                    &#39;s_score_platform_tech_multi&#39;: 1.0,</span>
+<span class="go">                    &#39;s_score_publication&#39;: 1.0,</span>
+<span class="go">                    &#39;s_score_raw_data&#39;: 1.0,</span>
+<span class="go">                    &#39;s_score_sample_size&#39;: 1.0},</span>
+<span class="go">           &#39;id&#39;: 1,</span>
+<span class="go">           &#39;last_needs_attention_event&#39;: {&#39;_date&#39;: datetime.datetime(2018, 10, 2, 20, 57, 53, tzinfo=tzutc()),</span>
+<span class="go">                                          &#39;action&#39;: &#39;U&#39;,</span>
+<span class="go">                                          &#39;action_name&#39;: &#39;Update&#39;,</span>
+<span class="go">                                          &#39;detail&#39;: None,</span>
+<span class="go">                                          &#39;event_type_name&#39;: &#39;DoesNotNeedAttentionEvent&#39;,</span>
+<span class="go">                                          &#39;id&#39;: 25176178,</span>
+<span class="go">                                          &#39;note&#39;: &#39;Does not need attention.&#39;,</span>
+<span class="go">                                          &#39;performer&#39;: &#39;amansharma&#39;},</span>
+<span class="go">           &#39;last_note_update_event&#39;: None,</span>
+<span class="go">           &#39;last_troubled_event&#39;: None,</span>
+<span class="go">           &#39;last_updated&#39;: datetime.datetime(2024, 2, 10, 8, 31, 41, 417000, tzinfo=tzutc()),</span>
+<span class="go">           &#39;metadata&#39;: None,</span>
+<span class="go">           &#39;name&#39;: &#39;Human Lung Transplant - BAL&#39;,</span>
+<span class="go">           &#39;needs_attention&#39;: False,</span>
+<span class="go">           &#39;number_of_array_designs&#39;: 1,</span>
+<span class="go">           &#39;number_of_bio_assays&#39;: 34,</span>
+<span class="go">           &#39;number_of_processed_expression_vectors&#39;: 22283,</span>
+<span class="go">           &#39;short_name&#39;: &#39;GSE2018&#39;,</span>
+<span class="go">           &#39;source&#39;: &#39;&#39;,</span>
+<span class="go">           &#39;taxon&#39;: {&#39;common_name&#39;: &#39;human&#39;,</span>
+<span class="go">                     &#39;external_database&#39;: {&#39;description&#39;: &#39;Genome Reference &#39;</span>
+<span class="go">                                                          &#39;Consortium Human &#39;</span>
+<span class="go">                                                          &#39;GRCh38.p13 &#39;</span>
+<span class="go">                                                          &#39;(GCA_000001405.28)&#39;,</span>
+<span class="go">                                           &#39;external_databases&#39;: [{&#39;description&#39;: None,</span>
+<span class="go">                                                                   &#39;external_databases&#39;: [],</span>
+<span class="go">                                                                   &#39;id&#39;: 94,</span>
+<span class="go">                                                                   &#39;last_updated&#39;: datetime.datetime(2022, 6, 30, 7, 0, tzinfo=tzutc()),</span>
+<span class="go">                                                                   &#39;name&#39;: &#39;hg38 &#39;</span>
+<span class="go">                                                                           &#39;annotations&#39;,</span>
+<span class="go">                                                                   &#39;release_url&#39;: &#39;https://www.ncbi.nlm.nih.gov/datasets/genome/GCA_000001405.28/&#39;,</span>
+<span class="go">                                                                   &#39;release_version&#39;: &#39;GRCh38.p13&#39;,</span>
+<span class="go">                                                                   &#39;uri&#39;: &#39;https://hgdownload.cse.ucsc.edu/goldenpath/hg38/database/&#39;},</span>
+<span class="go">                                                                  {&#39;description&#39;: &#39;Annotations &#39;</span>
+<span class="go">                                                                                  &#39;provided &#39;</span>
+<span class="go">                                                                                  &#39;by &#39;</span>
+<span class="go">                                                                                  &#39;NCBI &#39;</span>
+<span class="go">                                                                                  &#39;Genome &#39;</span>
+<span class="go">                                                                                  &#39;and &#39;</span>
+<span class="go">                                                                                  &#39;used &#39;</span>
+<span class="go">                                                                                  &#39;by &#39;</span>
+<span class="go">                                                                                  &#39;the &#39;</span>
+<span class="go">                                                                                  &#39;RNA-Seq &#39;</span>
+<span class="go">                                                                                  &#39;pipeline &#39;</span>
+<span class="go">                                                                                  &#39;for &#39;</span>
+<span class="go">                                                                                  &#39;human &#39;</span>
+<span class="go">                                                                                  &#39;data.&#39;,</span>
+<span class="go">                                                                   &#39;external_databases&#39;: [],</span>
+<span class="go">                                                                   &#39;id&#39;: 124,</span>
+<span class="go">                                                                   &#39;last_updated&#39;: datetime.datetime(2023, 1, 17, 20, 27, 55, 59000, tzinfo=tzutc()),</span>
+<span class="go">                                                                   &#39;name&#39;: &#39;hg38 &#39;</span>
+<span class="go">                                                                           &#39;RNA-Seq &#39;</span>
+<span class="go">                                                                           &#39;annotations&#39;,</span>
+<span class="go">                                                                   &#39;release_url&#39;: &#39;https://ftp.ncbi.nlm.nih.gov/genomes/all/annotation_releases/9606/110/&#39;,</span>
+<span class="go">                                                                   &#39;release_version&#39;: &#39;110&#39;,</span>
+<span class="go">                                                                   &#39;uri&#39;: &#39;https://www.ncbi.nlm.nih.gov/datasets/genome/GCF_000001405.40/&#39;}],</span>
+<span class="go">                                           &#39;id&#39;: 87,</span>
+<span class="go">                                           &#39;last_updated&#39;: datetime.datetime(2022, 6, 30, 7, 0, tzinfo=tzutc()),</span>
+<span class="go">                                           &#39;name&#39;: &#39;hg38&#39;,</span>
+<span class="go">                                           &#39;release_url&#39;: &#39;https://www.ncbi.nlm.nih.gov/datasets/genome/GCA_000001405.28/&#39;,</span>
+<span class="go">                                           &#39;release_version&#39;: &#39;GRCh38.p13&#39;,</span>
+<span class="go">                                           &#39;uri&#39;: &#39;https://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&#39;},</span>
+<span class="go">                     &#39;id&#39;: 1,</span>
+<span class="go">                     &#39;ncbi_id&#39;: 9606,</span>
+<span class="go">                     &#39;scientific_name&#39;: &#39;Homo sapiens&#39;},</span>
+<span class="go">           &#39;taxon_id&#39;: 1,</span>
+<span class="go">           &#39;technology_type&#39;: None,</span>
+<span class="go">           &#39;trouble_details&#39;: &#39;No trouble details provided.&#39;,</span>
+<span class="go">           &#39;troubled&#39;: False}],</span>
+<span class="go"> &#39;filter&#39;: &#39;id = 1&#39;,</span>
+<span class="go"> &#39;group_by&#39;: [&#39;id&#39;],</span>
+<span class="go"> &#39;limit&#39;: 20,</span>
+<span class="go"> &#39;offset&#39;: 0,</span>
+<span class="go"> &#39;sort&#39;: {&#39;direction&#39;: &#39;+&#39;, &#39;order_by&#39;: &#39;id&#39;},</span>
+<span class="go"> &#39;total_elements&#39;: 1}</span>
 </pre></div>
 </div>
 </section>
@@ -503,10 +804,12 @@ wish to query and send separate requests:</p>
 <li class="toctree-l2"><a class="reference internal" href="#about-gemma">About Gemma</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#installation-instructions">Installation instructions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#additional-packages">Additional packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#searching-for-datasets-of-interest-in-gemma">Searching for datasets of interest in Gemma</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#downloading-expression-data">Downloading expression data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#differential-expression-analyses">Differential expression analyses</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#platform-annotations">Platform Annotations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#differential-expression-analyses">Differential expression analyses</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#larger-queries">Larger queries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#raw-endpoints">Raw endpoints</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
@@ -544,11 +847,11 @@ wish to query and send separate requests:</p>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2022, The University of British Columbia.
+      &#169;2022, The University of British Columbia.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.0.2</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 7.2.6</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
       
       |
       <a href="_sources/tutorial.rst.txt"
