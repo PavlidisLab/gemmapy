@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 swagger_version=3.0.55
 gemmapy_version=0.0.2
 temp_sdk_dir=$(mktemp -d)
