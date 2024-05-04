@@ -352,7 +352,7 @@ return multiple differentials per study if a study has multiple factors to contr
 Since GSE46416 only has one extracting the first element of the returned list is all we need.
 
 >>> dif_exp = api.get_differential_expression_values('GSE46416')
->>> dif_exp
+>>> dif_exp[list(dif_exp.keys())[0]]
 {550248:          Probe     NCBIid  ... contrast_113005_tstat contrast_113005_pvalue
  0      2982730       4018  ...               -0.3622                 0.7196
  1      2787851     166752  ...                0.7495                 0.4590
@@ -393,120 +393,155 @@ corresponds to the name of the differential in the output object. Using them
 together will let one to access differentially expressed gene counts for each
 condition contrast
 
->>> 
 
 >>> import statsmodels.stats.multitest as multi
->>> 
+>>> dif_exp_genes = [
+...    sum(multi.multipletests(
+...        dif_exp[contrasts.loc[i,].result_ID][
+...            "contrast_" + contrasts.loc[i,].contrast_ID + "_pvalue"
+...            ],
+...        alpha = 0.05, method = "fdr_bh")[0]) for i in range(contrasts.shape[0])]
+>>> contrasts.assign(n_diff= dif_exp_genes)
+>>> contrasts
+   result_ID contrast_ID  ...  probes_analyzed genes_analyzed
+0     550248      113004  ...            21961          18959
+1     550248      113005  ...            21961          18959
+[2 rows x 12 columns]
+
+>>> # baseline factors of the contrasts
+>>> [x.summary for x in contrasts.baseline_factors]
+[0    reference subject role
+ Name: summary, dtype: object,
+ 0    reference subject role
+ Name: summary, dtype: object]
+ 
+>>> # experimental factors of the contrasts
+>>> [x.summary for x in contrasts.experimental_factors]
+[0    bipolar disorder has_modifier manic phase
+ Name: summary, dtype: object,
+ 0    bipolar disorder has_modifier euthymic phase
+ Name: summary, dtype: object]
 
 
->>> for d in contrasts.data:
-...     for r in d.result_sets:
-...         for f in r.experimental_factors:
-...             for v in f.values:
-...                 p_col = "contrast_" + str(v.id) + "_pvalue"
-...                 if p_col in list(de[r.id].columns):
-...                     p_values = de[r.id].loc[:,p_col]
-...                     fdr = multi.multipletests(p_values,method='fdr_bh')
-...                     print(r.id, v.id, v.factor_value, sum(fdr[1]<0.05))
-...
-550248 113004 bipolar disorder, manic phase 3
-550248 113005 euthymic phase, Bipolar Disorder 1389
 
-Alternatively we, since we are only looking at one dataset and one contrast manually, we can simply use readableContrasts.
+Alternatively we, since we are only looking at one dataset and one contrast manually, we can simply use readable_contrasts.
 
->>> de = api_instance.get_differential_expression_values('GSE46416',readableContrasts = True)[[0]]
+>>> de = api.get_differential_expression_values('GSE46416',readable_contrasts = True)
 >>> de = de[list(de.keys())[0]]
 >>> print(de)
-         Probe  ... contrast_euthymic phase, Bipolar Disorder_pvalue
-0      2982730  ...                                         0.719600
-1      2787851  ...                                         0.459000
-2      2477558  ...                                         0.216600
-3      2910917  ...                                         0.373100
-4      3983537  ...                                         0.086940
-...        ...  ...                                              ...
-21956  3301011  ...                                         0.114800
-21957  2461654  ...                                         0.839300
-21958  2360346  ...                                         0.003721
-21959  2391172  ...                                         0.091960
-21960  2525718  ...                                         0.482700
+         Probe  ... contrast_bipolar disorder has_modifier euthymic phase_pvalue
+0      2982730  ...                                             0.7196          
+1      2787851  ...                                             0.4590          
+2      2477558  ...                                             0.2166          
+3      2910917  ...                                             0.3731          
+4      3983537  ...                                             0.0869          
+       ...  ...                                                ...          
+21956  3301011  ...                                             0.1148          
+21957  2461654  ...                                             0.8393          
+21958  2360346  ...                                             0.0037          
+21959  2391172  ...                                             0.0920          
+21960  2525718  ...                                             0.4827          
 [21961 rows x 13 columns]
 >>> # Classify probes for plotting
 >>> de['diffexpr'] = 'No'   # add extra column
->>> de.loc[(de['contrast_bipolar disorder, manic phase_logFoldChange'] > 1.0) &
-...        (de['contrast_bipolar disorder, manic phase_pvalue'] < 0.05),'diffexpr'] = 'Up'
->>> de.loc[(de['contrast_bipolar disorder, manic phase_logFoldChange'] < -1.0) &
-...        (de['contrast_bipolar disorder, manic phase_pvalue'] < 0.05),'diffexpr'] = 'Down'
+>>> de.loc[(de['contrast_bipolar disorder has_modifier manic phase_logFoldChange'] > 1.0) &
+...        (de['contrast_bipolar disorder has_modifier manic phase_pvalue'] < 0.05),'diffexpr'] = 'Up'
+>>> de.loc[(de['contrast_bipolar disorder has_modifier manic phase_logFoldChange'] < -1.0) &
+...        (de['contrast_bipolar disorder has_modifier manic phase_pvalue'] < 0.05),'diffexpr'] = 'Down'
 >>> # Upregulated probes
 >>> de_up = de[de['diffexpr']=='Up']
->>> de_up = de_up[['Probe','GeneSymbol', 'contrast_bipolar disorder, manic phase_pvalue',
-...         'contrast_bipolar disorder, manic phase_logFoldChange']].sort_values(
-...         'contrast_bipolar disorder, manic phase_pvalue')
->>> with pandas.option_context('display.max_rows', None, 'display.max_columns', None):
+>>> de_up = de_up[['Probe','GeneSymbol', 'contrast_bipolar disorder has_modifier manic phase_pvalue',
+...         'contrast_bipolar disorder has_modifier manic phase_logFoldChange']].sort_values(
+...         'contrast_bipolar disorder has_modifier manic phase_pvalue')
+>>> with pd.option_context('display.max_rows', None, 'display.max_columns', None):
 ...         print(de_up[:10])
-         Probe GeneSymbol  contrast_bipolar disorder, manic phase_pvalue  \
-18835  2319550       RBP7                                       0.000086   
-4913   2548699     CYP1B1                                       0.000103   
-11877  3907190       SLPI                                       0.000333   
-6917   3629103      PCLAF                                       0.000518   
-6188   3545525      SLIRP                                       0.000565   
-2065   3146433      COX6C                                       0.000920   
-4839   2538349        NaN                                       0.001253   
-407    2899102       H3C3                                       0.001269   
-18009  3635198     BCL2A1                                       0.001800   
-18588  2633191      GPR15                                       0.002410   
-       contrast_bipolar disorder, manic phase_logFoldChange  
-18835                                              1.074     
-4913                                               1.322     
-11877                                              1.056     
-6917                                               1.278     
-6188                                               1.349     
-2065                                               1.467     
-4839                                               1.073     
-407                                                1.026     
-18009                                              1.080     
-18588                                              1.205     
+         Probe GeneSymbol  \
+18835  2319550       RBP7   
+4913   2548699     CYP1B1   
+11877  3907190       SLPI   
+6917   3629103      PCLAF   
+6188   3545525      SLIRP   
+2065   3146433      COX6C   
+407    2899102       H3C3   
+4839   2538349        NaN   
+18009  3635198     BCL2A1   
+18588  2633191      GPR15   
 
+       contrast_bipolar disorder has_modifier manic phase_pvalue  \
+18835                                           0.000086           
+4913                                            0.000100           
+11877                                           0.000300           
+6917                                            0.000500           
+6188                                            0.000600           
+2065                                            0.000900           
+407                                             0.001300           
+4839                                            0.001300           
+18009                                           0.001800           
+18588                                           0.002400           
+
+       contrast_bipolar disorder has_modifier manic phase_logFoldChange  
+18835                                             1.0740                 
+4913                                              1.3225                 
+11877                                             1.0558                 
+6917                                              1.2783                 
+6188                                              1.3490                 
+2065                                              1.4670                 
+407                                               1.0260                 
+4839                                              1.0731                 
+18009                                             1.0798                 
+18588                                             1.2046  
 >>> # Downregulated probes
 >>> de_dn = de[de['diffexpr']=='Down']
->>> de_dn = de_dn[['Probe','GeneSymbol', 'contrast_bipolar disorder, manic phase_pvalue',
->>>         'contrast_bipolar disorder, manic phase_logFoldChange']].sort_values(
->>>         'contrast_bipolar disorder, manic phase_pvalue')
->>> with pandas.option_context('display.max_rows', None, 'display.max_columns', None):
+>>> de_dn = de_dn[['Probe','GeneSymbol', 'contrast_bipolar disorder has_modifier manic phase_pvalue',
+...         'contrast_bipolar disorder has_modifier manic phase_logFoldChange']].sort_values(
+...         'contrast_bipolar disorder has_modifier manic phase_pvalue')
+>>> with pd.option_context('display.max_rows', None, 'display.max_columns', None):
 ...         print(de_dn[:10])
-         Probe GeneSymbol  contrast_bipolar disorder, manic phase_pvalue  \
-18856  2775390        NaN                                       0.000002   
-5641   3760268        NaN                                       0.000012   
-18194  3124344        NaN                                       0.000139   
-1742   3673179        NaN                                       0.000158   
-10623  3245871      WDFY4                                       0.000168   
-15046  3022689   SND1-IT1                                       0.000227   
-9240   2679014        NaN                                       0.000298   
-499    4019758        NaN                                       0.000355   
-526    3336402      RBM14                                       0.000361   
-9901   2880955        NaN                                       0.000374   
-       contrast_bipolar disorder, manic phase_logFoldChange  
-18856                                             -1.556     
-5641                                              -1.851     
-18194                                             -1.037     
-1742                                              -1.034     
-10623                                             -1.157     
-15046                                             -1.220     
-9240                                              -1.175     
-499                                               -1.405     
-526                                               -1.071     
-9901                                              -1.522     
+         Probe GeneSymbol  \
+18856  2775390        NaN   
+5641   3760268        NaN   
+18194  3124344        NaN   
+15046  3022689   SND1-IT1   
+10623  3245871      WDFY4   
+1742   3673179        NaN   
+9240   2679014        NaN   
+15821  3767230        NaN   
+9879   2880957        NaN   
+526    3336402      RBM14   
+
+       contrast_bipolar disorder has_modifier manic phase_pvalue  \
+18856                                           0.000002           
+5641                                            0.000012           
+18194                                           0.000100           
+15046                                           0.000200           
+10623                                           0.000200           
+1742                                            0.000200           
+9240                                            0.000300           
+15821                                           0.000400           
+9879                                            0.000400           
+526                                             0.000400           
+
+       contrast_bipolar disorder has_modifier manic phase_logFoldChange  
+18856                                            -1.5558                 
+5641                                             -1.8506                 
+18194                                            -1.0370                 
+15046                                            -1.2199                 
+10623                                            -1.1569                 
+1742                                             -1.0340                 
+9240                                             -1.1752                 
+15821                                            -1.0320                 
+9879                                             -1.1755                 
+526                                              -1.0711   
 
 >>> # Add gene symbols as labels to DE genes
 >>> de['delabel'] = ''
 >>> de.loc[de['diffexpr']!='No','delabel'] = de.loc[de['diffexpr']!='No','GeneSymbol']
-...
 >>> # Volcano plot for bipolar patients vs controls
->>> de['-log10(p-value)'] = -np.log10(de['contrast_bipolar disorder, manic phase_pvalue'])
+>>> de['-log10(p-value)'] = -np.log10(de['contrast_bipolar disorder has_modifier manic phase_pvalue'])
 >>> from plotnine import *
->>> plt.figure(figsize=(10,6))
 >>> plot=(ggplot(de)
 ... +aes(
-...     x='contrast_bipolar disorder, manic phase_logFoldChange',
+...     x='contrast_bipolar disorder has_modifier manic phase_logFoldChange',
 ...     y='-log10(p-value)',
 ...     color='diffexpr',
 ...     labels='delabel'
@@ -527,62 +562,82 @@ Differentially-expressed genes in bipolar patients during manic phase versus con
 Larger queries
 --------------
 
-To query large amounts of data, the API has a pagination system which uses the limit and offset parameters. To avoid overloading the server, calls are limited to a maximum of 100 entries, so the offset allows you to get the next batch of entries in the next call(s).
+To query large amounts of data, the API has a pagination system which uses the
+limit and offset parameters. To avoid overloading the server, calls are limited 
+to a maximum of 100 entries, so the offset allows you to get the next batch of 
+entries in the next call(s).
 
-The output of these functions include how many results are available in total.
+To simplify the process of accessing all available data, gemmapy includes the 
+:py:func:`~gemmapy.GemmaPy.get_all_pages` function which can use the output
+from one page to make all the follow up requests
 
->>> import gemmapy
->>> api_instance = gemmapy.GemmaPy()
->>> api_response = api_instance.get_taxon_datasets(taxon = 'human', limit = 1)
->>> print(api_response.total_elements)
-5766
+
+>>> api.get_all_pages(api.get_platforms).head()
+   platform_ID platform_short_name  ... taxon_database_name taxon_database_ID
+0            1               GPL96  ...                hg38              87.0
+1            2             GPL1355  ...                 rn6              86.0
+2            3             GPL1261  ...                mm10              81.0
+3            4              GPL570  ...                hg38              87.0
+4            5               GPL81  ...                mm10              81.0
+[5 rows x 13 columns]
+
+
+Alternative way to access all pages is to do so manually. To see how many
+available results are there, you can look at the attributes component of the output 
+objects where additional information from the API response is appended.
+
+>>> platform_count = api.get_platforms().attributes['total_elements']
+637
 
 After which you can use offset to access all available platforms.
 
->>> count = api_response.total_elements
->>> data = []
->>> for ofs in range(0,count,100):
-...     api_response = api_instance.get_taxon_datasets(taxon = 'human',offset = ofs, limit = 100)
-....    data += api_response.data
->>> print(len(data))
-5766
->>> for d in data[0:6]:
-...     print(d.short_name, d.name, d.taxon.common_name)
-GSE2018 Human Lung Transplant - BAL human
-GSE4036 perro-affy-human-186940 human
-GSE3489 Patterns of gene dysregulation in the frontal cortex of patients with HIV encephalitis human
-GSE1923 Identification of PDGF-dependent patterns of gene expression in U87 glioblastoma cells human
-GSE361 Mammary epithelial cell transduction human
-GSE492 Effect of prostaglandin analogs on aqueous humor outflow human
+>>> all_platforms = []
+>>> for i in range(0,platform_count,100):
+...    all_platforms.append(api.get_platforms(offset = i, limit = 100))
+>>> pd.concat(all_platforms)
+    platform_ID  platform_short_name  ... taxon_database_name taxon_database_ID
+0             1                GPL96  ...                hg38              87.0
+1             2              GPL1355  ...                 rn6              86.0
+2             3              GPL1261  ...                mm10              81.0
+3             4               GPL570  ...                hg38              87.0
+4             5                GPL81  ...                mm10              81.0
+..          ...                  ...  ...                 ...               ...
+32         1327             GPL11044  ...                mm10              81.0
+33         1328              GPL7182  ...                hg38              87.0
+34         1330             GPL33408  ...                 rn6              86.0
+35         1331             GPL32159  ...                mm10              81.0
+36         1332  014850_4x44K_Merged  ...                hg38              87.0
+[637 rows x 13 columns]
 
 
 Many endpoints only support a single identifier:
 
 
->>> api_response = api_instance.get_dataset_annotations(["GSE35974","GSE12649"])
+>>> api.get_dataset_annotations(["GSE35974","GSE12649"])
 ...Error Traceback...
 
 In these cases, you will have to loop over all the identifiers you
 wish to query and send separate requests:
 
+>>> annots = {}
 >>> for dataset in ["GSE35974","GSE12649"]:
-...     api_response = api_instance.get_dataset_annotations(dataset)
-...     for d in api_response.data:
-...         print('%s %-15s %-15s %-15s' % (dataset, d.object_class, d.class_name, d.term_name))
-...     print('--')
-... 
-GSE35974 BioMaterial     biological sex  male           
-GSE35974 FactorValue     disease         schizophrenia  
-GSE35974 FactorValue     disease         Bipolar Disorder
-GSE35974 BioMaterial     biological sex  female         
-GSE35974 FactorValue     disease         mental depression
-GSE35974 ExperimentTag   organism part   cerebellum     
---
-GSE12649 BioMaterial     organism part   reference subject role
-GSE12649 ExperimentTag   organism part   prefrontal cortex
-GSE12649 BioMaterial     disease         Bipolar Disorder
-GSE12649 BioMaterial     disease         schizophrenia  
---
+...   annots[dataset] = api.get_dataset_annotations(dataset)
+>>> annots
+{'GSE35974':        class_name  ...   object_class
+ 0  biological sex  ...    BioMaterial
+ 1         disease  ...    FactorValue
+ 2         disease  ...    FactorValue
+ 3  biological sex  ...    BioMaterial
+ 4       labelling  ...    BioMaterial
+ 5         disease  ...    FactorValue
+ 6   organism part  ...  ExperimentTag
+ [7 rows x 5 columns],
+ 'GSE12649':       class_name  ...   object_class
+ 0        disease  ...    FactorValue
+ 1      labelling  ...    BioMaterial
+ 2        disease  ...    FactorValue
+ 3  organism part  ...  ExperimentTag
+ [4 rows x 5 columns]}
 
 
 Raw endpoints
