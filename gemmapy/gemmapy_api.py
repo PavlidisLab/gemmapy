@@ -1641,8 +1641,8 @@ class GemmaPy(object):
                     ).drop_duplicates()
                 cols = [s.replace('log2fc','logFoldChange') for s in df.columns]
                 for i in range(factors.shape[0]):
-                    cols = [s.replace(str(factors.ID[i]),factors.summary[i]) for s in cols]
-                    df.columns = cols
+                    cols = [s.replace(str(list(factors.ID)[i]),list(factors.summary)[i]) for s in cols]
+                df.columns = cols
             rss[rs] = df
         return rss
             
