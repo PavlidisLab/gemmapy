@@ -14,7 +14,7 @@ info:
     name: Pavlidis Lab Support
     url: https://pavlab.msl.ubc.ca/
     email: pavlab-support@msl.ubc.ca
-  version: 2.7.2
+  version: 2.7.4
 servers:
 - url: https://gemma.msl.ubc.ca/rest/v2
   description: Gemma
@@ -54,7 +54,7 @@ paths:
           description: An expression analysis result set numerical identifier.
           format: int32
       responses:
-        "200":
+        default:
           content:
             application/json:
               schema:
@@ -79,7 +79,7 @@ paths:
           description: An expression analysis result set numerical identifier.
           format: int32
       responses:
-        "200":
+        default:
           content:
             text/tab-separated-values; charset=UTF-8:
               schema:
@@ -115,6 +115,10 @@ paths:
                 4.24E-1\t9.198E-1\t4.608E-1\t-1.774E-1\t-8.894E-1\t4.24E-1"
         "404":
           description: The analysis result set could not be found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseErrorObject'
   /resultSets:
     get:
       summary: Retrieve all result sets matching the provided criteria
@@ -183,6 +187,7 @@ paths:
       parameters:
       - name: query
         in: query
+        description: A comma-delimited list of keywords to find annotations.
         explode: false
         schema:
           type: array
@@ -192,13 +197,21 @@ paths:
             type: string
             default: ""
       responses:
-        "200":
+        default:
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseDataObjectListAnnotationSearchResultValueObject'
         "400":
           description: The search query is empty or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseErrorObject'
+        "503":
+          description: The search for annotations has timed out. It can generally
+            be resolved by reattempting the search 30 seconds later. Lookup the `Retry-After`
+            header for the recommended delay.
           content:
             application/json:
               schema:
@@ -211,7 +224,9 @@ paths:
       parameters:
       - name: query
         in: path
+        description: A comma-delimited list of keywords to find annotations.
         required: true
+        explode: false
         schema:
           type: array
           description: A comma-delimited list of strings. The value may be compressed
@@ -220,7 +235,7 @@ paths:
             type: string
             default: ""
       responses:
-        "200":
+        default:
           content:
             application/json:
               schema:
@@ -235,11 +250,14 @@ paths:
   /annotations/search/datasets:
     get:
       summary: Retrieve datasets associated to an annotation tags search
-      description: This is deprecated in favour of the getDatasets() endpoint.
+      description: "This is deprecated in favour of the [/datasets](#/default/getDatasets)\
+        \ endpoint. Use the `AND` operator to intersect the results of multiple queries."
       operationId: searchDatasets
       parameters:
       - name: query
         in: query
+        description: A comma-delimited list of keywords to find annotations. Matching
+          datasets for each query are intersected.
         explode: false
         schema:
           type: array
@@ -274,13 +292,21 @@ paths:
         schema:
           $ref: '#/components/schemas/SortArgExpressionExperiment'
       responses:
-        "200":
+        default:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FilteredAndPaginatedResponseDataObjectExpressionExperimentValueObject'
+                $ref: '#/components/schemas/QueriedAndFilteredAndPaginatedResponseDataObjectExpressionExperimentValueObject'
         "400":
           description: The search query is empty or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseErrorObject'
+        "503":
+          description: The search for annotations has timed out. It can generally
+            be resolved by reattempting the search 30 seconds later. Lookup the `Retry-After`
+            header for the recommended delay.
           content:
             application/json:
               schema:
@@ -294,7 +320,10 @@ paths:
       parameters:
       - name: query
         in: path
+        description: A comma-delimited list of keywords to find annotations. Matching
+          datasets for each query are intersected.
         required: true
+        explode: false
         schema:
           type: array
           description: A comma-delimited list of strings. The value may be compressed
@@ -328,11 +357,11 @@ paths:
         schema:
           $ref: '#/components/schemas/SortArgExpressionExperiment'
       responses:
-        "200":
+        default:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FilteredAndPaginatedResponseDataObjectExpressionExperimentValueObject'
+                $ref: '#/components/schemas/QueriedAndFilteredAndPaginatedResponseDataObjectExpressionExperimentValueObject'
         "400":
           description: The search query is empty or invalid.
           content:
@@ -344,9 +373,11 @@ paths:
     get:
       summary: Retrieve datasets within a given taxa associated to an annotation tags
         search
-      description: "Use getDatasets() with a `query` parameter and a `filter` parameter\
-        \ with `taxon.id = {taxon} or taxon.commonName = {taxon} or taxon.scientificName\
-        \ = {taxon}` to restrict the taxon instead."
+      description: "This is deprecated in favour of the [/datasets](#/default/getDatasets)\
+        \ endpoint with a `query` parameter and a `filter` parameter with `taxon.id\
+        \ = {taxon} or taxon.commonName = {taxon} or taxon.scientificName = {taxon}`\
+        \ to restrict the taxon instead.  Use the `AND` operator to intersect the\
+        \ results of multiple queries."
       operationId: searchTaxonDatasets
       parameters:
       - name: taxon
@@ -367,6 +398,8 @@ paths:
               common name.
       - name: query
         in: query
+        description: A comma-delimited list of keywords to find annotations. Matching
+          datasets for each query are intersected.
         explode: false
         schema:
           type: array
@@ -401,13 +434,21 @@ paths:
         schema:
           $ref: '#/components/schemas/SortArgExpressionExperiment'
       responses:
-        "200":
+        default:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FilteredAndPaginatedResponseDataObjectExpressionExperimentValueObject'
+                $ref: '#/components/schemas/QueriedAndFilteredAndPaginatedResponseDataObjectExpressionExperimentValueObject'
         "400":
           description: The search query is empty or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseErrorObject'
+        "503":
+          description: The search for annotations has timed out. It can generally
+            be resolved by reattempting the search 30 seconds later. Lookup the `Retry-After`
+            header for the recommended delay.
           content:
             application/json:
               schema:
@@ -438,7 +479,10 @@ paths:
               common name.
       - name: query
         in: path
+        description: A comma-delimited list of keywords to find annotations. Matching
+          datasets for each query are intersected.
         required: true
+        explode: false
         schema:
           type: array
           description: A comma-delimited list of strings. The value may be compressed
@@ -472,11 +516,11 @@ paths:
         schema:
           $ref: '#/components/schemas/SortArgExpressionExperiment'
       responses:
-        "200":
+        default:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FilteredAndPaginatedResponseDataObjectExpressionExperimentValueObject'
+                $ref: '#/components/schemas/QueriedAndFilteredAndPaginatedResponseDataObjectExpressionExperimentValueObject'
         "400":
           description: The search query is empty or invalid.
           content:
@@ -500,7 +544,7 @@ paths:
           - type: string
             description: A dataset short name.
       responses:
-        "200":
+        default:
           content:
             application/json:
               schema:
@@ -527,7 +571,7 @@ paths:
           - type: string
             description: A dataset short name.
       responses:
-        "200":
+        default:
           content:
             text/tab-separated-values; charset=UTF-8:
               schema:
@@ -632,7 +676,7 @@ paths:
           format: int32
           default: 20
       responses:
-        "200":
+        default:
           content:
             application/json:
               schema:
@@ -665,7 +709,7 @@ paths:
         "404":
           description: The dataset does not exist.
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: '#/components/schemas/ResponseErrorObject'
   /datasets/{dataset}/data:
@@ -691,7 +735,7 @@ paths:
           type: boolean
           default: false
       responses:
-        "200":
+        default:
           content:
             text/tab-separated-values; charset=UTF-8:
               schema:
@@ -833,7 +877,7 @@ paths:
           - type: string
             description: A dataset short name.
       responses:
-        "200":
+        default:
           content:
             application/json:
               schema:
@@ -860,7 +904,7 @@ paths:
           - type: string
             description: A dataset short name.
       responses:
-        "200":
+        default:
           content:
             text/tab-separated-values; charset=UTF-8:
               schema:
@@ -919,7 +963,7 @@ paths:
           - type: string
             description: A quantitation type name.
       responses:
-        "200":
+        default:
           content:
             text/tab-separated-values; charset=UTF-8:
               schema:
@@ -947,7 +991,7 @@ paths:
           - type: string
             description: A dataset short name.
       responses:
-        "200":
+        default:
           content:
             application/json:
               schema:
@@ -975,7 +1019,7 @@ paths:
           - type: string
             description: A dataset short name.
       responses:
-        "200":
+        default:
           content:
             application/json:
               schema:
@@ -994,7 +1038,7 @@ paths:
       - name: query
         in: query
         schema:
-          type: string
+          $ref: '#/components/schemas/QueryArg'
       - name: filter
         in: query
         schema:
@@ -1022,11 +1066,19 @@ paths:
           $ref: '#/components/schemas/SortArgExpressionExperiment'
       responses:
         default:
-          description: default response
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/QueriedAndFilteredAndPaginatedResponseDataObjectExpressionExperimentWithSearchResultValueObject'
+        "503":
+          description: The search has timed out. This can only occur if the `search`
+            parameter is provided. It can generally be resolved by reattempting the
+            search 30 seconds later. Lookup the `Retry-After` header for the recommended
+            delay.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseErrorObject'
   /datasets/annotations:
     get:
       summary: Retrieve usage statistics of annotations among datasets matching the
@@ -1038,7 +1090,7 @@ paths:
       - name: query
         in: query
         schema:
-          type: string
+          $ref: '#/components/schemas/QueryArg'
       - name: filter
         in: query
         schema:
@@ -1080,11 +1132,19 @@ paths:
           type: string
       responses:
         default:
-          description: default response
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/LimitedResponseDataObjectAnnotationWithUsageStatisticsValueObject'
+        "503":
+          description: The search has timed out. This can only occur if the `search`
+            parameter is provided. It can generally be resolved by reattempting the
+            search 30 seconds later. Lookup the `Retry-After` header for the recommended
+            delay.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseErrorObject'
   /datasets/{dataset}:
     get:
       summary: Retrieve datasets by their identifiers
@@ -1145,18 +1205,35 @@ paths:
       - name: query
         in: query
         schema:
-          type: string
+          $ref: '#/components/schemas/QueryArg'
       - name: filter
         in: query
         schema:
           $ref: '#/components/schemas/FilterArgExpressionExperiment'
+      - name: limit
+        in: query
+        schema:
+          maximum: 100
+          minimum: 1
+          type: integer
+          description: Limit the number of results retrieved.
+          format: int32
+          default: 20
       responses:
         default:
-          description: default response
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/QueriedAndFilteredResponseDataObjectCategoryWithUsageStatisticsValueObject'
+        "503":
+          description: The search has timed out. This can only occur if the `search`
+            parameter is provided. It can generally be resolved by reattempting the
+            search 30 seconds later. Lookup the `Retry-After` header for the recommended
+            delay.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseErrorObject'
   /datasets/platforms:
     get:
       summary: Retrieve usage statistics of platforms among datasets matching the
@@ -1168,7 +1245,7 @@ paths:
       - name: query
         in: query
         schema:
-          type: string
+          $ref: '#/components/schemas/QueryArg'
       - name: filter
         in: query
         schema:
@@ -1184,11 +1261,19 @@ paths:
           default: 50
       responses:
         default:
-          description: default response
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/LimitedResponseDataObjectArrayDesignWithUsageStatisticsValueObject'
+        "503":
+          description: The search has timed out. This can only occur if the `search`
+            parameter is provided. It can generally be resolved by reattempting the
+            search 30 seconds later. Lookup the `Retry-After` header for the recommended
+            delay.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseErrorObject'
   /datasets/taxa:
     get:
       summary: Retrieve taxa usage statistics for datasets matching the provided query
@@ -1198,38 +1283,54 @@ paths:
       - name: query
         in: query
         schema:
-          type: string
+          $ref: '#/components/schemas/QueryArg'
       - name: filter
         in: query
         schema:
           $ref: '#/components/schemas/FilterArgExpressionExperiment'
       responses:
         default:
-          description: default response
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/QueriedAndFilteredResponseDataObjectTaxonWithUsageStatisticsValueObject'
+        "503":
+          description: The search has timed out. This can only occur if the `search`
+            parameter is provided. It can generally be resolved by reattempting the
+            search 30 seconds later. Lookup the `Retry-After` header for the recommended
+            delay.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseErrorObject'
   /datasets/count:
     get:
-      summary: Count datasets matching the provided query and  filter
+      summary: Count datasets matching the provided query and filter
       operationId: getNumberOfDatasets
       parameters:
       - name: query
         in: query
         schema:
-          type: string
+          $ref: '#/components/schemas/QueryArg'
       - name: filter
         in: query
         schema:
           $ref: '#/components/schemas/FilterArgExpressionExperiment'
       responses:
         default:
-          description: default response
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseDataObjectLong'
+        "503":
+          description: The search has timed out. This can only occur if the `search`
+            parameter is provided. It can generally be resolved by reattempting the
+            search 30 seconds later. Lookup the `Retry-After` header for the recommended
+            delay.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseErrorObject'
   /genes/{gene}/goTerms:
     get:
       summary: Retrieve the GO terms associated to a gene
@@ -1398,7 +1499,7 @@ paths:
           - type: string
             description: A platform short name.
       responses:
-        "200":
+        default:
           content:
             text/tab-separated-values; charset=UTF-8:
               schema:
@@ -1690,7 +1791,7 @@ paths:
       - name: query
         in: query
         schema:
-          type: string
+          $ref: '#/components/schemas/QueryArg'
       - name: taxon
         in: query
         schema:
@@ -1722,16 +1823,16 @@ paths:
           items:
             type: string
             enum:
-            - ubic.gemma.model.expression.experiment.ExpressionExperiment
-            - ubic.gemma.model.association.phenotype.PhenotypeAssociation
-            - ubic.gemma.model.analysis.expression.ExpressionExperimentSet
-            - ubic.gemma.model.expression.BlacklistedEntity
             - ubic.gemma.model.expression.arrayDesign.ArrayDesign
-            - ubic.gemma.model.genome.biosequence.BioSequence
+            - ubic.gemma.model.expression.experiment.ExpressionExperiment
             - ubic.gemma.model.genome.Gene
-            - ubic.gemma.model.genome.gene.GeneSet
             - ubic.gemma.model.common.description.BibliographicReference
+            - ubic.gemma.model.expression.BlacklistedEntity
             - ubic.gemma.model.expression.designElement.CompositeSequence
+            - ubic.gemma.model.genome.gene.GeneSet
+            - ubic.gemma.model.analysis.expression.ExpressionExperimentSet
+            - ubic.gemma.model.genome.biosequence.BioSequence
+            - ubic.gemma.model.association.phenotype.PhenotypeAssociation
       - name: limit
         in: query
         description: Maximum number of search results to return; capped at 2000 unless
@@ -1756,11 +1857,23 @@ paths:
             type: string
       responses:
         default:
-          description: default response
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/SearchResultsResponseDataObject'
+        "400":
+          description: "Invalid search query, taxon, platform result type or exclusion\
+            \ specification."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseErrorObject'
+        "503":
+          description: The search timed out.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseErrorObject'
   /taxa/{taxon}/genes/{gene}/locations:
     get:
       summary: Retrieve physical locations for a given gene and taxon
@@ -2529,6 +2642,9 @@ components:
           type: string
         type:
           type: string
+          enum:
+          - categorical
+          - continuous
         values:
           type: array
           items:
@@ -2687,8 +2803,23 @@ components:
           type: string
         type:
           type: string
+          enum:
+          - ABSOLUTE
+          - CHANGE
         representation:
           type: string
+          enum:
+          - DOUBLE
+          - INT
+          - LONG
+          - CHAR
+          - BOOLEAN
+          - STRING
+          - INTARRAY
+          - DOUBLEARRAY
+          - CHARARRAY
+          - BOOLEANARRAY
+          - STRINGARRAY
     ResponseDataObjectDifferentialExpressionAnalysisResultSetValueObject:
       type: object
       properties:
@@ -3103,13 +3234,18 @@ components:
           format: date-time
         action:
           type: string
+          enum:
+          - C
+          - R
+          - U
+          - D
         note:
           type: string
         detail:
           type: string
-        actionName:
-          type: string
         eventTypeName:
+          type: string
+        actionName:
           type: string
     ExpressionExperimentValueObject:
       type: object
@@ -3145,9 +3281,21 @@ components:
           type: string
         batchEffect:
           type: string
+          enum:
+          - NO_BATCH_INFO
+          - SINGLETON_BATCHES_FAILURE
+          - UNINFORMATIVE_HEADERS_FAILURE
+          - PROBLEMATIC_BATCH_INFO_FAILURE
+          - BATCH_EFFECT_FAILURE
+          - BATCH_CORRECTED_SUCCESS
+          - SINGLE_BATCH_SUCCESS
+          - BATCH_EFFECT_UNDETERMINED_FAILURE
+          - NO_BATCH_EFFECT_SUCCESS
         batchEffectStatistics:
           type: string
         externalDatabase:
+          type: string
+        externalDatabaseUri:
           type: string
         externalUri:
           type: string
@@ -3177,30 +3325,6 @@ components:
           format: int32
         taxon:
           $ref: '#/components/schemas/TaxonValueObject'
-    FilteredAndPaginatedResponseDataObjectExpressionExperimentValueObject:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/ExpressionExperimentValueObject'
-        filter:
-          type: string
-        groupBy:
-          type: array
-          items:
-            type: string
-        sort:
-          $ref: '#/components/schemas/SortValueObject'
-        offset:
-          type: integer
-          format: int32
-        limit:
-          type: integer
-          format: int32
-        totalElements:
-          type: integer
-          format: int64
     GeeqValueObject:
       type: object
       properties:
@@ -3274,6 +3398,32 @@ components:
         qScorePublicBatchConfound:
           type: number
           format: double
+    QueriedAndFilteredAndPaginatedResponseDataObjectExpressionExperimentValueObject:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExpressionExperimentValueObject'
+        query:
+          type: string
+        filter:
+          type: string
+        groupBy:
+          type: array
+          items:
+            type: string
+        sort:
+          $ref: '#/components/schemas/SortValueObject'
+        offset:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        totalElements:
+          type: integer
+          format: int64
     FilterArgExpressionExperiment:
       type: string
       description: |-
@@ -4878,6 +5028,41 @@ components:
           type: string
         evidenceCode:
           type: string
+          enum:
+          - IC
+          - IDA
+          - IEA
+          - IEP
+          - IGI
+          - IMP
+          - IPI
+          - ISS
+          - NAS
+          - ND
+          - RCA
+          - TAS
+          - NR
+          - EXP
+          - ISA
+          - ISM
+          - IGC
+          - ISO
+          - IIA
+          - IBA
+          - IBD
+          - IKR
+          - IRD
+          - IMR
+          - IED
+          - IAGP
+          - IPM
+          - QTM
+          - HDA
+          - HEP
+          - HGI
+          - HMP
+          - HTP
+          - OTHER
         objectClass:
           type: string
     ResponseDataObjectSetAnnotationValueObject:
@@ -4971,6 +5156,13 @@ components:
           $ref: '#/components/schemas/AuditEventValueObject'
         color:
           type: string
+          enum:
+          - TWOCOLOR
+          - DUALMODE
+          - ONECOLOR
+          - SEQUENCING
+          - GENELIST
+          - OTHER
         description:
           type: string
         expressionExperimentCount:
@@ -4986,6 +5178,13 @@ components:
           type: string
         technologyType:
           type: string
+          enum:
+          - TWOCOLOR
+          - DUALMODE
+          - ONECOLOR
+          - SEQUENCING
+          - GENELIST
+          - OTHER
         releaseVersion:
           type: string
         releaseUrl:
@@ -4996,10 +5195,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/DatabaseEntryValueObject'
-        numberOfExpressionExperiments:
+        taxonID:
           type: integer
           format: int64
-        taxonID:
+        numberOfExpressionExperiments:
           type: integer
           format: int64
         troubleDetails:
@@ -5026,6 +5225,10 @@ components:
           type: string
         generalType:
           type: string
+          enum:
+          - QUANTITATIVE
+          - CATEGORICAL
+          - UNKNOWN
         isBackground:
           type: boolean
         isBackgroundSubtracted:
@@ -5046,10 +5249,45 @@ components:
           type: string
         representation:
           type: string
+          enum:
+          - DOUBLE
+          - INT
+          - LONG
+          - CHAR
+          - BOOLEAN
+          - STRING
+          - INTARRAY
+          - DOUBLEARRAY
+          - CHARARRAY
+          - BOOLEANARRAY
+          - STRINGARRAY
         scale:
           type: string
+          enum:
+          - LINEAR
+          - LN
+          - LOG2
+          - LOG10
+          - LOG1P
+          - LOGBASEUNKNOWN
+          - FOLDCHANGE
+          - OTHER
+          - UNSCALED
+          - PERCENT1
+          - PERCENT
+          - COUNT
         type:
           type: string
+          enum:
+          - PRESENTABSENT
+          - FAILED
+          - AMOUNT
+          - CONFIDENCEINDICATOR
+          - CORRELATION
+          - COUNT
+          - COORDINATE
+          - ZSCORE
+          - OTHER
         vectorType:
           type: string
     ResponseDataObjectSetQuantitationTypeValueObject:
@@ -5265,6 +5503,21 @@ components:
           $ref: '#/components/schemas/TaxonValueObject'
         type:
           type: string
+          enum:
+          - AFFY_TARGET
+          - AFFY_PROBE
+          - EST
+          - mRNA
+          - REFSEQ
+          - BAC
+          - WHOLE_GENOME
+          - WHOLE_CHROMOSOME
+          - DNA
+          - OTHER
+          - ORF
+          - AFFY_COLLAPSED
+          - OLIGO
+          - DUMMY
     CitationValueObject:
       type: object
       properties:
@@ -5364,9 +5617,21 @@ components:
           type: string
         batchEffect:
           type: string
+          enum:
+          - NO_BATCH_INFO
+          - SINGLETON_BATCHES_FAILURE
+          - UNINFORMATIVE_HEADERS_FAILURE
+          - PROBLEMATIC_BATCH_INFO_FAILURE
+          - BATCH_EFFECT_FAILURE
+          - BATCH_CORRECTED_SUCCESS
+          - SINGLE_BATCH_SUCCESS
+          - BATCH_EFFECT_UNDETERMINED_FAILURE
+          - NO_BATCH_EFFECT_SUCCESS
         batchEffectStatistics:
           type: string
         externalDatabase:
+          type: string
+        externalDatabaseUri:
           type: string
         externalUri:
           type: string
@@ -5461,6 +5726,139 @@ components:
             type: string
         resultObject:
           $ref: '#/components/schemas/ExpressionExperimentValueObject'
+    QueryArg:
+      type: string
+      description: "Filter results matching the given full-text query.\n\nThe search\
+        \ query accepts the following syntax:\n\n|              |                \
+        \             |                                                          \
+        \                                                              |\n|--------------|-----------------------------|------------------------------------------------------------------------------------------------------------------------|\n\
+        | Conjunction  | `alpha AND beta AND gamma`  | Results must contain \"alpha\"\
+        , \"beta\" and \"gamma\".                                                \
+        \                      |\n| Disjunction  | `alpha OR beta OR gamma`    | Results\
+        \ must contain either \"alpha\", \"beta\" or \"gamma\". This is the default\
+        \ when multiple terms are supplied.          | \n| Grouping     | `(alpha\
+        \ OR beta) AND gamma` | Results must contain one of \"alpha\" or \"beta\"\
+        \ and also \"gamma\".                                                    \
+        \    |\n| Exact Search | `\"alpha beta gamma\"`        | Results must contain\
+        \ the exact phrase \"alpha beta gamma\".                                 \
+        \                             |\n| Field        | `shortName:GSE00001`   \
+        \     | Results with short name GSE00001. <details><summary>List of supported\
+        \ fields</summary><h2>ubic.gemma.model.expression.experiment.ExpressionExperiment</h2><ul><li>description</li><li>name</li><li>shortName</li><li>accession.accession</li><li>bioAssays.description</li><li>bioAssays.name</li><li>characteristics.value</li><li>characteristics.valueUri</li><li>experimentalDesign.description</li><li>experimentalDesign.name</li><li>otherRelevantPublications.abstractText</li><li>otherRelevantPublications.authorList</li><li>otherRelevantPublications.fullTextUri</li><li>otherRelevantPublications.name</li><li>otherRelevantPublications.title</li><li>primaryPublication.abstractText</li><li>primaryPublication.authorList</li><li>primaryPublication.fullTextUri</li><li>primaryPublication.name</li><li>primaryPublication.title</li><li>bioAssays.accession.accession</li><li>bioAssays.sampleUsed.name</li><li>experimentalDesign.experimentalFactors.description</li><li>experimentalDesign.experimentalFactors.name</li><li>otherRelevantPublications.chemicals.name</li><li>otherRelevantPublications.chemicals.registryNumber</li><li>otherRelevantPublications.keywords.term</li><li>otherRelevantPublications.meshTerms.term</li><li>otherRelevantPublications.pubAccession.accession</li><li>primaryPublication.chemicals.name</li><li>primaryPublication.chemicals.registryNumber</li><li>primaryPublication.keywords.term</li><li>primaryPublication.meshTerms.term</li><li>primaryPublication.pubAccession.accession</li><li>bioAssays.sampleUsed.characteristics.value</li><li>bioAssays.sampleUsed.characteristics.valueUri</li><li>experimentalDesign.experimentalFactors.category.category</li><li>experimentalDesign.experimentalFactors.category.categoryUri</li><li>experimentalDesign.experimentalFactors.factorValues.characteristics.object</li><li>experimentalDesign.experimentalFactors.factorValues.characteristics.objectUri</li><li>experimentalDesign.experimentalFactors.factorValues.characteristics.secondObject</li><li>experimentalDesign.experimentalFactors.factorValues.characteristics.secondObjectUri</li><li>experimentalDesign.experimentalFactors.factorValues.characteristics.value</li><li>experimentalDesign.experimentalFactors.factorValues.characteristics.valueUri</li></ul><h2>ubic.gemma.model.genome.gene.GeneSet</h2><ul><li>description</li><li>name</li><li>characteristics.value</li><li>characteristics.valueUri</li><li>literatureSources.abstractText</li><li>literatureSources.authorList</li><li>literatureSources.fullTextUri</li><li>literatureSources.name</li><li>literatureSources.title</li><li>sourceAccession.accession</li><li>literatureSources.chemicals.name</li><li>literatureSources.chemicals.registryNumber</li><li>literatureSources.keywords.term</li><li>literatureSources.meshTerms.term</li><li>literatureSources.pubAccession.accession</li><li>members.gene.ensemblId</li><li>members.gene.name</li><li>members.gene.ncbiGeneId</li><li>members.gene.officialName</li><li>members.gene.officialSymbol</li><li>members.gene.accessions.accession</li><li>members.gene.aliases.alias</li><li>members.gene.products.name</li><li>members.gene.products.ncbiGi</li><li>members.gene.products.previousNcbiId</li><li>members.gene.products.accessions.accession</li></ul><h2>ubic.gemma.model.expression.designElement.CompositeSequence</h2><ul><li>description</li><li>name</li><li>biologicalCharacteristic.name</li><li>biologicalCharacteristic.sequenceDatabaseEntry.accession</li></ul><h2>ubic.gemma.model.expression.arrayDesign.ArrayDesign</h2><ul><li>description</li><li>name</li><li>shortName</li><li>alternateNames.name</li><li>externalReferences.accession</li></ul><h2>ubic.gemma.model.genome.Gene</h2><ul><li>ensemblId</li><li>name</li><li>ncbiGeneId</li><li>officialName</li><li>officialSymbol</li><li>accessions.accession</li><li>aliases.alias</li><li>products.name</li><li>products.ncbiGi</li><li>products.previousNcbiId</li><li>products.accessions.accession</li></ul><h2>ubic.gemma.model.genome.biosequence.BioSequence</h2><ul><li>name</li><li>sequenceDatabaseEntry.accession</li></ul></details>\
+        \ |\n| Prefix       | `alpha*`                    | Results must start with\
+        \ \"alpha\".                                                             \
+        \                          |\n| Wildcard     | `BRCA?`                   \
+        \  | Results can contain any letter for the `?`. In this example, BRCA1 and\
+        \ BRCA2 would be matched.                         | \n| Fuzzy        | `alpha~`\
+        \                    | Results can approximate \"alpha\". In this example,\
+        \ \"aleph\" would be accepted.                                           |\n\
+        | Boosting     | `alpha^2 beta`              | Results mentioning \"alpha\"\
+        \ are ranked higher over those containing only \"beta\".                 \
+        \                       |\n| Require      | `+alpha beta`               |\
+        \ Results must mention \"alpha\" and optionally \"beta\".                \
+        \                                                    |\n| Escape       | `\\\
+        +alpha`                   | Results must mention \"+alpha\". Any special character\
+        \ from the search syntax can be escaped by prepending it with \"\\\".  | \n"
+      externalDocs:
+        url: https://lucene.apache.org/core/3_6_2/queryparsersyntax.html
+      x-gemma-searchable-properties:
+        ubic.gemma.model.expression.experiment.ExpressionExperiment:
+        - description
+        - name
+        - shortName
+        - accession.accession
+        - bioAssays.description
+        - bioAssays.name
+        - characteristics.value
+        - characteristics.valueUri
+        - experimentalDesign.description
+        - experimentalDesign.name
+        - otherRelevantPublications.abstractText
+        - otherRelevantPublications.authorList
+        - otherRelevantPublications.fullTextUri
+        - otherRelevantPublications.name
+        - otherRelevantPublications.title
+        - primaryPublication.abstractText
+        - primaryPublication.authorList
+        - primaryPublication.fullTextUri
+        - primaryPublication.name
+        - primaryPublication.title
+        - bioAssays.accession.accession
+        - bioAssays.sampleUsed.name
+        - experimentalDesign.experimentalFactors.description
+        - experimentalDesign.experimentalFactors.name
+        - otherRelevantPublications.chemicals.name
+        - otherRelevantPublications.chemicals.registryNumber
+        - otherRelevantPublications.keywords.term
+        - otherRelevantPublications.meshTerms.term
+        - otherRelevantPublications.pubAccession.accession
+        - primaryPublication.chemicals.name
+        - primaryPublication.chemicals.registryNumber
+        - primaryPublication.keywords.term
+        - primaryPublication.meshTerms.term
+        - primaryPublication.pubAccession.accession
+        - bioAssays.sampleUsed.characteristics.value
+        - bioAssays.sampleUsed.characteristics.valueUri
+        - experimentalDesign.experimentalFactors.category.category
+        - experimentalDesign.experimentalFactors.category.categoryUri
+        - experimentalDesign.experimentalFactors.factorValues.characteristics.object
+        - experimentalDesign.experimentalFactors.factorValues.characteristics.objectUri
+        - experimentalDesign.experimentalFactors.factorValues.characteristics.secondObject
+        - experimentalDesign.experimentalFactors.factorValues.characteristics.secondObjectUri
+        - experimentalDesign.experimentalFactors.factorValues.characteristics.value
+        - experimentalDesign.experimentalFactors.factorValues.characteristics.valueUri
+        ubic.gemma.model.genome.gene.GeneSet:
+        - description
+        - name
+        - characteristics.value
+        - characteristics.valueUri
+        - literatureSources.abstractText
+        - literatureSources.authorList
+        - literatureSources.fullTextUri
+        - literatureSources.name
+        - literatureSources.title
+        - sourceAccession.accession
+        - literatureSources.chemicals.name
+        - literatureSources.chemicals.registryNumber
+        - literatureSources.keywords.term
+        - literatureSources.meshTerms.term
+        - literatureSources.pubAccession.accession
+        - members.gene.ensemblId
+        - members.gene.name
+        - members.gene.ncbiGeneId
+        - members.gene.officialName
+        - members.gene.officialSymbol
+        - members.gene.accessions.accession
+        - members.gene.aliases.alias
+        - members.gene.products.name
+        - members.gene.products.ncbiGi
+        - members.gene.products.previousNcbiId
+        - members.gene.products.accessions.accession
+        ubic.gemma.model.expression.designElement.CompositeSequence:
+        - description
+        - name
+        - biologicalCharacteristic.name
+        - biologicalCharacteristic.sequenceDatabaseEntry.accession
+        ubic.gemma.model.expression.arrayDesign.ArrayDesign:
+        - description
+        - name
+        - shortName
+        - alternateNames.name
+        - externalReferences.accession
+        ubic.gemma.model.genome.Gene:
+        - ensemblId
+        - name
+        - ncbiGeneId
+        - officialName
+        - officialSymbol
+        - accessions.accession
+        - aliases.alias
+        - products.name
+        - products.ncbiGi
+        - products.previousNcbiId
+        - products.accessions.accession
+        ubic.gemma.model.genome.biosequence.BioSequence:
+        - name
+        - sequenceDatabaseEntry.accession
     AnnotationWithUsageStatisticsValueObject:
       type: object
       properties:
@@ -5474,6 +5872,41 @@ components:
           type: string
         evidenceCode:
           type: string
+          enum:
+          - IC
+          - IDA
+          - IEA
+          - IEP
+          - IGI
+          - IMP
+          - IPI
+          - ISS
+          - NAS
+          - ND
+          - RCA
+          - TAS
+          - NR
+          - EXP
+          - ISA
+          - ISM
+          - IGC
+          - ISO
+          - IIA
+          - IBA
+          - IBD
+          - IKR
+          - IRD
+          - IMR
+          - IED
+          - IAGP
+          - IPM
+          - QTM
+          - HDA
+          - HEP
+          - HGI
+          - HMP
+          - HTP
+          - OTHER
         numberOfExpressionExperiments:
           type: integer
           format: int64
@@ -5514,6 +5947,30 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/OntologyTermValueObject'
+    FilteredAndPaginatedResponseDataObjectExpressionExperimentValueObject:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExpressionExperimentValueObject'
+        filter:
+          type: string
+        groupBy:
+          type: array
+          items:
+            type: string
+        sort:
+          $ref: '#/components/schemas/SortValueObject'
+        offset:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        totalElements:
+          type: integer
+          format: int64
     CategoryWithUsageStatisticsValueObject:
       type: object
       properties:
@@ -5564,6 +6021,13 @@ components:
           $ref: '#/components/schemas/AuditEventValueObject'
         color:
           type: string
+          enum:
+          - TWOCOLOR
+          - DUALMODE
+          - ONECOLOR
+          - SEQUENCING
+          - GENELIST
+          - OTHER
         description:
           type: string
         isMerged:
@@ -5576,6 +6040,13 @@ components:
           type: string
         technologyType:
           type: string
+          enum:
+          - TWOCOLOR
+          - DUALMODE
+          - ONECOLOR
+          - SEQUENCING
+          - GENELIST
+          - OTHER
         releaseVersion:
           type: string
         releaseUrl:
@@ -6952,16 +7423,16 @@ components:
       items:
         type: string
         enum:
-        - ubic.gemma.model.expression.experiment.ExpressionExperiment
-        - ubic.gemma.model.association.phenotype.PhenotypeAssociation
-        - ubic.gemma.model.analysis.expression.ExpressionExperimentSet
-        - ubic.gemma.model.expression.BlacklistedEntity
         - ubic.gemma.model.expression.arrayDesign.ArrayDesign
-        - ubic.gemma.model.genome.biosequence.BioSequence
+        - ubic.gemma.model.expression.experiment.ExpressionExperiment
         - ubic.gemma.model.genome.Gene
-        - ubic.gemma.model.genome.gene.GeneSet
         - ubic.gemma.model.common.description.BibliographicReference
+        - ubic.gemma.model.expression.BlacklistedEntity
         - ubic.gemma.model.expression.designElement.CompositeSequence
+        - ubic.gemma.model.genome.gene.GeneSet
+        - ubic.gemma.model.analysis.expression.ExpressionExperimentSet
+        - ubic.gemma.model.genome.biosequence.BioSequence
+        - ubic.gemma.model.association.phenotype.PhenotypeAssociation
     ResponseDataObjectListTaxonValueObject:
       type: object
       properties:
