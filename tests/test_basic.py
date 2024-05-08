@@ -58,7 +58,7 @@ def test_get_dataset_differential_expression_analyses():
 
 def test_result_set_table_compatibility():
     res = api.get_dataset_differential_expression_analyses(200)
-    res2 = api.get_result_sets(resultSets = [res.result_ID[0]])
+    res2 = api.get_result_sets(result_sets = [res.result_ID[0]])
     
     assert all(
         sub.list_in_list(res2.contrast_ID, res.contrast_ID)

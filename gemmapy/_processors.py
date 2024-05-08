@@ -29,7 +29,7 @@ def process_de_matrix(d,rs,api):
     i_regex = r"contrast_[0-9]+?_[0-9]+?_"
     
     if any([not re.search(i_regex,x) is None for x in df.columns]):
-        result_set = api.get_result_sets(resultSets = [rs])
+        result_set = api.get_result_sets(result_sets = [rs])
         to_rename = [x for x in df.columns if not re.search(i_regex,x) is None]
         
         def rename(name,result_set):
