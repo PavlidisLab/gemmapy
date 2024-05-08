@@ -93,7 +93,7 @@ def process_dea(d):
         "factor_ID": [],
         "baseline_factors": [],
         "experimental_factors": [],
-        "is_subset": [],
+        "is_subset": pd.Series(dtype='bool'),
         "subset_factor": [],
         "probes_analyzed": pd.Series(dtype='int'),
         "genes_analyzed": pd.Series(dtype='int')
@@ -188,7 +188,7 @@ def process_DifferentialExpressionAnalysisResultSetValueObject(d:list,api):
         "factor_ID": [],
         "baseline_factors": [],
         "experimental_factors": [],
-        "is_subset": [],
+        "is_subset": pd.Series(dtype='bool'),
         "subset_factor": []
     })
     out_list = [df]
@@ -259,7 +259,6 @@ def process_DifferentialExpressionAnalysisResultSetValueObject(d:list,api):
         factor_category = ",".join(sub.field_in_list(x.experimental_factors,'category'))
         factor_category_URI = ",".join(sub.field_in_list(x.experimental_factors,'category_uri'))
         factor_ID = ",".join([str(y) for y in sub.field_in_list(x.experimental_factors,'id')])
-        
         out =  pd.DataFrame({
             "result_ID": sub.rep(sub.access_field(x, "id"),size),
             "contrast_ID": contrast_id,
@@ -269,12 +268,11 @@ def process_DifferentialExpressionAnalysisResultSetValueObject(d:list,api):
             "factor_ID": sub.rep(factor_ID,size),
             "baseline_factors": sub.rep(baseline_factors,size),
             "experimental_factors": experimental_factors,
-            "is_subset": sub.rep(not sub.access_field(x,"analysis","subset_factor_value") is None,size),
+            "is_subset": sub.rep(not sub.access_field(x,"analysis","subset_factor_value",na_type = None) is None,size),
             "subset_factor": sub.rep(sub.process_FactorValueValueObject(x.analysis.subset_factor_value), size)
         })
         
         out_list.append(out)
-        
     out = pd.concat(out_list,ignore_index = True)
     
     
