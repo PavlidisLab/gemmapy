@@ -389,7 +389,7 @@ def process_expression(d, dataset, api):
                 match = i
         return match
     
-    sample_matches= [find_match(x) for x in sample_ids]
+    sample_matches = [find_match(x) for x in sample_ids]
     
     
     rename_dict = sub.make_dict([m_cols[i] for i in sample_matches],sample_names)
