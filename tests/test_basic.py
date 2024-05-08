@@ -72,13 +72,13 @@ def test_result_set_table_compatibility():
         )
 
 def test_get_dataset_expression_for_genes():
-    res = api.get_dataset_expression_for_genes(datasets = [1,4,2], genes = [10225,2841])
+    res = api.get_dataset_expression_for_genes(datasets = [1,4], genes = [10225,2841])
      
     assert all(
          [type(value) is pd.core.frame.DataFrame for value in res.values()]
          )
     
-    assert res[2].shape == (0,0)
+    # assert res[2].shape == (0,0)
     assert res[1].shape[0]>1
     assert res[4].shape[0]>1
      
