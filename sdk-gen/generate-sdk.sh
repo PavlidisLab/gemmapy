@@ -1,6 +1,6 @@
 #!/bin/bash
 swagger_version=3.0.55
-gemmapy_version=0.0.2
+gemmapy_version=1.0.0
 temp_sdk_dir=$(mktemp -d)
 script_dir=$(dirname "${BASH_SOURCE[0]}")
 echo "Updating openapi.yaml..."
