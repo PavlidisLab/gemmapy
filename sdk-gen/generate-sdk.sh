@@ -1,8 +1,9 @@
 #!/bin/bash
+set -e
 swagger_version=3.0.55
-gemmapy_version=1.0.0
 temp_sdk_dir=$(mktemp -d)
 script_dir=$(dirname "${BASH_SOURCE[0]}")
+gemmapy_version=$(grep 'version' "$script_dir/../setup.cfg" | sed 's/version = //')
 echo "Updating openapi.yaml..."
 curl https://gemma.msl.ubc.ca/rest/v2/openapi.yaml -o "$script_dir/openapi.yaml" --compressed
 echo "Updating swagger-codegen-cli.jar..."
