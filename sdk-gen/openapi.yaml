@@ -44,6 +44,8 @@ paths:
   /resultSets/{resultSet}:
     get:
       summary: Retrieve a single analysis result set by its identifier
+      description: A slice or results can be retrieved by specifying the `offset`
+        and `limit` parameters. This is only applicable to the JSON representation.
       operationId: getResultSet
       parameters:
       - name: resultSet
@@ -53,34 +55,32 @@ paths:
           type: integer
           description: An expression analysis result set numerical identifier.
           format: int32
-      responses:
-        default:
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseDataObjectDifferentialExpressionAnalysisResultSetValueObject'
-        "404":
-          description: The analysis result set could not be found.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseErrorObject'
-  /resultSets/{resultSet_}:
-    get:
-      summary: Retrieve a single analysis result set by its identifier as a tab-separated
-        values
-      operationId: getResultSetAsTsv
-      parameters:
-      - name: resultSet_
-        in: path
-        required: true
+      - name: threshold
+        in: query
         schema:
+          type: number
+          format: double
+      - name: offset
+        in: query
+        schema:
+          minimum: 0
           type: integer
-          description: An expression analysis result set numerical identifier.
+          description: The offset of the first retrieved result.
+          format: int32
+      - name: limit
+        in: query
+        schema:
+          maximum: 100
+          minimum: 1
+          type: integer
+          description: Limit the number of results retrieved.
           format: int32
       responses:
         default:
           content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResultsResponseDataObjectDifferentialExpressionAnalysisResultSetValueObject'
             text/tab-separated-values; charset=UTF-8:
               schema:
                 type: string
@@ -1143,7 +1143,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/QueriedAndFilteredAndPaginatedResponseDataObjectExpressionExperimentWithSearchResultValueObject'
+                $ref: '#/components/schemas/QueriedAndFilteredAndInferredAndPaginatedResponseDataObjectExpressionExperimentWithSearchResultValueObject'
         "503":
           description: The search has timed out. This can only occur if the `search`
             parameter is provided. It can generally be resolved by reattempting the
@@ -1209,7 +1209,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LimitedResponseDataObjectAnnotationWithUsageStatisticsValueObject'
+                $ref: '#/components/schemas/QueriedAndFilteredAndInferredAndLimitedResponseDataObjectAnnotationWithUsageStatisticsValueObject'
         "503":
           description: The search has timed out. This can only occur if the `search`
             parameter is provided. It can generally be resolved by reattempting the
@@ -1267,7 +1267,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FilteredAndPaginatedResponseDataObjectExpressionExperimentValueObject'
+                $ref: '#/components/schemas/FilteredAndInferredAndPaginatedResponseDataObjectExpressionExperimentValueObject'
   /datasets/categories:
     get:
       summary: Retrieve usage statistics of categories among datasets matching the
@@ -1298,7 +1298,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/QueriedAndFilteredResponseDataObjectCategoryWithUsageStatisticsValueObject'
+                $ref: '#/components/schemas/QueriedAndFilteredAndInferredAndLimitedResponseDataObjectCategoryWithUsageStatisticsValueObject'
         "503":
           description: The search has timed out. This can only occur if the `search`
             parameter is provided. It can generally be resolved by reattempting the
@@ -1338,7 +1338,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LimitedResponseDataObjectArrayDesignWithUsageStatisticsValueObject'
+                $ref: '#/components/schemas/QueriedAndFilteredAndInferredAndLimitedResponseDataObjectArrayDesignWithUsageStatisticsValueObject'
         "503":
           description: The search has timed out. This can only occur if the `search`
             parameter is provided. It can generally be resolved by reattempting the
@@ -1367,7 +1367,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/QueriedAndFilteredResponseDataObjectTaxonWithUsageStatisticsValueObject'
+                $ref: '#/components/schemas/QueriedAndFilteredAndInferredResponseDataObjectTaxonWithUsageStatisticsValueObject'
         "503":
           description: The search has timed out. This can only occur if the `search`
             parameter is provided. It can generally be resolved by reattempting the
@@ -1926,16 +1926,16 @@ paths:
           items:
             type: string
             enum:
-            - ubic.gemma.model.expression.BlacklistedEntity
-            - ubic.gemma.model.expression.arrayDesign.ArrayDesign
-            - ubic.gemma.model.genome.biosequence.BioSequence
-            - ubic.gemma.model.association.phenotype.PhenotypeAssociation
+            - ubic.gemma.model.expression.designElement.CompositeSequence
             - ubic.gemma.model.genome.gene.GeneSet
-            - ubic.gemma.model.genome.Gene
+            - ubic.gemma.model.expression.experiment.ExpressionExperiment
+            - ubic.gemma.model.genome.biosequence.BioSequence
+            - ubic.gemma.model.expression.arrayDesign.ArrayDesign
             - ubic.gemma.model.analysis.expression.ExpressionExperimentSet
             - ubic.gemma.model.common.description.BibliographicReference
-            - ubic.gemma.model.expression.designElement.CompositeSequence
-            - ubic.gemma.model.expression.experiment.ExpressionExperiment
+            - ubic.gemma.model.genome.Gene
+            - ubic.gemma.model.expression.BlacklistedEntity
+            - ubic.gemma.model.association.phenotype.PhenotypeAssociation
       - name: limit
         in: query
         description: Maximum number of search results to return; capped at 2000 unless
@@ -2682,25 +2682,6 @@ components:
         type: integer
       - name: results.size
         type: integer
-    ResponseErrorObject:
-      type: object
-      properties:
-        error:
-          $ref: '#/components/schemas/WellComposedErrorBody'
-        apiVersion:
-          type: string
-    WellComposedErrorBody:
-      type: object
-      properties:
-        code:
-          type: integer
-          format: int32
-        message:
-          type: string
-        errors:
-          type: object
-          additionalProperties:
-            type: string
     CharacteristicValueObject:
       type: object
       properties:
@@ -3081,11 +3062,35 @@ components:
           - CHARARRAY
           - BOOLEANARRAY
           - STRINGARRAY
-    ResponseDataObjectDifferentialExpressionAnalysisResultSetValueObject:
+    PaginatedResultsResponseDataObjectDifferentialExpressionAnalysisResultSetValueObject:
       type: object
       properties:
         data:
           $ref: '#/components/schemas/DifferentialExpressionAnalysisResultSetValueObject'
+        filter:
+          type: string
+        sort:
+          $ref: '#/components/schemas/SortValueObject'
+        groupBy:
+          type: array
+          items:
+            type: string
+        offset:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        totalElements:
+          type: integer
+          format: int64
+    SortValueObject:
+      type: object
+      properties:
+        orderBy:
+          type: string
+        direction:
+          type: string
     StatementValueObject:
       type: object
       properties:
@@ -3124,6 +3129,25 @@ components:
           format: int32
         externalDatabase:
           $ref: '#/components/schemas/ExternalDatabaseValueObject'
+    ResponseErrorObject:
+      type: object
+      properties:
+        error:
+          $ref: '#/components/schemas/WellComposedErrorBody'
+        apiVersion:
+          type: string
+    WellComposedErrorBody:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        errors:
+          type: object
+          additionalProperties:
+            type: string
     FilteredAndPaginatedResponseDataObjectDifferentialExpressionAnalysisResultSetValueObject:
       type: object
       properties:
@@ -3131,8 +3155,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/DifferentialExpressionAnalysisResultSetValueObject'
-        filter:
-          type: string
         groupBy:
           type: array
           items:
@@ -3148,12 +3170,7 @@ components:
         totalElements:
           type: integer
           format: int64
-    SortValueObject:
-      type: object
-      properties:
-        orderBy:
-          type: string
-        direction:
+        filter:
           type: string
     DatasetArg:
       oneOf:
@@ -3504,9 +3521,9 @@ components:
           type: string
         detail:
           type: string
-        eventTypeName:
-          type: string
         actionName:
+          type: string
+        eventTypeName:
           type: string
     ExpressionExperimentValueObject:
       type: object
@@ -3666,10 +3683,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ExpressionExperimentValueObject'
-        query:
-          type: string
-        filter:
-          type: string
         groupBy:
           type: array
           items:
@@ -3685,6 +3698,10 @@ components:
         totalElements:
           type: integer
           format: int64
+        filter:
+          type: string
+        query:
+          type: string
     FilterArgExpressionExperiment:
       type: string
       description: |-
@@ -5944,17 +5961,13 @@ components:
           format: int64
         taxon:
           $ref: '#/components/schemas/TaxonValueObject'
-    QueriedAndFilteredAndPaginatedResponseDataObjectExpressionExperimentWithSearchResultValueObject:
+    QueriedAndFilteredAndInferredAndPaginatedResponseDataObjectExpressionExperimentWithSearchResultValueObject:
       type: object
       properties:
         data:
           type: array
           items:
             $ref: '#/components/schemas/ExpressionExperimentWithSearchResultValueObject'
-        query:
-          type: string
-        filter:
-          type: string
         groupBy:
           type: array
           items:
@@ -5970,6 +5983,14 @@ components:
         totalElements:
           type: integer
           format: int64
+        filter:
+          type: string
+        query:
+          type: string
+        inferredTerms:
+          type: array
+          items:
+            $ref: '#/components/schemas/CharacteristicValueObject'
     SearchResultValueObjectExpressionExperimentValueObject:
       type: object
       properties:
@@ -6176,26 +6197,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/OntologyTermValueObject'
-    LimitedResponseDataObjectAnnotationWithUsageStatisticsValueObject:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/AnnotationWithUsageStatisticsValueObject'
-        query:
-          type: string
-        filter:
-          type: string
-        groupBy:
-          type: array
-          items:
-            type: string
-        sort:
-          $ref: '#/components/schemas/SortValueObject'
-        limit:
-          type: integer
-          format: int32
     OntologyTermValueObject:
       type: object
       properties:
@@ -6208,15 +6209,37 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/OntologyTermValueObject'
-    FilteredAndPaginatedResponseDataObjectExpressionExperimentValueObject:
+    QueriedAndFilteredAndInferredAndLimitedResponseDataObjectAnnotationWithUsageStatisticsValueObject:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AnnotationWithUsageStatisticsValueObject'
+        filter:
+          type: string
+        groupBy:
+          type: array
+          items:
+            type: string
+        sort:
+          $ref: '#/components/schemas/SortValueObject'
+        limit:
+          type: integer
+          format: int32
+        query:
+          type: string
+        inferredTerms:
+          type: array
+          items:
+            $ref: '#/components/schemas/CharacteristicValueObject'
+    FilteredAndInferredAndPaginatedResponseDataObjectExpressionExperimentValueObject:
       type: object
       properties:
         data:
           type: array
           items:
             $ref: '#/components/schemas/ExpressionExperimentValueObject'
-        filter:
-          type: string
         groupBy:
           type: array
           items:
@@ -6232,6 +6255,12 @@ components:
         totalElements:
           type: integer
           format: int64
+        filter:
+          type: string
+        inferredTerms:
+          type: array
+          items:
+            $ref: '#/components/schemas/CharacteristicValueObject'
     CategoryWithUsageStatisticsValueObject:
       type: object
       properties:
@@ -6242,15 +6271,13 @@ components:
         numberOfExpressionExperiments:
           type: integer
           format: int64
-    QueriedAndFilteredResponseDataObjectCategoryWithUsageStatisticsValueObject:
+    QueriedAndFilteredAndInferredAndLimitedResponseDataObjectCategoryWithUsageStatisticsValueObject:
       type: object
       properties:
         data:
           type: array
           items:
             $ref: '#/components/schemas/CategoryWithUsageStatisticsValueObject'
-        query:
-          type: string
         filter:
           type: string
         groupBy:
@@ -6258,7 +6285,16 @@ components:
           items:
             type: string
         sort:
+          $ref: '#/components/schemas/SortValueObject'
+        limit:
+          type: integer
+          format: int32
+        query:
           type: string
+        inferredTerms:
+          type: array
+          items:
+            $ref: '#/components/schemas/CharacteristicValueObject'
     ArrayDesignWithUsageStatisticsValueObject:
       type: object
       properties:
@@ -6331,15 +6367,13 @@ components:
           type: string
         taxon:
           $ref: '#/components/schemas/TaxonValueObject'
-    LimitedResponseDataObjectArrayDesignWithUsageStatisticsValueObject:
+    QueriedAndFilteredAndInferredAndLimitedResponseDataObjectArrayDesignWithUsageStatisticsValueObject:
       type: object
       properties:
         data:
           type: array
           items:
             $ref: '#/components/schemas/ArrayDesignWithUsageStatisticsValueObject'
-        query:
-          type: string
         filter:
           type: string
         groupBy:
@@ -6351,15 +6385,19 @@ components:
         limit:
           type: integer
           format: int32
-    QueriedAndFilteredResponseDataObjectTaxonWithUsageStatisticsValueObject:
+        query:
+          type: string
+        inferredTerms:
+          type: array
+          items:
+            $ref: '#/components/schemas/CharacteristicValueObject'
+    QueriedAndFilteredAndInferredResponseDataObjectTaxonWithUsageStatisticsValueObject:
       type: object
       properties:
         data:
           type: array
           items:
             $ref: '#/components/schemas/TaxonWithUsageStatisticsValueObject'
-        query:
-          type: string
         filter:
           type: string
         groupBy:
@@ -6367,7 +6405,13 @@ components:
           items:
             type: string
         sort:
+          $ref: '#/components/schemas/SortValueObject'
+        query:
           type: string
+        inferredTerms:
+          type: array
+          items:
+            $ref: '#/components/schemas/CharacteristicValueObject'
     TaxonWithUsageStatisticsValueObject:
       type: object
       properties:
@@ -7042,8 +7086,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/CompositeSequenceValueObject'
-        filter:
-          type: string
         groupBy:
           type: array
           items:
@@ -7059,6 +7101,8 @@ components:
         totalElements:
           type: integer
           format: int64
+        filter:
+          type: string
     CompositeSequenceArg:
       oneOf:
       - type: integer
@@ -7073,8 +7117,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/GeneValueObject'
-        filter:
-          type: string
         groupBy:
           type: array
           items:
@@ -7090,6 +7132,8 @@ components:
         totalElements:
           type: integer
           format: int64
+        filter:
+          type: string
     FilteredAndPaginatedResponseDataObjectArrayDesignValueObject:
       type: object
       properties:
@@ -7097,8 +7141,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ArrayDesignValueObject'
-        filter:
-          type: string
         groupBy:
           type: array
           items:
@@ -7114,6 +7156,8 @@ components:
         totalElements:
           type: integer
           format: int64
+        filter:
+          type: string
     SortArgArrayDesign:
       pattern: ^(\+|-?)(\w+)$
       type: string
@@ -7706,16 +7750,16 @@ components:
       items:
         type: string
         enum:
-        - ubic.gemma.model.expression.BlacklistedEntity
-        - ubic.gemma.model.expression.arrayDesign.ArrayDesign
-        - ubic.gemma.model.genome.biosequence.BioSequence
-        - ubic.gemma.model.association.phenotype.PhenotypeAssociation
+        - ubic.gemma.model.expression.designElement.CompositeSequence
         - ubic.gemma.model.genome.gene.GeneSet
-        - ubic.gemma.model.genome.Gene
+        - ubic.gemma.model.expression.experiment.ExpressionExperiment
+        - ubic.gemma.model.genome.biosequence.BioSequence
+        - ubic.gemma.model.expression.arrayDesign.ArrayDesign
         - ubic.gemma.model.analysis.expression.ExpressionExperimentSet
         - ubic.gemma.model.common.description.BibliographicReference
-        - ubic.gemma.model.expression.designElement.CompositeSequence
-        - ubic.gemma.model.expression.experiment.ExpressionExperiment
+        - ubic.gemma.model.genome.Gene
+        - ubic.gemma.model.expression.BlacklistedEntity
+        - ubic.gemma.model.association.phenotype.PhenotypeAssociation
     ResponseDataObjectListTaxonValueObject:
       type: object
       properties:
@@ -7723,6 +7767,30 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/TaxonValueObject'
+    FilteredAndPaginatedResponseDataObjectExpressionExperimentValueObject:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExpressionExperimentValueObject'
+        groupBy:
+          type: array
+          items:
+            type: string
+        sort:
+          $ref: '#/components/schemas/SortValueObject'
+        offset:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        totalElements:
+          type: integer
+          format: int64
+        filter:
+          type: string
   securitySchemes:
     basicAuth:
       type: http

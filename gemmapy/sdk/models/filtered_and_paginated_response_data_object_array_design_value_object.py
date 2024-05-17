@@ -29,38 +29,36 @@ class FilteredAndPaginatedResponseDataObjectArrayDesignValueObject(object):
     """
     swagger_types = {
         'data': 'list[ArrayDesignValueObject]',
-        'filter': 'str',
         'group_by': 'list[str]',
         'sort': 'SortValueObject',
         'offset': 'int',
         'limit': 'int',
-        'total_elements': 'int'
+        'total_elements': 'int',
+        'filter': 'str'
     }
 
     attribute_map = {
         'data': 'data',
-        'filter': 'filter',
         'group_by': 'groupBy',
         'sort': 'sort',
         'offset': 'offset',
         'limit': 'limit',
-        'total_elements': 'totalElements'
+        'total_elements': 'totalElements',
+        'filter': 'filter'
     }
 
-    def __init__(self, data=None, filter=None, group_by=None, sort=None, offset=None, limit=None, total_elements=None):  # noqa: E501
+    def __init__(self, data=None, group_by=None, sort=None, offset=None, limit=None, total_elements=None, filter=None):  # noqa: E501
         """FilteredAndPaginatedResponseDataObjectArrayDesignValueObject - a model defined in Swagger"""  # noqa: E501
         self._data = None
-        self._filter = None
         self._group_by = None
         self._sort = None
         self._offset = None
         self._limit = None
         self._total_elements = None
+        self._filter = None
         self.discriminator = None
         if data is not None:
             self.data = data
-        if filter is not None:
-            self.filter = filter
         if group_by is not None:
             self.group_by = group_by
         if sort is not None:
@@ -71,6 +69,8 @@ class FilteredAndPaginatedResponseDataObjectArrayDesignValueObject(object):
             self.limit = limit
         if total_elements is not None:
             self.total_elements = total_elements
+        if filter is not None:
+            self.filter = filter
 
     @property
     def data(self):
@@ -92,27 +92,6 @@ class FilteredAndPaginatedResponseDataObjectArrayDesignValueObject(object):
         """
 
         self._data = data
-
-    @property
-    def filter(self):
-        """Gets the filter of this FilteredAndPaginatedResponseDataObjectArrayDesignValueObject.  # noqa: E501
-
-
-        :return: The filter of this FilteredAndPaginatedResponseDataObjectArrayDesignValueObject.  # noqa: E501
-        :rtype: str
-        """
-        return self._filter
-
-    @filter.setter
-    def filter(self, filter):
-        """Sets the filter of this FilteredAndPaginatedResponseDataObjectArrayDesignValueObject.
-
-
-        :param filter: The filter of this FilteredAndPaginatedResponseDataObjectArrayDesignValueObject.  # noqa: E501
-        :type: str
-        """
-
-        self._filter = filter
 
     @property
     def group_by(self):
@@ -218,6 +197,27 @@ class FilteredAndPaginatedResponseDataObjectArrayDesignValueObject(object):
         """
 
         self._total_elements = total_elements
+
+    @property
+    def filter(self):
+        """Gets the filter of this FilteredAndPaginatedResponseDataObjectArrayDesignValueObject.  # noqa: E501
+
+
+        :return: The filter of this FilteredAndPaginatedResponseDataObjectArrayDesignValueObject.  # noqa: E501
+        :rtype: str
+        """
+        return self._filter
+
+    @filter.setter
+    def filter(self, filter):
+        """Sets the filter of this FilteredAndPaginatedResponseDataObjectArrayDesignValueObject.
+
+
+        :param filter: The filter of this FilteredAndPaginatedResponseDataObjectArrayDesignValueObject.  # noqa: E501
+        :type: str
+        """
+
+        self._filter = filter
 
     def to_dict(self):
         """Returns the model properties as a dict"""

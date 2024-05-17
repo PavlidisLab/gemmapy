@@ -1628,7 +1628,7 @@ class DefaultApi(object):
         :param int offset:
         :param int limit:
         :param SortArgExpressionExperiment sort:
-        :return: QueriedAndFilteredAndPaginatedResponseDataObjectExpressionExperimentWithSearchResultValueObject
+        :return: QueriedAndFilteredAndInferredAndPaginatedResponseDataObjectExpressionExperimentWithSearchResultValueObject
                  If the method is called asynchronously,
                  returns the request thread.
         """
@@ -1653,7 +1653,7 @@ class DefaultApi(object):
         :param int offset:
         :param int limit:
         :param SortArgExpressionExperiment sort:
-        :return: QueriedAndFilteredAndPaginatedResponseDataObjectExpressionExperimentWithSearchResultValueObject
+        :return: QueriedAndFilteredAndInferredAndPaginatedResponseDataObjectExpressionExperimentWithSearchResultValueObject
                  If the method is called asynchronously,
                  returns the request thread.
         """
@@ -1711,7 +1711,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='QueriedAndFilteredAndPaginatedResponseDataObjectExpressionExperimentWithSearchResultValueObject',  # noqa: E501
+            response_type='QueriedAndFilteredAndInferredAndPaginatedResponseDataObjectExpressionExperimentWithSearchResultValueObject',  # noqa: E501
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -1735,7 +1735,7 @@ class DefaultApi(object):
         :param int limit: Maximum number of annotations to returned; capped at 5000.
         :param int min_frequency: Minimum number of associated datasets to report an annotation. If used, the limit will default to 5000.
         :param str category: A category URI to restrict reported annotations. If unspecified, annotations from all categories are reported. If empty, uncategorized terms are reported.
-        :return: LimitedResponseDataObjectAnnotationWithUsageStatisticsValueObject
+        :return: QueriedAndFilteredAndInferredAndLimitedResponseDataObjectAnnotationWithUsageStatisticsValueObject
                  If the method is called asynchronously,
                  returns the request thread.
         """
@@ -1762,7 +1762,7 @@ class DefaultApi(object):
         :param int limit: Maximum number of annotations to returned; capped at 5000.
         :param int min_frequency: Minimum number of associated datasets to report an annotation. If used, the limit will default to 5000.
         :param str category: A category URI to restrict reported annotations. If unspecified, annotations from all categories are reported. If empty, uncategorized terms are reported.
-        :return: LimitedResponseDataObjectAnnotationWithUsageStatisticsValueObject
+        :return: QueriedAndFilteredAndInferredAndLimitedResponseDataObjectAnnotationWithUsageStatisticsValueObject
                  If the method is called asynchronously,
                  returns the request thread.
         """
@@ -1823,7 +1823,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='LimitedResponseDataObjectAnnotationWithUsageStatisticsValueObject',  # noqa: E501
+            response_type='QueriedAndFilteredAndInferredAndLimitedResponseDataObjectAnnotationWithUsageStatisticsValueObject',  # noqa: E501
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -1845,7 +1845,7 @@ class DefaultApi(object):
         :param int offset:
         :param int limit:
         :param SortArgExpressionExperiment sort:
-        :return: FilteredAndPaginatedResponseDataObjectExpressionExperimentValueObject
+        :return: FilteredAndInferredAndPaginatedResponseDataObjectExpressionExperimentValueObject
                  If the method is called asynchronously,
                  returns the request thread.
         """
@@ -1870,7 +1870,7 @@ class DefaultApi(object):
         :param int offset:
         :param int limit:
         :param SortArgExpressionExperiment sort:
-        :return: FilteredAndPaginatedResponseDataObjectExpressionExperimentValueObject
+        :return: FilteredAndInferredAndPaginatedResponseDataObjectExpressionExperimentValueObject
                  If the method is called asynchronously,
                  returns the request thread.
         """
@@ -1933,7 +1933,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='FilteredAndPaginatedResponseDataObjectExpressionExperimentValueObject',  # noqa: E501
+            response_type='FilteredAndInferredAndPaginatedResponseDataObjectExpressionExperimentValueObject',  # noqa: E501
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -1954,7 +1954,7 @@ class DefaultApi(object):
         :param QueryArg query:
         :param FilterArgExpressionExperiment filter:
         :param int limit:
-        :return: QueriedAndFilteredResponseDataObjectCategoryWithUsageStatisticsValueObject
+        :return: QueriedAndFilteredAndInferredAndLimitedResponseDataObjectCategoryWithUsageStatisticsValueObject
                  If the method is called asynchronously,
                  returns the request thread.
         """
@@ -1978,7 +1978,7 @@ class DefaultApi(object):
         :param QueryArg query:
         :param FilterArgExpressionExperiment filter:
         :param int limit:
-        :return: QueriedAndFilteredResponseDataObjectCategoryWithUsageStatisticsValueObject
+        :return: QueriedAndFilteredAndInferredAndLimitedResponseDataObjectCategoryWithUsageStatisticsValueObject
                  If the method is called asynchronously,
                  returns the request thread.
         """
@@ -2032,7 +2032,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='QueriedAndFilteredResponseDataObjectCategoryWithUsageStatisticsValueObject',  # noqa: E501
+            response_type='QueriedAndFilteredAndInferredAndLimitedResponseDataObjectCategoryWithUsageStatisticsValueObject',  # noqa: E501
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -2053,7 +2053,7 @@ class DefaultApi(object):
         :param QueryArg query:
         :param FilterArgExpressionExperiment filter:
         :param int limit:
-        :return: LimitedResponseDataObjectArrayDesignWithUsageStatisticsValueObject
+        :return: QueriedAndFilteredAndInferredAndLimitedResponseDataObjectArrayDesignWithUsageStatisticsValueObject
                  If the method is called asynchronously,
                  returns the request thread.
         """
@@ -2077,7 +2077,7 @@ class DefaultApi(object):
         :param QueryArg query:
         :param FilterArgExpressionExperiment filter:
         :param int limit:
-        :return: LimitedResponseDataObjectArrayDesignWithUsageStatisticsValueObject
+        :return: QueriedAndFilteredAndInferredAndLimitedResponseDataObjectArrayDesignWithUsageStatisticsValueObject
                  If the method is called asynchronously,
                  returns the request thread.
         """
@@ -2131,7 +2131,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='LimitedResponseDataObjectArrayDesignWithUsageStatisticsValueObject',  # noqa: E501
+            response_type='QueriedAndFilteredAndInferredAndLimitedResponseDataObjectArrayDesignWithUsageStatisticsValueObject',  # noqa: E501
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -2150,7 +2150,7 @@ class DefaultApi(object):
         :param async_req bool
         :param QueryArg query:
         :param FilterArgExpressionExperiment filter:
-        :return: QueriedAndFilteredResponseDataObjectTaxonWithUsageStatisticsValueObject
+        :return: QueriedAndFilteredAndInferredResponseDataObjectTaxonWithUsageStatisticsValueObject
                  If the method is called asynchronously,
                  returns the request thread.
         """
@@ -2172,7 +2172,7 @@ class DefaultApi(object):
         :param async_req bool
         :param QueryArg query:
         :param FilterArgExpressionExperiment filter:
-        :return: QueriedAndFilteredResponseDataObjectTaxonWithUsageStatisticsValueObject
+        :return: QueriedAndFilteredAndInferredResponseDataObjectTaxonWithUsageStatisticsValueObject
                  If the method is called asynchronously,
                  returns the request thread.
         """
@@ -2224,7 +2224,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='QueriedAndFilteredResponseDataObjectTaxonWithUsageStatisticsValueObject',  # noqa: E501
+            response_type='QueriedAndFilteredAndInferredResponseDataObjectTaxonWithUsageStatisticsValueObject',  # noqa: E501
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -3705,6 +3705,7 @@ class DefaultApi(object):
     def get_result_set(self, result_set, **kwargs):  # noqa: E501
         """Retrieve a single analysis result set by its identifier  # noqa: E501
 
+        A slice or results can be retrieved by specifying the `offset` and `limit` parameters. This is only applicable to the JSON representation.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
         >>> thread = api.get_result_set(result_set, async_req=True)
@@ -3712,7 +3713,10 @@ class DefaultApi(object):
 
         :param async_req bool
         :param int result_set: (required)
-        :return: ResponseDataObjectDifferentialExpressionAnalysisResultSetValueObject
+        :param float threshold:
+        :param int offset:
+        :param int limit:
+        :return: PaginatedResultsResponseDataObjectDifferentialExpressionAnalysisResultSetValueObject
                  If the method is called asynchronously,
                  returns the request thread.
         """
@@ -3726,6 +3730,7 @@ class DefaultApi(object):
     def get_result_set_with_http_info(self, result_set, **kwargs):  # noqa: E501
         """Retrieve a single analysis result set by its identifier  # noqa: E501
 
+        A slice or results can be retrieved by specifying the `offset` and `limit` parameters. This is only applicable to the JSON representation.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
         >>> thread = api.get_result_set_with_http_info(result_set, async_req=True)
@@ -3733,12 +3738,15 @@ class DefaultApi(object):
 
         :param async_req bool
         :param int result_set: (required)
-        :return: ResponseDataObjectDifferentialExpressionAnalysisResultSetValueObject
+        :param float threshold:
+        :param int offset:
+        :param int limit:
+        :return: PaginatedResultsResponseDataObjectDifferentialExpressionAnalysisResultSetValueObject
                  If the method is called asynchronously,
                  returns the request thread.
         """
 
-        all_params = ['result_set']  # noqa: E501
+        all_params = ['result_set', 'threshold', 'offset', 'limit']  # noqa: E501
         all_params.append('async_req')
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
@@ -3765,6 +3773,12 @@ class DefaultApi(object):
             path_params['resultSet'] = params['result_set']  # noqa: E501
 
         query_params = []
+        if 'threshold' in params:
+            query_params.append(('threshold', params['threshold']))  # noqa: E501
+        if 'offset' in params:
+            query_params.append(('offset', params['offset']))  # noqa: E501
+        if 'limit' in params:
+            query_params.append(('limit', params['limit']))  # noqa: E501
 
         header_params = {}
 
@@ -3774,7 +3788,7 @@ class DefaultApi(object):
         body_params = None
         # HTTP header `Accept`
         header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+            ['application/json', 'text/tab-separated-values; charset=UTF-8'])  # noqa: E501
 
         # Authentication setting
         auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
@@ -3787,100 +3801,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='ResponseDataObjectDifferentialExpressionAnalysisResultSetValueObject',  # noqa: E501
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
-    def get_result_set_as_tsv(self, result_set_, **kwargs):  # noqa: E501
-        """Retrieve a single analysis result set by its identifier as a tab-separated values  # noqa: E501
-
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.get_result_set_as_tsv(result_set_, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param int result_set_: (required)
-        :return: str
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.get_result_set_as_tsv_with_http_info(result_set_, **kwargs)  # noqa: E501
-        else:
-            (data) = self.get_result_set_as_tsv_with_http_info(result_set_, **kwargs)  # noqa: E501
-            return data
-
-    def get_result_set_as_tsv_with_http_info(self, result_set_, **kwargs):  # noqa: E501
-        """Retrieve a single analysis result set by its identifier as a tab-separated values  # noqa: E501
-
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.get_result_set_as_tsv_with_http_info(result_set_, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param int result_set_: (required)
-        :return: str
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['result_set_']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method get_result_set_as_tsv" % key
-                )
-            params[key] = val
-        del params['kwargs']
-        # verify the required parameter 'result_set_' is set
-        if ('result_set_' not in params or
-                params['result_set_'] is None):
-            raise ValueError("Missing the required parameter `result_set_` when calling `get_result_set_as_tsv`")  # noqa: E501
-
-        collection_formats = {}
-
-        path_params = {}
-        if 'result_set_' in params:
-            path_params['resultSet_'] = params['result_set_']  # noqa: E501
-
-        query_params = []
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['text/tab-separated-values; charset=UTF-8', 'application/json'])  # noqa: E501
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/resultSets/{resultSet_}', 'GET',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type='str',  # noqa: E501
+            response_type='PaginatedResultsResponseDataObjectDifferentialExpressionAnalysisResultSetValueObject',  # noqa: E501
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),

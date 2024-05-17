@@ -29,43 +29,39 @@ class QueriedAndFilteredAndPaginatedResponseDataObjectExpressionExperimentValueO
     """
     swagger_types = {
         'data': 'list[ExpressionExperimentValueObject]',
-        'query': 'str',
-        'filter': 'str',
         'group_by': 'list[str]',
         'sort': 'SortValueObject',
         'offset': 'int',
         'limit': 'int',
-        'total_elements': 'int'
+        'total_elements': 'int',
+        'filter': 'str',
+        'query': 'str'
     }
 
     attribute_map = {
         'data': 'data',
-        'query': 'query',
-        'filter': 'filter',
         'group_by': 'groupBy',
         'sort': 'sort',
         'offset': 'offset',
         'limit': 'limit',
-        'total_elements': 'totalElements'
+        'total_elements': 'totalElements',
+        'filter': 'filter',
+        'query': 'query'
     }
 
-    def __init__(self, data=None, query=None, filter=None, group_by=None, sort=None, offset=None, limit=None, total_elements=None):  # noqa: E501
+    def __init__(self, data=None, group_by=None, sort=None, offset=None, limit=None, total_elements=None, filter=None, query=None):  # noqa: E501
         """QueriedAndFilteredAndPaginatedResponseDataObjectExpressionExperimentValueObject - a model defined in Swagger"""  # noqa: E501
         self._data = None
-        self._query = None
-        self._filter = None
         self._group_by = None
         self._sort = None
         self._offset = None
         self._limit = None
         self._total_elements = None
+        self._filter = None
+        self._query = None
         self.discriminator = None
         if data is not None:
             self.data = data
-        if query is not None:
-            self.query = query
-        if filter is not None:
-            self.filter = filter
         if group_by is not None:
             self.group_by = group_by
         if sort is not None:
@@ -76,6 +72,10 @@ class QueriedAndFilteredAndPaginatedResponseDataObjectExpressionExperimentValueO
             self.limit = limit
         if total_elements is not None:
             self.total_elements = total_elements
+        if filter is not None:
+            self.filter = filter
+        if query is not None:
+            self.query = query
 
     @property
     def data(self):
@@ -97,48 +97,6 @@ class QueriedAndFilteredAndPaginatedResponseDataObjectExpressionExperimentValueO
         """
 
         self._data = data
-
-    @property
-    def query(self):
-        """Gets the query of this QueriedAndFilteredAndPaginatedResponseDataObjectExpressionExperimentValueObject.  # noqa: E501
-
-
-        :return: The query of this QueriedAndFilteredAndPaginatedResponseDataObjectExpressionExperimentValueObject.  # noqa: E501
-        :rtype: str
-        """
-        return self._query
-
-    @query.setter
-    def query(self, query):
-        """Sets the query of this QueriedAndFilteredAndPaginatedResponseDataObjectExpressionExperimentValueObject.
-
-
-        :param query: The query of this QueriedAndFilteredAndPaginatedResponseDataObjectExpressionExperimentValueObject.  # noqa: E501
-        :type: str
-        """
-
-        self._query = query
-
-    @property
-    def filter(self):
-        """Gets the filter of this QueriedAndFilteredAndPaginatedResponseDataObjectExpressionExperimentValueObject.  # noqa: E501
-
-
-        :return: The filter of this QueriedAndFilteredAndPaginatedResponseDataObjectExpressionExperimentValueObject.  # noqa: E501
-        :rtype: str
-        """
-        return self._filter
-
-    @filter.setter
-    def filter(self, filter):
-        """Sets the filter of this QueriedAndFilteredAndPaginatedResponseDataObjectExpressionExperimentValueObject.
-
-
-        :param filter: The filter of this QueriedAndFilteredAndPaginatedResponseDataObjectExpressionExperimentValueObject.  # noqa: E501
-        :type: str
-        """
-
-        self._filter = filter
 
     @property
     def group_by(self):
@@ -244,6 +202,48 @@ class QueriedAndFilteredAndPaginatedResponseDataObjectExpressionExperimentValueO
         """
 
         self._total_elements = total_elements
+
+    @property
+    def filter(self):
+        """Gets the filter of this QueriedAndFilteredAndPaginatedResponseDataObjectExpressionExperimentValueObject.  # noqa: E501
+
+
+        :return: The filter of this QueriedAndFilteredAndPaginatedResponseDataObjectExpressionExperimentValueObject.  # noqa: E501
+        :rtype: str
+        """
+        return self._filter
+
+    @filter.setter
+    def filter(self, filter):
+        """Sets the filter of this QueriedAndFilteredAndPaginatedResponseDataObjectExpressionExperimentValueObject.
+
+
+        :param filter: The filter of this QueriedAndFilteredAndPaginatedResponseDataObjectExpressionExperimentValueObject.  # noqa: E501
+        :type: str
+        """
+
+        self._filter = filter
+
+    @property
+    def query(self):
+        """Gets the query of this QueriedAndFilteredAndPaginatedResponseDataObjectExpressionExperimentValueObject.  # noqa: E501
+
+
+        :return: The query of this QueriedAndFilteredAndPaginatedResponseDataObjectExpressionExperimentValueObject.  # noqa: E501
+        :rtype: str
+        """
+        return self._query
+
+    @query.setter
+    def query(self, query):
+        """Sets the query of this QueriedAndFilteredAndPaginatedResponseDataObjectExpressionExperimentValueObject.
+
+
+        :param query: The query of this QueriedAndFilteredAndPaginatedResponseDataObjectExpressionExperimentValueObject.  # noqa: E501
+        :type: str
+        """
+
+        self._query = query
 
     def to_dict(self):
         """Returns the model properties as a dict"""

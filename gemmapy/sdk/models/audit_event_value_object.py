@@ -34,8 +34,8 @@ class AuditEventValueObject(object):
         'action': 'str',
         'note': 'str',
         'detail': 'str',
-        'event_type_name': 'str',
-        'action_name': 'str'
+        'action_name': 'str',
+        'event_type_name': 'str'
     }
 
     attribute_map = {
@@ -45,11 +45,11 @@ class AuditEventValueObject(object):
         'action': 'action',
         'note': 'note',
         'detail': 'detail',
-        'event_type_name': 'eventTypeName',
-        'action_name': 'actionName'
+        'action_name': 'actionName',
+        'event_type_name': 'eventTypeName'
     }
 
-    def __init__(self, id=None, performer=None, _date=None, action=None, note=None, detail=None, event_type_name=None, action_name=None):  # noqa: E501
+    def __init__(self, id=None, performer=None, _date=None, action=None, note=None, detail=None, action_name=None, event_type_name=None):  # noqa: E501
         """AuditEventValueObject - a model defined in Swagger"""  # noqa: E501
         self._id = None
         self._performer = None
@@ -57,8 +57,8 @@ class AuditEventValueObject(object):
         self._action = None
         self._note = None
         self._detail = None
-        self._event_type_name = None
         self._action_name = None
+        self._event_type_name = None
         self.discriminator = None
         if id is not None:
             self.id = id
@@ -72,10 +72,10 @@ class AuditEventValueObject(object):
             self.note = note
         if detail is not None:
             self.detail = detail
-        if event_type_name is not None:
-            self.event_type_name = event_type_name
         if action_name is not None:
             self.action_name = action_name
+        if event_type_name is not None:
+            self.event_type_name = event_type_name
 
     @property
     def id(self):
@@ -210,27 +210,6 @@ class AuditEventValueObject(object):
         self._detail = detail
 
     @property
-    def event_type_name(self):
-        """Gets the event_type_name of this AuditEventValueObject.  # noqa: E501
-
-
-        :return: The event_type_name of this AuditEventValueObject.  # noqa: E501
-        :rtype: str
-        """
-        return self._event_type_name
-
-    @event_type_name.setter
-    def event_type_name(self, event_type_name):
-        """Sets the event_type_name of this AuditEventValueObject.
-
-
-        :param event_type_name: The event_type_name of this AuditEventValueObject.  # noqa: E501
-        :type: str
-        """
-
-        self._event_type_name = event_type_name
-
-    @property
     def action_name(self):
         """Gets the action_name of this AuditEventValueObject.  # noqa: E501
 
@@ -250,6 +229,27 @@ class AuditEventValueObject(object):
         """
 
         self._action_name = action_name
+
+    @property
+    def event_type_name(self):
+        """Gets the event_type_name of this AuditEventValueObject.  # noqa: E501
+
+
+        :return: The event_type_name of this AuditEventValueObject.  # noqa: E501
+        :rtype: str
+        """
+        return self._event_type_name
+
+    @event_type_name.setter
+    def event_type_name(self, event_type_name):
+        """Sets the event_type_name of this AuditEventValueObject.
+
+
+        :param event_type_name: The event_type_name of this AuditEventValueObject.  # noqa: E501
+        :type: str
+        """
+
+        self._event_type_name = event_type_name
 
     def to_dict(self):
         """Returns the model properties as a dict"""
