@@ -14,7 +14,7 @@ info:
     name: Pavlidis Lab Support
     url: https://pavlab.msl.ubc.ca/
     email: pavlab-support@msl.ubc.ca
-  version: 2.7.4
+  version: 2.7.5
 servers:
 - url: https://gemma.msl.ubc.ca/rest/v2
   description: Gemma
@@ -808,6 +808,80 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseDataObjectListExperimentExpressionLevelsValueObject'
+  /datasets/{datasets}/expressions/taxa/{taxa}/genes/{genes}:
+    get:
+      summary: Retrieve the expression data matrix of a set of datasets and genes
+      operationId: getDatasetExpressionForGenesInTaxa
+      parameters:
+      - name: datasets
+        in: path
+        required: true
+        schema:
+          type: array
+          items:
+            oneOf:
+            - type: integer
+              description: A numerical dataset identifier.
+              format: int64
+            - type: string
+              description: A dataset short name.
+      - name: taxa
+        in: path
+        required: true
+        schema:
+          oneOf:
+          - type: integer
+            description: A numerical taxon identifier.
+            format: int64
+          - type: integer
+            description: An NCBI taxon identifier.
+            format: int64
+            externalDocs:
+              url: https://www.ncbi.nlm.nih.gov/taxonomy
+          - type: string
+            description: A taxon identifier that matches either its scientific or
+              common name.
+      - name: genes
+        in: path
+        required: true
+        schema:
+          type: array
+          items:
+            oneOf:
+            - type: string
+              description: An Ensembl gene identifier which typically starts with
+                'ENSG'.
+              externalDocs:
+                url: https://www.ensembl.org/
+            - type: string
+              description: An NCBI gene identifier.
+              externalDocs:
+                url: https://www.ncbi.nlm.nih.gov/gene
+            - type: string
+              description: An official gene symbol approved by HGNC.
+              externalDocs:
+                url: https://www.genenames.org/
+      - name: keepNonSpecific
+        in: query
+        schema:
+          type: boolean
+          default: false
+      - name: consolidate
+        in: query
+        schema:
+          type: string
+          description: An option for gene expression level consolidation.
+          enum:
+          - pickmax
+          - pickvar
+          - average
+      responses:
+        default:
+          description: default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseDataObjectListExperimentExpressionLevelsValueObject'
   /datasets/{datasets}/expressions/pca:
     get:
       summary: Retrieve the principal components (PCA) of a set of datasets
@@ -1434,7 +1508,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FilteredAndPaginatedResponseDataObjectCompositeSequenceValueObject'
+                $ref: '#/components/schemas/PaginatedResponseDataObjectCompositeSequenceValueObject'
   /genes/{genes}:
     get:
       summary: Retrieve genes matching gene identifiers
@@ -1467,6 +1541,35 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseDataObjectListGeneValueObject'
+  /genes:
+    get:
+      summary: Retrieve all genes
+      operationId: getGenes_1
+      parameters:
+      - name: offset
+        in: query
+        schema:
+          minimum: 0
+          type: integer
+          description: The offset of the first retrieved result.
+          format: int32
+          default: 0
+      - name: limit
+        in: query
+        schema:
+          maximum: 100
+          minimum: 1
+          type: integer
+          description: Limit the number of results retrieved.
+          format: int32
+          default: 20
+      responses:
+        default:
+          description: default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponseDataObjectGeneValueObject'
   /platforms/count:
     get:
       summary: Count platforms matching the provided filter
@@ -1823,16 +1926,16 @@ paths:
           items:
             type: string
             enum:
-            - ubic.gemma.model.expression.arrayDesign.ArrayDesign
-            - ubic.gemma.model.expression.experiment.ExpressionExperiment
-            - ubic.gemma.model.genome.Gene
-            - ubic.gemma.model.common.description.BibliographicReference
             - ubic.gemma.model.expression.BlacklistedEntity
-            - ubic.gemma.model.expression.designElement.CompositeSequence
-            - ubic.gemma.model.genome.gene.GeneSet
-            - ubic.gemma.model.analysis.expression.ExpressionExperimentSet
+            - ubic.gemma.model.expression.arrayDesign.ArrayDesign
             - ubic.gemma.model.genome.biosequence.BioSequence
             - ubic.gemma.model.association.phenotype.PhenotypeAssociation
+            - ubic.gemma.model.genome.gene.GeneSet
+            - ubic.gemma.model.genome.Gene
+            - ubic.gemma.model.analysis.expression.ExpressionExperimentSet
+            - ubic.gemma.model.common.description.BibliographicReference
+            - ubic.gemma.model.expression.designElement.CompositeSequence
+            - ubic.gemma.model.expression.experiment.ExpressionExperiment
       - name: limit
         in: query
         description: Maximum number of search results to return; capped at 2000 unless
@@ -1874,51 +1977,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseErrorObject'
-  /taxa/{taxon}/genes/{gene}/locations:
-    get:
-      summary: Retrieve physical locations for a given gene and taxon
-      operationId: getGeneLocationsInTaxon
-      parameters:
-      - name: taxon
-        in: path
-        required: true
-        schema:
-          oneOf:
-          - type: integer
-            description: A numerical taxon identifier.
-            format: int64
-          - type: integer
-            description: An NCBI taxon identifier.
-            format: int64
-            externalDocs:
-              url: https://www.ncbi.nlm.nih.gov/taxonomy
-          - type: string
-            description: A taxon identifier that matches either its scientific or
-              common name.
-      - name: gene
-        in: path
-        required: true
-        schema:
-          oneOf:
-          - type: string
-            description: An Ensembl gene identifier which typically starts with 'ENSG'.
-            externalDocs:
-              url: https://www.ensembl.org/
-          - type: string
-            description: An NCBI gene identifier.
-            externalDocs:
-              url: https://www.ncbi.nlm.nih.gov/gene
-          - type: string
-            description: An official gene symbol approved by HGNC.
-            externalDocs:
-              url: https://www.genenames.org/
-      responses:
-        default:
-          description: default response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseDataObjectListPhysicalLocationValueObject'
   /taxa:
     get:
       summary: Retrieve all available taxa
@@ -2005,7 +2063,7 @@ paths:
       - name: sort
         in: query
         schema:
-          $ref: '#/components/schemas/SortArgTaxon'
+          $ref: '#/components/schemas/SortArgExpressionExperiment'
       responses:
         default:
           description: default response
@@ -2013,10 +2071,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/FilteredAndPaginatedResponseDataObjectExpressionExperimentValueObject'
-  /taxa/{taxon}/genes/{gene}:
+  /taxa/{taxon}/genes/{gene}/goTerms:
     get:
-      summary: Retrieve all genes in a given taxon
-      operationId: getTaxonGenes
+      summary: Retrieve the GO terms associated to a gene in a given taxon
+      operationId: getTaxonGeneGoTerms
       parameters:
       - name: taxon
         in: path
@@ -2051,6 +2109,207 @@ paths:
             description: An official gene symbol approved by HGNC.
             externalDocs:
               url: https://www.genenames.org/
+      responses:
+        default:
+          description: default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseDataObjectListGeneOntologyTermValueObject'
+  /taxa/{taxon}/genes/{gene}/locations:
+    get:
+      summary: Retrieve physical locations for a given gene and taxon
+      operationId: getTaxonGeneLocations
+      parameters:
+      - name: taxon
+        in: path
+        required: true
+        schema:
+          oneOf:
+          - type: integer
+            description: A numerical taxon identifier.
+            format: int64
+          - type: integer
+            description: An NCBI taxon identifier.
+            format: int64
+            externalDocs:
+              url: https://www.ncbi.nlm.nih.gov/taxonomy
+          - type: string
+            description: A taxon identifier that matches either its scientific or
+              common name.
+      - name: gene
+        in: path
+        required: true
+        schema:
+          oneOf:
+          - type: string
+            description: An Ensembl gene identifier which typically starts with 'ENSG'.
+            externalDocs:
+              url: https://www.ensembl.org/
+          - type: string
+            description: An NCBI gene identifier.
+            externalDocs:
+              url: https://www.ncbi.nlm.nih.gov/gene
+          - type: string
+            description: An official gene symbol approved by HGNC.
+            externalDocs:
+              url: https://www.genenames.org/
+      responses:
+        default:
+          description: default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseDataObjectListPhysicalLocationValueObject'
+  /taxa/{taxon}/genes/{gene}/probes:
+    get:
+      summary: Retrieve the probes associated to a genes across all platforms in a
+        given taxon
+      operationId: getTaxonGeneProbes
+      parameters:
+      - name: taxon
+        in: path
+        required: true
+        schema:
+          oneOf:
+          - type: integer
+            description: A numerical taxon identifier.
+            format: int64
+          - type: integer
+            description: An NCBI taxon identifier.
+            format: int64
+            externalDocs:
+              url: https://www.ncbi.nlm.nih.gov/taxonomy
+          - type: string
+            description: A taxon identifier that matches either its scientific or
+              common name.
+      - name: gene
+        in: path
+        required: true
+        schema:
+          oneOf:
+          - type: string
+            description: An Ensembl gene identifier which typically starts with 'ENSG'.
+            externalDocs:
+              url: https://www.ensembl.org/
+          - type: string
+            description: An NCBI gene identifier.
+            externalDocs:
+              url: https://www.ncbi.nlm.nih.gov/gene
+          - type: string
+            description: An official gene symbol approved by HGNC.
+            externalDocs:
+              url: https://www.genenames.org/
+      - name: offset
+        in: query
+        schema:
+          minimum: 0
+          type: integer
+          description: The offset of the first retrieved result.
+          format: int32
+          default: 0
+      - name: limit
+        in: query
+        schema:
+          maximum: 100
+          minimum: 1
+          type: integer
+          description: Limit the number of results retrieved.
+          format: int32
+          default: 20
+      responses:
+        default:
+          description: default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponseDataObjectCompositeSequenceValueObject'
+  /taxa/{taxon}/genes:
+    get:
+      summary: Retrieve all genes in a given taxon
+      operationId: getTaxonGenes
+      parameters:
+      - name: taxon
+        in: path
+        required: true
+        schema:
+          oneOf:
+          - type: integer
+            description: A numerical taxon identifier.
+            format: int64
+          - type: integer
+            description: An NCBI taxon identifier.
+            format: int64
+            externalDocs:
+              url: https://www.ncbi.nlm.nih.gov/taxonomy
+          - type: string
+            description: A taxon identifier that matches either its scientific or
+              common name.
+      - name: offset
+        in: query
+        schema:
+          minimum: 0
+          type: integer
+          description: The offset of the first retrieved result.
+          format: int32
+          default: 0
+      - name: limit
+        in: query
+        schema:
+          maximum: 100
+          minimum: 1
+          type: integer
+          description: Limit the number of results retrieved.
+          format: int32
+          default: 20
+      responses:
+        default:
+          description: default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponseDataObjectGeneValueObject'
+  /taxa/{taxon}/genes/{gene}:
+    get:
+      summary: Retrieve genes matching gene identifiers in a given taxon
+      operationId: getTaxonGenesByIds
+      parameters:
+      - name: taxon
+        in: path
+        required: true
+        schema:
+          oneOf:
+          - type: integer
+            description: A numerical taxon identifier.
+            format: int64
+          - type: integer
+            description: An NCBI taxon identifier.
+            format: int64
+            externalDocs:
+              url: https://www.ncbi.nlm.nih.gov/taxonomy
+          - type: string
+            description: A taxon identifier that matches either its scientific or
+              common name.
+      - name: gene
+        in: path
+        required: true
+        schema:
+          type: array
+          items:
+            oneOf:
+            - type: string
+              description: An Ensembl gene identifier which typically starts with
+                'ENSG'.
+              externalDocs:
+                url: https://www.ensembl.org/
+            - type: string
+              description: An NCBI gene identifier.
+              externalDocs:
+                url: https://www.ncbi.nlm.nih.gov/gene
+            - type: string
+              description: An official gene symbol approved by HGNC.
+              externalDocs:
+                url: https://www.genenames.org/
       responses:
         default:
           description: default response
@@ -2547,6 +2806,8 @@ components:
           items:
             $ref: '#/components/schemas/ExperimentalFactorValueObject'
         baselineGroup:
+          $ref: '#/components/schemas/FactorValueBasicValueObject'
+        secondBaselineGroup:
           $ref: '#/components/schemas/FactorValueBasicValueObject'
         results:
           type: array
@@ -5195,10 +5456,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/DatabaseEntryValueObject'
-        taxonID:
+        numberOfExpressionExperiments:
           type: integer
           format: int64
-        numberOfExpressionExperiments:
+        taxonID:
           type: integer
           format: int64
         troubleDetails:
@@ -5743,7 +6004,7 @@ components:
         \ the exact phrase \"alpha beta gamma\".                                 \
         \                             |\n| Field        | `shortName:GSE00001`   \
         \     | Results with short name GSE00001. <details><summary>List of supported\
-        \ fields</summary><h2>ubic.gemma.model.expression.experiment.ExpressionExperiment</h2><ul><li>description</li><li>name</li><li>shortName</li><li>accession.accession</li><li>bioAssays.description</li><li>bioAssays.name</li><li>characteristics.value</li><li>characteristics.valueUri</li><li>experimentalDesign.description</li><li>experimentalDesign.name</li><li>otherRelevantPublications.abstractText</li><li>otherRelevantPublications.authorList</li><li>otherRelevantPublications.fullTextUri</li><li>otherRelevantPublications.name</li><li>otherRelevantPublications.title</li><li>primaryPublication.abstractText</li><li>primaryPublication.authorList</li><li>primaryPublication.fullTextUri</li><li>primaryPublication.name</li><li>primaryPublication.title</li><li>bioAssays.accession.accession</li><li>bioAssays.sampleUsed.name</li><li>experimentalDesign.experimentalFactors.description</li><li>experimentalDesign.experimentalFactors.name</li><li>otherRelevantPublications.chemicals.name</li><li>otherRelevantPublications.chemicals.registryNumber</li><li>otherRelevantPublications.keywords.term</li><li>otherRelevantPublications.meshTerms.term</li><li>otherRelevantPublications.pubAccession.accession</li><li>primaryPublication.chemicals.name</li><li>primaryPublication.chemicals.registryNumber</li><li>primaryPublication.keywords.term</li><li>primaryPublication.meshTerms.term</li><li>primaryPublication.pubAccession.accession</li><li>bioAssays.sampleUsed.characteristics.value</li><li>bioAssays.sampleUsed.characteristics.valueUri</li><li>experimentalDesign.experimentalFactors.category.category</li><li>experimentalDesign.experimentalFactors.category.categoryUri</li><li>experimentalDesign.experimentalFactors.factorValues.characteristics.object</li><li>experimentalDesign.experimentalFactors.factorValues.characteristics.objectUri</li><li>experimentalDesign.experimentalFactors.factorValues.characteristics.secondObject</li><li>experimentalDesign.experimentalFactors.factorValues.characteristics.secondObjectUri</li><li>experimentalDesign.experimentalFactors.factorValues.characteristics.value</li><li>experimentalDesign.experimentalFactors.factorValues.characteristics.valueUri</li></ul><h2>ubic.gemma.model.genome.gene.GeneSet</h2><ul><li>description</li><li>name</li><li>characteristics.value</li><li>characteristics.valueUri</li><li>literatureSources.abstractText</li><li>literatureSources.authorList</li><li>literatureSources.fullTextUri</li><li>literatureSources.name</li><li>literatureSources.title</li><li>sourceAccession.accession</li><li>literatureSources.chemicals.name</li><li>literatureSources.chemicals.registryNumber</li><li>literatureSources.keywords.term</li><li>literatureSources.meshTerms.term</li><li>literatureSources.pubAccession.accession</li><li>members.gene.ensemblId</li><li>members.gene.name</li><li>members.gene.ncbiGeneId</li><li>members.gene.officialName</li><li>members.gene.officialSymbol</li><li>members.gene.accessions.accession</li><li>members.gene.aliases.alias</li><li>members.gene.products.name</li><li>members.gene.products.ncbiGi</li><li>members.gene.products.previousNcbiId</li><li>members.gene.products.accessions.accession</li></ul><h2>ubic.gemma.model.expression.designElement.CompositeSequence</h2><ul><li>description</li><li>name</li><li>biologicalCharacteristic.name</li><li>biologicalCharacteristic.sequenceDatabaseEntry.accession</li></ul><h2>ubic.gemma.model.expression.arrayDesign.ArrayDesign</h2><ul><li>description</li><li>name</li><li>shortName</li><li>alternateNames.name</li><li>externalReferences.accession</li></ul><h2>ubic.gemma.model.genome.Gene</h2><ul><li>ensemblId</li><li>name</li><li>ncbiGeneId</li><li>officialName</li><li>officialSymbol</li><li>accessions.accession</li><li>aliases.alias</li><li>products.name</li><li>products.ncbiGi</li><li>products.previousNcbiId</li><li>products.accessions.accession</li></ul><h2>ubic.gemma.model.genome.biosequence.BioSequence</h2><ul><li>name</li><li>sequenceDatabaseEntry.accession</li></ul></details>\
+        \ fields</summary><h2>ubic.gemma.model.genome.gene.GeneSet</h2><ul><li>description</li><li>name</li><li>characteristics.value</li><li>characteristics.valueUri</li><li>literatureSources.abstractText</li><li>literatureSources.authorList</li><li>literatureSources.fullTextUri</li><li>literatureSources.name</li><li>literatureSources.title</li><li>sourceAccession.accession</li><li>literatureSources.chemicals.name</li><li>literatureSources.chemicals.registryNumber</li><li>literatureSources.keywords.term</li><li>literatureSources.meshTerms.term</li><li>literatureSources.pubAccession.accession</li><li>members.gene.ensemblId</li><li>members.gene.name</li><li>members.gene.ncbiGeneId</li><li>members.gene.officialName</li><li>members.gene.officialSymbol</li><li>members.gene.accessions.accession</li><li>members.gene.aliases.alias</li><li>members.gene.products.name</li><li>members.gene.products.ncbiGi</li><li>members.gene.products.previousNcbiId</li><li>members.gene.products.accessions.accession</li></ul><h2>ubic.gemma.model.expression.experiment.ExpressionExperiment</h2><ul><li>description</li><li>name</li><li>shortName</li><li>accession.accession</li><li>bioAssays.description</li><li>bioAssays.name</li><li>characteristics.value</li><li>characteristics.valueUri</li><li>experimentalDesign.description</li><li>experimentalDesign.name</li><li>otherRelevantPublications.abstractText</li><li>otherRelevantPublications.authorList</li><li>otherRelevantPublications.fullTextUri</li><li>otherRelevantPublications.name</li><li>otherRelevantPublications.title</li><li>primaryPublication.abstractText</li><li>primaryPublication.authorList</li><li>primaryPublication.fullTextUri</li><li>primaryPublication.name</li><li>primaryPublication.title</li><li>bioAssays.accession.accession</li><li>bioAssays.sampleUsed.name</li><li>experimentalDesign.experimentalFactors.description</li><li>experimentalDesign.experimentalFactors.name</li><li>otherRelevantPublications.chemicals.name</li><li>otherRelevantPublications.chemicals.registryNumber</li><li>otherRelevantPublications.keywords.term</li><li>otherRelevantPublications.meshTerms.term</li><li>otherRelevantPublications.pubAccession.accession</li><li>primaryPublication.chemicals.name</li><li>primaryPublication.chemicals.registryNumber</li><li>primaryPublication.keywords.term</li><li>primaryPublication.meshTerms.term</li><li>primaryPublication.pubAccession.accession</li><li>bioAssays.sampleUsed.characteristics.value</li><li>bioAssays.sampleUsed.characteristics.valueUri</li><li>experimentalDesign.experimentalFactors.category.category</li><li>experimentalDesign.experimentalFactors.category.categoryUri</li><li>experimentalDesign.experimentalFactors.factorValues.characteristics.object</li><li>experimentalDesign.experimentalFactors.factorValues.characteristics.objectUri</li><li>experimentalDesign.experimentalFactors.factorValues.characteristics.secondObject</li><li>experimentalDesign.experimentalFactors.factorValues.characteristics.secondObjectUri</li><li>experimentalDesign.experimentalFactors.factorValues.characteristics.value</li><li>experimentalDesign.experimentalFactors.factorValues.characteristics.valueUri</li></ul><h2>ubic.gemma.model.expression.designElement.CompositeSequence</h2><ul><li>description</li><li>name</li><li>biologicalCharacteristic.name</li><li>biologicalCharacteristic.sequenceDatabaseEntry.accession</li></ul><h2>ubic.gemma.model.expression.arrayDesign.ArrayDesign</h2><ul><li>description</li><li>name</li><li>shortName</li><li>alternateNames.name</li><li>externalReferences.accession</li></ul><h2>ubic.gemma.model.genome.Gene</h2><ul><li>ensemblId</li><li>name</li><li>ncbiGeneId</li><li>officialName</li><li>officialSymbol</li><li>accessions.accession</li><li>aliases.alias</li><li>products.name</li><li>products.ncbiGi</li><li>products.previousNcbiId</li><li>products.accessions.accession</li></ul><h2>ubic.gemma.model.genome.biosequence.BioSequence</h2><ul><li>name</li><li>sequenceDatabaseEntry.accession</li></ul></details>\
         \ |\n| Prefix       | `alpha*`                    | Results must start with\
         \ \"alpha\".                                                             \
         \                          |\n| Wildcard     | `BRCA?`                   \
@@ -5761,6 +6022,33 @@ components:
       externalDocs:
         url: https://lucene.apache.org/core/3_6_2/queryparsersyntax.html
       x-gemma-searchable-properties:
+        ubic.gemma.model.genome.gene.GeneSet:
+        - description
+        - name
+        - characteristics.value
+        - characteristics.valueUri
+        - literatureSources.abstractText
+        - literatureSources.authorList
+        - literatureSources.fullTextUri
+        - literatureSources.name
+        - literatureSources.title
+        - sourceAccession.accession
+        - literatureSources.chemicals.name
+        - literatureSources.chemicals.registryNumber
+        - literatureSources.keywords.term
+        - literatureSources.meshTerms.term
+        - literatureSources.pubAccession.accession
+        - members.gene.ensemblId
+        - members.gene.name
+        - members.gene.ncbiGeneId
+        - members.gene.officialName
+        - members.gene.officialSymbol
+        - members.gene.accessions.accession
+        - members.gene.aliases.alias
+        - members.gene.products.name
+        - members.gene.products.ncbiGi
+        - members.gene.products.previousNcbiId
+        - members.gene.products.accessions.accession
         ubic.gemma.model.expression.experiment.ExpressionExperiment:
         - description
         - name
@@ -5806,33 +6094,6 @@ components:
         - experimentalDesign.experimentalFactors.factorValues.characteristics.secondObjectUri
         - experimentalDesign.experimentalFactors.factorValues.characteristics.value
         - experimentalDesign.experimentalFactors.factorValues.characteristics.valueUri
-        ubic.gemma.model.genome.gene.GeneSet:
-        - description
-        - name
-        - characteristics.value
-        - characteristics.valueUri
-        - literatureSources.abstractText
-        - literatureSources.authorList
-        - literatureSources.fullTextUri
-        - literatureSources.name
-        - literatureSources.title
-        - sourceAccession.accession
-        - literatureSources.chemicals.name
-        - literatureSources.chemicals.registryNumber
-        - literatureSources.keywords.term
-        - literatureSources.meshTerms.term
-        - literatureSources.pubAccession.accession
-        - members.gene.ensemblId
-        - members.gene.name
-        - members.gene.ncbiGeneId
-        - members.gene.officialName
-        - members.gene.officialSymbol
-        - members.gene.accessions.accession
-        - members.gene.aliases.alias
-        - members.gene.products.name
-        - members.gene.products.ncbiGi
-        - members.gene.products.previousNcbiId
-        - members.gene.products.accessions.accession
         ubic.gemma.model.expression.designElement.CompositeSequence:
         - description
         - name
@@ -6177,15 +6438,13 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/PhysicalLocationValueObject'
-    FilteredAndPaginatedResponseDataObjectCompositeSequenceValueObject:
+    PaginatedResponseDataObjectCompositeSequenceValueObject:
       type: object
       properties:
         data:
           type: array
           items:
             $ref: '#/components/schemas/CompositeSequenceValueObject'
-        filter:
-          type: string
         groupBy:
           type: array
           items:
@@ -6208,6 +6467,28 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/GeneValueObject'
+    PaginatedResponseDataObjectGeneValueObject:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/GeneValueObject'
+        groupBy:
+          type: array
+          items:
+            type: string
+        sort:
+          $ref: '#/components/schemas/SortValueObject'
+        offset:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        totalElements:
+          type: integer
+          format: int64
     FilterArgArrayDesign:
       type: string
       description: |-
@@ -6754,20 +7035,13 @@ components:
         totalElements:
           type: integer
           format: int64
-    CompositeSequenceArg:
-      oneOf:
-      - type: integer
-        description: A composite sequence numerical identifier.
-        format: int64
-      - type: string
-        description: A composite sequence name.
-    FilteredAndPaginatedResponseDataObjectGeneValueObject:
+    FilteredAndPaginatedResponseDataObjectCompositeSequenceValueObject:
       type: object
       properties:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/GeneValueObject'
+            $ref: '#/components/schemas/CompositeSequenceValueObject'
         filter:
           type: string
         groupBy:
@@ -6785,13 +7059,22 @@ components:
         totalElements:
           type: integer
           format: int64
-    PaginatedResponseDataObjectCompositeSequenceValueObject:
+    CompositeSequenceArg:
+      oneOf:
+      - type: integer
+        description: A composite sequence numerical identifier.
+        format: int64
+      - type: string
+        description: A composite sequence name.
+    FilteredAndPaginatedResponseDataObjectGeneValueObject:
       type: object
       properties:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/CompositeSequenceValueObject'
+            $ref: '#/components/schemas/GeneValueObject'
+        filter:
+          type: string
         groupBy:
           type: array
           items:
@@ -7423,16 +7706,16 @@ components:
       items:
         type: string
         enum:
-        - ubic.gemma.model.expression.arrayDesign.ArrayDesign
-        - ubic.gemma.model.expression.experiment.ExpressionExperiment
-        - ubic.gemma.model.genome.Gene
-        - ubic.gemma.model.common.description.BibliographicReference
         - ubic.gemma.model.expression.BlacklistedEntity
-        - ubic.gemma.model.expression.designElement.CompositeSequence
-        - ubic.gemma.model.genome.gene.GeneSet
-        - ubic.gemma.model.analysis.expression.ExpressionExperimentSet
+        - ubic.gemma.model.expression.arrayDesign.ArrayDesign
         - ubic.gemma.model.genome.biosequence.BioSequence
         - ubic.gemma.model.association.phenotype.PhenotypeAssociation
+        - ubic.gemma.model.genome.gene.GeneSet
+        - ubic.gemma.model.genome.Gene
+        - ubic.gemma.model.analysis.expression.ExpressionExperimentSet
+        - ubic.gemma.model.common.description.BibliographicReference
+        - ubic.gemma.model.expression.designElement.CompositeSequence
+        - ubic.gemma.model.expression.experiment.ExpressionExperiment
     ResponseDataObjectListTaxonValueObject:
       type: object
       properties:
@@ -7440,90 +7723,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/TaxonValueObject'
-    SortArgTaxon:
-      pattern: ^(\+|-?)(\w+)$
-      type: string
-      description: |-
-        Order results by the given property and direction. The '+' sign indicate ascending order whereas the '-' indicate descending.
-
-        Available properties:
-
-        - commonName `string`
-        - externalDatabase.auditTrail.events.size `integer`
-        - externalDatabase.auditTrail.id `integer`
-        - externalDatabase.databaseSupplier.email `string`
-        - externalDatabase.databaseSupplier.id `integer`
-        - externalDatabase.databaseSupplier.name `string`
-        - externalDatabase.ftpUri `string`
-        - externalDatabase.id `integer`
-        - externalDatabase.lastUpdated `string`
-        - externalDatabase.localInstallDbName `string`
-        - externalDatabase.name `string`
-        - externalDatabase.releaseUrl `object`
-        - externalDatabase.releaseVersion `string`
-        - externalDatabase.type `string` (available values: ONTOLOGY, SEQUENCE, LITERATURE, EXPRESSION, GENOME, OTHER, PROTEIN)
-        - externalDatabase.webUri `string`
-        - id `integer`
-        - isGenesUsable `boolean`
-        - ncbiId `integer`
-        - scientificName `string`
-        - secondaryNcbiId `integer`
-      x-gemma-filterable-properties:
-      - name: commonName
-        type: string
-      - name: externalDatabase.auditTrail.events.size
-        type: integer
-      - name: externalDatabase.auditTrail.id
-        type: integer
-      - name: externalDatabase.databaseSupplier.email
-        type: string
-      - name: externalDatabase.databaseSupplier.id
-        type: integer
-      - name: externalDatabase.databaseSupplier.name
-        type: string
-      - name: externalDatabase.ftpUri
-        type: string
-      - name: externalDatabase.id
-        type: integer
-      - name: externalDatabase.lastUpdated
-        type: string
-      - name: externalDatabase.localInstallDbName
-        type: string
-      - name: externalDatabase.name
-        type: string
-      - name: externalDatabase.releaseUrl
-        type: object
-      - name: externalDatabase.releaseVersion
-        type: string
-      - name: externalDatabase.type
-        type: string
-        allowedValues:
-        - value: ONTOLOGY
-          label: Ontology
-        - value: SEQUENCE
-          label: Sequence
-        - value: LITERATURE
-          label: Literature
-        - value: EXPRESSION
-          label: Expression
-        - value: GENOME
-          label: Genome
-        - value: OTHER
-          label: Other
-        - value: PROTEIN
-          label: Protein
-      - name: externalDatabase.webUri
-        type: string
-      - name: id
-        type: integer
-      - name: isGenesUsable
-        type: boolean
-      - name: ncbiId
-        type: integer
-      - name: scientificName
-        type: string
-      - name: secondaryNcbiId
-        type: integer
   securitySchemes:
     basicAuth:
       type: http
