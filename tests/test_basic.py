@@ -10,9 +10,16 @@ import gemmapy
 import pandas as pd
 from gemmapy import _subprocessors as sub
 import anndata as ad
+import time
 
 
 api = gemmapy.GemmaPy()
+
+@pytest.fixture(autouse=True)
+def slow_down_tests():
+    yield
+    time.sleep(1)
+
 
 def test_get_result_sets():
     res = api.get_result_sets([200])
