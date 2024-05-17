@@ -73,6 +73,8 @@ class DefaultApi(object):
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
         all_params.append('_request_timeout')
+        all_params.append('_force_table')
+
 
         params = locals()
         for key, val in six.iteritems(params['kwargs']):
@@ -97,8 +99,14 @@ class DefaultApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        if not kwargs.get('_force_table'):
+            header_params['Accept'] = self.api_client.select_header_accept(
+                ['application/json'])  # noqa: E501
+            response_type = 'ResponseDataObjectApiInfoValueObject' # noqa: E501
+        else:
+            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
+            response_type = 'str'
+            
 
         # Authentication setting
         auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
@@ -111,7 +119,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='ResponseDataObjectApiInfoValueObject',  # noqa: E501
+            response_type=response_type,
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -160,6 +168,8 @@ class DefaultApi(object):
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
         all_params.append('_request_timeout')
+        all_params.append('_force_table')
+
 
         params = locals()
         for key, val in six.iteritems(params['kwargs']):
@@ -190,8 +200,14 @@ class DefaultApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        if not kwargs.get('_force_table'):
+            header_params['Accept'] = self.api_client.select_header_accept(
+                ['application/json'])  # noqa: E501
+            response_type = 'ResponseDataObjectSetAnnotationValueObject' # noqa: E501
+        else:
+            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
+            response_type = 'str'
+            
 
         # Authentication setting
         auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
@@ -204,7 +220,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='ResponseDataObjectSetAnnotationValueObject',  # noqa: E501
+            response_type=response_type,
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -253,6 +269,8 @@ class DefaultApi(object):
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
         all_params.append('_request_timeout')
+        all_params.append('_force_table')
+
 
         params = locals()
         for key, val in six.iteritems(params['kwargs']):
@@ -283,8 +301,14 @@ class DefaultApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['text/tab-separated-values; charset=UTF-8', 'application/json'])  # noqa: E501
+        if not kwargs.get('_force_table'):
+            header_params['Accept'] = self.api_client.select_header_accept(
+                ['text/tab-separated-values; charset=UTF-8', 'application/json'])  # noqa: E501
+            response_type = 'str' # noqa: E501
+        else:
+            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
+            response_type = 'str'
+            
 
         # Authentication setting
         auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
@@ -297,7 +321,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='str',  # noqa: E501
+            response_type=response_type,
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -356,6 +380,8 @@ class DefaultApi(object):
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
         all_params.append('_request_timeout')
+        all_params.append('_force_table')
+
 
         params = locals()
         for key, val in six.iteritems(params['kwargs']):
@@ -397,8 +423,14 @@ class DefaultApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        if not kwargs.get('_force_table'):
+            header_params['Accept'] = self.api_client.select_header_accept(
+                ['application/json'])  # noqa: E501
+            response_type = 'ResponseDataObjectListExperimentExpressionLevelsValueObject' # noqa: E501
+        else:
+            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
+            response_type = 'str'
+            
 
         # Authentication setting
         auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
@@ -411,7 +443,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='ResponseDataObjectListExperimentExpressionLevelsValueObject',  # noqa: E501
+            response_type=response_type,
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -464,6 +496,8 @@ class DefaultApi(object):
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
         all_params.append('_request_timeout')
+        all_params.append('_force_table')
+
 
         params = locals()
         for key, val in six.iteritems(params['kwargs']):
@@ -498,8 +532,14 @@ class DefaultApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        if not kwargs.get('_force_table'):
+            header_params['Accept'] = self.api_client.select_header_accept(
+                ['application/json'])  # noqa: E501
+            response_type = 'ResponseDataObjectListDifferentialExpressionAnalysisValueObject' # noqa: E501
+        else:
+            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
+            response_type = 'str'
+            
 
         # Authentication setting
         auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
@@ -512,7 +552,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='ResponseDataObjectListDifferentialExpressionAnalysisValueObject',  # noqa: E501
+            response_type=response_type,
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -561,6 +601,8 @@ class DefaultApi(object):
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
         all_params.append('_request_timeout')
+        all_params.append('_force_table')
+
 
         params = locals()
         for key, val in six.iteritems(params['kwargs']):
@@ -591,8 +633,14 @@ class DefaultApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        if not kwargs.get('_force_table'):
+            header_params['Accept'] = self.api_client.select_header_accept(
+                ['application/json'])  # noqa: E501
+            response_type = None # noqa: E501
+        else:
+            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
+            response_type = 'str'
+            
 
         # Authentication setting
         auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
@@ -605,7 +653,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type=None,  # noqa: E501
+            response_type=response_type,
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -658,6 +706,8 @@ class DefaultApi(object):
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
         all_params.append('_request_timeout')
+        all_params.append('_force_table')
+
 
         params = locals()
         for key, val in six.iteritems(params['kwargs']):
@@ -690,8 +740,14 @@ class DefaultApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['text/tab-separated-values; charset=UTF-8', 'application/json'])  # noqa: E501
+        if not kwargs.get('_force_table'):
+            header_params['Accept'] = self.api_client.select_header_accept(
+                ['text/tab-separated-values; charset=UTF-8', 'application/json'])  # noqa: E501
+            response_type = None # noqa: E501
+        else:
+            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
+            response_type = 'str'
+            
 
         # Authentication setting
         auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
@@ -704,7 +760,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type=None,  # noqa: E501
+            response_type=response_type,
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -759,6 +815,8 @@ class DefaultApi(object):
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
         all_params.append('_request_timeout')
+        all_params.append('_force_table')
+
 
         params = locals()
         for key, val in six.iteritems(params['kwargs']):
@@ -801,8 +859,14 @@ class DefaultApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        if not kwargs.get('_force_table'):
+            header_params['Accept'] = self.api_client.select_header_accept(
+                ['application/json'])  # noqa: E501
+            response_type = 'ResponseDataObjectListExperimentExpressionLevelsValueObject' # noqa: E501
+        else:
+            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
+            response_type = 'str'
+            
 
         # Authentication setting
         auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
@@ -815,7 +879,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='ResponseDataObjectListExperimentExpressionLevelsValueObject',  # noqa: E501
+            response_type=response_type,
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -872,6 +936,8 @@ class DefaultApi(object):
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
         all_params.append('_request_timeout')
+        all_params.append('_force_table')
+
 
         params = locals()
         for key, val in six.iteritems(params['kwargs']):
@@ -920,8 +986,14 @@ class DefaultApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        if not kwargs.get('_force_table'):
+            header_params['Accept'] = self.api_client.select_header_accept(
+                ['application/json'])  # noqa: E501
+            response_type = 'ResponseDataObjectListExperimentExpressionLevelsValueObject' # noqa: E501
+        else:
+            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
+            response_type = 'str'
+            
 
         # Authentication setting
         auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
@@ -934,7 +1006,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='ResponseDataObjectListExperimentExpressionLevelsValueObject',  # noqa: E501
+            response_type=response_type,
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -991,6 +1063,8 @@ class DefaultApi(object):
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
         all_params.append('_request_timeout')
+        all_params.append('_force_table')
+
 
         params = locals()
         for key, val in six.iteritems(params['kwargs']):
@@ -1030,8 +1104,14 @@ class DefaultApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        if not kwargs.get('_force_table'):
+            header_params['Accept'] = self.api_client.select_header_accept(
+                ['application/json'])  # noqa: E501
+            response_type = 'ResponseDataObjectListExperimentExpressionLevelsValueObject' # noqa: E501
+        else:
+            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
+            response_type = 'str'
+            
 
         # Authentication setting
         auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
@@ -1044,7 +1124,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='ResponseDataObjectListExperimentExpressionLevelsValueObject',  # noqa: E501
+            response_type=response_type,
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -1093,6 +1173,8 @@ class DefaultApi(object):
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
         all_params.append('_request_timeout')
+        all_params.append('_force_table')
+
 
         params = locals()
         for key, val in six.iteritems(params['kwargs']):
@@ -1123,8 +1205,14 @@ class DefaultApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        if not kwargs.get('_force_table'):
+            header_params['Accept'] = self.api_client.select_header_accept(
+                ['application/json'])  # noqa: E501
+            response_type = 'ResponseDataObjectListArrayDesignValueObject' # noqa: E501
+        else:
+            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
+            response_type = 'str'
+            
 
         # Authentication setting
         auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
@@ -1137,7 +1225,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='ResponseDataObjectListArrayDesignValueObject',  # noqa: E501
+            response_type=response_type,
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -1186,6 +1274,8 @@ class DefaultApi(object):
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
         all_params.append('_request_timeout')
+        all_params.append('_force_table')
+
 
         params = locals()
         for key, val in six.iteritems(params['kwargs']):
@@ -1216,8 +1306,14 @@ class DefaultApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['text/tab-separated-values; charset=UTF-8', 'application/json'])  # noqa: E501
+        if not kwargs.get('_force_table'):
+            header_params['Accept'] = self.api_client.select_header_accept(
+                ['text/tab-separated-values; charset=UTF-8', 'application/json'])  # noqa: E501
+            response_type = 'str' # noqa: E501
+        else:
+            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
+            response_type = 'str'
+            
 
         # Authentication setting
         auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
@@ -1230,7 +1326,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='str',  # noqa: E501
+            response_type=response_type,
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -1279,6 +1375,8 @@ class DefaultApi(object):
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
         all_params.append('_request_timeout')
+        all_params.append('_force_table')
+
 
         params = locals()
         for key, val in six.iteritems(params['kwargs']):
@@ -1309,8 +1407,14 @@ class DefaultApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        if not kwargs.get('_force_table'):
+            header_params['Accept'] = self.api_client.select_header_accept(
+                ['application/json'])  # noqa: E501
+            response_type = 'ResponseDataObjectSetQuantitationTypeValueObject' # noqa: E501
+        else:
+            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
+            response_type = 'str'
+            
 
         # Authentication setting
         auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
@@ -1323,7 +1427,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='ResponseDataObjectSetQuantitationTypeValueObject',  # noqa: E501
+            response_type=response_type,
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -1374,6 +1478,8 @@ class DefaultApi(object):
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
         all_params.append('_request_timeout')
+        all_params.append('_force_table')
+
 
         params = locals()
         for key, val in six.iteritems(params['kwargs']):
@@ -1406,8 +1512,14 @@ class DefaultApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['text/tab-separated-values; charset=UTF-8', 'application/json'])  # noqa: E501
+        if not kwargs.get('_force_table'):
+            header_params['Accept'] = self.api_client.select_header_accept(
+                ['text/tab-separated-values; charset=UTF-8', 'application/json'])  # noqa: E501
+            response_type = 'str' # noqa: E501
+        else:
+            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
+            response_type = 'str'
+            
 
         # Authentication setting
         auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
@@ -1420,7 +1532,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='str',  # noqa: E501
+            response_type=response_type,
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -1469,6 +1581,8 @@ class DefaultApi(object):
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
         all_params.append('_request_timeout')
+        all_params.append('_force_table')
+
 
         params = locals()
         for key, val in six.iteritems(params['kwargs']):
@@ -1499,8 +1613,14 @@ class DefaultApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        if not kwargs.get('_force_table'):
+            header_params['Accept'] = self.api_client.select_header_accept(
+                ['application/json'])  # noqa: E501
+            response_type = 'ResponseDataObjectListBioAssayValueObject' # noqa: E501
+        else:
+            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
+            response_type = 'str'
+            
 
         # Authentication setting
         auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
@@ -1513,7 +1633,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='ResponseDataObjectListBioAssayValueObject',  # noqa: E501
+            response_type=response_type,
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -1562,6 +1682,8 @@ class DefaultApi(object):
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
         all_params.append('_request_timeout')
+        all_params.append('_force_table')
+
 
         params = locals()
         for key, val in six.iteritems(params['kwargs']):
@@ -1592,8 +1714,14 @@ class DefaultApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        if not kwargs.get('_force_table'):
+            header_params['Accept'] = self.api_client.select_header_accept(
+                ['application/json'])  # noqa: E501
+            response_type = 'ResponseDataObjectSimpleSVDValueObject' # noqa: E501
+        else:
+            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
+            response_type = 'str'
+            
 
         # Authentication setting
         auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
@@ -1606,7 +1734,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='ResponseDataObjectSimpleSVDValueObject',  # noqa: E501
+            response_type=response_type,
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -1663,6 +1791,8 @@ class DefaultApi(object):
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
         all_params.append('_request_timeout')
+        all_params.append('_force_table')
+
 
         params = locals()
         for key, val in six.iteritems(params['kwargs']):
@@ -1697,8 +1827,14 @@ class DefaultApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        if not kwargs.get('_force_table'):
+            header_params['Accept'] = self.api_client.select_header_accept(
+                ['application/json'])  # noqa: E501
+            response_type = 'QueriedAndFilteredAndInferredAndPaginatedResponseDataObjectExpressionExperimentWithSearchResultValueObject' # noqa: E501
+        else:
+            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
+            response_type = 'str'
+            
 
         # Authentication setting
         auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
@@ -1711,7 +1847,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='QueriedAndFilteredAndInferredAndPaginatedResponseDataObjectExpressionExperimentWithSearchResultValueObject',  # noqa: E501
+            response_type=response_type,
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -1772,6 +1908,8 @@ class DefaultApi(object):
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
         all_params.append('_request_timeout')
+        all_params.append('_force_table')
+
 
         params = locals()
         for key, val in six.iteritems(params['kwargs']):
@@ -1809,8 +1947,14 @@ class DefaultApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        if not kwargs.get('_force_table'):
+            header_params['Accept'] = self.api_client.select_header_accept(
+                ['application/json'])  # noqa: E501
+            response_type = 'QueriedAndFilteredAndInferredAndLimitedResponseDataObjectAnnotationWithUsageStatisticsValueObject' # noqa: E501
+        else:
+            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
+            response_type = 'str'
+            
 
         # Authentication setting
         auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
@@ -1823,7 +1967,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='QueriedAndFilteredAndInferredAndLimitedResponseDataObjectAnnotationWithUsageStatisticsValueObject',  # noqa: E501
+            response_type=response_type,
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -1880,6 +2024,8 @@ class DefaultApi(object):
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
         all_params.append('_request_timeout')
+        all_params.append('_force_table')
+
 
         params = locals()
         for key, val in six.iteritems(params['kwargs']):
@@ -1919,8 +2065,14 @@ class DefaultApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        if not kwargs.get('_force_table'):
+            header_params['Accept'] = self.api_client.select_header_accept(
+                ['application/json'])  # noqa: E501
+            response_type = 'FilteredAndInferredAndPaginatedResponseDataObjectExpressionExperimentValueObject' # noqa: E501
+        else:
+            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
+            response_type = 'str'
+            
 
         # Authentication setting
         auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
@@ -1933,7 +2085,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='FilteredAndInferredAndPaginatedResponseDataObjectExpressionExperimentValueObject',  # noqa: E501
+            response_type=response_type,
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -1988,6 +2140,8 @@ class DefaultApi(object):
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
         all_params.append('_request_timeout')
+        all_params.append('_force_table')
+
 
         params = locals()
         for key, val in six.iteritems(params['kwargs']):
@@ -2018,8 +2172,14 @@ class DefaultApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        if not kwargs.get('_force_table'):
+            header_params['Accept'] = self.api_client.select_header_accept(
+                ['application/json'])  # noqa: E501
+            response_type = 'QueriedAndFilteredAndInferredAndLimitedResponseDataObjectCategoryWithUsageStatisticsValueObject' # noqa: E501
+        else:
+            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
+            response_type = 'str'
+            
 
         # Authentication setting
         auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
@@ -2032,7 +2192,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='QueriedAndFilteredAndInferredAndLimitedResponseDataObjectCategoryWithUsageStatisticsValueObject',  # noqa: E501
+            response_type=response_type,
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -2087,6 +2247,8 @@ class DefaultApi(object):
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
         all_params.append('_request_timeout')
+        all_params.append('_force_table')
+
 
         params = locals()
         for key, val in six.iteritems(params['kwargs']):
@@ -2117,8 +2279,14 @@ class DefaultApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        if not kwargs.get('_force_table'):
+            header_params['Accept'] = self.api_client.select_header_accept(
+                ['application/json'])  # noqa: E501
+            response_type = 'QueriedAndFilteredAndInferredAndLimitedResponseDataObjectArrayDesignWithUsageStatisticsValueObject' # noqa: E501
+        else:
+            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
+            response_type = 'str'
+            
 
         # Authentication setting
         auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
@@ -2131,7 +2299,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='QueriedAndFilteredAndInferredAndLimitedResponseDataObjectArrayDesignWithUsageStatisticsValueObject',  # noqa: E501
+            response_type=response_type,
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -2182,6 +2350,8 @@ class DefaultApi(object):
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
         all_params.append('_request_timeout')
+        all_params.append('_force_table')
+
 
         params = locals()
         for key, val in six.iteritems(params['kwargs']):
@@ -2210,8 +2380,14 @@ class DefaultApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        if not kwargs.get('_force_table'):
+            header_params['Accept'] = self.api_client.select_header_accept(
+                ['application/json'])  # noqa: E501
+            response_type = 'QueriedAndFilteredAndInferredResponseDataObjectTaxonWithUsageStatisticsValueObject' # noqa: E501
+        else:
+            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
+            response_type = 'str'
+            
 
         # Authentication setting
         auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
@@ -2224,7 +2400,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='QueriedAndFilteredAndInferredResponseDataObjectTaxonWithUsageStatisticsValueObject',  # noqa: E501
+            response_type=response_type,
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -2273,6 +2449,8 @@ class DefaultApi(object):
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
         all_params.append('_request_timeout')
+        all_params.append('_force_table')
+
 
         params = locals()
         for key, val in six.iteritems(params['kwargs']):
@@ -2303,8 +2481,14 @@ class DefaultApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        if not kwargs.get('_force_table'):
+            header_params['Accept'] = self.api_client.select_header_accept(
+                ['application/json'])  # noqa: E501
+            response_type = 'ResponseDataObjectListGeneOntologyTermValueObject' # noqa: E501
+        else:
+            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
+            response_type = 'str'
+            
 
         # Authentication setting
         auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
@@ -2317,7 +2501,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='ResponseDataObjectListGeneOntologyTermValueObject',  # noqa: E501
+            response_type=response_type,
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -2366,6 +2550,8 @@ class DefaultApi(object):
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
         all_params.append('_request_timeout')
+        all_params.append('_force_table')
+
 
         params = locals()
         for key, val in six.iteritems(params['kwargs']):
@@ -2396,8 +2582,14 @@ class DefaultApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        if not kwargs.get('_force_table'):
+            header_params['Accept'] = self.api_client.select_header_accept(
+                ['application/json'])  # noqa: E501
+            response_type = 'ResponseDataObjectListPhysicalLocationValueObject' # noqa: E501
+        else:
+            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
+            response_type = 'str'
+            
 
         # Authentication setting
         auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
@@ -2410,7 +2602,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='ResponseDataObjectListPhysicalLocationValueObject',  # noqa: E501
+            response_type=response_type,
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -2463,6 +2655,8 @@ class DefaultApi(object):
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
         all_params.append('_request_timeout')
+        all_params.append('_force_table')
+
 
         params = locals()
         for key, val in six.iteritems(params['kwargs']):
@@ -2497,8 +2691,14 @@ class DefaultApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        if not kwargs.get('_force_table'):
+            header_params['Accept'] = self.api_client.select_header_accept(
+                ['application/json'])  # noqa: E501
+            response_type = 'PaginatedResponseDataObjectCompositeSequenceValueObject' # noqa: E501
+        else:
+            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
+            response_type = 'str'
+            
 
         # Authentication setting
         auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
@@ -2511,7 +2711,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='PaginatedResponseDataObjectCompositeSequenceValueObject',  # noqa: E501
+            response_type=response_type,
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -2560,6 +2760,8 @@ class DefaultApi(object):
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
         all_params.append('_request_timeout')
+        all_params.append('_force_table')
+
 
         params = locals()
         for key, val in six.iteritems(params['kwargs']):
@@ -2591,8 +2793,14 @@ class DefaultApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        if not kwargs.get('_force_table'):
+            header_params['Accept'] = self.api_client.select_header_accept(
+                ['application/json'])  # noqa: E501
+            response_type = 'ResponseDataObjectListGeneValueObject' # noqa: E501
+        else:
+            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
+            response_type = 'str'
+            
 
         # Authentication setting
         auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
@@ -2605,7 +2813,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='ResponseDataObjectListGeneValueObject',  # noqa: E501
+            response_type=response_type,
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -2656,6 +2864,8 @@ class DefaultApi(object):
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
         all_params.append('_request_timeout')
+        all_params.append('_force_table')
+
 
         params = locals()
         for key, val in six.iteritems(params['kwargs']):
@@ -2684,8 +2894,14 @@ class DefaultApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        if not kwargs.get('_force_table'):
+            header_params['Accept'] = self.api_client.select_header_accept(
+                ['application/json'])  # noqa: E501
+            response_type = 'PaginatedResponseDataObjectGeneValueObject' # noqa: E501
+        else:
+            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
+            response_type = 'str'
+            
 
         # Authentication setting
         auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
@@ -2698,7 +2914,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='PaginatedResponseDataObjectGeneValueObject',  # noqa: E501
+            response_type=response_type,
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -2749,6 +2965,8 @@ class DefaultApi(object):
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
         all_params.append('_request_timeout')
+        all_params.append('_force_table')
+
 
         params = locals()
         for key, val in six.iteritems(params['kwargs']):
@@ -2777,8 +2995,14 @@ class DefaultApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        if not kwargs.get('_force_table'):
+            header_params['Accept'] = self.api_client.select_header_accept(
+                ['application/json'])  # noqa: E501
+            response_type = 'ResponseDataObjectLong' # noqa: E501
+        else:
+            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
+            response_type = 'str'
+            
 
         # Authentication setting
         auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
@@ -2791,7 +3015,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='ResponseDataObjectLong',  # noqa: E501
+            response_type=response_type,
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -2840,6 +3064,8 @@ class DefaultApi(object):
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
         all_params.append('_request_timeout')
+        all_params.append('_force_table')
+
 
         params = locals()
         for key, val in six.iteritems(params['kwargs']):
@@ -2866,8 +3092,14 @@ class DefaultApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        if not kwargs.get('_force_table'):
+            header_params['Accept'] = self.api_client.select_header_accept(
+                ['application/json'])  # noqa: E501
+            response_type = 'ResponseDataObjectLong' # noqa: E501
+        else:
+            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
+            response_type = 'str'
+            
 
         # Authentication setting
         auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
@@ -2880,7 +3112,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='ResponseDataObjectLong',  # noqa: E501
+            response_type=response_type,
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -2929,6 +3161,8 @@ class DefaultApi(object):
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
         all_params.append('_request_timeout')
+        all_params.append('_force_table')
+
 
         params = locals()
         for key, val in six.iteritems(params['kwargs']):
@@ -2955,8 +3189,14 @@ class DefaultApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        if not kwargs.get('_force_table'):
+            header_params['Accept'] = self.api_client.select_header_accept(
+                ['application/json'])  # noqa: E501
+            response_type = 'ResponseDataObjectLong' # noqa: E501
+        else:
+            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
+            response_type = 'str'
+            
 
         # Authentication setting
         auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
@@ -2969,7 +3209,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='ResponseDataObjectLong',  # noqa: E501
+            response_type=response_type,
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -3018,6 +3258,8 @@ class DefaultApi(object):
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
         all_params.append('_request_timeout')
+        all_params.append('_force_table')
+
 
         params = locals()
         for key, val in six.iteritems(params['kwargs']):
@@ -3048,8 +3290,14 @@ class DefaultApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['text/tab-separated-values; charset=UTF-8'])  # noqa: E501
+        if not kwargs.get('_force_table'):
+            header_params['Accept'] = self.api_client.select_header_accept(
+                ['text/tab-separated-values; charset=UTF-8'])  # noqa: E501
+            response_type = 'str' # noqa: E501
+        else:
+            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
+            response_type = 'str'
+            
 
         # Authentication setting
         auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
@@ -3062,7 +3310,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='str',  # noqa: E501
+            response_type=response_type,
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -3115,6 +3363,8 @@ class DefaultApi(object):
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
         all_params.append('_request_timeout')
+        all_params.append('_force_table')
+
 
         params = locals()
         for key, val in six.iteritems(params['kwargs']):
@@ -3149,8 +3399,14 @@ class DefaultApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        if not kwargs.get('_force_table'):
+            header_params['Accept'] = self.api_client.select_header_accept(
+                ['application/json'])  # noqa: E501
+            response_type = 'PaginatedResponseDataObjectExpressionExperimentValueObject' # noqa: E501
+        else:
+            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
+            response_type = 'str'
+            
 
         # Authentication setting
         auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
@@ -3163,7 +3419,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='PaginatedResponseDataObjectExpressionExperimentValueObject',  # noqa: E501
+            response_type=response_type,
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -3218,6 +3474,8 @@ class DefaultApi(object):
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
         all_params.append('_request_timeout')
+        all_params.append('_force_table')
+
 
         params = locals()
         for key, val in six.iteritems(params['kwargs']):
@@ -3259,8 +3517,14 @@ class DefaultApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        if not kwargs.get('_force_table'):
+            header_params['Accept'] = self.api_client.select_header_accept(
+                ['application/json'])  # noqa: E501
+            response_type = 'FilteredAndPaginatedResponseDataObjectCompositeSequenceValueObject' # noqa: E501
+        else:
+            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
+            response_type = 'str'
+            
 
         # Authentication setting
         auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
@@ -3273,7 +3537,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='FilteredAndPaginatedResponseDataObjectCompositeSequenceValueObject',  # noqa: E501
+            response_type=response_type,
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -3328,6 +3592,8 @@ class DefaultApi(object):
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
         all_params.append('_request_timeout')
+        all_params.append('_force_table')
+
 
         params = locals()
         for key, val in six.iteritems(params['kwargs']):
@@ -3368,8 +3634,14 @@ class DefaultApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        if not kwargs.get('_force_table'):
+            header_params['Accept'] = self.api_client.select_header_accept(
+                ['application/json'])  # noqa: E501
+            response_type = 'FilteredAndPaginatedResponseDataObjectGeneValueObject' # noqa: E501
+        else:
+            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
+            response_type = 'str'
+            
 
         # Authentication setting
         auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
@@ -3382,7 +3654,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='FilteredAndPaginatedResponseDataObjectGeneValueObject',  # noqa: E501
+            response_type=response_type,
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -3435,6 +3707,8 @@ class DefaultApi(object):
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
         all_params.append('_request_timeout')
+        all_params.append('_force_table')
+
 
         params = locals()
         for key, val in six.iteritems(params['kwargs']):
@@ -3469,8 +3743,14 @@ class DefaultApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        if not kwargs.get('_force_table'):
+            header_params['Accept'] = self.api_client.select_header_accept(
+                ['application/json'])  # noqa: E501
+            response_type = 'PaginatedResponseDataObjectCompositeSequenceValueObject' # noqa: E501
+        else:
+            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
+            response_type = 'str'
+            
 
         # Authentication setting
         auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
@@ -3483,7 +3763,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='PaginatedResponseDataObjectCompositeSequenceValueObject',  # noqa: E501
+            response_type=response_type,
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -3538,6 +3818,8 @@ class DefaultApi(object):
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
         all_params.append('_request_timeout')
+        all_params.append('_force_table')
+
 
         params = locals()
         for key, val in six.iteritems(params['kwargs']):
@@ -3570,8 +3852,14 @@ class DefaultApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        if not kwargs.get('_force_table'):
+            header_params['Accept'] = self.api_client.select_header_accept(
+                ['application/json'])  # noqa: E501
+            response_type = 'FilteredAndPaginatedResponseDataObjectArrayDesignValueObject' # noqa: E501
+        else:
+            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
+            response_type = 'str'
+            
 
         # Authentication setting
         auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
@@ -3584,7 +3872,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='FilteredAndPaginatedResponseDataObjectArrayDesignValueObject',  # noqa: E501
+            response_type=response_type,
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -3641,6 +3929,8 @@ class DefaultApi(object):
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
         all_params.append('_request_timeout')
+        all_params.append('_force_table')
+
 
         params = locals()
         for key, val in six.iteritems(params['kwargs']):
@@ -3680,8 +3970,14 @@ class DefaultApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        if not kwargs.get('_force_table'):
+            header_params['Accept'] = self.api_client.select_header_accept(
+                ['application/json'])  # noqa: E501
+            response_type = 'FilteredAndPaginatedResponseDataObjectArrayDesignValueObject' # noqa: E501
+        else:
+            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
+            response_type = 'str'
+            
 
         # Authentication setting
         auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
@@ -3694,7 +3990,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='FilteredAndPaginatedResponseDataObjectArrayDesignValueObject',  # noqa: E501
+            response_type=response_type,
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -3751,6 +4047,8 @@ class DefaultApi(object):
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
         all_params.append('_request_timeout')
+        all_params.append('_force_table')
+
 
         params = locals()
         for key, val in six.iteritems(params['kwargs']):
@@ -3787,8 +4085,14 @@ class DefaultApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json', 'text/tab-separated-values; charset=UTF-8'])  # noqa: E501
+        if not kwargs.get('_force_table'):
+            header_params['Accept'] = self.api_client.select_header_accept(
+                ['application/json', 'text/tab-separated-values; charset=UTF-8'])  # noqa: E501
+            response_type = 'PaginatedResultsResponseDataObjectDifferentialExpressionAnalysisResultSetValueObject' # noqa: E501
+        else:
+            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
+            response_type = 'str'
+            
 
         # Authentication setting
         auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
@@ -3801,7 +4105,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='PaginatedResultsResponseDataObjectDifferentialExpressionAnalysisResultSetValueObject',  # noqa: E501
+            response_type=response_type,
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -3860,6 +4164,8 @@ class DefaultApi(object):
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
         all_params.append('_request_timeout')
+        all_params.append('_force_table')
+
 
         params = locals()
         for key, val in six.iteritems(params['kwargs']):
@@ -3898,8 +4204,14 @@ class DefaultApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        if not kwargs.get('_force_table'):
+            header_params['Accept'] = self.api_client.select_header_accept(
+                ['application/json'])  # noqa: E501
+            response_type = 'FilteredAndPaginatedResponseDataObjectDifferentialExpressionAnalysisResultSetValueObject' # noqa: E501
+        else:
+            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
+            response_type = 'str'
+            
 
         # Authentication setting
         auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
@@ -3912,7 +4224,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='FilteredAndPaginatedResponseDataObjectDifferentialExpressionAnalysisResultSetValueObject',  # noqa: E501
+            response_type=response_type,
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -3959,6 +4271,8 @@ class DefaultApi(object):
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
         all_params.append('_request_timeout')
+        all_params.append('_force_table')
+
 
         params = locals()
         for key, val in six.iteritems(params['kwargs']):
@@ -3983,8 +4297,14 @@ class DefaultApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        if not kwargs.get('_force_table'):
+            header_params['Accept'] = self.api_client.select_header_accept(
+                ['application/json'])  # noqa: E501
+            response_type = 'ResponseDataObjectListTaxonValueObject' # noqa: E501
+        else:
+            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
+            response_type = 'str'
+            
 
         # Authentication setting
         auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
@@ -3997,7 +4317,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='ResponseDataObjectListTaxonValueObject',  # noqa: E501
+            response_type=response_type,
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -4046,6 +4366,8 @@ class DefaultApi(object):
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
         all_params.append('_request_timeout')
+        all_params.append('_force_table')
+
 
         params = locals()
         for key, val in six.iteritems(params['kwargs']):
@@ -4077,8 +4399,14 @@ class DefaultApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        if not kwargs.get('_force_table'):
+            header_params['Accept'] = self.api_client.select_header_accept(
+                ['application/json'])  # noqa: E501
+            response_type = 'ResponseDataObjectListTaxonValueObject' # noqa: E501
+        else:
+            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
+            response_type = 'str'
+            
 
         # Authentication setting
         auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
@@ -4091,7 +4419,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='ResponseDataObjectListTaxonValueObject',  # noqa: E501
+            response_type=response_type,
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -4148,6 +4476,8 @@ class DefaultApi(object):
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
         all_params.append('_request_timeout')
+        all_params.append('_force_table')
+
 
         params = locals()
         for key, val in six.iteritems(params['kwargs']):
@@ -4186,8 +4516,14 @@ class DefaultApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        if not kwargs.get('_force_table'):
+            header_params['Accept'] = self.api_client.select_header_accept(
+                ['application/json'])  # noqa: E501
+            response_type = 'FilteredAndPaginatedResponseDataObjectExpressionExperimentValueObject' # noqa: E501
+        else:
+            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
+            response_type = 'str'
+            
 
         # Authentication setting
         auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
@@ -4200,7 +4536,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='FilteredAndPaginatedResponseDataObjectExpressionExperimentValueObject',  # noqa: E501
+            response_type=response_type,
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -4251,6 +4587,8 @@ class DefaultApi(object):
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
         all_params.append('_request_timeout')
+        all_params.append('_force_table')
+
 
         params = locals()
         for key, val in six.iteritems(params['kwargs']):
@@ -4287,8 +4625,14 @@ class DefaultApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        if not kwargs.get('_force_table'):
+            header_params['Accept'] = self.api_client.select_header_accept(
+                ['application/json'])  # noqa: E501
+            response_type = 'ResponseDataObjectListGeneOntologyTermValueObject' # noqa: E501
+        else:
+            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
+            response_type = 'str'
+            
 
         # Authentication setting
         auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
@@ -4301,7 +4645,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='ResponseDataObjectListGeneOntologyTermValueObject',  # noqa: E501
+            response_type=response_type,
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -4352,6 +4696,8 @@ class DefaultApi(object):
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
         all_params.append('_request_timeout')
+        all_params.append('_force_table')
+
 
         params = locals()
         for key, val in six.iteritems(params['kwargs']):
@@ -4388,8 +4734,14 @@ class DefaultApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        if not kwargs.get('_force_table'):
+            header_params['Accept'] = self.api_client.select_header_accept(
+                ['application/json'])  # noqa: E501
+            response_type = 'ResponseDataObjectListPhysicalLocationValueObject' # noqa: E501
+        else:
+            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
+            response_type = 'str'
+            
 
         # Authentication setting
         auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
@@ -4402,7 +4754,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='ResponseDataObjectListPhysicalLocationValueObject',  # noqa: E501
+            response_type=response_type,
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -4457,6 +4809,8 @@ class DefaultApi(object):
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
         all_params.append('_request_timeout')
+        all_params.append('_force_table')
+
 
         params = locals()
         for key, val in six.iteritems(params['kwargs']):
@@ -4497,8 +4851,14 @@ class DefaultApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        if not kwargs.get('_force_table'):
+            header_params['Accept'] = self.api_client.select_header_accept(
+                ['application/json'])  # noqa: E501
+            response_type = 'PaginatedResponseDataObjectCompositeSequenceValueObject' # noqa: E501
+        else:
+            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
+            response_type = 'str'
+            
 
         # Authentication setting
         auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
@@ -4511,7 +4871,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='PaginatedResponseDataObjectCompositeSequenceValueObject',  # noqa: E501
+            response_type=response_type,
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -4564,6 +4924,8 @@ class DefaultApi(object):
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
         all_params.append('_request_timeout')
+        all_params.append('_force_table')
+
 
         params = locals()
         for key, val in six.iteritems(params['kwargs']):
@@ -4598,8 +4960,14 @@ class DefaultApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        if not kwargs.get('_force_table'):
+            header_params['Accept'] = self.api_client.select_header_accept(
+                ['application/json'])  # noqa: E501
+            response_type = 'PaginatedResponseDataObjectGeneValueObject' # noqa: E501
+        else:
+            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
+            response_type = 'str'
+            
 
         # Authentication setting
         auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
@@ -4612,7 +4980,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='PaginatedResponseDataObjectGeneValueObject',  # noqa: E501
+            response_type=response_type,
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -4663,6 +5031,8 @@ class DefaultApi(object):
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
         all_params.append('_request_timeout')
+        all_params.append('_force_table')
+
 
         params = locals()
         for key, val in six.iteritems(params['kwargs']):
@@ -4700,8 +5070,14 @@ class DefaultApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        if not kwargs.get('_force_table'):
+            header_params['Accept'] = self.api_client.select_header_accept(
+                ['application/json'])  # noqa: E501
+            response_type = 'ResponseDataObjectListGeneValueObject' # noqa: E501
+        else:
+            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
+            response_type = 'str'
+            
 
         # Authentication setting
         auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
@@ -4714,7 +5090,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='ResponseDataObjectListGeneValueObject',  # noqa: E501
+            response_type=response_type,
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -4771,6 +5147,8 @@ class DefaultApi(object):
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
         all_params.append('_request_timeout')
+        all_params.append('_force_table')
+
 
         params = locals()
         for key, val in six.iteritems(params['kwargs']):
@@ -4821,8 +5199,14 @@ class DefaultApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        if not kwargs.get('_force_table'):
+            header_params['Accept'] = self.api_client.select_header_accept(
+                ['application/json'])  # noqa: E501
+            response_type = 'ResponseDataObjectListGeneValueObject' # noqa: E501
+        else:
+            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
+            response_type = 'str'
+            
 
         # Authentication setting
         auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
@@ -4835,7 +5219,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='ResponseDataObjectListGeneValueObject',  # noqa: E501
+            response_type=response_type,
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -4894,6 +5278,8 @@ class DefaultApi(object):
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
         all_params.append('_request_timeout')
+        all_params.append('_force_table')
+
 
         params = locals()
         for key, val in six.iteritems(params['kwargs']):
@@ -4932,8 +5318,14 @@ class DefaultApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        if not kwargs.get('_force_table'):
+            header_params['Accept'] = self.api_client.select_header_accept(
+                ['application/json'])  # noqa: E501
+            response_type = 'SearchResultsResponseDataObject' # noqa: E501
+        else:
+            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
+            response_type = 'str'
+            
 
         # Authentication setting
         auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
@@ -4946,7 +5338,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='SearchResultsResponseDataObject',  # noqa: E501
+            response_type=response_type,
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -4995,6 +5387,8 @@ class DefaultApi(object):
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
         all_params.append('_request_timeout')
+        all_params.append('_force_table')
+
 
         params = locals()
         for key, val in six.iteritems(params['kwargs']):
@@ -5022,8 +5416,14 @@ class DefaultApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        if not kwargs.get('_force_table'):
+            header_params['Accept'] = self.api_client.select_header_accept(
+                ['application/json'])  # noqa: E501
+            response_type = 'ResponseDataObjectListAnnotationSearchResultValueObject' # noqa: E501
+        else:
+            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
+            response_type = 'str'
+            
 
         # Authentication setting
         auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
@@ -5036,7 +5436,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='ResponseDataObjectListAnnotationSearchResultValueObject',  # noqa: E501
+            response_type=response_type,
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -5087,6 +5487,8 @@ class DefaultApi(object):
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
         all_params.append('_request_timeout')
+        all_params.append('_force_table')
+
 
         params = locals()
         for key, val in six.iteritems(params['kwargs']):
@@ -5118,8 +5520,14 @@ class DefaultApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        if not kwargs.get('_force_table'):
+            header_params['Accept'] = self.api_client.select_header_accept(
+                ['application/json'])  # noqa: E501
+            response_type = 'ResponseDataObjectListAnnotationSearchResultValueObject' # noqa: E501
+        else:
+            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
+            response_type = 'str'
+            
 
         # Authentication setting
         auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
@@ -5132,7 +5540,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='ResponseDataObjectListAnnotationSearchResultValueObject',  # noqa: E501
+            response_type=response_type,
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -5191,6 +5599,8 @@ class DefaultApi(object):
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
         all_params.append('_request_timeout')
+        all_params.append('_force_table')
+
 
         params = locals()
         for key, val in six.iteritems(params['kwargs']):
@@ -5226,8 +5636,14 @@ class DefaultApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        if not kwargs.get('_force_table'):
+            header_params['Accept'] = self.api_client.select_header_accept(
+                ['application/json'])  # noqa: E501
+            response_type = 'QueriedAndFilteredAndPaginatedResponseDataObjectExpressionExperimentValueObject' # noqa: E501
+        else:
+            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
+            response_type = 'str'
+            
 
         # Authentication setting
         auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
@@ -5240,7 +5656,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='QueriedAndFilteredAndPaginatedResponseDataObjectExpressionExperimentValueObject',  # noqa: E501
+            response_type=response_type,
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -5299,6 +5715,8 @@ class DefaultApi(object):
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
         all_params.append('_request_timeout')
+        all_params.append('_force_table')
+
 
         params = locals()
         for key, val in six.iteritems(params['kwargs']):
@@ -5338,8 +5756,14 @@ class DefaultApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        if not kwargs.get('_force_table'):
+            header_params['Accept'] = self.api_client.select_header_accept(
+                ['application/json'])  # noqa: E501
+            response_type = 'QueriedAndFilteredAndPaginatedResponseDataObjectExpressionExperimentValueObject' # noqa: E501
+        else:
+            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
+            response_type = 'str'
+            
 
         # Authentication setting
         auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
@@ -5352,7 +5776,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='QueriedAndFilteredAndPaginatedResponseDataObjectExpressionExperimentValueObject',  # noqa: E501
+            response_type=response_type,
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -5413,6 +5837,8 @@ class DefaultApi(object):
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
         all_params.append('_request_timeout')
+        all_params.append('_force_table')
+
 
         params = locals()
         for key, val in six.iteritems(params['kwargs']):
@@ -5454,8 +5880,14 @@ class DefaultApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        if not kwargs.get('_force_table'):
+            header_params['Accept'] = self.api_client.select_header_accept(
+                ['application/json'])  # noqa: E501
+            response_type = 'QueriedAndFilteredAndPaginatedResponseDataObjectExpressionExperimentValueObject' # noqa: E501
+        else:
+            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
+            response_type = 'str'
+            
 
         # Authentication setting
         auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
@@ -5468,7 +5900,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='QueriedAndFilteredAndPaginatedResponseDataObjectExpressionExperimentValueObject',  # noqa: E501
+            response_type=response_type,
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -5529,6 +5961,8 @@ class DefaultApi(object):
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
         all_params.append('_request_timeout')
+        all_params.append('_force_table')
+
 
         params = locals()
         for key, val in six.iteritems(params['kwargs']):
@@ -5574,8 +6008,14 @@ class DefaultApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        if not kwargs.get('_force_table'):
+            header_params['Accept'] = self.api_client.select_header_accept(
+                ['application/json'])  # noqa: E501
+            response_type = 'QueriedAndFilteredAndPaginatedResponseDataObjectExpressionExperimentValueObject' # noqa: E501
+        else:
+            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
+            response_type = 'str'
+            
 
         # Authentication setting
         auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
@@ -5588,7 +6028,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='QueriedAndFilteredAndPaginatedResponseDataObjectExpressionExperimentValueObject',  # noqa: E501
+            response_type=response_type,
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
