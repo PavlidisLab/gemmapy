@@ -75,7 +75,8 @@ class GemmaPy(object):
 
         """
         
-        response = self.raw.get_result_set_as_tsv(result_set, **kwargs)
+        response = self.raw.get_result_set(result_set, **kwargs,
+                                           _force_table = True)
         
         df = ps.process_de_matrix(response, result_set,self)
         
