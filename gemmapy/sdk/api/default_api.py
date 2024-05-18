@@ -13,6 +13,9 @@
 from __future__ import absolute_import
 
 import re  # noqa: F401
+import time
+from gemmapy.sdk.rest import ApiException
+
 
 # python 2 and python 3 compatibility library
 import six
@@ -47,11 +50,23 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.get_api_info_with_http_info(**kwargs)  # noqa: E501
-        else:
-            (data) = self.get_api_info_with_http_info(**kwargs)  # noqa: E501
-            return data
+        
+         
+        attempts = 0
+        
+        while True:
+            try:
+                if kwargs.get('async_req'):
+                    return self.get_api_info_with_http_info(**kwargs)  # noqa: E501
+                else:
+                    (data) = self.get_api_info_with_http_info(**kwargs)  # noqa: E501
+                    return data
+            except ApiException as err:
+                if err.status in [429,500] and attempts < 2:
+                    attempts += 1
+                    time.sleep(3)
+                else: 
+                    raise err
 
     def get_api_info_with_http_info(self, **kwargs):  # noqa: E501
         """Retrieve an object with basic API information  # noqa: E501
@@ -142,11 +157,23 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.get_dataset_annotations_with_http_info(dataset, **kwargs)  # noqa: E501
-        else:
-            (data) = self.get_dataset_annotations_with_http_info(dataset, **kwargs)  # noqa: E501
-            return data
+        
+         
+        attempts = 0
+        
+        while True:
+            try:
+                if kwargs.get('async_req'):
+                    return self.get_dataset_annotations_with_http_info(dataset, **kwargs)  # noqa: E501
+                else:
+                    (data) = self.get_dataset_annotations_with_http_info(dataset, **kwargs)  # noqa: E501
+                    return data
+            except ApiException as err:
+                if err.status in [429,500] and attempts < 2:
+                    attempts += 1
+                    time.sleep(3)
+                else: 
+                    raise err
 
     def get_dataset_annotations_with_http_info(self, dataset, **kwargs):  # noqa: E501
         """Retrieve the annotations of a dataset  # noqa: E501
@@ -243,11 +270,23 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.get_dataset_design_with_http_info(dataset, **kwargs)  # noqa: E501
-        else:
-            (data) = self.get_dataset_design_with_http_info(dataset, **kwargs)  # noqa: E501
-            return data
+        
+         
+        attempts = 0
+        
+        while True:
+            try:
+                if kwargs.get('async_req'):
+                    return self.get_dataset_design_with_http_info(dataset, **kwargs)  # noqa: E501
+                else:
+                    (data) = self.get_dataset_design_with_http_info(dataset, **kwargs)  # noqa: E501
+                    return data
+            except ApiException as err:
+                if err.status in [429,500] and attempts < 2:
+                    attempts += 1
+                    time.sleep(3)
+                else: 
+                    raise err
 
     def get_dataset_design_with_http_info(self, dataset, **kwargs):  # noqa: E501
         """Retrieve the design of a dataset  # noqa: E501
@@ -349,11 +388,23 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.get_dataset_differential_expression_with_http_info(datasets, **kwargs)  # noqa: E501
-        else:
-            (data) = self.get_dataset_differential_expression_with_http_info(datasets, **kwargs)  # noqa: E501
-            return data
+        
+         
+        attempts = 0
+        
+        while True:
+            try:
+                if kwargs.get('async_req'):
+                    return self.get_dataset_differential_expression_with_http_info(datasets, **kwargs)  # noqa: E501
+                else:
+                    (data) = self.get_dataset_differential_expression_with_http_info(datasets, **kwargs)  # noqa: E501
+                    return data
+            except ApiException as err:
+                if err.status in [429,500] and attempts < 2:
+                    attempts += 1
+                    time.sleep(3)
+                else: 
+                    raise err
 
     def get_dataset_differential_expression_with_http_info(self, datasets, **kwargs):  # noqa: E501
         """Retrieve the expression levels of a set of datasets subject to a threshold on their differential expressions  # noqa: E501
@@ -468,11 +519,23 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.get_dataset_differential_expression_analyses_with_http_info(dataset, **kwargs)  # noqa: E501
-        else:
-            (data) = self.get_dataset_differential_expression_analyses_with_http_info(dataset, **kwargs)  # noqa: E501
-            return data
+        
+         
+        attempts = 0
+        
+        while True:
+            try:
+                if kwargs.get('async_req'):
+                    return self.get_dataset_differential_expression_analyses_with_http_info(dataset, **kwargs)  # noqa: E501
+                else:
+                    (data) = self.get_dataset_differential_expression_analyses_with_http_info(dataset, **kwargs)  # noqa: E501
+                    return data
+            except ApiException as err:
+                if err.status in [429,500] and attempts < 2:
+                    attempts += 1
+                    time.sleep(3)
+                else: 
+                    raise err
 
     def get_dataset_differential_expression_analyses_with_http_info(self, dataset, **kwargs):  # noqa: E501
         """Retrieve annotations and surface level stats for a dataset's differential analyses  # noqa: E501
@@ -575,11 +638,23 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.get_dataset_differential_expression_analyses_result_sets_with_http_info(dataset, **kwargs)  # noqa: E501
-        else:
-            (data) = self.get_dataset_differential_expression_analyses_result_sets_with_http_info(dataset, **kwargs)  # noqa: E501
-            return data
+        
+         
+        attempts = 0
+        
+        while True:
+            try:
+                if kwargs.get('async_req'):
+                    return self.get_dataset_differential_expression_analyses_result_sets_with_http_info(dataset, **kwargs)  # noqa: E501
+                else:
+                    (data) = self.get_dataset_differential_expression_analyses_result_sets_with_http_info(dataset, **kwargs)  # noqa: E501
+                    return data
+            except ApiException as err:
+                if err.status in [429,500] and attempts < 2:
+                    attempts += 1
+                    time.sleep(3)
+                else: 
+                    raise err
 
     def get_dataset_differential_expression_analyses_result_sets_with_http_info(self, dataset, **kwargs):  # noqa: E501
         """Retrieve the result sets of all differential analyses of a dataset  # noqa: E501
@@ -678,11 +753,23 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.get_dataset_expression_with_http_info(dataset, **kwargs)  # noqa: E501
-        else:
-            (data) = self.get_dataset_expression_with_http_info(dataset, **kwargs)  # noqa: E501
-            return data
+        
+         
+        attempts = 0
+        
+        while True:
+            try:
+                if kwargs.get('async_req'):
+                    return self.get_dataset_expression_with_http_info(dataset, **kwargs)  # noqa: E501
+                else:
+                    (data) = self.get_dataset_expression_with_http_info(dataset, **kwargs)  # noqa: E501
+                    return data
+            except ApiException as err:
+                if err.status in [429,500] and attempts < 2:
+                    attempts += 1
+                    time.sleep(3)
+                else: 
+                    raise err
 
     def get_dataset_expression_with_http_info(self, dataset, **kwargs):  # noqa: E501
         """Retrieve processed expression data of a dataset  # noqa: E501
@@ -786,11 +873,23 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.get_dataset_expression_for_genes_with_http_info(datasets, genes, **kwargs)  # noqa: E501
-        else:
-            (data) = self.get_dataset_expression_for_genes_with_http_info(datasets, genes, **kwargs)  # noqa: E501
-            return data
+        
+         
+        attempts = 0
+        
+        while True:
+            try:
+                if kwargs.get('async_req'):
+                    return self.get_dataset_expression_for_genes_with_http_info(datasets, genes, **kwargs)  # noqa: E501
+                else:
+                    (data) = self.get_dataset_expression_for_genes_with_http_info(datasets, genes, **kwargs)  # noqa: E501
+                    return data
+            except ApiException as err:
+                if err.status in [429,500] and attempts < 2:
+                    attempts += 1
+                    time.sleep(3)
+                else: 
+                    raise err
 
     def get_dataset_expression_for_genes_with_http_info(self, datasets, genes, **kwargs):  # noqa: E501
         """Retrieve the expression data matrix of a set of datasets and genes  # noqa: E501
@@ -906,11 +1005,23 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.get_dataset_expression_for_genes_in_taxa_with_http_info(datasets, taxa, genes, **kwargs)  # noqa: E501
-        else:
-            (data) = self.get_dataset_expression_for_genes_in_taxa_with_http_info(datasets, taxa, genes, **kwargs)  # noqa: E501
-            return data
+        
+         
+        attempts = 0
+        
+        while True:
+            try:
+                if kwargs.get('async_req'):
+                    return self.get_dataset_expression_for_genes_in_taxa_with_http_info(datasets, taxa, genes, **kwargs)  # noqa: E501
+                else:
+                    (data) = self.get_dataset_expression_for_genes_in_taxa_with_http_info(datasets, taxa, genes, **kwargs)  # noqa: E501
+                    return data
+            except ApiException as err:
+                if err.status in [429,500] and attempts < 2:
+                    attempts += 1
+                    time.sleep(3)
+                else: 
+                    raise err
 
     def get_dataset_expression_for_genes_in_taxa_with_http_info(self, datasets, taxa, genes, **kwargs):  # noqa: E501
         """Retrieve the expression data matrix of a set of datasets and genes  # noqa: E501
@@ -1033,11 +1144,23 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.get_dataset_expression_pca_with_http_info(datasets, **kwargs)  # noqa: E501
-        else:
-            (data) = self.get_dataset_expression_pca_with_http_info(datasets, **kwargs)  # noqa: E501
-            return data
+        
+         
+        attempts = 0
+        
+        while True:
+            try:
+                if kwargs.get('async_req'):
+                    return self.get_dataset_expression_pca_with_http_info(datasets, **kwargs)  # noqa: E501
+                else:
+                    (data) = self.get_dataset_expression_pca_with_http_info(datasets, **kwargs)  # noqa: E501
+                    return data
+            except ApiException as err:
+                if err.status in [429,500] and attempts < 2:
+                    attempts += 1
+                    time.sleep(3)
+                else: 
+                    raise err
 
     def get_dataset_expression_pca_with_http_info(self, datasets, **kwargs):  # noqa: E501
         """Retrieve the principal components (PCA) of a set of datasets  # noqa: E501
@@ -1147,11 +1270,23 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.get_dataset_platforms_with_http_info(dataset, **kwargs)  # noqa: E501
-        else:
-            (data) = self.get_dataset_platforms_with_http_info(dataset, **kwargs)  # noqa: E501
-            return data
+        
+         
+        attempts = 0
+        
+        while True:
+            try:
+                if kwargs.get('async_req'):
+                    return self.get_dataset_platforms_with_http_info(dataset, **kwargs)  # noqa: E501
+                else:
+                    (data) = self.get_dataset_platforms_with_http_info(dataset, **kwargs)  # noqa: E501
+                    return data
+            except ApiException as err:
+                if err.status in [429,500] and attempts < 2:
+                    attempts += 1
+                    time.sleep(3)
+                else: 
+                    raise err
 
     def get_dataset_platforms_with_http_info(self, dataset, **kwargs):  # noqa: E501
         """Retrieve the platforms of a dataset  # noqa: E501
@@ -1248,11 +1383,23 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.get_dataset_processed_expression_with_http_info(dataset, **kwargs)  # noqa: E501
-        else:
-            (data) = self.get_dataset_processed_expression_with_http_info(dataset, **kwargs)  # noqa: E501
-            return data
+        
+         
+        attempts = 0
+        
+        while True:
+            try:
+                if kwargs.get('async_req'):
+                    return self.get_dataset_processed_expression_with_http_info(dataset, **kwargs)  # noqa: E501
+                else:
+                    (data) = self.get_dataset_processed_expression_with_http_info(dataset, **kwargs)  # noqa: E501
+                    return data
+            except ApiException as err:
+                if err.status in [429,500] and attempts < 2:
+                    attempts += 1
+                    time.sleep(3)
+                else: 
+                    raise err
 
     def get_dataset_processed_expression_with_http_info(self, dataset, **kwargs):  # noqa: E501
         """Retrieve processed expression data of a dataset  # noqa: E501
@@ -1349,11 +1496,23 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.get_dataset_quantitation_types_with_http_info(dataset, **kwargs)  # noqa: E501
-        else:
-            (data) = self.get_dataset_quantitation_types_with_http_info(dataset, **kwargs)  # noqa: E501
-            return data
+        
+         
+        attempts = 0
+        
+        while True:
+            try:
+                if kwargs.get('async_req'):
+                    return self.get_dataset_quantitation_types_with_http_info(dataset, **kwargs)  # noqa: E501
+                else:
+                    (data) = self.get_dataset_quantitation_types_with_http_info(dataset, **kwargs)  # noqa: E501
+                    return data
+            except ApiException as err:
+                if err.status in [429,500] and attempts < 2:
+                    attempts += 1
+                    time.sleep(3)
+                else: 
+                    raise err
 
     def get_dataset_quantitation_types_with_http_info(self, dataset, **kwargs):  # noqa: E501
         """Retrieve quantitation types of a dataset  # noqa: E501
@@ -1451,11 +1610,23 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.get_dataset_raw_expression_with_http_info(dataset, **kwargs)  # noqa: E501
-        else:
-            (data) = self.get_dataset_raw_expression_with_http_info(dataset, **kwargs)  # noqa: E501
-            return data
+        
+         
+        attempts = 0
+        
+        while True:
+            try:
+                if kwargs.get('async_req'):
+                    return self.get_dataset_raw_expression_with_http_info(dataset, **kwargs)  # noqa: E501
+                else:
+                    (data) = self.get_dataset_raw_expression_with_http_info(dataset, **kwargs)  # noqa: E501
+                    return data
+            except ApiException as err:
+                if err.status in [429,500] and attempts < 2:
+                    attempts += 1
+                    time.sleep(3)
+                else: 
+                    raise err
 
     def get_dataset_raw_expression_with_http_info(self, dataset, **kwargs):  # noqa: E501
         """Retrieve raw expression data of a dataset  # noqa: E501
@@ -1555,11 +1726,23 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.get_dataset_samples_with_http_info(dataset, **kwargs)  # noqa: E501
-        else:
-            (data) = self.get_dataset_samples_with_http_info(dataset, **kwargs)  # noqa: E501
-            return data
+        
+         
+        attempts = 0
+        
+        while True:
+            try:
+                if kwargs.get('async_req'):
+                    return self.get_dataset_samples_with_http_info(dataset, **kwargs)  # noqa: E501
+                else:
+                    (data) = self.get_dataset_samples_with_http_info(dataset, **kwargs)  # noqa: E501
+                    return data
+            except ApiException as err:
+                if err.status in [429,500] and attempts < 2:
+                    attempts += 1
+                    time.sleep(3)
+                else: 
+                    raise err
 
     def get_dataset_samples_with_http_info(self, dataset, **kwargs):  # noqa: E501
         """Retrieve the samples of a dataset  # noqa: E501
@@ -1656,11 +1839,23 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.get_dataset_svd_with_http_info(dataset, **kwargs)  # noqa: E501
-        else:
-            (data) = self.get_dataset_svd_with_http_info(dataset, **kwargs)  # noqa: E501
-            return data
+        
+         
+        attempts = 0
+        
+        while True:
+            try:
+                if kwargs.get('async_req'):
+                    return self.get_dataset_svd_with_http_info(dataset, **kwargs)  # noqa: E501
+                else:
+                    (data) = self.get_dataset_svd_with_http_info(dataset, **kwargs)  # noqa: E501
+                    return data
+            except ApiException as err:
+                if err.status in [429,500] and attempts < 2:
+                    attempts += 1
+                    time.sleep(3)
+                else: 
+                    raise err
 
     def get_dataset_svd_with_http_info(self, dataset, **kwargs):  # noqa: E501
         """Retrieve the singular value decomposition (SVD) of a dataset expression data  # noqa: E501
@@ -1761,11 +1956,23 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.get_datasets_with_http_info(**kwargs)  # noqa: E501
-        else:
-            (data) = self.get_datasets_with_http_info(**kwargs)  # noqa: E501
-            return data
+        
+         
+        attempts = 0
+        
+        while True:
+            try:
+                if kwargs.get('async_req'):
+                    return self.get_datasets_with_http_info(**kwargs)  # noqa: E501
+                else:
+                    (data) = self.get_datasets_with_http_info(**kwargs)  # noqa: E501
+                    return data
+            except ApiException as err:
+                if err.status in [429,500] and attempts < 2:
+                    attempts += 1
+                    time.sleep(3)
+                else: 
+                    raise err
 
     def get_datasets_with_http_info(self, **kwargs):  # noqa: E501
         """Retrieve all datasets  # noqa: E501
@@ -1876,11 +2083,23 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.get_datasets_annotations_usage_statistics_with_http_info(**kwargs)  # noqa: E501
-        else:
-            (data) = self.get_datasets_annotations_usage_statistics_with_http_info(**kwargs)  # noqa: E501
-            return data
+        
+         
+        attempts = 0
+        
+        while True:
+            try:
+                if kwargs.get('async_req'):
+                    return self.get_datasets_annotations_usage_statistics_with_http_info(**kwargs)  # noqa: E501
+                else:
+                    (data) = self.get_datasets_annotations_usage_statistics_with_http_info(**kwargs)  # noqa: E501
+                    return data
+            except ApiException as err:
+                if err.status in [429,500] and attempts < 2:
+                    attempts += 1
+                    time.sleep(3)
+                else: 
+                    raise err
 
     def get_datasets_annotations_usage_statistics_with_http_info(self, **kwargs):  # noqa: E501
         """Retrieve usage statistics of annotations among datasets matching the provided query and filter  # noqa: E501
@@ -1994,11 +2213,23 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.get_datasets_by_ids_with_http_info(dataset, **kwargs)  # noqa: E501
-        else:
-            (data) = self.get_datasets_by_ids_with_http_info(dataset, **kwargs)  # noqa: E501
-            return data
+        
+         
+        attempts = 0
+        
+        while True:
+            try:
+                if kwargs.get('async_req'):
+                    return self.get_datasets_by_ids_with_http_info(dataset, **kwargs)  # noqa: E501
+                else:
+                    (data) = self.get_datasets_by_ids_with_http_info(dataset, **kwargs)  # noqa: E501
+                    return data
+            except ApiException as err:
+                if err.status in [429,500] and attempts < 2:
+                    attempts += 1
+                    time.sleep(3)
+                else: 
+                    raise err
 
     def get_datasets_by_ids_with_http_info(self, dataset, **kwargs):  # noqa: E501
         """Retrieve datasets by their identifiers  # noqa: E501
@@ -2111,11 +2342,23 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.get_datasets_categories_usage_statistics_with_http_info(**kwargs)  # noqa: E501
-        else:
-            (data) = self.get_datasets_categories_usage_statistics_with_http_info(**kwargs)  # noqa: E501
-            return data
+        
+         
+        attempts = 0
+        
+        while True:
+            try:
+                if kwargs.get('async_req'):
+                    return self.get_datasets_categories_usage_statistics_with_http_info(**kwargs)  # noqa: E501
+                else:
+                    (data) = self.get_datasets_categories_usage_statistics_with_http_info(**kwargs)  # noqa: E501
+                    return data
+            except ApiException as err:
+                if err.status in [429,500] and attempts < 2:
+                    attempts += 1
+                    time.sleep(3)
+                else: 
+                    raise err
 
     def get_datasets_categories_usage_statistics_with_http_info(self, **kwargs):  # noqa: E501
         """Retrieve usage statistics of categories among datasets matching the provided query and filter  # noqa: E501
@@ -2218,11 +2461,23 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.get_datasets_platforms_usage_statistics_with_http_info(**kwargs)  # noqa: E501
-        else:
-            (data) = self.get_datasets_platforms_usage_statistics_with_http_info(**kwargs)  # noqa: E501
-            return data
+        
+         
+        attempts = 0
+        
+        while True:
+            try:
+                if kwargs.get('async_req'):
+                    return self.get_datasets_platforms_usage_statistics_with_http_info(**kwargs)  # noqa: E501
+                else:
+                    (data) = self.get_datasets_platforms_usage_statistics_with_http_info(**kwargs)  # noqa: E501
+                    return data
+            except ApiException as err:
+                if err.status in [429,500] and attempts < 2:
+                    attempts += 1
+                    time.sleep(3)
+                else: 
+                    raise err
 
     def get_datasets_platforms_usage_statistics_with_http_info(self, **kwargs):  # noqa: E501
         """Retrieve usage statistics of platforms among datasets matching the provided query and filter  # noqa: E501
@@ -2323,11 +2578,23 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.get_datasets_taxa_usage_statistics_with_http_info(**kwargs)  # noqa: E501
-        else:
-            (data) = self.get_datasets_taxa_usage_statistics_with_http_info(**kwargs)  # noqa: E501
-            return data
+        
+         
+        attempts = 0
+        
+        while True:
+            try:
+                if kwargs.get('async_req'):
+                    return self.get_datasets_taxa_usage_statistics_with_http_info(**kwargs)  # noqa: E501
+                else:
+                    (data) = self.get_datasets_taxa_usage_statistics_with_http_info(**kwargs)  # noqa: E501
+                    return data
+            except ApiException as err:
+                if err.status in [429,500] and attempts < 2:
+                    attempts += 1
+                    time.sleep(3)
+                else: 
+                    raise err
 
     def get_datasets_taxa_usage_statistics_with_http_info(self, **kwargs):  # noqa: E501
         """Retrieve taxa usage statistics for datasets matching the provided query and filter  # noqa: E501
@@ -2423,11 +2690,23 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.get_gene_go_terms_with_http_info(gene, **kwargs)  # noqa: E501
-        else:
-            (data) = self.get_gene_go_terms_with_http_info(gene, **kwargs)  # noqa: E501
-            return data
+        
+         
+        attempts = 0
+        
+        while True:
+            try:
+                if kwargs.get('async_req'):
+                    return self.get_gene_go_terms_with_http_info(gene, **kwargs)  # noqa: E501
+                else:
+                    (data) = self.get_gene_go_terms_with_http_info(gene, **kwargs)  # noqa: E501
+                    return data
+            except ApiException as err:
+                if err.status in [429,500] and attempts < 2:
+                    attempts += 1
+                    time.sleep(3)
+                else: 
+                    raise err
 
     def get_gene_go_terms_with_http_info(self, gene, **kwargs):  # noqa: E501
         """Retrieve the GO terms associated to a gene  # noqa: E501
@@ -2524,11 +2803,23 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.get_gene_locations_with_http_info(gene, **kwargs)  # noqa: E501
-        else:
-            (data) = self.get_gene_locations_with_http_info(gene, **kwargs)  # noqa: E501
-            return data
+        
+         
+        attempts = 0
+        
+        while True:
+            try:
+                if kwargs.get('async_req'):
+                    return self.get_gene_locations_with_http_info(gene, **kwargs)  # noqa: E501
+                else:
+                    (data) = self.get_gene_locations_with_http_info(gene, **kwargs)  # noqa: E501
+                    return data
+            except ApiException as err:
+                if err.status in [429,500] and attempts < 2:
+                    attempts += 1
+                    time.sleep(3)
+                else: 
+                    raise err
 
     def get_gene_locations_with_http_info(self, gene, **kwargs):  # noqa: E501
         """Retrieve the physical locations of a given gene  # noqa: E501
@@ -2627,11 +2918,23 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.get_gene_probes_with_http_info(gene, **kwargs)  # noqa: E501
-        else:
-            (data) = self.get_gene_probes_with_http_info(gene, **kwargs)  # noqa: E501
-            return data
+        
+         
+        attempts = 0
+        
+        while True:
+            try:
+                if kwargs.get('async_req'):
+                    return self.get_gene_probes_with_http_info(gene, **kwargs)  # noqa: E501
+                else:
+                    (data) = self.get_gene_probes_with_http_info(gene, **kwargs)  # noqa: E501
+                    return data
+            except ApiException as err:
+                if err.status in [429,500] and attempts < 2:
+                    attempts += 1
+                    time.sleep(3)
+                else: 
+                    raise err
 
     def get_gene_probes_with_http_info(self, gene, **kwargs):  # noqa: E501
         """Retrieve the probes associated to a genes across all platforms  # noqa: E501
@@ -2734,11 +3037,23 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.get_genes_with_http_info(genes, **kwargs)  # noqa: E501
-        else:
-            (data) = self.get_genes_with_http_info(genes, **kwargs)  # noqa: E501
-            return data
+        
+         
+        attempts = 0
+        
+        while True:
+            try:
+                if kwargs.get('async_req'):
+                    return self.get_genes_with_http_info(genes, **kwargs)  # noqa: E501
+                else:
+                    (data) = self.get_genes_with_http_info(genes, **kwargs)  # noqa: E501
+                    return data
+            except ApiException as err:
+                if err.status in [429,500] and attempts < 2:
+                    attempts += 1
+                    time.sleep(3)
+                else: 
+                    raise err
 
     def get_genes_with_http_info(self, genes, **kwargs):  # noqa: E501
         """Retrieve genes matching gene identifiers  # noqa: E501
@@ -2837,11 +3152,23 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.get_genes1_with_http_info(**kwargs)  # noqa: E501
-        else:
-            (data) = self.get_genes1_with_http_info(**kwargs)  # noqa: E501
-            return data
+        
+         
+        attempts = 0
+        
+        while True:
+            try:
+                if kwargs.get('async_req'):
+                    return self.get_genes1_with_http_info(**kwargs)  # noqa: E501
+                else:
+                    (data) = self.get_genes1_with_http_info(**kwargs)  # noqa: E501
+                    return data
+            except ApiException as err:
+                if err.status in [429,500] and attempts < 2:
+                    attempts += 1
+                    time.sleep(3)
+                else: 
+                    raise err
 
     def get_genes1_with_http_info(self, **kwargs):  # noqa: E501
         """Retrieve all genes  # noqa: E501
@@ -2938,11 +3265,23 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.get_number_of_datasets_with_http_info(**kwargs)  # noqa: E501
-        else:
-            (data) = self.get_number_of_datasets_with_http_info(**kwargs)  # noqa: E501
-            return data
+        
+         
+        attempts = 0
+        
+        while True:
+            try:
+                if kwargs.get('async_req'):
+                    return self.get_number_of_datasets_with_http_info(**kwargs)  # noqa: E501
+                else:
+                    (data) = self.get_number_of_datasets_with_http_info(**kwargs)  # noqa: E501
+                    return data
+            except ApiException as err:
+                if err.status in [429,500] and attempts < 2:
+                    attempts += 1
+                    time.sleep(3)
+                else: 
+                    raise err
 
     def get_number_of_datasets_with_http_info(self, **kwargs):  # noqa: E501
         """Count datasets matching the provided query and filter  # noqa: E501
@@ -3038,11 +3377,23 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.get_number_of_platforms_with_http_info(**kwargs)  # noqa: E501
-        else:
-            (data) = self.get_number_of_platforms_with_http_info(**kwargs)  # noqa: E501
-            return data
+        
+         
+        attempts = 0
+        
+        while True:
+            try:
+                if kwargs.get('async_req'):
+                    return self.get_number_of_platforms_with_http_info(**kwargs)  # noqa: E501
+                else:
+                    (data) = self.get_number_of_platforms_with_http_info(**kwargs)  # noqa: E501
+                    return data
+            except ApiException as err:
+                if err.status in [429,500] and attempts < 2:
+                    attempts += 1
+                    time.sleep(3)
+                else: 
+                    raise err
 
     def get_number_of_platforms_with_http_info(self, **kwargs):  # noqa: E501
         """Count platforms matching the provided filter  # noqa: E501
@@ -3135,11 +3486,23 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.get_number_of_result_sets_with_http_info(**kwargs)  # noqa: E501
-        else:
-            (data) = self.get_number_of_result_sets_with_http_info(**kwargs)  # noqa: E501
-            return data
+        
+         
+        attempts = 0
+        
+        while True:
+            try:
+                if kwargs.get('async_req'):
+                    return self.get_number_of_result_sets_with_http_info(**kwargs)  # noqa: E501
+                else:
+                    (data) = self.get_number_of_result_sets_with_http_info(**kwargs)  # noqa: E501
+                    return data
+            except ApiException as err:
+                if err.status in [429,500] and attempts < 2:
+                    attempts += 1
+                    time.sleep(3)
+                else: 
+                    raise err
 
     def get_number_of_result_sets_with_http_info(self, **kwargs):  # noqa: E501
         """Count result sets matching the provided filter  # noqa: E501
@@ -3232,11 +3595,23 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.get_platform_annotations_with_http_info(platform, **kwargs)  # noqa: E501
-        else:
-            (data) = self.get_platform_annotations_with_http_info(platform, **kwargs)  # noqa: E501
-            return data
+        
+         
+        attempts = 0
+        
+        while True:
+            try:
+                if kwargs.get('async_req'):
+                    return self.get_platform_annotations_with_http_info(platform, **kwargs)  # noqa: E501
+                else:
+                    (data) = self.get_platform_annotations_with_http_info(platform, **kwargs)  # noqa: E501
+                    return data
+            except ApiException as err:
+                if err.status in [429,500] and attempts < 2:
+                    attempts += 1
+                    time.sleep(3)
+                else: 
+                    raise err
 
     def get_platform_annotations_with_http_info(self, platform, **kwargs):  # noqa: E501
         """Retrieve the annotations of a given platform  # noqa: E501
@@ -3335,11 +3710,23 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.get_platform_datasets_with_http_info(platform, **kwargs)  # noqa: E501
-        else:
-            (data) = self.get_platform_datasets_with_http_info(platform, **kwargs)  # noqa: E501
-            return data
+        
+         
+        attempts = 0
+        
+        while True:
+            try:
+                if kwargs.get('async_req'):
+                    return self.get_platform_datasets_with_http_info(platform, **kwargs)  # noqa: E501
+                else:
+                    (data) = self.get_platform_datasets_with_http_info(platform, **kwargs)  # noqa: E501
+                    return data
+            except ApiException as err:
+                if err.status in [429,500] and attempts < 2:
+                    attempts += 1
+                    time.sleep(3)
+                else: 
+                    raise err
 
     def get_platform_datasets_with_http_info(self, platform, **kwargs):  # noqa: E501
         """Retrieve all experiments using a given platform  # noqa: E501
@@ -3445,11 +3832,23 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.get_platform_element_with_http_info(platform, probes, **kwargs)  # noqa: E501
-        else:
-            (data) = self.get_platform_element_with_http_info(platform, probes, **kwargs)  # noqa: E501
-            return data
+        
+         
+        attempts = 0
+        
+        while True:
+            try:
+                if kwargs.get('async_req'):
+                    return self.get_platform_element_with_http_info(platform, probes, **kwargs)  # noqa: E501
+                else:
+                    (data) = self.get_platform_element_with_http_info(platform, probes, **kwargs)  # noqa: E501
+                    return data
+            except ApiException as err:
+                if err.status in [429,500] and attempts < 2:
+                    attempts += 1
+                    time.sleep(3)
+                else: 
+                    raise err
 
     def get_platform_element_with_http_info(self, platform, probes, **kwargs):  # noqa: E501
         """Retrieve the selected probes for a given platform  # noqa: E501
@@ -3563,11 +3962,23 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.get_platform_element_genes_with_http_info(platform, probe, **kwargs)  # noqa: E501
-        else:
-            (data) = self.get_platform_element_genes_with_http_info(platform, probe, **kwargs)  # noqa: E501
-            return data
+        
+         
+        attempts = 0
+        
+        while True:
+            try:
+                if kwargs.get('async_req'):
+                    return self.get_platform_element_genes_with_http_info(platform, probe, **kwargs)  # noqa: E501
+                else:
+                    (data) = self.get_platform_element_genes_with_http_info(platform, probe, **kwargs)  # noqa: E501
+                    return data
+            except ApiException as err:
+                if err.status in [429,500] and attempts < 2:
+                    attempts += 1
+                    time.sleep(3)
+                else: 
+                    raise err
 
     def get_platform_element_genes_with_http_info(self, platform, probe, **kwargs):  # noqa: E501
         """Retrieve the genes associated to a probe in a given platform  # noqa: E501
@@ -3679,11 +4090,23 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.get_platform_elements_with_http_info(platform, **kwargs)  # noqa: E501
-        else:
-            (data) = self.get_platform_elements_with_http_info(platform, **kwargs)  # noqa: E501
-            return data
+        
+         
+        attempts = 0
+        
+        while True:
+            try:
+                if kwargs.get('async_req'):
+                    return self.get_platform_elements_with_http_info(platform, **kwargs)  # noqa: E501
+                else:
+                    (data) = self.get_platform_elements_with_http_info(platform, **kwargs)  # noqa: E501
+                    return data
+            except ApiException as err:
+                if err.status in [429,500] and attempts < 2:
+                    attempts += 1
+                    time.sleep(3)
+                else: 
+                    raise err
 
     def get_platform_elements_with_http_info(self, platform, **kwargs):  # noqa: E501
         """Retrieve the probes for a given platform  # noqa: E501
@@ -3789,11 +4212,23 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.get_platforms_with_http_info(**kwargs)  # noqa: E501
-        else:
-            (data) = self.get_platforms_with_http_info(**kwargs)  # noqa: E501
-            return data
+        
+         
+        attempts = 0
+        
+        while True:
+            try:
+                if kwargs.get('async_req'):
+                    return self.get_platforms_with_http_info(**kwargs)  # noqa: E501
+                else:
+                    (data) = self.get_platforms_with_http_info(**kwargs)  # noqa: E501
+                    return data
+            except ApiException as err:
+                if err.status in [429,500] and attempts < 2:
+                    attempts += 1
+                    time.sleep(3)
+                else: 
+                    raise err
 
     def get_platforms_with_http_info(self, **kwargs):  # noqa: E501
         """Retrieve all platforms  # noqa: E501
@@ -3899,11 +4334,23 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.get_platforms_by_ids_with_http_info(platform, **kwargs)  # noqa: E501
-        else:
-            (data) = self.get_platforms_by_ids_with_http_info(platform, **kwargs)  # noqa: E501
-            return data
+        
+         
+        attempts = 0
+        
+        while True:
+            try:
+                if kwargs.get('async_req'):
+                    return self.get_platforms_by_ids_with_http_info(platform, **kwargs)  # noqa: E501
+                else:
+                    (data) = self.get_platforms_by_ids_with_http_info(platform, **kwargs)  # noqa: E501
+                    return data
+            except ApiException as err:
+                if err.status in [429,500] and attempts < 2:
+                    attempts += 1
+                    time.sleep(3)
+                else: 
+                    raise err
 
     def get_platforms_by_ids_with_http_info(self, platform, **kwargs):  # noqa: E501
         """Retrieve all platforms matching a set of platform identifiers  # noqa: E501
@@ -4017,11 +4464,23 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.get_result_set_with_http_info(result_set, **kwargs)  # noqa: E501
-        else:
-            (data) = self.get_result_set_with_http_info(result_set, **kwargs)  # noqa: E501
-            return data
+        
+         
+        attempts = 0
+        
+        while True:
+            try:
+                if kwargs.get('async_req'):
+                    return self.get_result_set_with_http_info(result_set, **kwargs)  # noqa: E501
+                else:
+                    (data) = self.get_result_set_with_http_info(result_set, **kwargs)  # noqa: E501
+                    return data
+            except ApiException as err:
+                if err.status in [429,500] and attempts < 2:
+                    attempts += 1
+                    time.sleep(3)
+                else: 
+                    raise err
 
     def get_result_set_with_http_info(self, result_set, **kwargs):  # noqa: E501
         """Retrieve a single analysis result set by its identifier  # noqa: E501
@@ -4133,11 +4592,23 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.get_result_sets_with_http_info(**kwargs)  # noqa: E501
-        else:
-            (data) = self.get_result_sets_with_http_info(**kwargs)  # noqa: E501
-            return data
+        
+         
+        attempts = 0
+        
+        while True:
+            try:
+                if kwargs.get('async_req'):
+                    return self.get_result_sets_with_http_info(**kwargs)  # noqa: E501
+                else:
+                    (data) = self.get_result_sets_with_http_info(**kwargs)  # noqa: E501
+                    return data
+            except ApiException as err:
+                if err.status in [429,500] and attempts < 2:
+                    attempts += 1
+                    time.sleep(3)
+                else: 
+                    raise err
 
     def get_result_sets_with_http_info(self, **kwargs):  # noqa: E501
         """Retrieve all result sets matching the provided criteria  # noqa: E501
@@ -4246,11 +4717,23 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.get_taxa_with_http_info(**kwargs)  # noqa: E501
-        else:
-            (data) = self.get_taxa_with_http_info(**kwargs)  # noqa: E501
-            return data
+        
+         
+        attempts = 0
+        
+        while True:
+            try:
+                if kwargs.get('async_req'):
+                    return self.get_taxa_with_http_info(**kwargs)  # noqa: E501
+                else:
+                    (data) = self.get_taxa_with_http_info(**kwargs)  # noqa: E501
+                    return data
+            except ApiException as err:
+                if err.status in [429,500] and attempts < 2:
+                    attempts += 1
+                    time.sleep(3)
+                else: 
+                    raise err
 
     def get_taxa_with_http_info(self, **kwargs):  # noqa: E501
         """Retrieve all available taxa  # noqa: E501
@@ -4340,11 +4823,23 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.get_taxa_by_ids_with_http_info(taxa, **kwargs)  # noqa: E501
-        else:
-            (data) = self.get_taxa_by_ids_with_http_info(taxa, **kwargs)  # noqa: E501
-            return data
+        
+         
+        attempts = 0
+        
+        while True:
+            try:
+                if kwargs.get('async_req'):
+                    return self.get_taxa_by_ids_with_http_info(taxa, **kwargs)  # noqa: E501
+                else:
+                    (data) = self.get_taxa_by_ids_with_http_info(taxa, **kwargs)  # noqa: E501
+                    return data
+            except ApiException as err:
+                if err.status in [429,500] and attempts < 2:
+                    attempts += 1
+                    time.sleep(3)
+                else: 
+                    raise err
 
     def get_taxa_by_ids_with_http_info(self, taxa, **kwargs):  # noqa: E501
         """Retrieve taxa by their identifiers  # noqa: E501
@@ -4446,11 +4941,23 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.get_taxon_datasets_with_http_info(taxon, **kwargs)  # noqa: E501
-        else:
-            (data) = self.get_taxon_datasets_with_http_info(taxon, **kwargs)  # noqa: E501
-            return data
+        
+         
+        attempts = 0
+        
+        while True:
+            try:
+                if kwargs.get('async_req'):
+                    return self.get_taxon_datasets_with_http_info(taxon, **kwargs)  # noqa: E501
+                else:
+                    (data) = self.get_taxon_datasets_with_http_info(taxon, **kwargs)  # noqa: E501
+                    return data
+            except ApiException as err:
+                if err.status in [429,500] and attempts < 2:
+                    attempts += 1
+                    time.sleep(3)
+                else: 
+                    raise err
 
     def get_taxon_datasets_with_http_info(self, taxon, **kwargs):  # noqa: E501
         """Retrieve the datasets for a given taxon  # noqa: E501
@@ -4560,11 +5067,23 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.get_taxon_gene_go_terms_with_http_info(taxon, gene, **kwargs)  # noqa: E501
-        else:
-            (data) = self.get_taxon_gene_go_terms_with_http_info(taxon, gene, **kwargs)  # noqa: E501
-            return data
+        
+         
+        attempts = 0
+        
+        while True:
+            try:
+                if kwargs.get('async_req'):
+                    return self.get_taxon_gene_go_terms_with_http_info(taxon, gene, **kwargs)  # noqa: E501
+                else:
+                    (data) = self.get_taxon_gene_go_terms_with_http_info(taxon, gene, **kwargs)  # noqa: E501
+                    return data
+            except ApiException as err:
+                if err.status in [429,500] and attempts < 2:
+                    attempts += 1
+                    time.sleep(3)
+                else: 
+                    raise err
 
     def get_taxon_gene_go_terms_with_http_info(self, taxon, gene, **kwargs):  # noqa: E501
         """Retrieve the GO terms associated to a gene in a given taxon  # noqa: E501
@@ -4669,11 +5188,23 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.get_taxon_gene_locations_with_http_info(taxon, gene, **kwargs)  # noqa: E501
-        else:
-            (data) = self.get_taxon_gene_locations_with_http_info(taxon, gene, **kwargs)  # noqa: E501
-            return data
+        
+         
+        attempts = 0
+        
+        while True:
+            try:
+                if kwargs.get('async_req'):
+                    return self.get_taxon_gene_locations_with_http_info(taxon, gene, **kwargs)  # noqa: E501
+                else:
+                    (data) = self.get_taxon_gene_locations_with_http_info(taxon, gene, **kwargs)  # noqa: E501
+                    return data
+            except ApiException as err:
+                if err.status in [429,500] and attempts < 2:
+                    attempts += 1
+                    time.sleep(3)
+                else: 
+                    raise err
 
     def get_taxon_gene_locations_with_http_info(self, taxon, gene, **kwargs):  # noqa: E501
         """Retrieve physical locations for a given gene and taxon  # noqa: E501
@@ -4780,11 +5311,23 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.get_taxon_gene_probes_with_http_info(taxon, gene, **kwargs)  # noqa: E501
-        else:
-            (data) = self.get_taxon_gene_probes_with_http_info(taxon, gene, **kwargs)  # noqa: E501
-            return data
+        
+         
+        attempts = 0
+        
+        while True:
+            try:
+                if kwargs.get('async_req'):
+                    return self.get_taxon_gene_probes_with_http_info(taxon, gene, **kwargs)  # noqa: E501
+                else:
+                    (data) = self.get_taxon_gene_probes_with_http_info(taxon, gene, **kwargs)  # noqa: E501
+                    return data
+            except ApiException as err:
+                if err.status in [429,500] and attempts < 2:
+                    attempts += 1
+                    time.sleep(3)
+                else: 
+                    raise err
 
     def get_taxon_gene_probes_with_http_info(self, taxon, gene, **kwargs):  # noqa: E501
         """Retrieve the probes associated to a genes across all platforms in a given taxon  # noqa: E501
@@ -4896,11 +5439,23 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.get_taxon_genes_with_http_info(taxon, **kwargs)  # noqa: E501
-        else:
-            (data) = self.get_taxon_genes_with_http_info(taxon, **kwargs)  # noqa: E501
-            return data
+        
+         
+        attempts = 0
+        
+        while True:
+            try:
+                if kwargs.get('async_req'):
+                    return self.get_taxon_genes_with_http_info(taxon, **kwargs)  # noqa: E501
+                else:
+                    (data) = self.get_taxon_genes_with_http_info(taxon, **kwargs)  # noqa: E501
+                    return data
+            except ApiException as err:
+                if err.status in [429,500] and attempts < 2:
+                    attempts += 1
+                    time.sleep(3)
+                else: 
+                    raise err
 
     def get_taxon_genes_with_http_info(self, taxon, **kwargs):  # noqa: E501
         """Retrieve all genes in a given taxon  # noqa: E501
@@ -5004,11 +5559,23 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.get_taxon_genes_by_ids_with_http_info(taxon, gene, **kwargs)  # noqa: E501
-        else:
-            (data) = self.get_taxon_genes_by_ids_with_http_info(taxon, gene, **kwargs)  # noqa: E501
-            return data
+        
+         
+        attempts = 0
+        
+        while True:
+            try:
+                if kwargs.get('async_req'):
+                    return self.get_taxon_genes_by_ids_with_http_info(taxon, gene, **kwargs)  # noqa: E501
+                else:
+                    (data) = self.get_taxon_genes_by_ids_with_http_info(taxon, gene, **kwargs)  # noqa: E501
+                    return data
+            except ApiException as err:
+                if err.status in [429,500] and attempts < 2:
+                    attempts += 1
+                    time.sleep(3)
+                else: 
+                    raise err
 
     def get_taxon_genes_by_ids_with_http_info(self, taxon, gene, **kwargs):  # noqa: E501
         """Retrieve genes matching gene identifiers in a given taxon  # noqa: E501
@@ -5117,11 +5684,23 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.get_taxon_genes_overlapping_chromosome_with_http_info(taxon, chromosome, start, size, **kwargs)  # noqa: E501
-        else:
-            (data) = self.get_taxon_genes_overlapping_chromosome_with_http_info(taxon, chromosome, start, size, **kwargs)  # noqa: E501
-            return data
+        
+         
+        attempts = 0
+        
+        while True:
+            try:
+                if kwargs.get('async_req'):
+                    return self.get_taxon_genes_overlapping_chromosome_with_http_info(taxon, chromosome, start, size, **kwargs)  # noqa: E501
+                else:
+                    (data) = self.get_taxon_genes_overlapping_chromosome_with_http_info(taxon, chromosome, start, size, **kwargs)  # noqa: E501
+                    return data
+            except ApiException as err:
+                if err.status in [429,500] and attempts < 2:
+                    attempts += 1
+                    time.sleep(3)
+                else: 
+                    raise err
 
     def get_taxon_genes_overlapping_chromosome_with_http_info(self, taxon, chromosome, start, size, **kwargs):  # noqa: E501
         """Retrieve genes overlapping a given region in a taxon  # noqa: E501
@@ -5247,11 +5826,23 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.search_with_http_info(**kwargs)  # noqa: E501
-        else:
-            (data) = self.search_with_http_info(**kwargs)  # noqa: E501
-            return data
+        
+         
+        attempts = 0
+        
+        while True:
+            try:
+                if kwargs.get('async_req'):
+                    return self.search_with_http_info(**kwargs)  # noqa: E501
+                else:
+                    (data) = self.search_with_http_info(**kwargs)  # noqa: E501
+                    return data
+            except ApiException as err:
+                if err.status in [429,500] and attempts < 2:
+                    attempts += 1
+                    time.sleep(3)
+                else: 
+                    raise err
 
     def search_with_http_info(self, **kwargs):  # noqa: E501
         """Search everything in Gemma  # noqa: E501
@@ -5361,11 +5952,23 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.search_annotations_with_http_info(**kwargs)  # noqa: E501
-        else:
-            (data) = self.search_annotations_with_http_info(**kwargs)  # noqa: E501
-            return data
+        
+         
+        attempts = 0
+        
+        while True:
+            try:
+                if kwargs.get('async_req'):
+                    return self.search_annotations_with_http_info(**kwargs)  # noqa: E501
+                else:
+                    (data) = self.search_annotations_with_http_info(**kwargs)  # noqa: E501
+                    return data
+            except ApiException as err:
+                if err.status in [429,500] and attempts < 2:
+                    attempts += 1
+                    time.sleep(3)
+                else: 
+                    raise err
 
     def search_annotations_with_http_info(self, **kwargs):  # noqa: E501
         """Search for annotation tags  # noqa: E501
@@ -5460,11 +6063,23 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.search_annotations_by_path_query_with_http_info(query, **kwargs)  # noqa: E501
-        else:
-            (data) = self.search_annotations_by_path_query_with_http_info(query, **kwargs)  # noqa: E501
-            return data
+        
+         
+        attempts = 0
+        
+        while True:
+            try:
+                if kwargs.get('async_req'):
+                    return self.search_annotations_by_path_query_with_http_info(query, **kwargs)  # noqa: E501
+                else:
+                    (data) = self.search_annotations_by_path_query_with_http_info(query, **kwargs)  # noqa: E501
+                    return data
+            except ApiException as err:
+                if err.status in [429,500] and attempts < 2:
+                    attempts += 1
+                    time.sleep(3)
+                else: 
+                    raise err
 
     def search_annotations_by_path_query_with_http_info(self, query, **kwargs):  # noqa: E501
         """Search for annotation tags  # noqa: E501
@@ -5568,11 +6183,23 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.search_datasets_with_http_info(**kwargs)  # noqa: E501
-        else:
-            (data) = self.search_datasets_with_http_info(**kwargs)  # noqa: E501
-            return data
+        
+         
+        attempts = 0
+        
+        while True:
+            try:
+                if kwargs.get('async_req'):
+                    return self.search_datasets_with_http_info(**kwargs)  # noqa: E501
+                else:
+                    (data) = self.search_datasets_with_http_info(**kwargs)  # noqa: E501
+                    return data
+            except ApiException as err:
+                if err.status in [429,500] and attempts < 2:
+                    attempts += 1
+                    time.sleep(3)
+                else: 
+                    raise err
 
     def search_datasets_with_http_info(self, **kwargs):  # noqa: E501
         """Retrieve datasets associated to an annotation tags search  # noqa: E501
@@ -5684,11 +6311,23 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.search_datasets_by_query_in_path_with_http_info(query, **kwargs)  # noqa: E501
-        else:
-            (data) = self.search_datasets_by_query_in_path_with_http_info(query, **kwargs)  # noqa: E501
-            return data
+        
+         
+        attempts = 0
+        
+        while True:
+            try:
+                if kwargs.get('async_req'):
+                    return self.search_datasets_by_query_in_path_with_http_info(query, **kwargs)  # noqa: E501
+                else:
+                    (data) = self.search_datasets_by_query_in_path_with_http_info(query, **kwargs)  # noqa: E501
+                    return data
+            except ApiException as err:
+                if err.status in [429,500] and attempts < 2:
+                    attempts += 1
+                    time.sleep(3)
+                else: 
+                    raise err
 
     def search_datasets_by_query_in_path_with_http_info(self, query, **kwargs):  # noqa: E501
         """Retrieve datasets associated to an annotation tags search  # noqa: E501
@@ -5805,11 +6444,23 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.search_taxon_datasets_with_http_info(taxon, **kwargs)  # noqa: E501
-        else:
-            (data) = self.search_taxon_datasets_with_http_info(taxon, **kwargs)  # noqa: E501
-            return data
+        
+         
+        attempts = 0
+        
+        while True:
+            try:
+                if kwargs.get('async_req'):
+                    return self.search_taxon_datasets_with_http_info(taxon, **kwargs)  # noqa: E501
+                else:
+                    (data) = self.search_taxon_datasets_with_http_info(taxon, **kwargs)  # noqa: E501
+                    return data
+            except ApiException as err:
+                if err.status in [429,500] and attempts < 2:
+                    attempts += 1
+                    time.sleep(3)
+                else: 
+                    raise err
 
     def search_taxon_datasets_with_http_info(self, taxon, **kwargs):  # noqa: E501
         """Retrieve datasets within a given taxa associated to an annotation tags search  # noqa: E501
@@ -5929,11 +6580,23 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.search_taxon_datasets_by_query_in_path_with_http_info(taxon, query, **kwargs)  # noqa: E501
-        else:
-            (data) = self.search_taxon_datasets_by_query_in_path_with_http_info(taxon, query, **kwargs)  # noqa: E501
-            return data
+        
+         
+        attempts = 0
+        
+        while True:
+            try:
+                if kwargs.get('async_req'):
+                    return self.search_taxon_datasets_by_query_in_path_with_http_info(taxon, query, **kwargs)  # noqa: E501
+                else:
+                    (data) = self.search_taxon_datasets_by_query_in_path_with_http_info(taxon, query, **kwargs)  # noqa: E501
+                    return data
+            except ApiException as err:
+                if err.status in [429,500] and attempts < 2:
+                    attempts += 1
+                    time.sleep(3)
+                else: 
+                    raise err
 
     def search_taxon_datasets_by_query_in_path_with_http_info(self, taxon, query, **kwargs):  # noqa: E501
         """Retrieve datasets within a given taxa associated to an annotation tags search  # noqa: E501
