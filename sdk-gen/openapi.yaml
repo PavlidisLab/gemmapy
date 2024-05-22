@@ -1926,16 +1926,16 @@ paths:
           items:
             type: string
             enum:
-            - ubic.gemma.model.expression.designElement.CompositeSequence
-            - ubic.gemma.model.genome.gene.GeneSet
-            - ubic.gemma.model.expression.experiment.ExpressionExperiment
-            - ubic.gemma.model.genome.biosequence.BioSequence
             - ubic.gemma.model.expression.arrayDesign.ArrayDesign
             - ubic.gemma.model.analysis.expression.ExpressionExperimentSet
-            - ubic.gemma.model.common.description.BibliographicReference
-            - ubic.gemma.model.genome.Gene
-            - ubic.gemma.model.expression.BlacklistedEntity
+            - ubic.gemma.model.genome.gene.GeneSet
             - ubic.gemma.model.association.phenotype.PhenotypeAssociation
+            - ubic.gemma.model.common.description.BibliographicReference
+            - ubic.gemma.model.expression.experiment.ExpressionExperiment
+            - ubic.gemma.model.expression.BlacklistedEntity
+            - ubic.gemma.model.genome.Gene
+            - ubic.gemma.model.genome.biosequence.BioSequence
+            - ubic.gemma.model.expression.designElement.CompositeSequence
       - name: limit
         in: query
         description: Maximum number of search results to return; capped at 2000 unless
@@ -7750,16 +7750,16 @@ components:
       items:
         type: string
         enum:
-        - ubic.gemma.model.expression.designElement.CompositeSequence
-        - ubic.gemma.model.genome.gene.GeneSet
-        - ubic.gemma.model.expression.experiment.ExpressionExperiment
-        - ubic.gemma.model.genome.biosequence.BioSequence
         - ubic.gemma.model.expression.arrayDesign.ArrayDesign
         - ubic.gemma.model.analysis.expression.ExpressionExperimentSet
-        - ubic.gemma.model.common.description.BibliographicReference
-        - ubic.gemma.model.genome.Gene
-        - ubic.gemma.model.expression.BlacklistedEntity
+        - ubic.gemma.model.genome.gene.GeneSet
         - ubic.gemma.model.association.phenotype.PhenotypeAssociation
+        - ubic.gemma.model.common.description.BibliographicReference
+        - ubic.gemma.model.expression.experiment.ExpressionExperiment
+        - ubic.gemma.model.expression.BlacklistedEntity
+        - ubic.gemma.model.genome.Gene
+        - ubic.gemma.model.genome.biosequence.BioSequence
+        - ubic.gemma.model.expression.designElement.CompositeSequence
     ResponseDataObjectListTaxonValueObject:
       type: object
       properties:
