@@ -323,18 +323,28 @@ def process_dataset_gene_expression(d:list,self):
                 return out
             dataset_exp = pd.concat([compile_exp_frame(y) for y in x.gene_expression_levels],ignore_index = True)
         
+        
         samples = self.get_dataset_samples(dataset)
-        
-        dataset_exp = \
-            dataset_exp.\
-                reindex(
-                    columns = \
-                        list(dataset_exp.columns[~np.array(
-                            sub.list_in_list(dataset_exp.columns,
-                                             samples.sample_name))]) + \
-                            list(samples.sample_name))
-        
-        out.update({dataset:dataset_exp })
+
+        if dataset_exp.shape == (0,0):
+            gene_data = pd.DataFrame({
+                'Probe': pd.Series(dtype = 'str'),
+                'GeneSymbol': pd.Series(dtype = 'str'),
+                'NCBIid': pd.Series(dtype = 'int')
+                })
+            expression = pd.DataFrame(columns = samples.sample_name,dtype = 'float64')
+            
+            out.update({dataset: pd.concat([gene_data,expression],axis = 1)})
+        else:
+            dataset_exp = \
+                dataset_exp.\
+                    reindex(
+                        columns = \
+                            list(dataset_exp.columns[~np.array(
+                                sub.list_in_list(dataset_exp.columns,
+                                                 samples.sample_name))]) + \
+                                list(samples.sample_name))     
+            out.update({dataset:dataset_exp })
 
 
     return out
