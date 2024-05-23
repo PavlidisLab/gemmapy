@@ -384,11 +384,22 @@ def process_expression(d, dataset, api):
     # more non-uniformities
     df = sub.read_tsv(d)
     m_cols = list(df.columns)
-    samples = api.raw.get_dataset_samples(dataset).data
-    sample_ids = sub.field_in_list(samples,"sample",'name')
-    sample_names = sub.field_in_list(samples,"name")
+    # we use the order returned by get_dataset_samples as authoritative which makes
+    # it a bit awkward when we need to access a property left out of the processed output
+    # this could be simplified by ordering by ids but I don't want to break
+    # get_dataseset_samples supremacy in case ordering changes later
+    # R package makes this easier by appending raw outputs to every processed
+    # results. we don't do that here so calling twice is necessary
+    samples = api.get_dataset_samples(dataset)
+    samples_raw = api.raw.get_dataset_samples(dataset).data
     
-    sample_ids = [x.replace("|",".") for x in sample_ids]
+    raw_ids = sub.field_in_list(samples_raw,'sample','id')
+    sample_internal_names = sub.field_in_list(samples_raw,'sample','name')
+    sample_internal_names = sub.match_by(sample_internal_names, samples.sample_ID, raw_ids)
+    
+    sample_names = samples.sample_name
+    
+    sample_internal_names = [x.replace("|",".") for x in sample_internal_names]
     
     def find_match(x):
         match = None
@@ -397,7 +408,7 @@ def process_expression(d, dataset, api):
                 match = i
         return match
     
-    sample_matches = [find_match(x) for x in sample_ids]
+    sample_matches = [find_match(x) for x in sample_internal_names]
     
     
     rename_dict = sub.make_dict([m_cols[i] for i in sample_matches],sample_names)
@@ -408,13 +419,13 @@ def process_expression(d, dataset, api):
     
     df = df.drop(columns=['Sequence', 'GemmaId'], errors='ignore')
     
-    non_samples = [x for x in list(df.columns) if not x in sample_names]
-    df = df.reindex(columns = non_samples + sample_names)
+    non_samples = [x for x in list(df.columns) if not x in list(sample_names)]
+    df = df.reindex(columns = non_samples +list(sample_names))
     
     return df
 
 def process_samples(d:list):
-    
+
     df = pd.DataFrame({
         "sample_name": sub.field_in_list(d,"name"),
         "sample_ID": sub.field_in_list(d,"sample",'id'),
@@ -427,7 +438,7 @@ def process_samples(d:list):
         "sample_factor_values": [sub.process_FactorValueValueObject_list(x)
                                 for x in sub.field_in_list(d,"sample","factor_value_objects")]
         
-        })
+        }).sort_values(by= ['sample_ID'],ignore_index=True)
     
     return df
 
