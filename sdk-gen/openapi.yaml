@@ -14,9 +14,9 @@ info:
     name: Pavlidis Lab Support
     url: https://pavlab.msl.ubc.ca/
     email: pavlab-support@msl.ubc.ca
-  version: 2.7.6
+  version: 2.8.0
 servers:
-- url: https://gemma.msl.ubc.ca/rest/v2
+- url: https://staging-gemma.msl.ubc.ca/rest/v2
 security:
 - basicAuth: []
 - cookieAuth: []
@@ -125,7 +125,10 @@ paths:
         in: query
         explode: false
         schema:
+          minItems: 1
           type: array
+          description: A comma-delimited list of dataset IDs or short names. The value
+            may be compressed with gzip and encoded with base64.
           items:
             oneOf:
             - type: integer
@@ -137,7 +140,10 @@ paths:
         in: query
         explode: false
         schema:
+          minItems: 1
           type: array
+          description: A comma-delimited list of database entry IDs or accessions.
+            The value may be compressed with gzip and encoded with base64.
           items:
             oneOf:
             - type: integer
@@ -177,6 +183,84 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/FilteredAndPaginatedResponseDataObjectDifferentialExpressionAnalysisResultSetValueObject'
+  /annotations/children:
+    get:
+      summary: Retrieve the children of the given annotations
+      description: "Terms that are returned satisfies the [inverse of rdfs:subClassOf](https://www.w3.org/TR/2012/REC-owl2-syntax-20121211/#Subclass_Axioms)\
+        \ or [has_part](http://purl.obolibrary.org/obo/BFO_0000051) relations. When\
+        \ `direct` is set to false, this rule is applied recursively."
+      operationId: getAnnotationsChildren
+      parameters:
+      - name: uri
+        in: query
+        description: Term URI
+        schema:
+          type: string
+      - name: direct
+        in: query
+        description: Only include direct parents.
+        schema:
+          type: boolean
+          default: false
+      responses:
+        default:
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AnnotationSearchResultValueObject'
+        "404":
+          description: No term matched the given URI.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseErrorObject'
+        "503":
+          description: Ontology inference timed out.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseErrorObject'
+  /annotations/parents:
+    get:
+      summary: Retrieve the parents of the given annotations
+      description: "Terms that are returned satisfies the [rdfs:subClassOf](https://www.w3.org/TR/2012/REC-owl2-syntax-20121211/#Subclass_Axioms)\
+        \ or [part_of](http://purl.obolibrary.org/obo/BFO_0000050) relations. When\
+        \ `direct` is set to false, this rule is applied recursively."
+      operationId: getAnnotationsParents
+      parameters:
+      - name: uri
+        in: query
+        description: Term URI
+        schema:
+          type: string
+      - name: direct
+        in: query
+        description: Only include direct children.
+        schema:
+          type: boolean
+          default: false
+      responses:
+        default:
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AnnotationSearchResultValueObject'
+        "404":
+          description: No term matched the given URI.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseErrorObject'
+        "503":
+          description: Ontology inference timed out.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseErrorObject'
   /annotations/search:
     get:
       summary: Search for annotation tags
@@ -187,6 +271,7 @@ paths:
         description: A comma-delimited list of keywords to find annotations.
         explode: false
         schema:
+          minItems: 1
           type: array
           description: A comma-delimited list of strings. The value may be compressed
             with gzip and encoded with base64.
@@ -225,6 +310,7 @@ paths:
         required: true
         explode: false
         schema:
+          minItems: 1
           type: array
           description: A comma-delimited list of strings. The value may be compressed
             with gzip and encoded with base64.
@@ -257,6 +343,7 @@ paths:
           datasets for each query are intersected.
         explode: false
         schema:
+          minItems: 1
           type: array
           description: A comma-delimited list of strings. The value may be compressed
             with gzip and encoded with base64.
@@ -322,6 +409,7 @@ paths:
         required: true
         explode: false
         schema:
+          minItems: 1
           type: array
           description: A comma-delimited list of strings. The value may be compressed
             with gzip and encoded with base64.
@@ -399,6 +487,7 @@ paths:
           datasets for each query are intersected.
         explode: false
         schema:
+          minItems: 1
           type: array
           description: A comma-delimited list of strings. The value may be compressed
             with gzip and encoded with base64.
@@ -481,6 +570,7 @@ paths:
         required: true
         explode: false
         schema:
+          minItems: 1
           type: array
           description: A comma-delimited list of strings. The value may be compressed
             with gzip and encoded with base64.
@@ -628,7 +718,10 @@ paths:
         in: path
         required: true
         schema:
+          minItems: 1
           type: array
+          description: A comma-delimited list of dataset IDs or short names. The value
+            may be compressed with gzip and encoded with base64.
           items:
             oneOf:
             - type: integer
@@ -725,7 +818,7 @@ paths:
   /datasets/{dataset}/analyses/differential/resultSets:
     get:
       summary: Retrieve the result sets of all differential analyses of a dataset
-      operationId: getDatasetDifferentialExpressionAnalysesResultSets
+      operationId: getDatasetDifferentialExpressionAnalysisResultSets
       parameters:
       - name: dataset
         in: path
@@ -794,7 +887,10 @@ paths:
         in: path
         required: true
         schema:
+          minItems: 1
           type: array
+          description: A comma-delimited list of dataset IDs or short names. The value
+            may be compressed with gzip and encoded with base64.
           items:
             oneOf:
             - type: integer
@@ -806,7 +902,10 @@ paths:
         in: path
         required: true
         schema:
+          minItems: 1
           type: array
+          description: "A comma-delimited list of NCBI IDs, Ensembl IDs or gene symbols.\
+            \ The value may be compressed with gzip and encoded with base64."
           items:
             oneOf:
             - type: string
@@ -852,7 +951,10 @@ paths:
         in: path
         required: true
         schema:
+          minItems: 1
           type: array
+          description: A comma-delimited list of dataset IDs or short names. The value
+            may be compressed with gzip and encoded with base64.
           items:
             oneOf:
             - type: integer
@@ -880,7 +982,10 @@ paths:
         in: path
         required: true
         schema:
+          minItems: 1
           type: array
+          description: "A comma-delimited list of NCBI IDs, Ensembl IDs or gene symbols.\
+            \ The value may be compressed with gzip and encoded with base64."
           items:
             oneOf:
             - type: string
@@ -926,7 +1031,10 @@ paths:
         in: path
         required: true
         schema:
+          minItems: 1
           type: array
+          description: A comma-delimited list of dataset IDs or short names. The value
+            may be compressed with gzip and encoded with base64.
           items:
             oneOf:
             - type: integer
@@ -1263,7 +1371,10 @@ paths:
         in: path
         required: true
         schema:
+          minItems: 1
           type: array
+          description: A comma-delimited list of dataset IDs or short names. The value
+            may be compressed with gzip and encoded with base64.
           items:
             oneOf:
             - type: integer
@@ -1343,6 +1454,166 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseErrorObject'
+  /datasets/analyses/differential/results/genes/{gene}:
+    get:
+      summary: Retrieve the differential expression results for a given gene
+      description: |-
+        Pagination with `offset` and `limit` is done on the datasets, thus `data` will hold a variable number of results.
+
+        If a result set has more than one probe for a given gene, the result corresponding to the lowest corrected P-value is retained. This statistic reflects the goodness of the fit of the linear model for the probe, and not the significance of the contrasts.
+
+        Results for non-specific probes (i.e. probes that map to more than one genes) are excluded.
+      operationId: getDatasetsDifferentialExpressionAnalysisResultsForGene
+      parameters:
+      - name: gene
+        in: path
+        required: true
+        schema:
+          oneOf:
+          - type: string
+            description: An Ensembl gene identifier which typically starts with 'ENSG'.
+            externalDocs:
+              url: https://www.ensembl.org/
+          - type: string
+            description: An NCBI gene identifier.
+            externalDocs:
+              url: https://www.ncbi.nlm.nih.gov/gene
+          - type: string
+            description: An official gene symbol approved by HGNC.
+            externalDocs:
+              url: https://www.genenames.org/
+      - name: query
+        in: query
+        schema:
+          $ref: '#/components/schemas/QueryArg'
+      - name: filter
+        in: query
+        schema:
+          $ref: '#/components/schemas/FilterArgExpressionExperiment'
+      - name: offset
+        in: query
+        schema:
+          minimum: 0
+          type: integer
+          description: The offset of the first retrieved result.
+          format: int32
+      - name: limit
+        in: query
+        schema:
+          maximum: 100
+          minimum: 1
+          type: integer
+          description: Limit the number of results retrieved.
+          format: int32
+      - name: threshold
+        in: query
+        description: Maximum threshold on the corrected P-value to retain a result.
+          The threshold is inclusive (i.e. 0.05 will match results with corrected
+          P-values lower or equal to 0.05).
+        schema:
+          maximum: 1.0
+          minimum: 0.0
+          type: number
+          format: double
+          default: 1.0
+      responses:
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueriedAndFilteredAndInferredAndPaginatedResponseDataObjectDifferentialExpressionAnalysisResultByGeneValueObject'
+            text/tab-separated-values; charset=UTF-8:
+              schema:
+                type: string
+                format: binary
+  /datasets/analyses/differential/results/taxa/{taxon}/genes/{gene}:
+    get:
+      summary: Retrieve the differential expression results for a given gene and taxa
+      description: |-
+        Pagination with `offset` and `limit` is done on the datasets, thus `data` will hold a variable number of results.
+
+        If a result set has more than one probe for a given gene, the result corresponding to the lowest corrected P-value is retained. This statistic reflects the goodness of the fit of the linear model for the probe, and not the significance of the contrasts.
+
+        Results for non-specific probes (i.e. probes that map to more than one genes) are excluded.
+      operationId: getDatasetsDifferentialExpressionAnalysisResultsForGeneInTaxon
+      parameters:
+      - name: taxon
+        in: path
+        required: true
+        schema:
+          oneOf:
+          - type: integer
+            description: A numerical taxon identifier.
+            format: int64
+          - type: integer
+            description: An NCBI taxon identifier.
+            format: int64
+            externalDocs:
+              url: https://www.ncbi.nlm.nih.gov/taxonomy
+          - type: string
+            description: A taxon identifier that matches either its scientific or
+              common name.
+      - name: gene
+        in: path
+        required: true
+        schema:
+          oneOf:
+          - type: string
+            description: An Ensembl gene identifier which typically starts with 'ENSG'.
+            externalDocs:
+              url: https://www.ensembl.org/
+          - type: string
+            description: An NCBI gene identifier.
+            externalDocs:
+              url: https://www.ncbi.nlm.nih.gov/gene
+          - type: string
+            description: An official gene symbol approved by HGNC.
+            externalDocs:
+              url: https://www.genenames.org/
+      - name: query
+        in: query
+        schema:
+          $ref: '#/components/schemas/QueryArg'
+      - name: filter
+        in: query
+        schema:
+          $ref: '#/components/schemas/FilterArgExpressionExperiment'
+      - name: offset
+        in: query
+        schema:
+          minimum: 0
+          type: integer
+          description: The offset of the first retrieved result.
+          format: int32
+      - name: limit
+        in: query
+        schema:
+          maximum: 100
+          minimum: 1
+          type: integer
+          description: Limit the number of results retrieved.
+          format: int32
+      - name: threshold
+        in: query
+        description: Maximum threshold on the corrected P-value to retain a result.
+          The threshold is inclusive (i.e. 0.05 will match results with corrected
+          P-values lower or equal to 0.05).
+        schema:
+          maximum: 1.0
+          minimum: 0.0
+          type: number
+          format: double
+          default: 1.0
+      responses:
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueriedAndFilteredAndInferredAndPaginatedResponseDataObjectDifferentialExpressionAnalysisResultByGeneValueObject'
+            text/tab-separated-values; charset=UTF-8:
+              schema:
+                type: string
+                format: binary
   /datasets/platforms:
     get:
       summary: Retrieve usage statistics of platforms among datasets matching the
@@ -1553,7 +1824,10 @@ paths:
         in: path
         required: true
         schema:
+          minItems: 1
           type: array
+          description: "A comma-delimited list of NCBI IDs, Ensembl IDs or gene symbols.\
+            \ The value may be compressed with gzip and encoded with base64."
           items:
             oneOf:
             - type: string
@@ -1701,7 +1975,10 @@ paths:
         in: path
         required: true
         schema:
+          minItems: 1
           type: array
+          description: A comma-delimited list of element IDs or names. The value may
+            be compressed with gzip and encoded with base64.
           items:
             oneOf:
             - type: integer
@@ -1867,7 +2144,10 @@ paths:
         in: path
         required: true
         schema:
+          minItems: 1
           type: array
+          description: A comma-delimited list of platform IDs or short names. The
+            value may be compressed with gzip and encoded with base64.
           items:
             oneOf:
             - type: integer
@@ -1961,16 +2241,16 @@ paths:
           items:
             type: string
             enum:
-            - ubic.gemma.model.blacklist.BlacklistedEntity
-            - ubic.gemma.model.association.phenotype.PhenotypeAssociation
-            - ubic.gemma.model.expression.designElement.CompositeSequence
             - ubic.gemma.model.expression.experiment.ExpressionExperiment
+            - ubic.gemma.model.analysis.expression.ExpressionExperimentSet
+            - ubic.gemma.model.common.description.BibliographicReference
+            - ubic.gemma.model.expression.designElement.CompositeSequence
             - ubic.gemma.model.genome.Gene
             - ubic.gemma.model.genome.gene.GeneSet
-            - ubic.gemma.model.analysis.expression.ExpressionExperimentSet
-            - ubic.gemma.model.genome.biosequence.BioSequence
+            - ubic.gemma.model.blacklist.BlacklistedEntity
+            - ubic.gemma.model.association.phenotype.PhenotypeAssociation
             - ubic.gemma.model.expression.arrayDesign.ArrayDesign
-            - ubic.gemma.model.common.description.BibliographicReference
+            - ubic.gemma.model.genome.biosequence.BioSequence
       - name: limit
         in: query
         description: Maximum number of search results to return; capped at 2000 unless
@@ -2032,7 +2312,10 @@ paths:
         in: path
         required: true
         schema:
+          minItems: 1
           type: array
+          description: "A comma-delimited list of taxon IDs, NCBI IDs, common names\
+            \ or scientific names."
           items:
             oneOf:
             - type: integer
@@ -2329,7 +2612,10 @@ paths:
         in: path
         required: true
         schema:
+          minItems: 1
           type: array
+          description: "A comma-delimited list of NCBI IDs, Ensembl IDs or gene symbols.\
+            \ The value may be compressed with gzip and encoded with base64."
           items:
             oneOf:
             - type: string
@@ -2905,23 +3191,23 @@ components:
         id:
           type: integer
           format: int64
-        category:
-          type: string
-        categoryUri:
+        name:
           type: string
         description:
-          type: string
-        factorValues:
-          type: string
-          description: "This is deprecated, use `values` directly instead."
-          deprecated: true
-        name:
           type: string
         type:
           type: string
           enum:
           - categorical
           - continuous
+        category:
+          type: string
+        categoryUri:
+          type: string
+        factorValues:
+          type: string
+          description: "This is deprecated, use `values` directly instead."
+          deprecated: true
         values:
           type: array
           items:
@@ -3568,9 +3854,9 @@ components:
           type: string
         detail:
           type: string
-        actionName:
-          type: string
         eventTypeName:
+          type: string
+        actionName:
           type: string
     ExpressionExperimentValueObject:
       type: object
@@ -6342,6 +6628,73 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/CharacteristicValueObject'
+    DifferentialExpressionAnalysisResultByGeneValueObject:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        probeId:
+          type: integer
+          format: int64
+        probeName:
+          type: string
+        genes:
+          type: array
+          items:
+            $ref: '#/components/schemas/GeneValueObject'
+        correctedPvalue:
+          type: number
+          format: double
+        rank:
+          type: number
+          format: double
+        contrasts:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContrastResultValueObject'
+        sourceExperimentId:
+          type: integer
+          format: int64
+        experimentAnalyzedId:
+          type: integer
+          format: int64
+        resultSetId:
+          type: integer
+          format: int64
+        pvalue:
+          type: number
+          format: double
+    QueriedAndFilteredAndInferredAndPaginatedResponseDataObjectDifferentialExpressionAnalysisResultByGeneValueObject:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/DifferentialExpressionAnalysisResultByGeneValueObject'
+        groupBy:
+          type: array
+          items:
+            type: string
+        sort:
+          $ref: '#/components/schemas/SortValueObject'
+        offset:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        totalElements:
+          type: integer
+          format: int64
+        filter:
+          type: string
+        query:
+          type: string
+        inferredTerms:
+          type: array
+          items:
+            $ref: '#/components/schemas/CharacteristicValueObject'
     ArrayDesignWithUsageStatisticsValueObject:
       type: object
       properties:
@@ -7805,16 +8158,16 @@ components:
       items:
         type: string
         enum:
-        - ubic.gemma.model.blacklist.BlacklistedEntity
-        - ubic.gemma.model.association.phenotype.PhenotypeAssociation
-        - ubic.gemma.model.expression.designElement.CompositeSequence
         - ubic.gemma.model.expression.experiment.ExpressionExperiment
+        - ubic.gemma.model.analysis.expression.ExpressionExperimentSet
+        - ubic.gemma.model.common.description.BibliographicReference
+        - ubic.gemma.model.expression.designElement.CompositeSequence
         - ubic.gemma.model.genome.Gene
         - ubic.gemma.model.genome.gene.GeneSet
-        - ubic.gemma.model.analysis.expression.ExpressionExperimentSet
-        - ubic.gemma.model.genome.biosequence.BioSequence
+        - ubic.gemma.model.blacklist.BlacklistedEntity
+        - ubic.gemma.model.association.phenotype.PhenotypeAssociation
         - ubic.gemma.model.expression.arrayDesign.ArrayDesign
-        - ubic.gemma.model.common.description.BibliographicReference
+        - ubic.gemma.model.genome.biosequence.BioSequence
     ResponseDataObjectListTaxonValueObject:
       type: object
       properties:
