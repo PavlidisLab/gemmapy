@@ -334,7 +334,7 @@ class GemmaPy(object):
             consolidate = consolidate,
             **kwargs)
         
-        response = self.raw.get_dataset_expression_for_genes(datasets, genes, 
+        response = self.raw.get_datasets_expression_levels_for_genes(datasets, genes, 
                                                              **kwargs)
         df = ps.process_dataset_gene_expression(response.data,self)
         
