@@ -1465,6 +1465,7 @@ class GemmaPy(object):
                                                  genes = genes,
                                                  keep_non_specific = keep_non_specific,
                                                  consolidate = consolidate)
+            expression = {key:value for key in unique_sets for value in expression.values()}
         
         designs = {k:self.make_design(metadata[k]) for k in metadata.keys()}
         dat = self.get_datasets_by_ids(unique_sets)
@@ -1478,6 +1479,20 @@ class GemmaPy(object):
                 "result_set": None,
                 "contrasts": None
                 }
+            # create unique probe ids. needed for rownames and merging
+            # probe ids are usually unique but there are exceptions
+            
+            unique_probes = packed_info['exp'].Probe
+            append = pd.Series(sub.rep(0,len(unique_probes)))
+            dups = unique_probes.duplicated()
+            while dups.any():
+                append[dups] = append[dups]+1
+                dups = (unique_probes + append.astype('string')).duplicated()
+            
+            append = append.astype('string')
+            append[append=='0'] = ""
+            unique_probes = unique_probes + append
+            packed_info['unique_probes'] = unique_probes
             
             
             if result_sets is not None:
@@ -1524,7 +1539,7 @@ class GemmaPy(object):
         
         if output_type == 'anndata':
             def make_anndata(pack):
-                pack['exp'].index = pack['exp']['Probe']
+                pack['exp'].index = pack['unique_probes']
                 try: 
                     gene_data = pack['exp'][['GeneSymbol', 'NCBIid']]
                 except KeyError:
@@ -1553,7 +1568,6 @@ class GemmaPy(object):
                 adata.uns = mda
                 return adata
             # make_anndata
-            
             
             out = {k:make_anndata(packed_data[k]) for k in packed_data.keys()}
         elif output_type == 'dict':
