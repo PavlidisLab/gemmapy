@@ -1563,7 +1563,8 @@ class GemmaPy(object):
         return out
 
     def get_differential_expression_values(self, 
-                                           dataset:Optional[str|int] = None, 
+                                           dataset:Optional[str|int] = None,
+                                           keep_non_specific:bool = False,
                                            result_sets:Optional[List[str|int]] = None,
                                            readable_contrasts:bool = False, 
                                            **kwargs)->List[DataFrame]:
@@ -1636,6 +1637,10 @@ class GemmaPy(object):
         
         for rs in result_sets:
             df = self.__get_result_set(rs)
+            
+            if not keep_non_specific:
+                df = df[~df.GeneSymbol.str.contains("|",regex = False,na = True)]
+            
             if readable_contrasts:
                 factors = pd.concat(
                     list(all_factors[all_factors.result_ID == rs].experimental_factors)
