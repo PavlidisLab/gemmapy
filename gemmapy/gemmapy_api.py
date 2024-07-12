@@ -1465,8 +1465,8 @@ class GemmaPy(object):
                                                  genes = genes,
                                                  keep_non_specific = keep_non_specific,
                                                  consolidate = consolidate)
-            expression = {key:value for key in unique_sets for value in expression.values()}
-        
+            expression = sub.make_dict(unique_sets,  list(expression.values()))
+                    
         designs = {k:self.make_design(metadata[k]) for k in metadata.keys()}
         dat = self.get_datasets_by_ids(unique_sets)
         def pack_data(i):
@@ -1501,9 +1501,11 @@ class GemmaPy(object):
                 packed_info['contrasts'] = contrasts[i]
             # reordering to match expression/metadata no longer necesarry
             
-            diff = self.get_dataset_differential_expression_analyses(dataset)
             
             if result_sets is not None:
+                diff = self.get_dataset_differential_expression_analyses(dataset)
+
+                
                 gene_info = packed_info['exp'].\
                     columns[[not x 
                              for x in sub.list_in_list(packed_info['exp'].columns,
