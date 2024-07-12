@@ -131,6 +131,11 @@ def process_dea(d):
                 baseline_factors =  sub.process_FactorValueBasicValueObject(d[i].result_sets[j].baseline_group) 
                 
             else:
+                factor_ids = [x.id for x in d[i].result_sets[j].experimental_factors]
+                factor_order = sub.order(factor_ids)
+                d[i].result_sets[j].experimental_factors = [d[i].result_sets[j].experimental_factors[k] for k in factor_order]
+                factor_ids = [factor_ids[k] for k in factor_order]
+                
                 ids = list(map(lambda y: sub.field_in_list(y,'id'),
                           sub.field_in_list(exp_factors,"values")))
                 ids = [[x,y] for x in ids[0] for y in ids[1]]
