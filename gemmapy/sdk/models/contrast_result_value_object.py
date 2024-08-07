@@ -170,6 +170,7 @@ class ContrastResultValueObject(object):
     def factor_value_id(self):
         """Gets the factor_value_id of this ContrastResultValueObject.  # noqa: E501
 
+        This property is mutually exclusive with `factorValue`.  # noqa: E501
 
         :return: The factor_value_id of this ContrastResultValueObject.  # noqa: E501
         :rtype: int
@@ -180,6 +181,7 @@ class ContrastResultValueObject(object):
     def factor_value_id(self, factor_value_id):
         """Sets the factor_value_id of this ContrastResultValueObject.
 
+        This property is mutually exclusive with `factorValue`.  # noqa: E501
 
         :param factor_value_id: The factor_value_id of this ContrastResultValueObject.  # noqa: E501
         :type: int
@@ -212,6 +214,7 @@ class ContrastResultValueObject(object):
     def second_factor_value_id(self):
         """Gets the second_factor_value_id of this ContrastResultValueObject.  # noqa: E501
 
+        This property is mutually exclusive with `secondFactorValue`.  # noqa: E501
 
         :return: The second_factor_value_id of this ContrastResultValueObject.  # noqa: E501
         :rtype: int
@@ -222,6 +225,7 @@ class ContrastResultValueObject(object):
     def second_factor_value_id(self, second_factor_value_id):
         """Sets the second_factor_value_id of this ContrastResultValueObject.
 
+        This property is mutually exclusive with `secondFactorValue`.  # noqa: E501
 
         :param second_factor_value_id: The second_factor_value_id of this ContrastResultValueObject.  # noqa: E501
         :type: int

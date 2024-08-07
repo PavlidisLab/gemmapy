@@ -72,6 +72,22 @@ paths:
           type: integer
           description: Limit the number of results retrieved.
           format: int32
+      - name: includeFactorValuesInContrasts
+        in: query
+        description: "Include complete factor values in contrasts instead of only\
+          \ populating `factorValueId` and `secondFactorValueId`. In 2.9.0, this will\
+          \ default to false."
+        schema:
+          type: boolean
+          default: true
+      - name: includeTaxonInGenes
+        in: query
+        description: "Include complete taxon in genes instead of only populating `taxonId`.\
+          \ When this is set to true, a `taxa` collection will be included in `DifferentialExpressionAnalysisResultSetValueObject`.\
+          \ In 2.9.0, this will default to false."
+        schema:
+          type: boolean
+          default: true
       responses:
         default:
           content:
@@ -2397,16 +2413,16 @@ paths:
           items:
             type: string
             enum:
-            - ubic.gemma.model.blacklist.BlacklistedEntity
-            - ubic.gemma.model.genome.biosequence.BioSequence
-            - ubic.gemma.model.expression.arrayDesign.ArrayDesign
-            - ubic.gemma.model.expression.experiment.ExpressionExperiment
-            - ubic.gemma.model.genome.Gene
-            - ubic.gemma.model.analysis.expression.ExpressionExperimentSet
             - ubic.gemma.model.common.description.BibliographicReference
+            - ubic.gemma.model.expression.designElement.CompositeSequence
             - ubic.gemma.model.genome.gene.GeneSet
             - ubic.gemma.model.association.phenotype.PhenotypeAssociation
-            - ubic.gemma.model.expression.designElement.CompositeSequence
+            - ubic.gemma.model.expression.experiment.ExpressionExperiment
+            - ubic.gemma.model.analysis.expression.ExpressionExperimentSet
+            - ubic.gemma.model.genome.biosequence.BioSequence
+            - ubic.gemma.model.genome.Gene
+            - ubic.gemma.model.blacklist.BlacklistedEntity
+            - ubic.gemma.model.expression.arrayDesign.ArrayDesign
       - name: limit
         in: query
         description: Maximum number of search results to return; capped at 2000 unless
@@ -3192,11 +3208,13 @@ components:
           format: double
         factorValueId:
           type: integer
+          description: This property is mutually exclusive with `factorValue`.
           format: int64
         factorValue:
           $ref: '#/components/schemas/FactorValueBasicValueObject'
         secondFactorValueId:
           type: integer
+          description: This property is mutually exclusive with `secondFactorValue`.
           format: int64
         secondFactorValue:
           $ref: '#/components/schemas/FactorValueBasicValueObject'
@@ -3248,15 +3266,15 @@ components:
         downregulatedCount:
           type: integer
           format: int32
+        numberOfUpregulatedProbes:
+          type: integer
+          format: int32
         numberOfDownregulatedProbes:
           type: integer
           format: int32
         qvalue:
           type: number
           format: double
-        numberOfUpregulatedProbes:
-          type: integer
-          format: int32
     DifferentialExpressionAnalysisResultSetValueObject:
       type: object
       properties:
@@ -3273,6 +3291,11 @@ components:
           $ref: '#/components/schemas/FactorValueBasicValueObject'
         secondBaselineGroup:
           $ref: '#/components/schemas/FactorValueBasicValueObject'
+        taxa:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: '#/components/schemas/TaxonValueObject'
         results:
           type: array
           items:
@@ -3341,6 +3364,7 @@ components:
           $ref: '#/components/schemas/FactorValueValueObject'
         subsetFactorValueId:
           type: integer
+          description: This property is mutually exclusive with `subsetFactorValue`.
           format: int64
         sourceExperiment:
           type: integer
@@ -3360,6 +3384,8 @@ components:
               $ref: '#/components/schemas/FactorValueValueObject'
         isSubset:
           type: boolean
+          description: "Indicate if this analysis is a subset of another experiment.\
+            \ if this is set, additional fields relevant to the subset will be populated."
     ExperimentalFactorValueObject:
       type: object
       properties:
@@ -3425,8 +3451,6 @@ components:
           format: int64
         experimentalFactorCategory:
           $ref: '#/components/schemas/CharacteristicValueObject'
-        measurement:
-          $ref: '#/components/schemas/MeasurementValueObject'
         characteristics:
           type: array
           items:
@@ -3442,6 +3466,10 @@ components:
           description: Use `summary` if you need a human-readable representation of
             this factor value or lookup the `characteristics` bag.
           deprecated: true
+        isMeasurement:
+          type: boolean
+          description: "Indicate if this factor value represents a measurement. When\
+            \ this is true, the `measurement` field will be populated."
     FactorValueValueObject:
       type: object
       properties:
@@ -3478,20 +3506,20 @@ components:
           type: string
           description: Use experimentalFactorCategory.categoryUri instead.
           deprecated: true
+        description:
+          type: string
+          description: Use `summary` if you need a human-readable representation of
+            this factor value or lookup the `characteristics` bag.
+          deprecated: true
         factorValue:
           type: string
           description: Use `summary` if you need a human-readable representation of
             this factor value or lookup the `characteristics` bag.
           deprecated: true
-        description:
-          type: string
-          description: This property is never filled nor used; use `summary` if you
-            need a human-readable representation of this factor value.
-          deprecated: true
         isMeasurement:
           type: boolean
-          description: Check if a `measurement` key exists instead.
-          deprecated: true
+          description: "Indicate if this factor value represents a measurement. When\
+            \ this is true, the `measurement` field will be populated."
         measurement:
           $ref: '#/components/schemas/MeasurementValueObject'
     GeneValueObject:
@@ -3524,6 +3552,10 @@ components:
           type: string
         taxon:
           $ref: '#/components/schemas/TaxonValueObject'
+        taxonId:
+          type: integer
+          description: This property is mutually exclusive with `taxon`.
+          format: int64
     MeasurementValueObject:
       type: object
       properties:
@@ -3553,6 +3585,7 @@ components:
           - CHARARRAY
           - BOOLEANARRAY
           - STRINGARRAY
+      description: This property exists only if this factor value is a measurement
     PaginatedResultsResponseDataObjectDifferentialExpressionAnalysisResultSetValueObject:
       type: object
       properties:
@@ -3620,6 +3653,7 @@ components:
           format: int32
         externalDatabase:
           $ref: '#/components/schemas/ExternalDatabaseValueObject'
+      description: This property is mutually exclusive with `taxonId`.
     BuildInfoValueObject:
       type: object
       properties:
@@ -4024,9 +4058,9 @@ components:
           type: string
         detail:
           type: string
-        eventTypeName:
-          type: string
         actionName:
+          type: string
+        eventTypeName:
           type: string
     ExpressionExperimentValueObject:
       type: object
@@ -4090,12 +4124,12 @@ components:
           type: string
         technologyType:
           type: string
-        bioAssayCount:
-          type: integer
-          format: int32
         taxonId:
           type: integer
           format: int64
+        bioAssayCount:
+          type: integer
+          format: int32
         troubleDetails:
           type: string
         numberOfArrayDesigns:
@@ -6375,12 +6409,12 @@ components:
           type: string
         searchResult:
           $ref: '#/components/schemas/SearchResultValueObjectExpressionExperimentValueObject'
-        bioAssayCount:
-          type: integer
-          format: int32
         taxonId:
           type: integer
           format: int64
+        bioAssayCount:
+          type: integer
+          format: int32
         troubleDetails:
           type: string
         numberOfArrayDesigns:
@@ -6475,7 +6509,7 @@ components:
         \ the exact phrase \"alpha beta gamma\".                                 \
         \                             |\n| Field        | `shortName:GSE00001`   \
         \     | Results with short name GSE00001. <details><summary>List of supported\
-        \ fields</summary><h2>ubic.gemma.model.expression.experiment.ExpressionExperiment</h2><ul><li>description</li><li>name</li><li>shortName</li><li>accession.accession</li><li>bioAssays.description</li><li>bioAssays.name</li><li>characteristics.value</li><li>characteristics.valueUri</li><li>experimentalDesign.description</li><li>experimentalDesign.name</li><li>otherRelevantPublications.abstractText</li><li>otherRelevantPublications.authorList</li><li>otherRelevantPublications.fullTextUri</li><li>otherRelevantPublications.name</li><li>otherRelevantPublications.title</li><li>primaryPublication.abstractText</li><li>primaryPublication.authorList</li><li>primaryPublication.fullTextUri</li><li>primaryPublication.name</li><li>primaryPublication.title</li><li>bioAssays.accession.accession</li><li>bioAssays.sampleUsed.name</li><li>experimentalDesign.experimentalFactors.description</li><li>experimentalDesign.experimentalFactors.name</li><li>otherRelevantPublications.chemicals.name</li><li>otherRelevantPublications.chemicals.registryNumber</li><li>otherRelevantPublications.keywords.term</li><li>otherRelevantPublications.meshTerms.term</li><li>otherRelevantPublications.pubAccession.accession</li><li>primaryPublication.chemicals.name</li><li>primaryPublication.chemicals.registryNumber</li><li>primaryPublication.keywords.term</li><li>primaryPublication.meshTerms.term</li><li>primaryPublication.pubAccession.accession</li><li>bioAssays.sampleUsed.characteristics.value</li><li>bioAssays.sampleUsed.characteristics.valueUri</li><li>experimentalDesign.experimentalFactors.category.category</li><li>experimentalDesign.experimentalFactors.category.categoryUri</li><li>experimentalDesign.experimentalFactors.factorValues.characteristics.object</li><li>experimentalDesign.experimentalFactors.factorValues.characteristics.objectUri</li><li>experimentalDesign.experimentalFactors.factorValues.characteristics.secondObject</li><li>experimentalDesign.experimentalFactors.factorValues.characteristics.secondObjectUri</li><li>experimentalDesign.experimentalFactors.factorValues.characteristics.value</li><li>experimentalDesign.experimentalFactors.factorValues.characteristics.valueUri</li></ul><h2>ubic.gemma.model.genome.gene.GeneSet</h2><ul><li>description</li><li>name</li><li>characteristics.value</li><li>characteristics.valueUri</li><li>literatureSources.abstractText</li><li>literatureSources.authorList</li><li>literatureSources.fullTextUri</li><li>literatureSources.name</li><li>literatureSources.title</li><li>sourceAccession.accession</li><li>literatureSources.chemicals.name</li><li>literatureSources.chemicals.registryNumber</li><li>literatureSources.keywords.term</li><li>literatureSources.meshTerms.term</li><li>literatureSources.pubAccession.accession</li><li>members.gene.ensemblId</li><li>members.gene.name</li><li>members.gene.ncbiGeneId</li><li>members.gene.officialName</li><li>members.gene.officialSymbol</li><li>members.gene.accessions.accession</li><li>members.gene.aliases.alias</li><li>members.gene.products.name</li><li>members.gene.products.ncbiGi</li><li>members.gene.products.previousNcbiId</li><li>members.gene.products.accessions.accession</li></ul><h2>ubic.gemma.model.expression.designElement.CompositeSequence</h2><ul><li>description</li><li>name</li><li>biologicalCharacteristic.name</li><li>biologicalCharacteristic.sequenceDatabaseEntry.accession</li></ul><h2>ubic.gemma.model.expression.arrayDesign.ArrayDesign</h2><ul><li>description</li><li>name</li><li>shortName</li><li>alternateNames.name</li><li>externalReferences.accession</li></ul><h2>ubic.gemma.model.genome.Gene</h2><ul><li>ensemblId</li><li>name</li><li>ncbiGeneId</li><li>officialName</li><li>officialSymbol</li><li>accessions.accession</li><li>aliases.alias</li><li>products.name</li><li>products.ncbiGi</li><li>products.previousNcbiId</li><li>products.accessions.accession</li></ul><h2>ubic.gemma.model.genome.biosequence.BioSequence</h2><ul><li>name</li><li>sequenceDatabaseEntry.accession</li></ul></details>\
+        \ fields</summary><h2>ubic.gemma.model.genome.gene.GeneSet</h2><ul><li>description</li><li>name</li><li>characteristics.value</li><li>characteristics.valueUri</li><li>literatureSources.abstractText</li><li>literatureSources.authorList</li><li>literatureSources.fullTextUri</li><li>literatureSources.name</li><li>literatureSources.title</li><li>sourceAccession.accession</li><li>literatureSources.chemicals.name</li><li>literatureSources.chemicals.registryNumber</li><li>literatureSources.keywords.term</li><li>literatureSources.meshTerms.term</li><li>literatureSources.pubAccession.accession</li><li>members.gene.ensemblId</li><li>members.gene.name</li><li>members.gene.ncbiGeneId</li><li>members.gene.officialName</li><li>members.gene.officialSymbol</li><li>members.gene.accessions.accession</li><li>members.gene.aliases.alias</li><li>members.gene.products.name</li><li>members.gene.products.ncbiGi</li><li>members.gene.products.previousNcbiId</li><li>members.gene.products.accessions.accession</li></ul><h2>ubic.gemma.model.expression.experiment.ExpressionExperiment</h2><ul><li>description</li><li>name</li><li>shortName</li><li>accession.accession</li><li>bioAssays.description</li><li>bioAssays.name</li><li>characteristics.value</li><li>characteristics.valueUri</li><li>experimentalDesign.description</li><li>experimentalDesign.name</li><li>otherRelevantPublications.abstractText</li><li>otherRelevantPublications.authorList</li><li>otherRelevantPublications.fullTextUri</li><li>otherRelevantPublications.name</li><li>otherRelevantPublications.title</li><li>primaryPublication.abstractText</li><li>primaryPublication.authorList</li><li>primaryPublication.fullTextUri</li><li>primaryPublication.name</li><li>primaryPublication.title</li><li>bioAssays.accession.accession</li><li>bioAssays.sampleUsed.name</li><li>experimentalDesign.experimentalFactors.description</li><li>experimentalDesign.experimentalFactors.name</li><li>otherRelevantPublications.chemicals.name</li><li>otherRelevantPublications.chemicals.registryNumber</li><li>otherRelevantPublications.keywords.term</li><li>otherRelevantPublications.meshTerms.term</li><li>otherRelevantPublications.pubAccession.accession</li><li>primaryPublication.chemicals.name</li><li>primaryPublication.chemicals.registryNumber</li><li>primaryPublication.keywords.term</li><li>primaryPublication.meshTerms.term</li><li>primaryPublication.pubAccession.accession</li><li>bioAssays.sampleUsed.characteristics.value</li><li>bioAssays.sampleUsed.characteristics.valueUri</li><li>experimentalDesign.experimentalFactors.category.category</li><li>experimentalDesign.experimentalFactors.category.categoryUri</li><li>experimentalDesign.experimentalFactors.factorValues.characteristics.object</li><li>experimentalDesign.experimentalFactors.factorValues.characteristics.objectUri</li><li>experimentalDesign.experimentalFactors.factorValues.characteristics.secondObject</li><li>experimentalDesign.experimentalFactors.factorValues.characteristics.secondObjectUri</li><li>experimentalDesign.experimentalFactors.factorValues.characteristics.value</li><li>experimentalDesign.experimentalFactors.factorValues.characteristics.valueUri</li></ul><h2>ubic.gemma.model.expression.designElement.CompositeSequence</h2><ul><li>description</li><li>name</li><li>biologicalCharacteristic.name</li><li>biologicalCharacteristic.sequenceDatabaseEntry.accession</li></ul><h2>ubic.gemma.model.expression.arrayDesign.ArrayDesign</h2><ul><li>description</li><li>name</li><li>shortName</li><li>alternateNames.name</li><li>externalReferences.accession</li></ul><h2>ubic.gemma.model.genome.Gene</h2><ul><li>ensemblId</li><li>name</li><li>ncbiGeneId</li><li>officialName</li><li>officialSymbol</li><li>accessions.accession</li><li>aliases.alias</li><li>products.name</li><li>products.ncbiGi</li><li>products.previousNcbiId</li><li>products.accessions.accession</li></ul><h2>ubic.gemma.model.genome.biosequence.BioSequence</h2><ul><li>name</li><li>sequenceDatabaseEntry.accession</li></ul></details>\
         \ |\n| Prefix       | `alpha*`                    | Results must start with\
         \ \"alpha\".                                                             \
         \                          |\n| Wildcard     | `BRCA?`                   \
@@ -6493,6 +6527,33 @@ components:
       externalDocs:
         url: https://lucene.apache.org/core/3_6_2/queryparsersyntax.html
       x-gemma-searchable-properties:
+        ubic.gemma.model.genome.gene.GeneSet:
+        - description
+        - name
+        - characteristics.value
+        - characteristics.valueUri
+        - literatureSources.abstractText
+        - literatureSources.authorList
+        - literatureSources.fullTextUri
+        - literatureSources.name
+        - literatureSources.title
+        - sourceAccession.accession
+        - literatureSources.chemicals.name
+        - literatureSources.chemicals.registryNumber
+        - literatureSources.keywords.term
+        - literatureSources.meshTerms.term
+        - literatureSources.pubAccession.accession
+        - members.gene.ensemblId
+        - members.gene.name
+        - members.gene.ncbiGeneId
+        - members.gene.officialName
+        - members.gene.officialSymbol
+        - members.gene.accessions.accession
+        - members.gene.aliases.alias
+        - members.gene.products.name
+        - members.gene.products.ncbiGi
+        - members.gene.products.previousNcbiId
+        - members.gene.products.accessions.accession
         ubic.gemma.model.expression.experiment.ExpressionExperiment:
         - description
         - name
@@ -6538,33 +6599,6 @@ components:
         - experimentalDesign.experimentalFactors.factorValues.characteristics.secondObjectUri
         - experimentalDesign.experimentalFactors.factorValues.characteristics.value
         - experimentalDesign.experimentalFactors.factorValues.characteristics.valueUri
-        ubic.gemma.model.genome.gene.GeneSet:
-        - description
-        - name
-        - characteristics.value
-        - characteristics.valueUri
-        - literatureSources.abstractText
-        - literatureSources.authorList
-        - literatureSources.fullTextUri
-        - literatureSources.name
-        - literatureSources.title
-        - sourceAccession.accession
-        - literatureSources.chemicals.name
-        - literatureSources.chemicals.registryNumber
-        - literatureSources.keywords.term
-        - literatureSources.meshTerms.term
-        - literatureSources.pubAccession.accession
-        - members.gene.ensemblId
-        - members.gene.name
-        - members.gene.ncbiGeneId
-        - members.gene.officialName
-        - members.gene.officialSymbol
-        - members.gene.accessions.accession
-        - members.gene.aliases.alias
-        - members.gene.products.name
-        - members.gene.products.ncbiGi
-        - members.gene.products.previousNcbiId
-        - members.gene.products.accessions.accession
         ubic.gemma.model.expression.designElement.CompositeSequence:
         - description
         - name
@@ -8354,16 +8388,16 @@ components:
       items:
         type: string
         enum:
-        - ubic.gemma.model.blacklist.BlacklistedEntity
-        - ubic.gemma.model.genome.biosequence.BioSequence
-        - ubic.gemma.model.expression.arrayDesign.ArrayDesign
-        - ubic.gemma.model.expression.experiment.ExpressionExperiment
-        - ubic.gemma.model.genome.Gene
-        - ubic.gemma.model.analysis.expression.ExpressionExperimentSet
         - ubic.gemma.model.common.description.BibliographicReference
+        - ubic.gemma.model.expression.designElement.CompositeSequence
         - ubic.gemma.model.genome.gene.GeneSet
         - ubic.gemma.model.association.phenotype.PhenotypeAssociation
-        - ubic.gemma.model.expression.designElement.CompositeSequence
+        - ubic.gemma.model.expression.experiment.ExpressionExperiment
+        - ubic.gemma.model.analysis.expression.ExpressionExperimentSet
+        - ubic.gemma.model.genome.biosequence.BioSequence
+        - ubic.gemma.model.genome.Gene
+        - ubic.gemma.model.blacklist.BlacklistedEntity
+        - ubic.gemma.model.expression.arrayDesign.ArrayDesign
     ResponseDataObjectListTaxonValueObject:
       type: object
       properties:

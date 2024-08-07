@@ -32,11 +32,11 @@ class FactorValueBasicValueObject(object):
         'ontology_id': 'str',
         'experimental_factor_id': 'int',
         'experimental_factor_category': 'CharacteristicValueObject',
-        'measurement': 'MeasurementValueObject',
         'characteristics': 'list[CharacteristicValueObject]',
         'statements': 'list[StatementValueObject]',
         'summary': 'str',
-        'value': 'str'
+        'value': 'str',
+        'is_measurement': 'bool'
     }
 
     attribute_map = {
@@ -44,24 +44,24 @@ class FactorValueBasicValueObject(object):
         'ontology_id': 'ontologyId',
         'experimental_factor_id': 'experimentalFactorId',
         'experimental_factor_category': 'experimentalFactorCategory',
-        'measurement': 'measurement',
         'characteristics': 'characteristics',
         'statements': 'statements',
         'summary': 'summary',
-        'value': 'value'
+        'value': 'value',
+        'is_measurement': 'isMeasurement'
     }
 
-    def __init__(self, id=None, ontology_id=None, experimental_factor_id=None, experimental_factor_category=None, measurement=None, characteristics=None, statements=None, summary=None, value=None):  # noqa: E501
+    def __init__(self, id=None, ontology_id=None, experimental_factor_id=None, experimental_factor_category=None, characteristics=None, statements=None, summary=None, value=None, is_measurement=None):  # noqa: E501
         """FactorValueBasicValueObject - a model defined in Swagger"""  # noqa: E501
         self._id = None
         self._ontology_id = None
         self._experimental_factor_id = None
         self._experimental_factor_category = None
-        self._measurement = None
         self._characteristics = None
         self._statements = None
         self._summary = None
         self._value = None
+        self._is_measurement = None
         self.discriminator = None
         if id is not None:
             self.id = id
@@ -71,8 +71,6 @@ class FactorValueBasicValueObject(object):
             self.experimental_factor_id = experimental_factor_id
         if experimental_factor_category is not None:
             self.experimental_factor_category = experimental_factor_category
-        if measurement is not None:
-            self.measurement = measurement
         if characteristics is not None:
             self.characteristics = characteristics
         if statements is not None:
@@ -81,6 +79,8 @@ class FactorValueBasicValueObject(object):
             self.summary = summary
         if value is not None:
             self.value = value
+        if is_measurement is not None:
+            self.is_measurement = is_measurement
 
     @property
     def id(self):
@@ -167,27 +167,6 @@ class FactorValueBasicValueObject(object):
         self._experimental_factor_category = experimental_factor_category
 
     @property
-    def measurement(self):
-        """Gets the measurement of this FactorValueBasicValueObject.  # noqa: E501
-
-
-        :return: The measurement of this FactorValueBasicValueObject.  # noqa: E501
-        :rtype: MeasurementValueObject
-        """
-        return self._measurement
-
-    @measurement.setter
-    def measurement(self, measurement):
-        """Sets the measurement of this FactorValueBasicValueObject.
-
-
-        :param measurement: The measurement of this FactorValueBasicValueObject.  # noqa: E501
-        :type: MeasurementValueObject
-        """
-
-        self._measurement = measurement
-
-    @property
     def characteristics(self):
         """Gets the characteristics of this FactorValueBasicValueObject.  # noqa: E501
 
@@ -272,6 +251,29 @@ class FactorValueBasicValueObject(object):
         """
 
         self._value = value
+
+    @property
+    def is_measurement(self):
+        """Gets the is_measurement of this FactorValueBasicValueObject.  # noqa: E501
+
+        Indicate if this factor value represents a measurement. When this is true, the `measurement` field will be populated.  # noqa: E501
+
+        :return: The is_measurement of this FactorValueBasicValueObject.  # noqa: E501
+        :rtype: bool
+        """
+        return self._is_measurement
+
+    @is_measurement.setter
+    def is_measurement(self, is_measurement):
+        """Sets the is_measurement of this FactorValueBasicValueObject.
+
+        Indicate if this factor value represents a measurement. When this is true, the `measurement` field will be populated.  # noqa: E501
+
+        :param is_measurement: The is_measurement of this FactorValueBasicValueObject.  # noqa: E501
+        :type: bool
+        """
+
+        self._is_measurement = is_measurement
 
     def to_dict(self):
         """Returns the model properties as a dict"""

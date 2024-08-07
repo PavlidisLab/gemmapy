@@ -300,6 +300,7 @@ class DifferentialExpressionAnalysisValueObject(object):
     def subset_factor_value_id(self):
         """Gets the subset_factor_value_id of this DifferentialExpressionAnalysisValueObject.  # noqa: E501
 
+        This property is mutually exclusive with `subsetFactorValue`.  # noqa: E501
 
         :return: The subset_factor_value_id of this DifferentialExpressionAnalysisValueObject.  # noqa: E501
         :rtype: int
@@ -310,6 +311,7 @@ class DifferentialExpressionAnalysisValueObject(object):
     def subset_factor_value_id(self, subset_factor_value_id):
         """Sets the subset_factor_value_id of this DifferentialExpressionAnalysisValueObject.
 
+        This property is mutually exclusive with `subsetFactorValue`.  # noqa: E501
 
         :param subset_factor_value_id: The subset_factor_value_id of this DifferentialExpressionAnalysisValueObject.  # noqa: E501
         :type: int
@@ -388,6 +390,7 @@ class DifferentialExpressionAnalysisValueObject(object):
     def is_subset(self):
         """Gets the is_subset of this DifferentialExpressionAnalysisValueObject.  # noqa: E501
 
+        Indicate if this analysis is a subset of another experiment. if this is set, additional fields relevant to the subset will be populated.  # noqa: E501
 
         :return: The is_subset of this DifferentialExpressionAnalysisValueObject.  # noqa: E501
         :rtype: bool
@@ -398,6 +401,7 @@ class DifferentialExpressionAnalysisValueObject(object):
     def is_subset(self, is_subset):
         """Sets the is_subset of this DifferentialExpressionAnalysisValueObject.
 
+        Indicate if this analysis is a subset of another experiment. if this is set, additional fields relevant to the subset will be populated.  # noqa: E501
 
         :param is_subset: The is_subset of this DifferentialExpressionAnalysisValueObject.  # noqa: E501
         :type: bool

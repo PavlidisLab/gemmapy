@@ -36,7 +36,8 @@ class GeneValueObject(object):
         'accessions': 'list[DatabaseEntryValueObject]',
         'official_name': 'str',
         'official_symbol': 'str',
-        'taxon': 'TaxonValueObject'
+        'taxon': 'TaxonValueObject',
+        'taxon_id': 'int'
     }
 
     attribute_map = {
@@ -48,10 +49,11 @@ class GeneValueObject(object):
         'accessions': 'accessions',
         'official_name': 'officialName',
         'official_symbol': 'officialSymbol',
-        'taxon': 'taxon'
+        'taxon': 'taxon',
+        'taxon_id': 'taxonId'
     }
 
-    def __init__(self, id=None, aliases=None, multifunctionality_rank=None, ncbi_id=None, ensembl_id=None, accessions=None, official_name=None, official_symbol=None, taxon=None):  # noqa: E501
+    def __init__(self, id=None, aliases=None, multifunctionality_rank=None, ncbi_id=None, ensembl_id=None, accessions=None, official_name=None, official_symbol=None, taxon=None, taxon_id=None):  # noqa: E501
         """GeneValueObject - a model defined in Swagger"""  # noqa: E501
         self._id = None
         self._aliases = None
@@ -62,6 +64,7 @@ class GeneValueObject(object):
         self._official_name = None
         self._official_symbol = None
         self._taxon = None
+        self._taxon_id = None
         self.discriminator = None
         if id is not None:
             self.id = id
@@ -81,6 +84,8 @@ class GeneValueObject(object):
             self.official_symbol = official_symbol
         if taxon is not None:
             self.taxon = taxon
+        if taxon_id is not None:
+            self.taxon_id = taxon_id
 
     @property
     def id(self):
@@ -270,6 +275,29 @@ class GeneValueObject(object):
         """
 
         self._taxon = taxon
+
+    @property
+    def taxon_id(self):
+        """Gets the taxon_id of this GeneValueObject.  # noqa: E501
+
+        This property is mutually exclusive with `taxon`.  # noqa: E501
+
+        :return: The taxon_id of this GeneValueObject.  # noqa: E501
+        :rtype: int
+        """
+        return self._taxon_id
+
+    @taxon_id.setter
+    def taxon_id(self, taxon_id):
+        """Sets the taxon_id of this GeneValueObject.
+
+        This property is mutually exclusive with `taxon`.  # noqa: E501
+
+        :param taxon_id: The taxon_id of this GeneValueObject.  # noqa: E501
+        :type: int
+        """
+
+        self._taxon_id = taxon_id
 
     def to_dict(self):
         """Returns the model properties as a dict"""

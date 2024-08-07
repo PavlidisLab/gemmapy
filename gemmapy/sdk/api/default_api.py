@@ -5370,6 +5370,8 @@ class DefaultApi(object):
         :param float threshold:
         :param int offset:
         :param int limit:
+        :param bool include_factor_values_in_contrasts: Include complete factor values in contrasts instead of only populating `factorValueId` and `secondFactorValueId`. In 2.9.0, this will default to false.
+        :param bool include_taxon_in_genes: Include complete taxon in genes instead of only populating `taxonId`. When this is set to true, a `taxa` collection will be included in `DifferentialExpressionAnalysisResultSetValueObject`. In 2.9.0, this will default to false.
         :return: PaginatedResultsResponseDataObjectDifferentialExpressionAnalysisResultSetValueObject
                  If the method is called asynchronously,
                  returns the request thread.
@@ -5407,12 +5409,14 @@ class DefaultApi(object):
         :param float threshold:
         :param int offset:
         :param int limit:
+        :param bool include_factor_values_in_contrasts: Include complete factor values in contrasts instead of only populating `factorValueId` and `secondFactorValueId`. In 2.9.0, this will default to false.
+        :param bool include_taxon_in_genes: Include complete taxon in genes instead of only populating `taxonId`. When this is set to true, a `taxa` collection will be included in `DifferentialExpressionAnalysisResultSetValueObject`. In 2.9.0, this will default to false.
         :return: PaginatedResultsResponseDataObjectDifferentialExpressionAnalysisResultSetValueObject
                  If the method is called asynchronously,
                  returns the request thread.
         """
 
-        all_params = ['result_set', 'threshold', 'offset', 'limit']  # noqa: E501
+        all_params = ['result_set', 'threshold', 'offset', 'limit', 'include_factor_values_in_contrasts', 'include_taxon_in_genes']  # noqa: E501
         all_params.append('async_req')
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
@@ -5447,6 +5451,10 @@ class DefaultApi(object):
             query_params.append(('offset', params['offset']))  # noqa: E501
         if 'limit' in params:
             query_params.append(('limit', params['limit']))  # noqa: E501
+        if 'include_factor_values_in_contrasts' in params:
+            query_params.append(('includeFactorValuesInContrasts', params['include_factor_values_in_contrasts']))  # noqa: E501
+        if 'include_taxon_in_genes' in params:
+            query_params.append(('includeTaxonInGenes', params['include_taxon_in_genes']))  # noqa: E501
 
         header_params = {}
 

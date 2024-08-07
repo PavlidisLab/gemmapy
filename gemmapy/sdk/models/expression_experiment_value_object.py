@@ -51,8 +51,8 @@ class ExpressionExperimentValueObject(object):
         'short_name': 'str',
         'source': 'str',
         'technology_type': 'str',
-        'bio_assay_count': 'int',
         'taxon_id': 'int',
+        'bio_assay_count': 'int',
         'trouble_details': 'str',
         'number_of_array_designs': 'int',
         'number_of_processed_expression_vectors': 'int',
@@ -83,15 +83,15 @@ class ExpressionExperimentValueObject(object):
         'short_name': 'shortName',
         'source': 'source',
         'technology_type': 'technologyType',
-        'bio_assay_count': 'bioAssayCount',
         'taxon_id': 'taxonId',
+        'bio_assay_count': 'bioAssayCount',
         'trouble_details': 'troubleDetails',
         'number_of_array_designs': 'numberOfArrayDesigns',
         'number_of_processed_expression_vectors': 'numberOfProcessedExpressionVectors',
         'taxon': 'taxon'
     }
 
-    def __init__(self, id=None, last_updated=None, troubled=None, last_troubled_event=None, needs_attention=None, last_needs_attention_event=None, curation_note=None, last_note_update_event=None, number_of_bio_assays=None, description=None, name=None, accession=None, batch_confound=None, batch_effect=None, batch_effect_statistics=None, external_database=None, external_database_uri=None, external_uri=None, geeq=None, metadata=None, short_name=None, source=None, technology_type=None, bio_assay_count=None, taxon_id=None, trouble_details=None, number_of_array_designs=None, number_of_processed_expression_vectors=None, taxon=None):  # noqa: E501
+    def __init__(self, id=None, last_updated=None, troubled=None, last_troubled_event=None, needs_attention=None, last_needs_attention_event=None, curation_note=None, last_note_update_event=None, number_of_bio_assays=None, description=None, name=None, accession=None, batch_confound=None, batch_effect=None, batch_effect_statistics=None, external_database=None, external_database_uri=None, external_uri=None, geeq=None, metadata=None, short_name=None, source=None, technology_type=None, taxon_id=None, bio_assay_count=None, trouble_details=None, number_of_array_designs=None, number_of_processed_expression_vectors=None, taxon=None):  # noqa: E501
         """ExpressionExperimentValueObject - a model defined in Swagger"""  # noqa: E501
         self._id = None
         self._last_updated = None
@@ -116,8 +116,8 @@ class ExpressionExperimentValueObject(object):
         self._short_name = None
         self._source = None
         self._technology_type = None
-        self._bio_assay_count = None
         self._taxon_id = None
+        self._bio_assay_count = None
         self._trouble_details = None
         self._number_of_array_designs = None
         self._number_of_processed_expression_vectors = None
@@ -169,10 +169,10 @@ class ExpressionExperimentValueObject(object):
             self.source = source
         if technology_type is not None:
             self.technology_type = technology_type
-        if bio_assay_count is not None:
-            self.bio_assay_count = bio_assay_count
         if taxon_id is not None:
             self.taxon_id = taxon_id
+        if bio_assay_count is not None:
+            self.bio_assay_count = bio_assay_count
         if trouble_details is not None:
             self.trouble_details = trouble_details
         if number_of_array_designs is not None:
@@ -672,27 +672,6 @@ class ExpressionExperimentValueObject(object):
         self._technology_type = technology_type
 
     @property
-    def bio_assay_count(self):
-        """Gets the bio_assay_count of this ExpressionExperimentValueObject.  # noqa: E501
-
-
-        :return: The bio_assay_count of this ExpressionExperimentValueObject.  # noqa: E501
-        :rtype: int
-        """
-        return self._bio_assay_count
-
-    @bio_assay_count.setter
-    def bio_assay_count(self, bio_assay_count):
-        """Sets the bio_assay_count of this ExpressionExperimentValueObject.
-
-
-        :param bio_assay_count: The bio_assay_count of this ExpressionExperimentValueObject.  # noqa: E501
-        :type: int
-        """
-
-        self._bio_assay_count = bio_assay_count
-
-    @property
     def taxon_id(self):
         """Gets the taxon_id of this ExpressionExperimentValueObject.  # noqa: E501
 
@@ -712,6 +691,27 @@ class ExpressionExperimentValueObject(object):
         """
 
         self._taxon_id = taxon_id
+
+    @property
+    def bio_assay_count(self):
+        """Gets the bio_assay_count of this ExpressionExperimentValueObject.  # noqa: E501
+
+
+        :return: The bio_assay_count of this ExpressionExperimentValueObject.  # noqa: E501
+        :rtype: int
+        """
+        return self._bio_assay_count
+
+    @bio_assay_count.setter
+    def bio_assay_count(self, bio_assay_count):
+        """Sets the bio_assay_count of this ExpressionExperimentValueObject.
+
+
+        :param bio_assay_count: The bio_assay_count of this ExpressionExperimentValueObject.  # noqa: E501
+        :type: int
+        """
+
+        self._bio_assay_count = bio_assay_count
 
     @property
     def trouble_details(self):

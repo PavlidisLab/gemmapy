@@ -38,8 +38,8 @@ class FactorValueValueObject(object):
         'factor_id': 'int',
         'category': 'str',
         'category_uri': 'str',
-        'factor_value': 'str',
         'description': 'str',
+        'factor_value': 'str',
         'is_measurement': 'bool',
         'measurement': 'MeasurementValueObject'
     }
@@ -55,13 +55,13 @@ class FactorValueValueObject(object):
         'factor_id': 'factorId',
         'category': 'category',
         'category_uri': 'categoryUri',
-        'factor_value': 'factorValue',
         'description': 'description',
+        'factor_value': 'factorValue',
         'is_measurement': 'isMeasurement',
         'measurement': 'measurement'
     }
 
-    def __init__(self, id=None, ontology_id=None, experimental_factor_id=None, experimental_factor_category=None, characteristics=None, statements=None, summary=None, factor_id=None, category=None, category_uri=None, factor_value=None, description=None, is_measurement=None, measurement=None):  # noqa: E501
+    def __init__(self, id=None, ontology_id=None, experimental_factor_id=None, experimental_factor_category=None, characteristics=None, statements=None, summary=None, factor_id=None, category=None, category_uri=None, description=None, factor_value=None, is_measurement=None, measurement=None):  # noqa: E501
         """FactorValueValueObject - a model defined in Swagger"""  # noqa: E501
         self._id = None
         self._ontology_id = None
@@ -73,8 +73,8 @@ class FactorValueValueObject(object):
         self._factor_id = None
         self._category = None
         self._category_uri = None
-        self._factor_value = None
         self._description = None
+        self._factor_value = None
         self._is_measurement = None
         self._measurement = None
         self.discriminator = None
@@ -98,10 +98,10 @@ class FactorValueValueObject(object):
             self.category = category
         if category_uri is not None:
             self.category_uri = category_uri
-        if factor_value is not None:
-            self.factor_value = factor_value
         if description is not None:
             self.description = description
+        if factor_value is not None:
+            self.factor_value = factor_value
         if is_measurement is not None:
             self.is_measurement = is_measurement
         if measurement is not None:
@@ -324,6 +324,29 @@ class FactorValueValueObject(object):
         self._category_uri = category_uri
 
     @property
+    def description(self):
+        """Gets the description of this FactorValueValueObject.  # noqa: E501
+
+        Use `summary` if you need a human-readable representation of this factor value or lookup the `characteristics` bag.  # noqa: E501
+
+        :return: The description of this FactorValueValueObject.  # noqa: E501
+        :rtype: str
+        """
+        return self._description
+
+    @description.setter
+    def description(self, description):
+        """Sets the description of this FactorValueValueObject.
+
+        Use `summary` if you need a human-readable representation of this factor value or lookup the `characteristics` bag.  # noqa: E501
+
+        :param description: The description of this FactorValueValueObject.  # noqa: E501
+        :type: str
+        """
+
+        self._description = description
+
+    @property
     def factor_value(self):
         """Gets the factor_value of this FactorValueValueObject.  # noqa: E501
 
@@ -347,33 +370,10 @@ class FactorValueValueObject(object):
         self._factor_value = factor_value
 
     @property
-    def description(self):
-        """Gets the description of this FactorValueValueObject.  # noqa: E501
-
-        This property is never filled nor used; use `summary` if you need a human-readable representation of this factor value.  # noqa: E501
-
-        :return: The description of this FactorValueValueObject.  # noqa: E501
-        :rtype: str
-        """
-        return self._description
-
-    @description.setter
-    def description(self, description):
-        """Sets the description of this FactorValueValueObject.
-
-        This property is never filled nor used; use `summary` if you need a human-readable representation of this factor value.  # noqa: E501
-
-        :param description: The description of this FactorValueValueObject.  # noqa: E501
-        :type: str
-        """
-
-        self._description = description
-
-    @property
     def is_measurement(self):
         """Gets the is_measurement of this FactorValueValueObject.  # noqa: E501
 
-        Check if a `measurement` key exists instead.  # noqa: E501
+        Indicate if this factor value represents a measurement. When this is true, the `measurement` field will be populated.  # noqa: E501
 
         :return: The is_measurement of this FactorValueValueObject.  # noqa: E501
         :rtype: bool
@@ -384,7 +384,7 @@ class FactorValueValueObject(object):
     def is_measurement(self, is_measurement):
         """Sets the is_measurement of this FactorValueValueObject.
 
-        Check if a `measurement` key exists instead.  # noqa: E501
+        Indicate if this factor value represents a measurement. When this is true, the `measurement` field will be populated.  # noqa: E501
 
         :param is_measurement: The is_measurement of this FactorValueValueObject.  # noqa: E501
         :type: bool

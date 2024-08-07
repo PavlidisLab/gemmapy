@@ -33,6 +33,7 @@ class DifferentialExpressionAnalysisResultSetValueObject(object):
         'experimental_factors': 'list[ExperimentalFactorValueObject]',
         'baseline_group': 'FactorValueBasicValueObject',
         'second_baseline_group': 'FactorValueBasicValueObject',
+        'taxa': 'list[TaxonValueObject]',
         'results': 'list[DifferentialExpressionAnalysisResultValueObject]'
     }
 
@@ -42,16 +43,18 @@ class DifferentialExpressionAnalysisResultSetValueObject(object):
         'experimental_factors': 'experimentalFactors',
         'baseline_group': 'baselineGroup',
         'second_baseline_group': 'secondBaselineGroup',
+        'taxa': 'taxa',
         'results': 'results'
     }
 
-    def __init__(self, id=None, analysis=None, experimental_factors=None, baseline_group=None, second_baseline_group=None, results=None):  # noqa: E501
+    def __init__(self, id=None, analysis=None, experimental_factors=None, baseline_group=None, second_baseline_group=None, taxa=None, results=None):  # noqa: E501
         """DifferentialExpressionAnalysisResultSetValueObject - a model defined in Swagger"""  # noqa: E501
         self._id = None
         self._analysis = None
         self._experimental_factors = None
         self._baseline_group = None
         self._second_baseline_group = None
+        self._taxa = None
         self._results = None
         self.discriminator = None
         if id is not None:
@@ -64,6 +67,8 @@ class DifferentialExpressionAnalysisResultSetValueObject(object):
             self.baseline_group = baseline_group
         if second_baseline_group is not None:
             self.second_baseline_group = second_baseline_group
+        if taxa is not None:
+            self.taxa = taxa
         if results is not None:
             self.results = results
 
@@ -171,6 +176,27 @@ class DifferentialExpressionAnalysisResultSetValueObject(object):
         """
 
         self._second_baseline_group = second_baseline_group
+
+    @property
+    def taxa(self):
+        """Gets the taxa of this DifferentialExpressionAnalysisResultSetValueObject.  # noqa: E501
+
+
+        :return: The taxa of this DifferentialExpressionAnalysisResultSetValueObject.  # noqa: E501
+        :rtype: list[TaxonValueObject]
+        """
+        return self._taxa
+
+    @taxa.setter
+    def taxa(self, taxa):
+        """Sets the taxa of this DifferentialExpressionAnalysisResultSetValueObject.
+
+
+        :param taxa: The taxa of this DifferentialExpressionAnalysisResultSetValueObject.  # noqa: E501
+        :type: list[TaxonValueObject]
+        """
+
+        self._taxa = taxa
 
     @property
     def results(self):
