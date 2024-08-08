@@ -3441,6 +3441,8 @@ components:
     FactorValueBasicValueObject:
       type: object
       properties:
+        measurement:
+          $ref: '#/components/schemas/MeasurementValueObject'
         id:
           type: integer
           format: int64

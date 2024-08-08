@@ -119,6 +119,7 @@ def process_dea(d):
             d[i].result_sets[j].experimental_factors = [d[i].result_sets[j].experimental_factors[k] for k in order]
             exp_factors = d[i].result_sets[j].experimental_factors
             
+            
             if len(exp_factors) == 1:
                 contrast_id = [x.id for x in exp_factors[0].values]
                 baseline_id = d[i].result_sets[j].baseline_group.id
@@ -128,6 +129,18 @@ def process_dea(d):
                 size = len(contrast_id)
                 
                 experimental_factors = [sub.process_FactorValueValueObject(x) for x in non_control_factors]
+                
+                factor_ID = d[i].result_sets[j].experimental_factors[0].id
+                factor_category = d[i].result_sets[j].experimental_factors[0].category
+                factor_category_URI = d[i].result_sets[j].experimental_factors[0].category_uri
+                
+                def add_missing(x):
+                    x.factor_ID = factor_ID
+                    x.factor_category = factor_category
+                    x.factor_category_URI = factor_category_URI
+                    return x
+                
+                experimental_factors = [add_missing(x) for x in experimental_factors]
                 baseline_factors =  sub.process_FactorValueBasicValueObject(d[i].result_sets[j].baseline_group) 
                 
             else:
@@ -144,11 +157,17 @@ def process_dea(d):
                 
                 relevant_ids = [x for x in ids if not any(sub.list_in_list(x, baseline_ids))]
                 
-                fac_vals = [sub.access_field(y,'values') for y in exp_factors]
-                all_factors = pd.concat(
-                    [sub.process_FactorValueValueObject_list(y) for y in fac_vals],
-                    ignore_index = True
-                    )
+                def get_factor_vals(x):
+                    vals = sub.access_field(x,'values')
+                    out = sub.process_FactorValueValueObject_list(vals)
+                    out.factor_ID = x.id
+                    out.factor_category = x.category
+                    out.factor_category_URI = x.category_uri
+                    return out
+                
+                all_factors = pd.concat([get_factor_vals(x) for x in exp_factors])
+                    
+                
                 
                 baseline_factors = all_factors.loc[all_factors.ID.isin(baseline_ids)]
                 experimental_factors = [

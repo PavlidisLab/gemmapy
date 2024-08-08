@@ -28,6 +28,7 @@ class FactorValueBasicValueObject(object):
                             and the value is json key in definition.
     """
     swagger_types = {
+        'measurement': 'MeasurementValueObject',
         'id': 'int',
         'ontology_id': 'str',
         'experimental_factor_id': 'int',
@@ -40,6 +41,7 @@ class FactorValueBasicValueObject(object):
     }
 
     attribute_map = {
+        'measurement': 'measurement',
         'id': 'id',
         'ontology_id': 'ontologyId',
         'experimental_factor_id': 'experimentalFactorId',
@@ -51,8 +53,9 @@ class FactorValueBasicValueObject(object):
         'is_measurement': 'isMeasurement'
     }
 
-    def __init__(self, id=None, ontology_id=None, experimental_factor_id=None, experimental_factor_category=None, characteristics=None, statements=None, summary=None, value=None, is_measurement=None):  # noqa: E501
+    def __init__(self, measurement=None, id=None, ontology_id=None, experimental_factor_id=None, experimental_factor_category=None, characteristics=None, statements=None, summary=None, value=None, is_measurement=None):  # noqa: E501
         """FactorValueBasicValueObject - a model defined in Swagger"""  # noqa: E501
+        self._measurement = None
         self._id = None
         self._ontology_id = None
         self._experimental_factor_id = None
@@ -63,6 +66,8 @@ class FactorValueBasicValueObject(object):
         self._value = None
         self._is_measurement = None
         self.discriminator = None
+        if measurement is not None:
+            self.measurement = measurement
         if id is not None:
             self.id = id
         if ontology_id is not None:
@@ -81,6 +86,27 @@ class FactorValueBasicValueObject(object):
             self.value = value
         if is_measurement is not None:
             self.is_measurement = is_measurement
+
+    @property
+    def measurement(self):
+        """Gets the measurement of this FactorValueBasicValueObject.  # noqa: E501
+
+
+        :return: The measurement of this FactorValueBasicValueObject.  # noqa: E501
+        :rtype: MeasurementValueObject
+        """
+        return self._measurement
+
+    @measurement.setter
+    def measurement(self, measurement):
+        """Sets the measurement of this FactorValueBasicValueObject.
+
+
+        :param measurement: The measurement of this FactorValueBasicValueObject.  # noqa: E501
+        :type: MeasurementValueObject
+        """
+
+        self._measurement = measurement
 
     @property
     def id(self):
