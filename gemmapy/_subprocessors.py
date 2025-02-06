@@ -111,6 +111,8 @@ def field_in_list(x:list,*fields, blank_series =  pd.Series(dtype='str'), na_typ
 
 def process_FactorValueValueObject_list(d:T.Optional[list]):
     out = [process_FactorValueBasicValueObject(x) for x in d]
+    if(len(out)==0):
+        return process_FactorValueBasicValueObject(None)
     return pd.concat(out,ignore_index = True)
     
 
