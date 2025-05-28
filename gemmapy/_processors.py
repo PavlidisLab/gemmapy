@@ -133,7 +133,6 @@ def process_dea(d):
                 factor_ID = d[i].result_sets[j].experimental_factors[0].id
                 factor_category = d[i].result_sets[j].experimental_factors[0].category
                 factor_category_URI = d[i].result_sets[j].experimental_factors[0].category_uri
-                
                 def add_missing(x):
                     x.factor_ID = factor_ID
                     x.factor_category = factor_category
@@ -141,6 +140,15 @@ def process_dea(d):
                     return x
                 
                 experimental_factors = [add_missing(x) for x in experimental_factors]
+                
+                if(exp_factors[0].type=="continuous"):
+                    experimental_factors = experimental_factors [0:1]
+                    experimental_factors[0].value = np.nan
+                    experimental_factors[0].summary = np.nan
+                    experimental_factors[0].ID = np.nan
+                    contrast_id = np.nan
+                    size = 1
+                
                 baseline_factors =  sub.process_FactorValueBasicValueObject(d[i].result_sets[j].baseline_group) 
                 
             else:
