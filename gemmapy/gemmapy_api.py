@@ -483,13 +483,18 @@ class GemmaPy(object):
     
     
     # datasets/{dataset}/samples, get_dataset_samples --------
-    def get_dataset_samples(self, dataset:int|str, **kwargs)->DataFrame:
+    def get_dataset_samples(self, 
+                            dataset:int|str,
+                            use_processed_quantitation_type:Optional[bool] = True,
+                            **kwargs)->DataFrame:
         """
         Retrieve the samples of a dataset
 
 
         :param dataset: A numerical dataset identifier or a dataset short name
         :type dataset: int|str
+        :param use_processed_quantitation_type: If True, returns the samples according to the processed quantitation type. This is set to TRUE by default to ensure output of this function always matches with get_dataset_processed_expression, otherwise for single cell experiments in particular, the output will not include cell types.
+        :type use_processed_quantitationType: Optional[bool]
         :param **kwargs: Additional arguments to pass to raw.get_dataset_samples
         :return: A DataFrame with information about the samples of the queried dataset.
         
@@ -505,7 +510,7 @@ class GemmaPy(object):
         :rtype: DataFrame
 
         """
-        response = self.raw.get_dataset_samples(dataset, **kwargs)
+        response = self.raw.get_dataset_samples(dataset, use_processed_quantitation_type = use_processed_quantitation_type, **kwargs)
         df = ps.process_samples(response.data)
         return df
         

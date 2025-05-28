@@ -428,7 +428,7 @@ def process_expression(d, dataset, api):
     # R package makes this easier by appending raw outputs to every processed
     # results. we don't do that here so calling twice is necessary
     samples = api.get_dataset_samples(dataset)
-    samples_raw = api.raw.get_dataset_samples(dataset).data
+    samples_raw = api.raw.get_dataset_samples(dataset,use_processed_quantitation_type = True).data
     
     raw_ids = sub.field_in_list(samples_raw,'sample','id')
     sample_internal_names = sub.field_in_list(samples_raw,'sample','name')
@@ -436,7 +436,7 @@ def process_expression(d, dataset, api):
     
     sample_names = samples.sample_name
     
-    sample_internal_names = [x.replace("|",".") for x in sample_internal_names]
+    sample_internal_names = [x.replace("|",".").replace("-",".").replace(" ","") for x in sample_internal_names]
     
     def find_match(x):
         match = None
