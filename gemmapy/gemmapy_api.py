@@ -1764,26 +1764,4 @@ class GemmaPy(object):
             
         
     
-    def get_child_terms(self,terms:List[str])->List[str]:
-        """
-        When querying for ontology terms, Gemma propagates these terms to 
-        include any datasets with their child terms in the results. This 
-        function returns these children for any number of terms, including all 
-        children and the terms itself in the output vector
-        
-        :param terms: A list of ontology terms
-        :type terms: List[str]
-        :return: An array containing descendends of the annotation terms, 
-        including the terms themselves
-        :rtype: List[str]
-
-        """
-        
-        output = self.get_datasets(uris=terms)
-        
-        return re.findall(r'http.*?(?=,|\))',output.attributes['filter'])
-    
-    # update_results currenty unimplemented and not really essential
-
-
 
