@@ -165,6 +165,51 @@ class GemmaPy(object):
 
         return df
 
+    # /annotations/children ------
+    
+    def get_annotation_children(self, uri:str,**kwargs)->DataFrame:
+        """
+        Acquires child terms of a given URI based on ontologies loaded into Gemma. Propagated relations are subClassOf and has_part
+        
+        :param annotation: Term URI
+        :type annotation: str
+        :param **kwargs: DESCRIPTION
+        :param **kwargs: Additional arguments to pass to raw.search_annotations
+        :return: A DataFrame with annotations for the child terms. 
+          The fields of the DataFrame are:
+            - category_name: Category that the annotation belongs to
+            - category_URI: URI for the category_name
+            - value_name: Annotation term
+            - value_URI: URI for the value_name
+        :rtype: DataFrame
+
+        """
+        
+        response = self.raw.get_annotations_children(uri=uri,**kwargs)
+        df = ps.process_search_annotations(response)
+        return df
+
+    def get_annotation_parents(self,uri:str,**kwargs)->DataFrame:
+        """
+        Acquires parent terms of a given URI based on ontologies loaded into Gemma. Propagated relations are subClassOf and has_part
+        
+        :param annotation: Term URI
+        :type annotation: str
+        :param **kwargs: DESCRIPTION
+        :param **kwargs: Additional arguments to pass to raw.search_annotations
+        :return: A DataFrame with annotations for the parent terms. 
+          The fields of the DataFrame are:
+            - category_name: Category that the annotation belongs to
+            - category_URI: URI for the category_name
+            - value_name: Annotation term
+            - value_URI: URI for the value_name
+        :rtype: DataFrame
+
+        """
+        
+        response = self.raw.get_annotations_parents(uri=uri,**kwargs)
+        df = ps.process_search_annotations(response)
+        return df
     
     # /annotations/search, search_annotations --------
     def search_annotations(self, query:List[str], **kwargs)->DataFrame:
