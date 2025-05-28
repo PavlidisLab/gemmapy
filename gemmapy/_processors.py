@@ -318,17 +318,6 @@ def process_DifferentialExpressionAnalysisResultSetValueObject(d:list,api):
     
     return out
 
-def process_dataset_design(d):
-    df = sub.read_tsv(d)
-
-    # conditioning: fix Bioassay names, add them index, remove redundant columns
-    # rowall = [re.search(r"(?<=Name=).*",x).group() for x in df['Bioassay']]
-    rowall = [c[c.find('Name=')+5:] for c in df['Bioassay'] if c.find('Name=') >= 0]
-    assert len(rowall) == df.shape[0], 'Err1'
-    df.index = rowall
-
-    return df.drop(columns=['Bioassay', 'ExternalID'], errors='ignore')
-
 
 
 
