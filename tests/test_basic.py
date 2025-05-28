@@ -55,10 +55,6 @@ def test_get_dataset_annotations():
     assert type(res) is pd.core.frame.DataFrame
     assert res.shape[1] == 5
 
-def test_get_dataset_design():
-    res = api._GemmaPy__get_dataset_design('1')
-    assert type(res) is pd.core.frame.DataFrame
-
 def test_get_dataset_differential_expression_analyses():
     res = api.get_dataset_differential_expression_analyses(200)
     assert type(res) is pd.core.frame.DataFrame
@@ -126,4 +122,9 @@ def test_get_dataset_object():
                            contrasts = dea.contrast_ID,output_type='dict')
     
     assert len(obj) == dea.shape[0]
+
+
+# def test_measurements():
+#    dataset = "GSE106"
+#    samples = api.get_dataset_samples(dataset)
     

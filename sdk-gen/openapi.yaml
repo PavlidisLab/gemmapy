@@ -6859,6 +6859,7 @@ components:
         evidenceCode:
           type: string
           enum:
+          - ~
           - IC
           - IDA
           - IEA
@@ -7894,6 +7895,7 @@ components:
         evidenceCode:
           type: string
           enum:
+          - ~
           - IC
           - IDA
           - IEA
