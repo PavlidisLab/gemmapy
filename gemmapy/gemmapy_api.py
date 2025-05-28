@@ -216,25 +216,7 @@ class GemmaPy(object):
         return df
     
     # /datasets/{dataset}/design, get_dataset_design -----
-    # this endpoint is not very useful since the names it comes with
-    # is annoying to match names provided in the samples endpoint
-    # make_design replaces this
-    def __get_dataset_design(self, dataset:str|int, **kwargs):
-        """
-        
-        :param dataset: DESCRIPTION
-        :type dataset: str|int
-        :param **kwargs: Additional arguments to pass to raw.get_dataset_design
-        :type **kwargs: TYPE
-        :return: DESCRIPTION
-        :rtype: TYPE
-
-        """
-
-        response = self.raw.get_dataset_design(dataset, **kwargs)
-        df = ps.process_dataset_design(response)
-        
-        return df
+    # removed as not useful
     
     # /datasets/{datasets}/expressions/differential ------
     # unimplemented
