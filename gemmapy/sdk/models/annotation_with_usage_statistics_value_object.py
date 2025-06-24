@@ -174,7 +174,7 @@ class AnnotationWithUsageStatisticsValueObject(object):
         :param evidence_code: The evidence_code of this AnnotationWithUsageStatisticsValueObject.  # noqa: E501
         :type: str
         """
-        allowed_values = ["", "IC", "IDA", "IEA", "IEP", "IGI", "IMP", "IPI", "ISS", "NAS", "ND", "RCA", "TAS", "NR", "EXP", "ISA", "ISM", "IGC", "ISO", "IIA", "IBA", "IBD", "IKR", "IRD", "IMR", "IED", "IAGP", "IPM", "QTM", "HDA", "HEP", "HGI", "HMP", "HTP", "OTHER"]  # noqa: E501
+        allowed_values = ["IC", "IDA", "IEA", "IEP", "IGI", "IMP", "IPI", "ISS", "NAS", "ND", "RCA", "TAS", "NR", "EXP", "ISA", "ISM", "IGC", "ISO", "IIA", "IBA", "IBD", "IKR", "IRD", "IMR", "IED", "IAGP", "IPM", "QTM", "HDA", "HEP", "HGI", "HMP", "HTP", "OTHER"]  # noqa: E501
         if evidence_code not in allowed_values:
             raise ValueError(
                 "Invalid value for `evidence_code` ({0}), must be one of {1}"  # noqa: E501

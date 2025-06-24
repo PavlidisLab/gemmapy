@@ -47,7 +47,7 @@ class DefaultApi(object):
         :param async_req bool
         :param str uri: Term URI
         :param bool direct: Only include direct parents.
-        :return: list[AnnotationSearchResultValueObject]
+        :return: ResponseDataObjectListAnnotationSearchResultValueObject
                  If the method is called asynchronously,
                  returns the request thread.
         """
@@ -82,7 +82,7 @@ class DefaultApi(object):
         :param async_req bool
         :param str uri: Term URI
         :param bool direct: Only include direct parents.
-        :return: list[AnnotationSearchResultValueObject]
+        :return: ResponseDataObjectListAnnotationSearchResultValueObject
                  If the method is called asynchronously,
                  returns the request thread.
         """
@@ -125,7 +125,7 @@ class DefaultApi(object):
         if not kwargs.get('_force_table'):
             header_params['Accept'] = self.api_client.select_header_accept(
                 ['application/json'])  # noqa: E501
-            response_type = 'list[AnnotationSearchResultValueObject]' # noqa: E501
+            response_type = 'ResponseDataObjectListAnnotationSearchResultValueObject' # noqa: E501
         else:
             header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
             response_type = 'str'
@@ -162,7 +162,7 @@ class DefaultApi(object):
         :param async_req bool
         :param str uri: Term URI
         :param bool direct: Only include direct children.
-        :return: list[AnnotationSearchResultValueObject]
+        :return: ResponseDataObjectListAnnotationSearchResultValueObject
                  If the method is called asynchronously,
                  returns the request thread.
         """
@@ -197,7 +197,7 @@ class DefaultApi(object):
         :param async_req bool
         :param str uri: Term URI
         :param bool direct: Only include direct children.
-        :return: list[AnnotationSearchResultValueObject]
+        :return: ResponseDataObjectListAnnotationSearchResultValueObject
                  If the method is called asynchronously,
                  returns the request thread.
         """
@@ -240,7 +240,7 @@ class DefaultApi(object):
         if not kwargs.get('_force_table'):
             header_params['Accept'] = self.api_client.select_header_accept(
                 ['application/json'])  # noqa: E501
-            response_type = 'list[AnnotationSearchResultValueObject]' # noqa: E501
+            response_type = 'ResponseDataObjectListAnnotationSearchResultValueObject' # noqa: E501
         else:
             header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
             response_type = 'str'

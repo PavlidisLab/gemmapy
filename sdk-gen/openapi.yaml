@@ -166,6 +166,8 @@ paths:
           description: A comma-delimited list of dataset IDs or short names. The value
             may be compressed with gzip and encoded with base64.
           items:
+            required:
+            - value
             oneOf:
             - type: integer
               description: A numerical dataset identifier.
@@ -181,6 +183,8 @@ paths:
           description: A comma-delimited list of database entry IDs or accessions.
             The value may be compressed with gzip and encoded with base64.
           items:
+            required:
+            - value
             oneOf:
             - type: integer
               description: A database entry numerical identifier.
@@ -243,9 +247,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/AnnotationSearchResultValueObject"
+                $ref: "#/components/schemas/ResponseDataObjectListAnnotationSearchResultValueObject"
         "404":
           description: No term matched the given URI.
           content:
@@ -282,9 +284,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/AnnotationSearchResultValueObject"
+                $ref: "#/components/schemas/ResponseDataObjectListAnnotationSearchResultValueObject"
         "404":
           description: No term matched the given URI.
           content:
@@ -505,6 +505,8 @@ paths:
         in: path
         required: true
         schema:
+          required:
+          - value
           oneOf:
           - type: integer
             description: A numerical taxon identifier.
@@ -587,6 +589,8 @@ paths:
         in: path
         required: true
         schema:
+          required:
+          - value
           oneOf:
           - type: integer
             description: A numerical taxon identifier.
@@ -660,6 +664,8 @@ paths:
         in: path
         required: true
         schema:
+          required:
+          - value
           oneOf:
           - type: integer
             description: A numerical dataset identifier.
@@ -687,6 +693,8 @@ paths:
         in: path
         required: true
         schema:
+          required:
+          - value
           oneOf:
           - type: integer
             description: A numerical dataset identifier.
@@ -696,6 +704,8 @@ paths:
       - name: quantitationType
         in: query
         schema:
+          required:
+          - value
           oneOf:
           - type: integer
             description: A quantitation type ID.
@@ -722,6 +732,8 @@ paths:
         in: path
         required: true
         schema:
+          required:
+          - value
           oneOf:
           - type: integer
             description: A numerical dataset identifier.
@@ -731,6 +743,8 @@ paths:
       - name: quantitationType
         in: query
         schema:
+          required:
+          - value
           oneOf:
           - type: integer
             description: A quantitation type ID.
@@ -789,6 +803,8 @@ paths:
         in: path
         required: true
         schema:
+          required:
+          - value
           oneOf:
           - type: integer
             description: A numerical dataset identifier.
@@ -838,6 +854,8 @@ paths:
         in: path
         required: true
         schema:
+          required:
+          - value
           oneOf:
           - type: integer
             description: A numerical dataset identifier.
@@ -882,6 +900,8 @@ paths:
         in: path
         required: true
         schema:
+          required:
+          - value
           oneOf:
           - type: integer
             description: A numerical dataset identifier.
@@ -911,6 +931,8 @@ paths:
         in: path
         required: true
         schema:
+          required:
+          - value
           oneOf:
           - type: integer
             description: A numerical dataset identifier.
@@ -1041,6 +1063,8 @@ paths:
         in: path
         required: true
         schema:
+          required:
+          - value
           oneOf:
           - type: integer
             description: A numerical dataset identifier.
@@ -1071,6 +1095,8 @@ paths:
         in: path
         required: true
         schema:
+          required:
+          - value
           oneOf:
           - type: integer
             description: A numerical dataset identifier.
@@ -1201,6 +1227,8 @@ paths:
         in: path
         required: true
         schema:
+          required:
+          - value
           oneOf:
           - type: integer
             description: A numerical dataset identifier.
@@ -1226,6 +1254,8 @@ paths:
         in: path
         required: true
         schema:
+          required:
+          - value
           oneOf:
           - type: integer
             description: A numerical dataset identifier.
@@ -1235,6 +1265,8 @@ paths:
       - name: quantitationType
         in: query
         schema:
+          required:
+          - value
           oneOf:
           - type: integer
             description: A quantitation type ID.
@@ -1357,6 +1389,8 @@ paths:
         in: path
         required: true
         schema:
+          required:
+          - value
           oneOf:
           - type: integer
             description: A numerical dataset identifier.
@@ -1366,6 +1400,8 @@ paths:
       - name: quantitationType
         in: query
         schema:
+          required:
+          - value
           oneOf:
           - type: integer
             description: A quantitation type ID.
@@ -1397,6 +1433,8 @@ paths:
         in: path
         required: true
         schema:
+          required:
+          - value
           oneOf:
           - type: integer
             description: A numerical dataset identifier.
@@ -1406,6 +1444,8 @@ paths:
       - name: quantitationType
         in: query
         schema:
+          required:
+          - value
           oneOf:
           - type: integer
             description: A quantitation type ID.
@@ -1476,6 +1516,8 @@ paths:
         in: path
         required: true
         schema:
+          required:
+          - value
           oneOf:
           - type: integer
             description: A numerical dataset identifier.
@@ -1485,6 +1527,8 @@ paths:
       - name: quantitationType
         in: query
         schema:
+          required:
+          - value
           oneOf:
           - type: integer
             description: A quantitation type ID.
@@ -1606,6 +1650,8 @@ paths:
         in: path
         required: true
         schema:
+          required:
+          - value
           oneOf:
           - type: integer
             description: A numerical dataset identifier.
@@ -1634,6 +1680,8 @@ paths:
         in: path
         required: true
         schema:
+          required:
+          - value
           oneOf:
           - type: integer
             description: A numerical dataset identifier.
@@ -1662,6 +1710,8 @@ paths:
         in: path
         required: true
         schema:
+          required:
+          - value
           oneOf:
           - type: integer
             description: A numerical dataset identifier.
@@ -1684,6 +1734,8 @@ paths:
         in: path
         required: true
         schema:
+          required:
+          - value
           oneOf:
           - type: integer
             description: A numerical dataset identifier.
@@ -1712,6 +1764,8 @@ paths:
         in: path
         required: true
         schema:
+          required:
+          - value
           oneOf:
           - type: integer
             description: A numerical dataset identifier.
@@ -1735,6 +1789,8 @@ paths:
         in: path
         required: true
         schema:
+          required:
+          - value
           oneOf:
           - type: integer
             description: A numerical dataset identifier.
@@ -1885,6 +1941,8 @@ paths:
           description: A comma-delimited list of dataset IDs or short names. The value
             may be compressed with gzip and encoded with base64.
           items:
+            required:
+            - value
             oneOf:
             - type: integer
               description: A numerical dataset identifier.
@@ -1978,6 +2036,8 @@ paths:
           description: A comma-delimited list of dataset IDs or short names. The value
             may be compressed with gzip and encoded with base64.
           items:
+            required:
+            - value
             oneOf:
             - type: integer
               description: A numerical dataset identifier.
@@ -2047,6 +2107,8 @@ paths:
         in: path
         required: true
         schema:
+          required:
+          - value
           oneOf:
           - type: string
             description: An Ensembl gene identifier which typically starts with 'ENSG'.
@@ -2120,6 +2182,8 @@ paths:
         in: path
         required: true
         schema:
+          required:
+          - value
           oneOf:
           - type: integer
             description: A numerical taxon identifier.
@@ -2136,6 +2200,8 @@ paths:
         in: path
         required: true
         schema:
+          required:
+          - value
           oneOf:
           - type: string
             description: An Ensembl gene identifier which typically starts with 'ENSG'.
@@ -2203,6 +2269,8 @@ paths:
         in: path
         required: true
         schema:
+          required:
+          - value
           oneOf:
           - type: string
             description: An Ensembl gene identifier which typically starts with 'ENSG'.
@@ -2272,6 +2340,8 @@ paths:
         in: path
         required: true
         schema:
+          required:
+          - value
           oneOf:
           - type: integer
             description: A numerical taxon identifier.
@@ -2288,6 +2358,8 @@ paths:
         in: path
         required: true
         schema:
+          required:
+          - value
           oneOf:
           - type: string
             description: An Ensembl gene identifier which typically starts with 'ENSG'.
@@ -2361,6 +2433,8 @@ paths:
           description: A comma-delimited list of dataset IDs or short names. The value
             may be compressed with gzip and encoded with base64.
           items:
+            required:
+            - value
             oneOf:
             - type: integer
               description: A numerical dataset identifier.
@@ -2376,6 +2450,8 @@ paths:
           description: "A comma-delimited list of NCBI IDs, Ensembl IDs or gene symbols.\
             \ The value may be compressed with gzip and encoded with base64."
           items:
+            required:
+            - value
             oneOf:
             - type: string
               description: An Ensembl gene identifier which typically starts with
@@ -2425,6 +2501,8 @@ paths:
           description: A comma-delimited list of dataset IDs or short names. The value
             may be compressed with gzip and encoded with base64.
           items:
+            required:
+            - value
             oneOf:
             - type: integer
               description: A numerical dataset identifier.
@@ -2435,6 +2513,8 @@ paths:
         in: path
         required: true
         schema:
+          required:
+          - value
           oneOf:
           - type: integer
             description: A numerical taxon identifier.
@@ -2456,6 +2536,8 @@ paths:
           description: "A comma-delimited list of NCBI IDs, Ensembl IDs or gene symbols.\
             \ The value may be compressed with gzip and encoded with base64."
           items:
+            required:
+            - value
             oneOf:
             - type: string
               description: An Ensembl gene identifier which typically starts with
@@ -2505,6 +2587,8 @@ paths:
           description: A comma-delimited list of dataset IDs or short names. The value
             may be compressed with gzip and encoded with base64.
           items:
+            required:
+            - value
             oneOf:
             - type: integer
               description: A numerical dataset identifier.
@@ -2653,6 +2737,8 @@ paths:
         in: path
         required: true
         schema:
+          required:
+          - value
           oneOf:
           - type: integer
             description: A numerical dataset identifier.
@@ -2779,6 +2865,8 @@ paths:
         in: path
         required: true
         schema:
+          required:
+          - value
           oneOf:
           - type: string
             description: An Ensembl gene identifier which typically starts with 'ENSG'.
@@ -2808,6 +2896,8 @@ paths:
         in: path
         required: true
         schema:
+          required:
+          - value
           oneOf:
           - type: string
             description: An Ensembl gene identifier which typically starts with 'ENSG'.
@@ -2837,6 +2927,8 @@ paths:
         in: path
         required: true
         schema:
+          required:
+          - value
           oneOf:
           - type: string
             description: An Ensembl gene identifier which typically starts with 'ENSG'.
@@ -2917,6 +3009,8 @@ paths:
           description: "A comma-delimited list of NCBI IDs, Ensembl IDs or gene symbols.\
             \ The value may be compressed with gzip and encoded with base64."
           items:
+            required:
+            - value
             oneOf:
             - type: string
               description: An Ensembl gene identifier which typically starts with
@@ -2980,6 +3074,8 @@ paths:
         in: path
         required: true
         schema:
+          required:
+          - value
           oneOf:
           - type: integer
             description: A platform numerical identifier.
@@ -3019,6 +3115,8 @@ paths:
         in: path
         required: true
         schema:
+          required:
+          - value
           oneOf:
           - type: integer
             description: A platform numerical identifier.
@@ -3058,6 +3156,8 @@ paths:
         in: path
         required: true
         schema:
+          required:
+          - value
           oneOf:
           - type: integer
             description: A platform numerical identifier.
@@ -3073,6 +3173,8 @@ paths:
           description: A comma-delimited list of element IDs or names. The value may
             be compressed with gzip and encoded with base64.
           items:
+            required:
+            - value
             oneOf:
             - type: integer
               description: A composite sequence numerical identifier.
@@ -3112,6 +3214,8 @@ paths:
         in: path
         required: true
         schema:
+          required:
+          - value
           oneOf:
           - type: integer
             description: A platform numerical identifier.
@@ -3122,6 +3226,8 @@ paths:
         in: path
         required: true
         schema:
+          required:
+          - value
           oneOf:
           - type: integer
             description: A composite sequence numerical identifier.
@@ -3161,6 +3267,8 @@ paths:
         in: path
         required: true
         schema:
+          required:
+          - value
           oneOf:
           - type: integer
             description: A platform numerical identifier.
@@ -3242,6 +3350,8 @@ paths:
           description: A comma-delimited list of platform IDs or short names. The
             value may be compressed with gzip and encoded with base64.
           items:
+            required:
+            - value
             oneOf:
             - type: integer
               description: A platform numerical identifier.
@@ -3306,6 +3416,8 @@ paths:
       - name: taxon
         in: query
         schema:
+          required:
+          - value
           oneOf:
           - type: integer
             description: A numerical taxon identifier.
@@ -3321,6 +3433,8 @@ paths:
       - name: platform
         in: query
         schema:
+          required:
+          - value
           oneOf:
           - type: integer
             description: A platform numerical identifier.
@@ -3334,15 +3448,15 @@ paths:
           items:
             type: string
             enum:
-            - ubic.gemma.model.common.description.BibliographicReference
-            - ubic.gemma.model.expression.arrayDesign.ArrayDesign
             - ubic.gemma.model.genome.biosequence.BioSequence
-            - ubic.gemma.model.genome.Gene
-            - ubic.gemma.model.genome.gene.GeneSet
-            - ubic.gemma.model.analysis.expression.ExpressionExperimentSet
             - ubic.gemma.model.blacklist.BlacklistedEntity
-            - ubic.gemma.model.expression.designElement.CompositeSequence
             - ubic.gemma.model.expression.experiment.ExpressionExperiment
+            - ubic.gemma.model.genome.gene.GeneSet
+            - ubic.gemma.model.common.description.BibliographicReference
+            - ubic.gemma.model.analysis.expression.ExpressionExperimentSet
+            - ubic.gemma.model.expression.designElement.CompositeSequence
+            - ubic.gemma.model.expression.arrayDesign.ArrayDesign
+            - ubic.gemma.model.genome.Gene
       - name: limit
         in: query
         description: Maximum number of search results to return; capped at 2000 unless
@@ -3409,6 +3523,8 @@ paths:
           description: "A comma-delimited list of taxon IDs, NCBI IDs, common names\
             \ or scientific names."
           items:
+            required:
+            - value
             oneOf:
             - type: integer
               description: A numerical taxon identifier.
@@ -3437,6 +3553,8 @@ paths:
         in: path
         required: true
         schema:
+          required:
+          - value
           oneOf:
           - type: integer
             description: A numerical taxon identifier.
@@ -3490,6 +3608,8 @@ paths:
         in: path
         required: true
         schema:
+          required:
+          - value
           oneOf:
           - type: integer
             description: A numerical taxon identifier.
@@ -3506,6 +3626,8 @@ paths:
         in: path
         required: true
         schema:
+          required:
+          - value
           oneOf:
           - type: string
             description: An Ensembl gene identifier which typically starts with 'ENSG'.
@@ -3535,6 +3657,8 @@ paths:
         in: path
         required: true
         schema:
+          required:
+          - value
           oneOf:
           - type: integer
             description: A numerical taxon identifier.
@@ -3551,6 +3675,8 @@ paths:
         in: path
         required: true
         schema:
+          required:
+          - value
           oneOf:
           - type: string
             description: An Ensembl gene identifier which typically starts with 'ENSG'.
@@ -3581,6 +3707,8 @@ paths:
         in: path
         required: true
         schema:
+          required:
+          - value
           oneOf:
           - type: integer
             description: A numerical taxon identifier.
@@ -3597,6 +3725,8 @@ paths:
         in: path
         required: true
         schema:
+          required:
+          - value
           oneOf:
           - type: string
             description: An Ensembl gene identifier which typically starts with 'ENSG'.
@@ -3643,6 +3773,8 @@ paths:
         in: path
         required: true
         schema:
+          required:
+          - value
           oneOf:
           - type: integer
             description: A numerical taxon identifier.
@@ -3688,6 +3820,8 @@ paths:
         in: path
         required: true
         schema:
+          required:
+          - value
           oneOf:
           - type: integer
             description: A numerical taxon identifier.
@@ -3709,6 +3843,8 @@ paths:
           description: "A comma-delimited list of NCBI IDs, Ensembl IDs or gene symbols.\
             \ The value may be compressed with gzip and encoded with base64."
           items:
+            required:
+            - value
             oneOf:
             - type: string
               description: An Ensembl gene identifier which typically starts with
@@ -3739,6 +3875,8 @@ paths:
         in: path
         required: true
         schema:
+          required:
+          - value
           oneOf:
           - type: integer
             description: A numerical taxon identifier.
@@ -4690,6 +4828,8 @@ components:
         filter:
           type: string
     DatasetArg:
+      required:
+      - value
       oneOf:
       - type: integer
         description: A numerical dataset identifier.
@@ -4697,6 +4837,8 @@ components:
       - type: string
         description: A dataset short name.
     DatabaseEntryArg:
+      required:
+      - value
       oneOf:
       - type: integer
         description: A database entry numerical identifier.
@@ -6830,6 +6972,8 @@ components:
         type: boolean
         description: alias for curationDetails.troubled
     TaxonArg:
+      required:
+      - value
       oneOf:
       - type: integer
         description: A numerical taxon identifier.
@@ -6859,7 +7003,6 @@ components:
         evidenceCode:
           type: string
           enum:
-          - ~
           - IC
           - IDA
           - IEA
@@ -6939,6 +7082,8 @@ components:
           items:
             $ref: "#/components/schemas/WellComposedWarning"
     QuantitationTypeArg:
+      required:
+      - value
       oneOf:
       - type: integer
         description: A quantitation type ID.
@@ -7052,10 +7197,10 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/DatabaseEntryValueObject"
-        taxonID:
+        numberOfExpressionExperiments:
           type: integer
           format: int64
-        numberOfExpressionExperiments:
+        taxonID:
           type: integer
           format: int64
         troubleDetails:
@@ -7765,7 +7910,7 @@ components:
         \ the exact phrase \"alpha beta gamma\".                                 \
         \                             |\n| Field        | `shortName:GSE00001`   \
         \     | Results with short name GSE00001. <details><summary>List of supported\
-        \ fields</summary><h2>ubic.gemma.model.genome.gene.GeneSet</h2><ul><li>description</li><li>name</li><li>characteristics.value</li><li>characteristics.valueUri</li><li>literatureSources.abstractText</li><li>literatureSources.authorList</li><li>literatureSources.fullTextUri</li><li>literatureSources.name</li><li>literatureSources.title</li><li>sourceAccession.accession</li><li>literatureSources.chemicals.name</li><li>literatureSources.chemicals.registryNumber</li><li>literatureSources.keywords.term</li><li>literatureSources.meshTerms.term</li><li>literatureSources.pubAccession.accession</li><li>members.gene.ensemblId</li><li>members.gene.name</li><li>members.gene.ncbiGeneId</li><li>members.gene.officialName</li><li>members.gene.officialSymbol</li><li>members.gene.accessions.accession</li><li>members.gene.aliases.alias</li><li>members.gene.products.name</li><li>members.gene.products.ncbiGi</li><li>members.gene.products.previousNcbiId</li><li>members.gene.products.accessions.accession</li></ul><h2>ubic.gemma.model.expression.experiment.ExpressionExperiment</h2><ul><li>description</li><li>name</li><li>shortName</li><li>accession.accession</li><li>bioAssays.description</li><li>bioAssays.name</li><li>characteristics.value</li><li>characteristics.valueUri</li><li>experimentalDesign.description</li><li>experimentalDesign.name</li><li>otherRelevantPublications.abstractText</li><li>otherRelevantPublications.authorList</li><li>otherRelevantPublications.fullTextUri</li><li>otherRelevantPublications.name</li><li>otherRelevantPublications.title</li><li>primaryPublication.abstractText</li><li>primaryPublication.authorList</li><li>primaryPublication.fullTextUri</li><li>primaryPublication.name</li><li>primaryPublication.title</li><li>bioAssays.accession.accession</li><li>bioAssays.sampleUsed.name</li><li>experimentalDesign.experimentalFactors.description</li><li>experimentalDesign.experimentalFactors.name</li><li>otherRelevantPublications.chemicals.name</li><li>otherRelevantPublications.chemicals.registryNumber</li><li>otherRelevantPublications.keywords.term</li><li>otherRelevantPublications.meshTerms.term</li><li>otherRelevantPublications.pubAccession.accession</li><li>primaryPublication.chemicals.name</li><li>primaryPublication.chemicals.registryNumber</li><li>primaryPublication.keywords.term</li><li>primaryPublication.meshTerms.term</li><li>primaryPublication.pubAccession.accession</li><li>bioAssays.sampleUsed.characteristics.value</li><li>bioAssays.sampleUsed.characteristics.valueUri</li><li>experimentalDesign.experimentalFactors.category.category</li><li>experimentalDesign.experimentalFactors.category.categoryUri</li><li>experimentalDesign.experimentalFactors.factorValues.characteristics.object</li><li>experimentalDesign.experimentalFactors.factorValues.characteristics.objectUri</li><li>experimentalDesign.experimentalFactors.factorValues.characteristics.secondObject</li><li>experimentalDesign.experimentalFactors.factorValues.characteristics.secondObjectUri</li><li>experimentalDesign.experimentalFactors.factorValues.characteristics.value</li><li>experimentalDesign.experimentalFactors.factorValues.characteristics.valueUri</li></ul><h2>ubic.gemma.model.expression.designElement.CompositeSequence</h2><ul><li>description</li><li>name</li><li>biologicalCharacteristic.name</li><li>biologicalCharacteristic.sequenceDatabaseEntry.accession</li></ul><h2>ubic.gemma.model.expression.arrayDesign.ArrayDesign</h2><ul><li>description</li><li>name</li><li>shortName</li><li>alternateNames.name</li><li>externalReferences.accession</li></ul><h2>ubic.gemma.model.genome.Gene</h2><ul><li>ensemblId</li><li>name</li><li>ncbiGeneId</li><li>officialName</li><li>officialSymbol</li><li>accessions.accession</li><li>aliases.alias</li><li>products.name</li><li>products.ncbiGi</li><li>products.previousNcbiId</li><li>products.accessions.accession</li></ul><h2>ubic.gemma.model.genome.biosequence.BioSequence</h2><ul><li>name</li><li>sequenceDatabaseEntry.accession</li></ul></details>\
+        \ fields</summary><h2>ubic.gemma.model.expression.experiment.ExpressionExperiment</h2><ul><li>description</li><li>name</li><li>shortName</li><li>accession.accession</li><li>bioAssays.description</li><li>bioAssays.name</li><li>characteristics.value</li><li>characteristics.valueUri</li><li>experimentalDesign.description</li><li>experimentalDesign.name</li><li>otherRelevantPublications.abstractText</li><li>otherRelevantPublications.authorList</li><li>otherRelevantPublications.fullTextUri</li><li>otherRelevantPublications.name</li><li>otherRelevantPublications.title</li><li>primaryPublication.abstractText</li><li>primaryPublication.authorList</li><li>primaryPublication.fullTextUri</li><li>primaryPublication.name</li><li>primaryPublication.title</li><li>bioAssays.accession.accession</li><li>bioAssays.sampleUsed.name</li><li>experimentalDesign.experimentalFactors.description</li><li>experimentalDesign.experimentalFactors.name</li><li>otherRelevantPublications.chemicals.name</li><li>otherRelevantPublications.chemicals.registryNumber</li><li>otherRelevantPublications.keywords.term</li><li>otherRelevantPublications.meshTerms.term</li><li>otherRelevantPublications.pubAccession.accession</li><li>primaryPublication.chemicals.name</li><li>primaryPublication.chemicals.registryNumber</li><li>primaryPublication.keywords.term</li><li>primaryPublication.meshTerms.term</li><li>primaryPublication.pubAccession.accession</li><li>bioAssays.sampleUsed.characteristics.value</li><li>bioAssays.sampleUsed.characteristics.valueUri</li><li>experimentalDesign.experimentalFactors.category.category</li><li>experimentalDesign.experimentalFactors.category.categoryUri</li><li>experimentalDesign.experimentalFactors.factorValues.characteristics.object</li><li>experimentalDesign.experimentalFactors.factorValues.characteristics.objectUri</li><li>experimentalDesign.experimentalFactors.factorValues.characteristics.secondObject</li><li>experimentalDesign.experimentalFactors.factorValues.characteristics.secondObjectUri</li><li>experimentalDesign.experimentalFactors.factorValues.characteristics.value</li><li>experimentalDesign.experimentalFactors.factorValues.characteristics.valueUri</li></ul><h2>ubic.gemma.model.genome.gene.GeneSet</h2><ul><li>description</li><li>name</li><li>characteristics.value</li><li>characteristics.valueUri</li><li>literatureSources.abstractText</li><li>literatureSources.authorList</li><li>literatureSources.fullTextUri</li><li>literatureSources.name</li><li>literatureSources.title</li><li>sourceAccession.accession</li><li>literatureSources.chemicals.name</li><li>literatureSources.chemicals.registryNumber</li><li>literatureSources.keywords.term</li><li>literatureSources.meshTerms.term</li><li>literatureSources.pubAccession.accession</li><li>members.gene.ensemblId</li><li>members.gene.name</li><li>members.gene.ncbiGeneId</li><li>members.gene.officialName</li><li>members.gene.officialSymbol</li><li>members.gene.accessions.accession</li><li>members.gene.aliases.alias</li><li>members.gene.products.name</li><li>members.gene.products.ncbiGi</li><li>members.gene.products.previousNcbiId</li><li>members.gene.products.accessions.accession</li></ul><h2>ubic.gemma.model.expression.designElement.CompositeSequence</h2><ul><li>description</li><li>name</li><li>biologicalCharacteristic.name</li><li>biologicalCharacteristic.sequenceDatabaseEntry.accession</li></ul><h2>ubic.gemma.model.expression.arrayDesign.ArrayDesign</h2><ul><li>description</li><li>name</li><li>shortName</li><li>alternateNames.name</li><li>externalReferences.accession</li></ul><h2>ubic.gemma.model.genome.Gene</h2><ul><li>ensemblId</li><li>name</li><li>ncbiGeneId</li><li>officialName</li><li>officialSymbol</li><li>accessions.accession</li><li>aliases.alias</li><li>products.name</li><li>products.ncbiGi</li><li>products.previousNcbiId</li><li>products.accessions.accession</li></ul><h2>ubic.gemma.model.genome.biosequence.BioSequence</h2><ul><li>name</li><li>sequenceDatabaseEntry.accession</li></ul></details>\
         \ |\n| Prefix       | `alpha*`                    | Results must start with\
         \ \"alpha\".                                                             \
         \                          |\n| Wildcard     | `BRCA?`                   \
@@ -7783,33 +7928,6 @@ components:
       externalDocs:
         url: https://lucene.apache.org/core/3_6_2/queryparsersyntax.html
       x-gemma-searchable-properties:
-        ubic.gemma.model.genome.gene.GeneSet:
-        - description
-        - name
-        - characteristics.value
-        - characteristics.valueUri
-        - literatureSources.abstractText
-        - literatureSources.authorList
-        - literatureSources.fullTextUri
-        - literatureSources.name
-        - literatureSources.title
-        - sourceAccession.accession
-        - literatureSources.chemicals.name
-        - literatureSources.chemicals.registryNumber
-        - literatureSources.keywords.term
-        - literatureSources.meshTerms.term
-        - literatureSources.pubAccession.accession
-        - members.gene.ensemblId
-        - members.gene.name
-        - members.gene.ncbiGeneId
-        - members.gene.officialName
-        - members.gene.officialSymbol
-        - members.gene.accessions.accession
-        - members.gene.aliases.alias
-        - members.gene.products.name
-        - members.gene.products.ncbiGi
-        - members.gene.products.previousNcbiId
-        - members.gene.products.accessions.accession
         ubic.gemma.model.expression.experiment.ExpressionExperiment:
         - description
         - name
@@ -7855,6 +7973,33 @@ components:
         - experimentalDesign.experimentalFactors.factorValues.characteristics.secondObjectUri
         - experimentalDesign.experimentalFactors.factorValues.characteristics.value
         - experimentalDesign.experimentalFactors.factorValues.characteristics.valueUri
+        ubic.gemma.model.genome.gene.GeneSet:
+        - description
+        - name
+        - characteristics.value
+        - characteristics.valueUri
+        - literatureSources.abstractText
+        - literatureSources.authorList
+        - literatureSources.fullTextUri
+        - literatureSources.name
+        - literatureSources.title
+        - sourceAccession.accession
+        - literatureSources.chemicals.name
+        - literatureSources.chemicals.registryNumber
+        - literatureSources.keywords.term
+        - literatureSources.meshTerms.term
+        - literatureSources.pubAccession.accession
+        - members.gene.ensemblId
+        - members.gene.name
+        - members.gene.ncbiGeneId
+        - members.gene.officialName
+        - members.gene.officialSymbol
+        - members.gene.accessions.accession
+        - members.gene.aliases.alias
+        - members.gene.products.name
+        - members.gene.products.ncbiGi
+        - members.gene.products.previousNcbiId
+        - members.gene.products.accessions.accession
         ubic.gemma.model.expression.designElement.CompositeSequence:
         - description
         - name
@@ -7895,7 +8040,6 @@ components:
         evidenceCode:
           type: string
           enum:
-          - ~
           - IC
           - IDA
           - IEA
@@ -8167,6 +8311,8 @@ components:
           items:
             $ref: "#/components/schemas/CharacteristicValueObject"
     GeneArg:
+      required:
+      - value
       oneOf:
       - type: string
         description: An Ensembl gene identifier which typically starts with 'ENSG'.
@@ -8999,6 +9145,8 @@ components:
         type: boolean
         description: alias for curationDetails.troubled
     PlatformArg:
+      required:
+      - value
       oneOf:
       - type: integer
         description: A platform numerical identifier.
@@ -9060,6 +9208,8 @@ components:
         filter:
           type: string
     CompositeSequenceArg:
+      required:
+      - value
       oneOf:
       - type: integer
         description: A composite sequence numerical identifier.
@@ -9730,15 +9880,15 @@ components:
       items:
         type: string
         enum:
-        - ubic.gemma.model.common.description.BibliographicReference
-        - ubic.gemma.model.expression.arrayDesign.ArrayDesign
         - ubic.gemma.model.genome.biosequence.BioSequence
-        - ubic.gemma.model.genome.Gene
-        - ubic.gemma.model.genome.gene.GeneSet
-        - ubic.gemma.model.analysis.expression.ExpressionExperimentSet
         - ubic.gemma.model.blacklist.BlacklistedEntity
-        - ubic.gemma.model.expression.designElement.CompositeSequence
         - ubic.gemma.model.expression.experiment.ExpressionExperiment
+        - ubic.gemma.model.genome.gene.GeneSet
+        - ubic.gemma.model.common.description.BibliographicReference
+        - ubic.gemma.model.analysis.expression.ExpressionExperimentSet
+        - ubic.gemma.model.expression.designElement.CompositeSequence
+        - ubic.gemma.model.expression.arrayDesign.ArrayDesign
+        - ubic.gemma.model.genome.Gene
     ResponseDataObjectListTaxonValueObject:
       type: object
       properties:
