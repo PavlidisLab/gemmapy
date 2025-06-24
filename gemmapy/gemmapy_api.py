@@ -186,7 +186,7 @@ class GemmaPy(object):
         """
         
         response = self.raw.get_annotations_children(uri=uri,**kwargs)
-        df = ps.process_search_annotations(response)
+        df = ps.process_search_annotations(response.data)
         return df
 
     def get_annotation_parents(self,uri:str,**kwargs)->DataFrame:
@@ -208,7 +208,7 @@ class GemmaPy(object):
         """
         
         response = self.raw.get_annotations_parents(uri=uri,**kwargs)
-        df = ps.process_search_annotations(response)
+        df = ps.process_search_annotations(response.data)
         return df
     
     # /annotations/search, search_annotations --------
