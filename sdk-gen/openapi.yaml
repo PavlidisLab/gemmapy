@@ -14,7 +14,7 @@ info:
     name: Pavlidis Lab Support
     url: https://pavlab.msl.ubc.ca/
     email: pavlab-support@msl.ubc.ca
-  version: 2.9.0
+  version: 2.9.1
 servers:
 - url: https://gemma.msl.ubc.ca/rest/v2
 security:
@@ -753,8 +753,14 @@ paths:
             description: A quantitation type name.
       - name: cellTypeAssignment
         in: query
-        description: "The name of of the cell type assignment to retrieve. If left\
-          \ unset, this the preferred one is returned."
+        description: "The name of the cell type assignment to retrieve. If left unset,\
+          \ this the preferred one is returned."
+        schema:
+          type: string
+      - name: protocol
+        in: query
+        description: The protocol of the cell type assignment to retrieve. This cannot
+          be used in combination with `cellTypeAssignment`.
         schema:
           type: string
       responses:
@@ -3448,14 +3454,14 @@ paths:
           items:
             type: string
             enum:
-            - ubic.gemma.model.genome.biosequence.BioSequence
-            - ubic.gemma.model.blacklist.BlacklistedEntity
-            - ubic.gemma.model.expression.experiment.ExpressionExperiment
-            - ubic.gemma.model.genome.gene.GeneSet
+            - ubic.gemma.model.expression.designElement.CompositeSequence
             - ubic.gemma.model.common.description.BibliographicReference
             - ubic.gemma.model.analysis.expression.ExpressionExperimentSet
-            - ubic.gemma.model.expression.designElement.CompositeSequence
             - ubic.gemma.model.expression.arrayDesign.ArrayDesign
+            - ubic.gemma.model.expression.experiment.ExpressionExperiment
+            - ubic.gemma.model.genome.gene.GeneSet
+            - ubic.gemma.model.genome.biosequence.BioSequence
+            - ubic.gemma.model.blacklist.BlacklistedEntity
             - ubic.gemma.model.genome.Gene
       - name: limit
         in: query
@@ -4639,12 +4645,12 @@ components:
           type: string
         officialSymbol:
           type: string
-        taxon:
-          $ref: "#/components/schemas/TaxonValueObject"
         taxonId:
           type: integer
           description: This property is mutually exclusive with `taxon`.
           format: int64
+        taxon:
+          $ref: "#/components/schemas/TaxonValueObject"
     MeasurementValueObject:
       type: object
       properties:
@@ -7197,10 +7203,10 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/DatabaseEntryValueObject"
-        numberOfExpressionExperiments:
+        taxonID:
           type: integer
           format: int64
-        taxonID:
+        numberOfExpressionExperiments:
           type: integer
           format: int64
         troubleDetails:
@@ -7313,22 +7319,18 @@ components:
           format: int64
         shortName:
           type: string
-        accession:
-          $ref: "#/components/schemas/DatabaseEntryValueObject"
-        arrayDesign:
-          $ref: "#/components/schemas/ArrayDesignValueObject"
+        name:
+          type: string
         description:
           type: string
         metadata:
           type: string
-        name:
-          type: string
+        accession:
+          $ref: "#/components/schemas/DatabaseEntryValueObject"
+        arrayDesign:
+          $ref: "#/components/schemas/ArrayDesignValueObject"
         originalPlatform:
           $ref: "#/components/schemas/ArrayDesignValueObject"
-        outlier:
-          type: boolean
-        predictedOutlier:
-          type: boolean
         processingDate:
           type: string
           format: date-time
@@ -7342,6 +7344,10 @@ components:
         sequenceReadLength:
           type: integer
           format: int32
+        outlier:
+          type: boolean
+        predictedOutlier:
+          type: boolean
         userFlaggedOutlier:
           type: boolean
         sourceBioAssayId:
@@ -9880,14 +9886,14 @@ components:
       items:
         type: string
         enum:
-        - ubic.gemma.model.genome.biosequence.BioSequence
-        - ubic.gemma.model.blacklist.BlacklistedEntity
-        - ubic.gemma.model.expression.experiment.ExpressionExperiment
-        - ubic.gemma.model.genome.gene.GeneSet
+        - ubic.gemma.model.expression.designElement.CompositeSequence
         - ubic.gemma.model.common.description.BibliographicReference
         - ubic.gemma.model.analysis.expression.ExpressionExperimentSet
-        - ubic.gemma.model.expression.designElement.CompositeSequence
         - ubic.gemma.model.expression.arrayDesign.ArrayDesign
+        - ubic.gemma.model.expression.experiment.ExpressionExperiment
+        - ubic.gemma.model.genome.gene.GeneSet
+        - ubic.gemma.model.genome.biosequence.BioSequence
+        - ubic.gemma.model.blacklist.BlacklistedEntity
         - ubic.gemma.model.genome.Gene
     ResponseDataObjectListTaxonValueObject:
       type: object
