@@ -15,7 +15,6 @@ import anndata as ad
 from anndata import AnnData
 from io import StringIO
 import warnings
-import re
 import json
 
 
@@ -149,7 +148,7 @@ class GemmaPy(object):
         """
         
         filter = vs.add_to_filter(filter, 'id', result_sets)
-        
+        filter = vs.compress_arg(filter)
         
         kwargs = vs.remove_nones(
             datasets = datasets,
@@ -229,7 +228,7 @@ class GemmaPy(object):
         :rtype: DataFrame
 
         """
-
+        
         response = self.raw.search_annotations(query=query, **kwargs)
         return ps.process_search_annotations(response.data)
     
@@ -598,7 +597,7 @@ class GemmaPy(object):
         
         filter = vs.add_to_filter(filter, 'allCharacteristics.valueUri', uris)
         filter = vs.add_to_filter(filter, 'taxon.commonName', taxa)
-        
+        filter = vs.compress_arg(filter)
         kwargs = vs.remove_nones(
             query = query,
             filter = filter,
@@ -693,6 +692,7 @@ class GemmaPy(object):
         filter = vs.add_to_filter(filter, 'allCharacteristics.valueUri', uris)
         filter = vs.add_to_filter(filter, 'taxon.commonName', taxa)
         
+        filter = vs.compress_arg(filter)
         
         kwargs = vs.remove_nones(
             filter = filter,
@@ -1140,6 +1140,7 @@ class GemmaPy(object):
 
         """
         filter = vs.add_to_filter(filter,"taxon.commonName",taxa)
+        filter = vs.compress_arg(filter)
         kwargs = vs.remove_nones(filter = filter,
                                  offset = offset,
                                  limit = limit,

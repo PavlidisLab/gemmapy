@@ -7,7 +7,14 @@ Created on Wed Feb 28 23:09:30 2024
 """
 
 import typing as T
+import base64
+import gzip
 
+def compress_arg(arg:str):
+    if arg is not None:
+        return base64.b64encode(gzip.compress(arg.encode())).decode()
+    else: 
+        return arg
 
 def remove_nones(**kwargs):
     out = kwargs.copy()
@@ -17,7 +24,6 @@ def remove_nones(**kwargs):
     return out
 
 def add_to_filter(filt:T.Optional[str], prop: str, terms: T.List[T.Union[str,int]]):
-    
     if terms is None:
         return filt
     
