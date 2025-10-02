@@ -12,22 +12,20 @@ public studies, referencing thousands of published papers.
 Installation instructions
 -------------------------
 .. This is a content of docs/install.rst. Update it whenever install.rst changes.
-   
-The package requires Python3.10+. 
+
+The package requires Python 3.10+.
+
+#. Install it from PyPI
+
+   .. code-block:: bash
+
+      pip install gemmapy
 
 #. Install it from a local copy
 
    .. code-block:: bash
 
-      git clone git@github.com:PavlidisLab/gemmapy.git
-      cd gemmapy
-      pip install .
-
-#. Install it from PyPI 
-
-   .. code-block:: bash
-
-      pip install gemmapy
+      pip install git+https://github.com/PavlidisLab/gemmapy.git
 
 
 Usage
