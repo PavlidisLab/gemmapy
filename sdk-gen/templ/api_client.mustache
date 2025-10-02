@@ -552,11 +552,6 @@ class ApiClient(object):
 
         :return: int, long, float, str, bool.
         """
-
-        # dv special case
-        if klass == str and type(data) == bytes:
-            return str(data, encoding = 'utf-8')
-
         try:
             return klass(data)
         except UnicodeEncodeError:
