@@ -10,7 +10,7 @@ import subprocess
 import warnings
 from getpass import getpass
 from io import StringIO
-from typing import Optional, List, Callable
+from typing import Optional, List, Callable, Union, TypeVar, Any
 
 import anndata as ad
 import numpy as np
@@ -30,13 +30,21 @@ class GemmaPath(enum.Enum):
     DEV = "dev"
     STAGING = "staging"
 
+DatasetId = TypeVar('DatasetId', str, int)
+QuantitationTypeId = int  # TODO: supported named QTs
+PlatformId = TypeVar('PlatformId', str, int)
+ProbeId = TypeVar('ProbeId', str, int)
+GeneId = TypeVar('GeneId', int, str)
+ResultSetId = int  # TODO: support named RS by its experimental factor (or interaction thereof)
+TaxonId = TypeVar('TaxonId', str, int)
+
 class GemmaPy(object):
     """
     Main API class
     """
 
-    def __init__(self, auth: Optional[list | tuple] = None,
-                 path: Optional[GemmaPath | str] = None):
+    def __init__(self, auth: Optional[Union[list, tuple]] = None,
+                 path: Optional[Union[GemmaPath, str]] = None):
         """
         :param list auth: (optional) A list or tuple of credential strings, e.g.
          (your_username, your_password). Note that you may also define your Gemma
@@ -105,74 +113,73 @@ class GemmaPy(object):
         # create an instance of the API class
         self.raw = sdk.DefaultApi(sdk.ApiClient(configuration))
 
-
     # /resultSets/count get_number_of_result_sets ------
     # unimplemented
     # we don't need this here, not included
-    
+
     # /resultSets/{resultSet}
-    # this was only used in the past to access result set metadata by 
+    # this was only used in the past to access result set metadata by
     # using a hidden parameter. this information can be accessed using get_result_sets
-    # enpoint instead
-    
-    # /resultSets/{resultSet_}, get_result_set_as_tsv ------ 
+    # endpoint instead
+
+    # /resultSets/{resultSet_}, get_result_set_as_tsv ------
     # made internal to not cause unneeded confusion
     # use get_differential_expression_values instead
-    def __get_result_set(self, result_set:int, **kwargs):
+    def __get_result_set(self, result_set: int):
         """
-        
+
         :param result_set: DESCRIPTION
         :type result_set: int
-        :param **kwargs: Additional arguments to pass to raw.get_result_set_as_tsv
         :return: DESCRIPTION
         :rtype: TYPE
 
         """
-        
-        response = self.raw.get_result_set(result_set, **kwargs,
-                                           _force_table = True)
-        
-        df = ps.process_de_matrix(response, result_set,self)
-        
-        return df
-        
 
-    
+        response = self.raw.get_result_set(result_set, _force_table=True)
+
+        df = ps.process_de_matrix(response, result_set, self)
+
+        return df
+
     # /resultSets, get_result_sets -----
-    
+
     def get_result_sets(self,
-                        datasets:Optional[List[str|int]] = None,
-                        result_sets:Optional[List[int]] = None,
-                        filter:str = None,
-                        offset:int = 0,
-                        limit:int = 20,
-                        sort:str = "+id",
-                        **kwargs)->DataFrame:
+                        datasets: Optional[List[DatasetId]] = None,
+                        result_sets: Optional[ResultSetId] = None,
+                        filter: str = "",
+                        offset: int = 0,
+                        limit: int = 20,
+                        sort: str = "+id") -> DataFrame:
         """Returns queried result set
 
-        Output and usage of this function is mostly identical to 
+        Output and usage of this function is mostly identical to
         get_dataset_differential_expression_analyses. The principal difference
-        being the ability to restrict your result sets, being able to query 
-        across multiple datasets and being able to use the filter argument to 
+        being the ability to restrict your result sets, being able to query
+        across multiple datasets and being able to use the filter argument to
         search based on result set properties.
 
 
-        
-        :param datasets: A numerical dataset identifier or a dataset short name, defaults to None
-        :type datasets: Optional[List[str|int]], optional
-        :param result_sets: 	A result set identifier. Note that result set identifiers are not static and can change when Gemma re-runs analyses internally. Whem using these as inputs, try to make sure you access a currently existing result set ID by basing them on result sets returned for a particular dataset or filter used in get_result_sets, defaults to None
+        :param datasets: A numerical dataset identifier or a dataset short name.
+         Defaults to None.
+        :type datasets: Optional[List[Dataset]], optional
+        :param result_sets: A result set identifier. Note that result set
+        identifiers are not static and can change when Gemma re-runs analyses
+         internally. When using these as inputs, try to make sure you access a
+          currently existing result set ID by basing them on result sets returned
+           for a particular dataset or filter used in get_result_sets. Defaults
+           to None.
         :type result_sets: Optional[List[int]], optional
-        :param filter: Filter results by matching expression. Use 
-          filter_properties function to get a list of all available parameters. 
-          These properties can be combined using "and" "or" clauses and may 
-          contain common operators such as "=", "<" or "in". (e.g. 
-          "taxon.commonName = human", "taxon.commonName in (human,mouse), 
-          "id < 1000"), defaults to None
+        :param filter: Filter results by matching expression. Use
+          filter_properties function to get a list of all available parameters.
+          These properties can be combined using "and" "or" clauses and may
+          contain common operators such as "=", "<" or "in". (e.g.
+          "taxon.commonName = human", "taxon.commonName in (human,mouse),
+          "id < 1000"). Defaults to None
         :type filter: str, optional
         :param offset: The offset of the first retrieved result., defaults to 0
         :type offset: int, optional
         :param limit: Limits the result to specified amount of objects.
-          Has a maximum value of 100. Use together with offset and the 
+          Has a maximum value of 100. Use together with offset and the
           total_elements attribute in the output to compile all data if needed.
           Alternatively get_all_pages function can be used with all functions
           including offset and limit parameters, defaults to 20
@@ -181,15 +188,14 @@ class GemmaPy(object):
           sign indicate ascending order whereas the '-' indicate descending,
           defaults to "+id"
         :type sort: str, optional
-        :param **kwargs: Additional arguments to pass to raw.get_result_sets
-        :return: A DataFrame with information about the queried result sets. 
+        :return: A DataFrame with information about the queried result sets.
           Note that this function does not return differential expression values
           themselves
-        
+
           The fields of the DataFrame are:
             - result_ID: Result set ID of the differential expression analysis. May represent multiple factors in a single model.
-            - contrast_ID: Id of the specific contrast factor. Together with the result.ID they uniquely represent a given contrast.
-            - experiment_ID: Id of the source experiment
+            - contrast_ID: ID of the specific contrast factor. Together with the result.ID they uniquely represent a given contrast.
+            - experiment_ID: ID of the source experiment
             - factor_category: Category for the contrast
             - factor_category_URI: URI for the baseline category
             - factor_ID: ID of the factor
@@ -197,39 +203,37 @@ class GemmaPy(object):
             - experimental_factors: Characteristics of the experimental group. This field is a DataFrame
             - is_subset: True if the result set belong to a subset, False if not. Subsets are created when performing differential expression to avoid unhelpful comparisons.
             - subset_factor: Characteristics of the subset. This field is a DataFrame
-        
+
         :rtype: DataFrame
 
         """
-        
+
         filter = vs.add_to_filter(filter, 'id', result_sets)
         filter = vs.compress_arg(filter)
-        
+
         kwargs = vs.remove_nones(
-            datasets = datasets,
-            filter = filter,
-            offset = offset,
-            limit = limit,
-            sort = sort,
-            **kwargs)
-        
+            datasets=datasets,
+            filter=filter,
+            offset=offset,
+            limit=limit,
+            sort=sort)
+
         response = self.raw.get_result_sets(**kwargs)
-        df = ps.process_DifferentialExpressionAnalysisResultSetValueObject(response.data,self)
+        df = ps.process_DifferentialExpressionAnalysisResultSetValueObject(
+            response.data, self)
         ps.attach_attributes(df, response.to_dict())
 
         return df
 
     # /annotations/children ------
-    
-    def get_annotation_children(self, uri:str,**kwargs)->DataFrame:
+
+    def get_annotation_children(self, uri: str) -> DataFrame:
         """
         Acquires child terms of a given URI based on ontologies loaded into Gemma. Propagated relations are subClassOf and has_part
-        
-        :param annotation: Term URI
-        :type annotation: str
-        :param **kwargs: DESCRIPTION
-        :param **kwargs: Additional arguments to pass to raw.search_annotations
-        :return: A DataFrame with annotations for the child terms. 
+
+        :param uri: Term URI
+        :type uri: str
+        :return: A DataFrame with annotations for the child terms.
           The fields of the DataFrame are:
             - category_name: Category that the annotation belongs to
             - category_URI: URI for the category_name
@@ -238,20 +242,18 @@ class GemmaPy(object):
         :rtype: DataFrame
 
         """
-        
-        response = self.raw.get_annotations_children(uri=uri,**kwargs)
+
+        response = self.raw.get_annotations_children(uri=uri)
         df = ps.process_search_annotations(response.data)
         return df
 
-    def get_annotation_parents(self,uri:str,**kwargs)->DataFrame:
+    def get_annotation_parents(self, uri: str) -> DataFrame:
         """
         Acquires parent terms of a given URI based on ontologies loaded into Gemma. Propagated relations are subClassOf and has_part
-        
-        :param annotation: Term URI
-        :type annotation: str
-        :param **kwargs: DESCRIPTION
-        :param **kwargs: Additional arguments to pass to raw.search_annotations
-        :return: A DataFrame with annotations for the parent terms. 
+
+        :param uri: Term URI
+        :type uri: str
+        :return: A DataFrame with annotations for the parent terms.
           The fields of the DataFrame are:
             - category_name: Category that the annotation belongs to
             - category_URI: URI for the category_name
@@ -260,21 +262,20 @@ class GemmaPy(object):
         :rtype: DataFrame
 
         """
-        
-        response = self.raw.get_annotations_parents(uri=uri,**kwargs)
+
+        response = self.raw.get_annotations_parents(uri=uri)
         df = ps.process_search_annotations(response.data)
         return df
-    
+
     # /annotations/search, search_annotations --------
-    def search_annotations(self, query:List[str], **kwargs)->DataFrame:
+    def search_annotations(self, query: List[str]) -> DataFrame:
         """
         Search for annotation tags
 
 
         :param query: The search query
         :type query: List[str]
-        :param **kwargs: Additional arguments to pass to raw.search_annotations
-        :return: A DataFrame with annotations matching the given identifiers. 
+        :return: A DataFrame with annotations matching the given identifiers.
           The fields of the DataFrame are:
             - category_name: Category that the annotation belongs to
             - category_URI: URI for the category_name
@@ -283,70 +284,66 @@ class GemmaPy(object):
         :rtype: DataFrame
 
         """
-        
-        response = self.raw.search_annotations(query=query, **kwargs)
+
+        response = self.raw.search_annotations(query=query)
         return ps.process_search_annotations(response.data)
-    
 
     # /datasets/{dataset}/annotations, get_dataset_annotations ----------
-    def get_dataset_annotations(self, dataset:str|int, **kwargs)->DataFrame:
+    def get_dataset_annotations(self, dataset: DatasetId) -> DataFrame:
         """
         Retrieve the annotations of a dataset
 
 
         :param dataset: 	A numerical dataset identifier or a dataset short name
-        :type dataset: str|int
-        :param **kwargs: Additional arguments to pass to raw.get_dataset_annotations
-        :return: A DataFrame with information about the annotations of the queried dataset. 
+        :type dataset: Dataset
+        :return: A DataFrame with information about the annotations of the queried dataset.
           The fields of the DataFrame are:
             - class_name: Name of the annotation class (e.g. organism part)
             - class_URI: URI for the annotation class
             - term_name: Name of the annotation term (e.g. lung)
             - term_URI: URI for the annotation term
-            - object_class: Class of object that the term originated from.       
+            - object_class: Class of object that the term originated from.
         :rtype: DataFrame
 
         """
 
-        response = self.raw.get_dataset_annotations(dataset, **kwargs)
+        response = self.raw.get_dataset_annotations(dataset)
         df = ps.process_annotations(response.data)
         ps.attach_attributes(df, response.to_dict())
-        
+
         return df
-    
+
     # /datasets/{dataset}/design, get_dataset_design -----
     # removed as not useful
-    
+
     # /datasets/{datasets}/expressions/differential ------
     # unimplemented
     # not sure how the parameters for this endpoint works and doesn't seem essential
-    
+
     # /datasets/{dataset}/analyses/differential, get_dataset_differential_expression_analyses ------
-    def get_dataset_differential_expression_analyses(self, 
-                                                     dataset:str|int,
-                                                     **kwargs)->DataFrame:
+    def get_dataset_differential_expression_analyses(self,
+                                                     dataset: DatasetId) -> DataFrame:
         """Retrieve annotations and surface level stats for a dataset's differential analyses
-        
+
         :param dataset: A numerical dataset identifier or a dataset short name
-        :type dataset: str|int
-        :param **kwargs: Additional arguments to pass to raw.get_dataset_differential_expression_analyses
+        :type dataset: Dataset
         :return: A data table with information about the differential expression
-          analysis of the queried dataset. Note that this funciton does not return 
+          analysis of the queried dataset. Note that this function does not return
           differential expression values themselves. Use
           get_differential_expression_values to get differential expression
           values (see examples).
-          
+
           The fields of the DataFrame are:
             - result_ID: Result set ID of the differential expression analysis. May represent multiple factors in a single model.
-            - contrast_ID: Id of the specific contrast factor. Together with the result.ID they uniquely represent a given contrast.
-            - experiment_ID: Id of the source experiment
+            - contrast_ID: ID of the specific contrast factor. Together with the result.ID they uniquely represent a given contrast.
+            - experiment_ID: ID of the source experiment
             - factor_category: Category for the contrast
             - factor_category_URI: URI for the contrast category
             - factor_ID: ID of the factor
             - baseline_factors: Characteristics of the baseline. This field is a DataFrame
             - experimental_factors: Characteristics of the experimental group. This field is a DataFrame
-            - isSubset: True if the result set belong to a subset, False if not. 
-              Subsets are created when performing differential expression to avoid 
+            - isSubset: True if the result set belong to a subset, False if not.
+              Subsets are created when performing differential expression to avoid
               unhelpful comparisons.
             - subset_factor: Characteristics of the subset. This field is a DataFrame
             - probes_analyzed: Number of probesets represented in the contrast
@@ -354,88 +351,82 @@ class GemmaPy(object):
         :rtype: DataFrame
 
         """
-        response = self.raw.get_dataset_differential_expression_analyses(dataset,
-                                                                         **kwargs)
+        response = self.raw.get_dataset_differential_expression_analyses(
+            dataset)
         df = ps.process_dea(response.data)
-        
+
         return df
-    
+
     # /datasets/{dataset}/analyses/differential/resultSets -----
     # unimplemented
-    # unsure about the distinction between this and the get_dataset_differential_expression_analyses. 
-    # seem to contain the reduntant information
-    
-    
+    # unsure about the distinction between this and the get_dataset_differential_expression_analyses.
+    # seem to contain the redundant information
+
     # /datasets/{dataset}/data -----
     # deprecated, remove later
-    def get_dataset_expression(self, dataset:str|int, **kwargs)->DataFrame:
+    def get_dataset_expression(self, dataset: DatasetId) -> DataFrame:
         """
         Deprecated in favour of get_dataset_expression
         """
-        warnings.warn('get_dataset_expression is deprecated, please use get_dataset_processed_expression instead')
-        
-        return self.get_dataset_processed_expression(dataset,**kwargs)
+        warnings.warn(
+            'get_dataset_expression is deprecated, please use get_dataset_processed_expression instead')
 
-    
-    
-    
+        return self.get_dataset_processed_expression(dataset)
+
     # /datasets/{datasets}/expressions/genes/{genes}, get_dataset_expression_for_genes ------
     def get_dataset_expression_for_genes(self,
-                                         datasets:List[str|int],
-                                         genes:List[int],
-                                         keep_non_specific:bool = False,
-                                         consolidate = None,
-                                         **kwargs)->dict[int:DataFrame]:
+                                         datasets: List[DatasetId],
+                                         genes: List[GeneId],
+                                         keep_non_specific: bool = False,
+                                         consolidate=None) -> dict[
+        int, DataFrame]:
         """Retrieve the expression data matrix of a set of datasets and genes
 
 
         :param datasets: A numerical dataset identifier or a dataset short name
-        :type datasets: List[str|int]
-        :param genes: An ensembl gene identifier which typically starts with 
-          ensg or an ncbi gene identifier or an official gene symbol approved by 
-          hgnc
+        :type datasets: List[Dataset]
+        :param genes: An ensembl gene identifier which typically starts with
+          ENSG (or ENSM) or an NCBI gene identifier or an official gene symbol approved by
+          HGNC
         :type genes: List[int]
         :param keep_non_specific: If True, results from probesets that are not
           specific to the gene will also be returned., defaults to False
         :type keep_non_specific: bool, optional
-        :param consolidate: An option for gene expression level consolidation. 
+        :param consolidate: An option for gene expression level consolidation.
           If empty, will return every probe for the genes. "pickmax" to pick the
-          probe with the highest expression, "pickvar" to pick the prove with the 
-          highest variance and "average" for returning the average expression, 
+          probe with the highest expression, "pickvar" to pick the probe with the
+          highest variance and "average" for returning the average expression,
           defaults to None
         :type consolidate: TYPE, optional
-        :param **kwargs: Additional arguments to pass to raw.get_dataset_expression_for_genes
         :return: A dict of DataFrames keyed to dataset ids
         :rtype: dict[int:DataFrame]
 
         """
-        
+
         kwargs = vs.remove_nones(
-            keep_non_specific = keep_non_specific,
-            consolidate = consolidate,
-            **kwargs)
-        
-        response = self.raw.get_datasets_expression_levels_for_genes(datasets, genes, 
-                                                             **kwargs)
-        df = ps.process_dataset_gene_expression(response.data,self)
-        
+            keep_non_specific=keep_non_specific,
+            consolidate=consolidate)
+
+        response = self.raw.get_datasets_expression_levels_for_genes(datasets,
+                                                                     genes,
+                                                                     **kwargs)
+        df = ps.process_dataset_gene_expression(response.data, self)
+
         return df
-        
+
     # datasets/{datasets}/expressions/pca -----
     # unimplemented
-    
-    
+
     # datasets/{dataset}/platforms ------
-    def get_dataset_platforms(self, dataset:str|int, **kwargs)->DataFrame:
+    def get_dataset_platforms(self, dataset: DatasetId) -> DataFrame:
         """
-        
+
         :param dataset: A numerical dataset identifier or a dataset short name
-        :type dataset: str|int
-        :param **kwargs: Additional arguments to pass to raw.get_dataset_platforms
+        :type dataset: Dataset
         :return: A DataFrame with information about the platforms.
           The fields of the DataFrame are:
-                
-            - platform_ID: Id number of the platform given by Gemma
+
+            - platform_ID: ID number of the platform given by Gemma
             - platform_type: Type of the platform.
             - platform_description: Free text field describing the platform.
             - platform_troubled: Whether the platform is marked as troubled by a Gemma curator.
@@ -444,174 +435,166 @@ class GemmaPy(object):
             - taxon_ID: Internal identifier given to the species by Gemma
             - taxon_NCBI: NCBI ID of the taxon
             - taxon_database_name: Underlying database used in Gemma for the taxon
-            - taxon_database_ID: ID of the underlying database used in Gemma for the taxon  
+            - taxon_database_ID: ID of the underlying database used in Gemma for the taxon
         :rtype: DataFrame
 
         """
-        response = self.raw.get_dataset_platforms(dataset, **kwargs)
+        response = self.raw.get_dataset_platforms(dataset)
         df = ps.process_platforms(response.data)
-        
-        return(df)
-    
-    
+
+        return df
+
     # datasets/{dataset}/data/processed ------
-    
-    def get_dataset_processed_expression(self,dataset:str|int,**kwargs)->DataFrame:
+
+    def get_dataset_processed_expression(self, dataset: DatasetId) -> DataFrame:
         """Retrieve processed expression data of a dataset
 
-        
+
         :param dataset:  numerical dataset identifier or a dataset short name
-        :type dataset: str|int
-        :param **kwargs: Additional arguments to pass to raw.get_dataset_processed_expression
+        :type dataset: Dataset
         :return: A DataFrame of the expression matrix for the queried dataset
         :rtype: DataFrame
 
         """
-        response = self.raw.get_dataset_processed_expression(dataset, **kwargs)
-        
-        df = ps.process_expression(response,dataset,self)
-        
+        response = self.raw.get_dataset_processed_expression(dataset)
+
+        df = ps.process_expression(response, dataset, self)
+
         return df
-    
+
     # datasets/{dataset}/quantitationTypes get_dataset_quantitation_types ----------
-    
-    def get_dataset_quantitation_types(self,dataset:int|str,**kwargs)->DataFrame:
+
+    def get_dataset_quantitation_types(self, dataset: DatasetId) -> DataFrame:
         """Retrieve quantitation types of a dataset
 
-        
+
         :param dataset: 	A numerical dataset identifier or a dataset short name
-        :type dataset: int|str
-        :param **kwargs: Additional arguments to pass to raw.get_dataset_quantitation_types
+        :type dataset: Dataset
         :return: A DataFrame containing the quantitation types
-        
+
           The fields of the output DataFrame are:
             - id: If of the quantitation type. Any raw quantitation type can be
                by get_dataset_raw_expression function using this id.
             - name: Name of the quantitation type
             - description: Description of the quantitation type
-            - type: Type of the quantitation type. Either raw or processed. 
-              Each dataset will have one processed quantitation type which is the 
+            - type: Type of the quantitation type. Either raw or processed.
+              Each dataset will have one processed quantitation type which is the
               data returned using get_dataset_processed_expression
-            - ratio: Whether or not the quanitation type is a ratio of multiple
-              quantitation types. Typically TRUE for processed TWOCOLOR quantitation type.
-            - preferred: The preferred raw quantitation type. This version is 
+            - ratio: Whether the quantitation type is a ratio of multiple
+              quantitation types. Typically TRUE for processed two-color arrays
+            - preferred: The preferred raw quantitation type. This version is
               used in generation of the processed data within gemma.
             - recomputed: If TRUE this quantitation type is generated by
               recomputing raw data files Gemma had access to
         :rtype: DataFrame
 
         """
-        
-        response = self.raw.get_dataset_quantitation_types(dataset, **kwargs)
+
+        response = self.raw.get_dataset_quantitation_types(dataset)
         df = ps.process_QuantitationTypeValueObject(response.data)
-        
-        
+
         return df
 
     # datasets/{dataset}/data/raw, get_dataset_raw_expression ---------
-    def get_dataset_raw_expression(self,dataset:int|str,
-                                   quantitation_type:[int],**kwargs)->DataFrame:
+    def get_dataset_raw_expression(self, dataset: DatasetId,
+                                   quantitation_type: QuantitationTypeId) -> DataFrame:
         """
-        
+
         :param dataset: A numerical dataset identifier or a dataset short name
-        :type dataset: int|str
-        :param quantitation_type: Quantitation type id. These can be acquired 
-          using get_dataset_quantitation_types function. This endpoint can only 
+        :type dataset: Dataset
+        :param quantitation_type: Quantitation type id. These can be acquired
+          using get_dataset_quantitation_types function. This endpoint can only
           return non-processed quantitation types.
         :type quantitation_type: [int]
-        :param **kwargs: Additional arguments to pass to raw.get_dataset_raw_expression
         :return: A DataFrame of the expression matrix for the queried dataset
         :rtype: DataFrame
 
         """
-        
+
         kwargs = vs.remove_nones(
-            quantitation_type = quantitation_type,
-            **kwargs)
-        
+            quantitation_type=quantitation_type
+        )
+
         response = self.raw.get_dataset_raw_expression(dataset, **kwargs)
-        
-        df = ps.process_expression(response,dataset,self)
-        
+
+        df = ps.process_expression(response, dataset, self)
+
         return df
-    
-    
+
     # datasets/{dataset}/samples, get_dataset_samples --------
-    def get_dataset_samples(self, 
-                            dataset:int|str,
-                            use_processed_quantitation_type:Optional[bool] = True,
-                            **kwargs)->DataFrame:
+    def get_dataset_samples(self,
+                            dataset: DatasetId,
+                            use_processed_quantitation_type: bool = True) -> DataFrame:
         """
         Retrieve the samples of a dataset
 
 
         :param dataset: A numerical dataset identifier or a dataset short name
-        :type dataset: int|str
+        :type dataset: Dataset
         :param use_processed_quantitation_type: If True, returns the samples according to the processed quantitation type. This is set to TRUE by default to ensure output of this function always matches with get_dataset_processed_expression, otherwise for single cell experiments in particular, the output will not include cell types.
-        :type use_processed_quantitationType: Optional[bool]
-        :param **kwargs: Additional arguments to pass to raw.get_dataset_samples
+        :type use_processed_quantitation_type: bool
         :return: A DataFrame with information about the samples of the queried dataset.
-        
+
           The fields of the DataFrame are:
             - sample_name: Internal name given to the sample.
             - sample_ID: Internal ID of the sample
             - sample_description: Free text description of the sample
-            - sample_outlier: Whether or not the sample is marked as an outlier
-            - sample_accession: Accession ID of the sample in it's original database
+            - sample_outlier: Whether the sample is marked as an outlier
+            - sample_accession: Accession ID of the sample in its original database
             - sample_database: Database of origin for the sample
             - sample_characteristics: Characteristics of the sample. This field is a data table
             - sample_factor_values: Experimental factor values of the sample. This field is a data table
         :rtype: DataFrame
 
         """
-        response = self.raw.get_dataset_samples(dataset, use_processed_quantitation_type = use_processed_quantitation_type, **kwargs)
+        response = self.raw.get_dataset_samples(dataset,
+                                                use_processed_quantitation_type=use_processed_quantitation_type)
         df = ps.process_samples(response.data)
         return df
-        
-    # datasets/{dataset}/svd --- 
+
+    # datasets/{dataset}/svd ---
     # not implemented
-    
+
     # datasets, get_datasets ------
-    def get_datasets(self,query:Optional[str] = None, 
-                     filter:Optional[str] = None, 
-                     taxa:Optional[List[str]] = None, 
-                     uris:Optional[List[str]] = None,
-                     offset:int = 0,
-                     limit:int = 20,
-                     sort:str = "+id",
-                     **kwargs)->DataFrame:
+    def get_datasets(self, query: Optional[str] = None,
+                     filter: Optional[str] = None,
+                     taxa: Optional[List[str]] = None,
+                     uris: Optional[List[str]] = None,
+                     offset: int = 0,
+                     limit: int = 20,
+                     sort: str = "+id") -> DataFrame:
         """
-        
-        :param query: The search query. Either plain text ('traumatic'), or an 
+
+        :param query: The search query. Either plain text ('traumatic'), or an
           ontology term URI ('http://purl.obolibrary.org/obo/UBERON_0002048').
-          Datasets that contain the given string in their short of full name will 
-          also be matched., defaults to None
+          Datasets that contain the given string in their short of full name will
+          also be matched. Defaults to None.
         :type query: Optional[str], optional
-        :param filter: Filter results by matching expression. Use 
-          filter_properties function to get a list of all available parameters. 
-          These properties can be combined using "and" "or" clauses and may 
-          contain common operators such as "=", "<" or "in". (e.g. 
-          "taxon.commonName = human", "taxon.commonName in (human,mouse), 
-          "id < 1000"), defaults to None
+        :param filter: Filter results by matching expression. Use
+          filter_properties function to get a list of all available parameters.
+          These properties can be combined using "and" "or" clauses and may
+          contain common operators such as "=", "<" or "in". (e.g.
+          "taxon.commonName = human", "taxon.commonName in (human,mouse),
+          "id < 1000"). Defaults to None
         :type filter: Optional[str], optional
         :param taxa: A vector of taxon common names (e.g. human, mouse, rat).
-          Providing multiple species will return results for all species. These 
-          are appended to the filter and equivalent to filtering for 
-          taxon.commonName property, defaults to None
-        :param taxa: A list of taxon common names (e.g. human, mouse, rat). 
-          Providing multiple species will return results for all species. 
-          These are appended to the filter and equivalent to filtering for 
-          taxon.commonName property, defaults to None
+          Providing multiple species will return results for all species. These
+          are appended to the filter and equivalent to filtering for
+          taxon.commonName property. Defaults to None
+        :param taxa: A list of taxon common names (e.g. human, mouse, rat).
+          Providing multiple species will return results for all species.
+          These are appended to the filter and equivalent to filtering for
+          taxon.commonName property. Defaults to None
         :type taxa: Optional[List[str]], optional
         :param uris: A vector of ontology term URIs. Providing multiple terms
-          will return results containing any of the terms and their children. 
-          These are appended to the filter and equivalent to filtering for 
-          allCharacteristics.valueUri, defaults to None
+          will return results containing any of the terms and their children.
+          These are appended to the filter and equivalent to filtering for
+          allCharacteristics.valueUri. Defaults to None
         :type uris: Optional[List[str]], optional
         :param offset: The offset of the first retrieved result., defaults to 0
         :type offset: int, optional
         :param limit: Limits the result to specified amount of objects.
-          Has a maximum value of 100. Use together with offset and the 
+          Has a maximum value of 100. Use together with offset and the
           total_elements attribute in the output to compile all data if needed.
           Alternatively get_all_pages function can be used with all functions
           including offset and limit parameters, defaults to 20
@@ -620,9 +603,8 @@ class GemmaPy(object):
           sign indicate ascending order whereas the '-' indicate descending,
           defaults to "+id"
         :type sort: str, optional
-        :param **kwargs: Additional arguments to pass to raw.get_datasets
         :return: A DataFrame with information about the queried dataset(s).
-        
+
           The fields of the DataFrame are:
             - experiment_short_name: Shortname given to the dataset within Gemma. Often corresponds to accession ID
             - experiment_name: Full title of the dataset
@@ -634,10 +616,10 @@ class GemmaPy(object):
             - experiment_URI: URI of the original database
             - experiment_sample_count: Number of samples in the dataset
             - experiment_batch_effect_text: A text field describing whether the dataset has batch effects
-            - experimen_batch_corrected: Whether batch correction has been performed on the dataset.
-            - experimen_batch_confound: 0 if batch info isn't available, -1 if batch counfoud is detected, 1 if batch information is available and no batch confound found
-            - experimen_batch_effect: -1 if batch p value < 0.0001, 1 if batch p value > 0.1, 0 if otherwise and when there is no batch information is available or when the data is confounded with batches.
-            - experimen_raw_data: -1 if no raw data available, 1 if raw data was available. When available, Gemma reprocesses raw data to get expression values and batches
+            - experiment_batch_corrected: Whether batch correction has been performed on the dataset.
+            - experiment_batch_confound: 0 if batch info isn't available, -1 if batch confound is detected, 1 if batch information is available and no batch confound found
+            - experiment_batch_effect: -1 if batch P-value < 0.0001, 1 if batch P-value > 0.1, 0 if otherwise and when there is no batch information is available or when the data is confounded with batches.
+            - experiment_raw_data: -1 if no raw data available, 1 if raw data was available. When available, Gemma reprocesses raw data to get expression values and batches
             - geeq_q_score: Data quality score given to the dataset by Gemma.
             - geeq_s_score: Suitability score given to the dataset by Gemma. Refers to factors like batches, platforms and other aspects of experimental design
             - taxon_name: Name of the species
@@ -645,67 +627,63 @@ class GemmaPy(object):
             - taxon_ID: Internal identifier given to the species by Gemma
             - taxon_NCBI: NCBI ID of the taxon
             - taxon_database_name: Underlying database used in Gemma for the taxon
-            - taxon_database_ID: ID of the underyling database used in Gemma for the taxon
+            - taxon_database_ID: ID of the underlying database used in Gemma for the taxon
         :rtype: DataFrame
 
         """
-        
+
         filter = vs.add_to_filter(filter, 'allCharacteristics.valueUri', uris)
         filter = vs.add_to_filter(filter, 'taxon.commonName', taxa)
         filter = vs.compress_arg(filter)
         kwargs = vs.remove_nones(
-            query = query,
-            filter = filter,
-            offset = offset,
-            limit = limit,
-            sort = sort,
-            **kwargs)
-        
+            query=query,
+            filter=filter,
+            offset=offset,
+            limit=limit,
+            sort=sort)
+
         response = self.raw.get_datasets(**kwargs)
         df = ps.process_datasets(response.data)
         ps.attach_attributes(df, response.to_dict())
 
-        
         return df
-    
+
     # datasets/annotations -----
     # currently unimplemented
-    
-    
+
     # datasets/{datasets}, get_datasets_by_ids -----
-    def get_datasets_by_ids(self, dataset:List[str|int],
-                            filter:Optional[str] = None, 
-                            taxa:Optional[List[str]] = None, 
-                            uris:Optional[List[str]] = None,
-                            offset:int = 0,
-                            limit:int = 20,
-                            sort:str = "+id",
-                            **kwargs)->DataFrame:
+    def get_datasets_by_ids(self, dataset: List[DatasetId],
+                            filter: Optional[str] = None,
+                            taxa: Optional[List[str]] = None,
+                            uris: Optional[List[str]] = None,
+                            offset: int = 0,
+                            limit: int = 20,
+                            sort: str = "+id") -> DataFrame:
         """
-        
+
         :param dataset: Numerical dataset identifiers or dataset short names.
-        :type dataset: List[str|int]
-        :param filter: Filter results by matching expression. Use 
-          filter_properties function to get a list of all available parameters. 
-          These properties can be combined using "and" "or" clauses and may 
-          contain common operators such as "=", "<" or "in". (e.g. 
-          "taxon.commonName = human", "taxon.commonName in (human,mouse), 
-          "id < 1000"), defaults to None
+        :type dataset: List[Dataset]
+        :param filter: Filter results by matching expression. Use
+          filter_properties function to get a list of all available parameters.
+          These properties can be combined using "and" "or" clauses and may
+          contain common operators such as "=", "<" or "in". (e.g.
+          "taxon.commonName = human", "taxon.commonName in (human,mouse),
+          "id < 1000"). Defaults to None
         :type filter: Optional[str], optional
-        :param taxa: A list of taxon common names (e.g. human, mouse, rat). 
-          Providing multiple species will return results for all species. 
-          These are appended to the filter and equivalent to filtering for 
-          taxon.commonName property, defaults to None
+        :param taxa: A list of taxon common names (e.g. human, mouse, rat).
+          Providing multiple species will return results for all species.
+          These are appended to the filter and equivalent to filtering for
+          taxon.commonName property. Defaults to None
         :type taxa: Optional[List[str]], optional
         :param uris: A vector of ontology term URIs. Providing multiple terms
-          will return results containing any of the terms and their children. 
-          These are appended to the filter and equivalent to filtering for 
-          allCharacteristics.valueUri, defaults to None
+          will return results containing any of the terms and their children.
+          These are appended to the filter and equivalent to filtering for
+          allCharacteristics.valueUri. Defaults to None
         :type uris: Optional[List[str]], optional
         :param offset: The offset of the first retrieved result., defaults to 0
         :type offset: int, optional
         :param limit: Limits the result to specified amount of objects.
-          Has a maximum value of 100. Use together with offset and the 
+          Has a maximum value of 100. Use together with offset and the
           total_elements attribute in the output to compile all data if needed.
           Alternatively get_all_pages function can be used with all functions
           including offset and limit parameters, defaults to 20
@@ -714,9 +692,8 @@ class GemmaPy(object):
           sign indicate ascending order whereas the '-' indicate descending,
           defaults to "+id"
         :type sort: str, optional
-        :param **kwargs: Additional arguments to pass to raw.get_datasets_by_ids
         :return: A DataFrame with information about the queried dataset(s).
-        
+
           The fields of the DataFrame are:
             - experiment_short_name: Shortname given to the dataset within Gemma. Often corresponds to accession ID
             - experiment_name: Full title of the dataset
@@ -728,10 +705,12 @@ class GemmaPy(object):
             - experiment_URI: URI of the original database
             - experiment_sample_count: Number of samples in the dataset
             - experiment_batch_effect_text: A text field describing whether the dataset has batch effects
-            - experimen_batch_corrected: Whether batch correction has been performed on the dataset.
-            - experimen_batch_confound: 0 if batch info isn't available, -1 if batch counfoud is detected, 1 if batch information is available and no batch confound found
-            - experimen_batch_effect: -1 if batch p value < 0.0001, 1 if batch p value > 0.1, 0 if otherwise and when there is no batch information is available or when the data is confounded with batches.
-            - experimen_raw_data: -1 if no raw data available, 1 if raw data was available. When available, Gemma reprocesses raw data to get expression values and batches
+            - experiment_batch_corrected: Whether batch correction has been performed on the dataset.
+            - experiment_batch_confound: 0 if batch info isn't available, -1 if
+              batch confound is detected, 1 if batch information is available
+              and no batch confound found
+            - experiment_batch_effect: -1 if batch P-value < 0.0001, 1 if batch P-value > 0.1, 0 if otherwise and when there is no batch information is available or when the data is confounded with batches.
+            - experiment_raw_data: -1 if no raw data available, 1 if raw data was available. When available, Gemma reprocesses raw data to get expression values and batches
             - geeq_q_score: Data quality score given to the dataset by Gemma.
             - geeq_s_score: Suitability score given to the dataset by Gemma. Refers to factors like batches, platforms and other aspects of experimental design
             - taxon_name: Name of the species
@@ -739,27 +718,26 @@ class GemmaPy(object):
             - taxon_ID: Internal identifier given to the species by Gemma
             - taxon_NCBI: NCBI ID of the taxon
             - taxon_database_name: Underlying database used in Gemma for the taxon
-            - taxon_database_ID: ID of the underyling database used in Gemma for the taxon
+            - taxon_database_ID: ID of the underlying database used in Gemma for the taxon
         :rtype: DataFrame
 
         """
 
         filter = vs.add_to_filter(filter, 'allCharacteristics.valueUri', uris)
         filter = vs.add_to_filter(filter, 'taxon.commonName', taxa)
-        
+
         filter = vs.compress_arg(filter)
-        
+
         kwargs = vs.remove_nones(
-            filter = filter,
-            offset = offset,
-            limit = limit,
-            sort = sort,
-            **kwargs)
-        
+            filter=filter,
+            offset=offset,
+            limit=limit,
+            sort=sort)
+
         response = self.raw.get_datasets_by_ids(dataset, **kwargs)
         df = ps.process_datasets(response.data)
         ps.attach_attributes(df, response.to_dict())
-        
+
         return df
 
     # datasets/categories -----
@@ -771,38 +749,30 @@ class GemmaPy(object):
     # datasets/count -----
     # currently unimplemented
 
-    # genes/{gene}/goTerms -------   
-    
-    def get_gene_go_terms(self, gene:str|int, **kwargs)->DataFrame:
-        """
-        
-        :param gene: An ensembl gene identifier which typically starts with 
-          ensg or an ncbi gene identifier or an official gene symbol approved by
-          hgnc
-        :type gene: str|int
-        :param **kwargs: Additional arguments to pass to raw.get_gene_go_terms
+    # genes/{gene}/goTerms -------
+
+    def get_gene_go_terms(self, gene: GeneId) -> DataFrame:
+        """Obtain the GO terms associated with the given gene.
+        :param gene: A supported gene identifier
+        :type gene: Gene
         :return: A DataFrame with information about the GO terms assigned to the queried gene
           The fields of the output DataFrame are:
             - term_name: Name of the term
             - term_ID: ID of the term
-            - term_URI: URI of the term 
+            - term_URI: URI of the term
         :rtype: DataFrame
-
         """
-        response = self.raw.get_gene_go_terms(gene, **kwargs)
+        response = self.raw.get_gene_go_terms(gene)
         df = ps.process_GO(response.data)
         return df
 
-    
     # genes/{gene}/locations, get_gene_locations ----
-    
-    def get_gene_locations(self, gene:str|int, **kwargs)->DataFrame:
+
+    def get_gene_locations(self, gene: GeneId) -> DataFrame:
         """
-        
-        :param gene: DESCRIPTION
-        :type gene: str|int
-        :param **kwargs: DAdditional arguments to pass to raw.get_gene_locations
-        :type **kwargs: TYPE
+
+        :param gene: A supported gene identifier.
+        :type gene: Gene
         :return: A DataFrame with information about the physical location of the queried gene
           The fields of the output DataFrame are:
             - chromosome: Name of the chromosome the gene is located
@@ -814,45 +784,43 @@ class GemmaPy(object):
             - taxon_ID: Internal identifier given to the species by Gemma
             - taxon_NCBI: NCBI ID of the taxon
             - taxon_database_name: Underlying database used in Gemma for the taxon
-            - taxon_database_ID: ID of the underlying database used in Gemma for the taxon      
+            - taxon_database_ID: ID of the underlying database used in Gemma for the taxon
         :rtype: DataFrame
 
         """
 
-        response = self.raw.get_gene_locations(gene, **kwargs)
+        response = self.raw.get_gene_locations(gene)
         df = ps.process_gene_location(response.data)
         return df
-    
+
     # genes/{gene}/probes, get_gene_probes -----
-    
-    def get_gene_probes(self, gene:str|int,
-                        offset:int = 0,
-                        limit:int = 20,
-                        **kwargs)->DataFrame:
+
+    def get_gene_probes(self, gene: GeneId,
+                        offset: int = 0,
+                        limit: int = 20) -> DataFrame:
         """Retrieve the probes associated to a genes across all platforms
-        
+
         :param gene: An ensembl gene identifier which typically starts with
-          ensg or an ncbi gene identifier or an official gene symbol approved by 
-          hgnc
-        :type gene: str|int
+          ENSG (or ENSM) or an NCBI gene identifier or an official gene symbol approved by
+          HGNC
+        :type gene: Gene
         :param offset: The offset of the first retrieved result., defaults to 0
         :type offset: int, optional
         :param limit: Limits the result to specified amount of objects.
-          Has a maximum value of 100. Use together with offset and the 
+          Has a maximum value of 100. Use together with offset and the
           total_elements attribute in the output to compile all data if needed.
           Alternatively get_all_pages function can be used with all functions
           including offset and limit parameters, defaults to 20
         :type limit: int, optional
-        :param **kwargs: Additional arguments to pass to raw.get_gene_probes
-        :return: A DataFrame with information about the probes representing a 
-          gene across all platrofms.
-        
+        :return: A DataFrame with information about the probes representing a
+          gene across all platforms.
+
           The fields of the output DataFrame are:
-            - element_name: Name of the element. Typically the probeset name
+            - element_name: Name of the element. Typically, the probeset name
             - element_description: A free text field providing optional information about the element
-            - platform_short_name: Shortname of the platform given by Gemma. Typically the GPL identifier.
+            - platform_short_name: Shortname of the platform given by Gemma. Typically, the GPL identifier.
             - platform_name: Full name of the platform
-            - platform_ID: Id number of the platform given by Gemma
+            - platform_ID: ID number of the platform given by Gemma
             - platform_type: Type of the platform.
             - platform_description: Free text field describing the platform.
             - platform_troubled: Whether the platform is marked as troubled by a Gemma curator.
@@ -861,178 +829,30 @@ class GemmaPy(object):
             - taxon_ID: Internal identifier given to the species by Gemma
             - taxon_NCBI: NCBI ID of the taxon
             - taxon_database_name: Underlying database used in Gemma for the taxon
-            - taxon_database_ID: ID of the underlying database used in Gemma for the taxon    
+            - taxon_database_ID: ID of the underlying database used in Gemma for the taxon
         :rtype: DataFrame
 
         """
-        
-        kwargs = vs.remove_nones(offset = offset,
-                                 limit = limit,
-                                 **kwargs)
-        
+
+        kwargs = vs.remove_nones(offset=offset,
+                                 limit=limit)
+
         response = self.raw.get_gene_probes(gene, **kwargs)
         df = ps.process_elements(response.data)
         ps.attach_attributes(df, response.to_dict())
         return df
-        
-        
+
     # genes/{genes}, get_genes-------
 
-    def get_genes(self, genes:int|str, **kwargs)->DataFrame:
+    def get_genes(self, genes: List[GeneId]) -> DataFrame:
         """Retrieve genes matching gene identifiers
 
-        :param genes: An ensembl gene identifier which typically starts with 
-          ensg or an ncbi gene identifier or an official gene symbol approved by hgnc
-        :type genes: int|str
-        :param **kwargs: Additional arguments to pass to raw_get_genes
-        :return: A DataFrame with the information about the querried genes.
-        
-          The fields of the output DataFrame are:
-            - gene_symbol: Symbol for the gene
-            - gene_ensembl: Ensembl ID for the gene
-            - gene_NCBI: NCBI id for the gene
-            - gene_name: Name of the gene
-            - gene_aliases: Gene aliases. Each row includes a vector
-            - gene_MFX_rank: Multifunctionality rank for the gene
-            - taxon_name: Name of the species
-            - taxon_scientific: Scientific name for the taxon
-            - taxon_ID: Internal identifier given to the species by Gemma
-            - taxon_NCBI: NCBI ID of the taxon
-            - taxon_database_name: Underlying database used in Gemma for the taxon
-            - taxon_database_ID: ID of the underlying database used in Gemma for the taxon    
-        :rtype: DataFrame
+        :param genes: An ensembl gene identifier which typically starts with
+          ENSG (or ENSM) or an NCBI gene identifier or an official gene symbol
+          approved by HGNC
+        :type genes: List[Gene]
+        :return: A DataFrame with the information about the queried genes.
 
-        """
-
-        response = self.raw.get_genes(genes, **kwargs)
-        df = ps.process_genes(response.data)
-        return df
-
-    # platforms/count -----
-    # unimplemented
-    
-    # platform/{platform}/annotations -----
-    # in gemma.R this endpoint isn't implemented and uses a convenience function instead
-    # here we just use the enpoint since the added functionality isn't needed
-
-    # Corresponding gemma.R function doesn't use any endpoint (uses some alternative URL
-    # to get info) but has several options allowing to select the ann. type:
-    # annotType = c("bioProcess", "noParents", "allParents")
-    # This feature is not implemented here, the return value corresponds to "noParents"
-    # (as of 2022-05-19)
-    def get_platform_annotations(self, platform:int|str, **kwargs)->DataFrame:
-        """Gets Gemma's platform annotations including mappings of microarray probes to genes.
-        
-        :param platform: A platform numerical identifier or a platform short name
-        :type platform: int|str
-        :param **kwargs: Additional arguments to pass to raw.get_platform_annotations
-        :type **kwargs: TYPE
-        :return: A DataFrame of annotations
-        
-          - ProbeName: Probeset names provided by the platform. Gene symbols for generic annotations
-          - GeneSymbols: Genes that were found to be aligned to the probe sequence. Note that it is possible for probes to be non-specific. Alignment to multiple genes are indicated with gene symbols separated by "|"s
-          - GeneNames: Name of the gene
-          - GOTerms: GO Terms associated with the genes. annotType argument can be used to choose which terms should be included.
-          - GemmaIDs and NCBIids: respective IDs for the genes.
-        :rtype: DataFrame
-
-        """
-        
-        api_response = self.raw.get_platform_annotations(platform, **kwargs)
-        uncomment = api_response.split("\n#")
-        api_response = uncomment[len(uncomment)-1]
-        uncomment = api_response.split('\n',1)
-        api_response = uncomment[len(uncomment)-1]
-        return pd.read_csv(StringIO(api_response), sep='\t')
-
-    # platform/{platform}/datasets, get_platform_datasets ----
-
-    def get_platform_datasets(self, platform:str|int,
-                              offset:int = 0,
-                              limit:int = 20,
-                              **kwargs)->DataFrame:
-        """Retrieve all experiments using a given platform
-
-        
-        :param platform: A platform numerical identifier or a platform short name
-        :type platform: str|int
-        :param offset: The offset of the first retrieved result., defaults to 0
-        :type offset: int, optional
-        :param limit: Limits the result to specified amount of objects.
-          Has a maximum value of 100. Use together with offset and the 
-          total_elements attribute in the output to compile all data if needed.
-          Alternatively get_all_pages function can be used with all functions
-          including offset and limit parameters, defaults to 20
-        :type limit: int, optional
-        :param **kwargs: Additional arguments to pass to raw.get_platform_datasets
-        :return: A DataFrame with information about the queried dataset(s).
-        
-          The fields of the DataFrame are:
-            - experiment_short_name: Shortname given to the dataset within Gemma. Often corresponds to accession ID
-            - experiment_name: Full title of the dataset
-            - experiment_ID: Internal ID of the dataset.
-            - experiment_description: Description of the dataset
-            - experiment_troubled: Did an automatic process within gemma or a curator mark the dataset as "troubled"
-            - experiment_accession: Accession ID of the dataset in the external database it was taken from
-            - experiment_database: The name of the database where the dataset was taken from
-            - experiment_URI: URI of the original database
-            - experiment_sample_count: Number of samples in the dataset
-            - experiment_batch_effect_text: A text field describing whether the dataset has batch effects
-            - experimen_batch_corrected: Whether batch correction has been performed on the dataset.
-            - experimen_batch_confound: 0 if batch info isn't available, -1 if batch counfoud is detected, 1 if batch information is available and no batch confound found
-            - experimen_batch_effect: -1 if batch p value < 0.0001, 1 if batch p value > 0.1, 0 if otherwise and when there is no batch information is available or when the data is confounded with batches.
-            - experimen_raw_data: -1 if no raw data available, 1 if raw data was available. When available, Gemma reprocesses raw data to get expression values and batches
-            - geeq_q_score: Suitability score given to the dataset by Gemma. Refers to factors like batches, platforms and other aspects of experimental design
-            - geeq_s_score: Data quality score given to the dataset by Gemma.
-            - taxon_name: Name of the species
-            - taxon_scientific: Scientific name for the taxon
-            - taxon_ID: Internal identifier given to the species by Gemma
-            - taxon_NCBI: NCBI ID of the taxon
-            - taxon_database_name: Underlying database used in Gemma for the taxon
-            - taxon_database_ID: ID of the underyling database used in Gemma for the taxon
-        :rtype: DataFrame
-
-        """
-        
-        kwargs = vs.remove_nones(offset = offset,
-                                 limit = limit,
-                                 **kwargs)
-        
-        
-        response = self.raw.get_platform_datasets(platform, **kwargs)
-        df = ps.process_datasets(response.data)
-        ps.attach_attributes(df, response.to_dict())
-        return df
-
-    # platforms/{platform}/elements/{probes} -----
-    # not implemented
-    
-    # platforms/{platform}/elements/{probe}/genes, get_platform_element_genes ----
-
-    def get_platform_element_genes(self, platform:str|int, 
-                                   probe:str|int,
-                                   offset:int = 0,
-                                   limit:int = 20,
-                                   **kwargs)->DataFrame:
-        
-        
-        """Retrieve the genes associated to a probe in a given platform
-        
-        :param platform: A platform numerical identifier or a platform short name
-        :type platform: str|int
-        :param probe: A probe name or it's numerical identifier
-        :type probe: str|int
-        :param offset: The offset of the first retrieved result., defaults to 0
-        :type offset: int, optional
-        :param limit: Limits the result to specified amount of objects.
-          Has a maximum value of 100. Use together with offset and the 
-          total_elements attribute in the output to compile all data if needed.
-          Alternatively get_all_pages function can be used with all functions
-          including offset and limit parameters, defaults to 20
-        :type limit: int, optional
-        :param **kwargs: Additional arguments to pass to raw.get_platform_element_genes
-        :type **kwargs: TYPE
-        :return: A DataFrame with the information about querried gene(s).
           The fields of the output DataFrame are:
             - gene_symbol: Symbol for the gene
             - gene_ensembl: Ensembl ID for the gene
@@ -1049,47 +869,189 @@ class GemmaPy(object):
         :rtype: DataFrame
 
         """
-        
-        kwargs = vs.remove_nones(offset = offset,
-                                 limit = limit,
-                                 **kwargs)
-        
-        response =  self.raw.get_platform_element_genes(platform, probe, **kwargs)
+
+        response = self.raw.get_genes_by_ids(genes)
+        df = ps.process_genes(response.data)
+        return df
+
+    # platforms/count -----
+    # unimplemented
+
+    # platform/{platform}/annotations -----
+    # in gemma.R this endpoint isn't implemented and uses a convenience function instead
+    # here we just use the endpoint since the added functionality isn't needed
+
+    # Corresponding gemma.R function doesn't use any endpoint (uses some alternative URL
+    # to get info) but has several options allowing to select the ann. type:
+    # annotType = c("bioProcess", "noParents", "allParents")
+    # This feature is not implemented here, the return value corresponds to "noParents"
+    # (as of 2022-05-19)
+    def get_platform_annotations(self, platform: PlatformId) -> DataFrame:
+        """Gets Gemma's platform annotations including mappings of microarray probes to genes.
+
+        :param platform: A platform numerical identifier or a platform short name
+        :type platform: Platform
+        :return: A DataFrame of annotations
+
+          - ProbeName: Probeset names provided by the platform. Gene symbols for
+            generic annotations
+          - GeneSymbols: Genes that were found to be aligned to the probe
+            sequence. Note that it is possible for probes to be non-specific.
+            Alignment to multiple genes are indicated with gene symbols
+            separated by '|'s
+          - GeneNames: Name of the gene
+          - GOTerms: GO Terms associated with the genes. annotType argument can
+            be used to choose which terms should be included.
+          - GemmaIDs and NCBIids: respective IDs for the genes.
+        :rtype: DataFrame
+
+        """
+
+        api_response = self.raw.get_platform_annotations(platform)
+        uncomment = api_response.split("\n#")
+        api_response = uncomment[len(uncomment) - 1]
+        uncomment = api_response.split('\n', 1)
+        api_response = uncomment[len(uncomment) - 1]
+        return pd.read_csv(StringIO(api_response), sep='\t')
+
+    # platform/{platform}/datasets, get_platform_datasets ----
+
+    def get_platform_datasets(self, platform: PlatformId,
+                              offset: int = 0,
+                              limit: int = 20) -> DataFrame:
+        """Retrieve all experiments using a given platform
+
+
+        :param platform: A platform numerical identifier or a platform short name
+        :type platform: Platform
+        :param offset: The offset of the first retrieved result., defaults to 0
+        :type offset: int, optional
+        :param limit: Limits the result to specified amount of objects.
+          Has a maximum value of 100. Use together with offset and the
+          total_elements attribute in the output to compile all data if needed.
+          Alternatively get_all_pages function can be used with all functions
+          including offset and limit parameters, defaults to 20
+        :type limit: int, optional
+        :return: A DataFrame with information about the queried dataset(s).
+
+          The fields of the DataFrame are:
+            - experiment_short_name: Shortname given to the dataset within Gemma. Often corresponds to accession ID
+            - experiment_name: Full title of the dataset
+            - experiment_ID: Internal ID of the dataset.
+            - experiment_description: Description of the dataset
+            - experiment_troubled: Did an automatic process within gemma or a curator mark the dataset as "troubled"
+            - experiment_accession: Accession ID of the dataset in the external database it was taken from
+            - experiment_database: The name of the database where the dataset was taken from
+            - experiment_URI: URI of the original database
+            - experiment_sample_count: Number of samples in the dataset
+            - experiment_batch_effect_text: A text field describing whether the dataset has batch effects
+            - experiment_batch_corrected: Whether batch correction has been performed on the dataset.
+            - experiment_batch_confound: 0 if batch info isn't available, -1 if batch confound is detected, 1 if batch information is available and no batch confound found
+            - experiment_batch_effect: -1 if batch P-value < 0.0001, 1 if batch
+              P-value > 0.1, 0 if otherwise and when there is no batch information is available or when the data is confounded with batches.
+            - experiment_raw_data: -1 if no raw data available, 1 if raw data was available. When available, Gemma reprocesses raw data to get expression values and batches
+            - geeq_q_score: Suitability score given to the dataset by Gemma. Refers to factors like batches, platforms and other aspects of experimental design
+            - geeq_s_score: Data quality score given to the dataset by Gemma.
+            - taxon_name: Name of the species
+            - taxon_scientific: Scientific name for the taxon
+            - taxon_ID: Internal identifier given to the species by Gemma
+            - taxon_NCBI: NCBI ID of the taxon
+            - taxon_database_name: Underlying database used in Gemma for the taxon
+            - taxon_database_ID: ID of the underlying database used in Gemma for the taxon
+        :rtype: DataFrame
+
+        """
+
+        kwargs = vs.remove_nones(offset=offset,
+                                 limit=limit)
+
+        response = self.raw.get_platform_datasets(platform, **kwargs)
+        df = ps.process_datasets(response.data)
+        ps.attach_attributes(df, response.to_dict())
+        return df
+
+    # platforms/{platform}/elements/{probes} -----
+    # not implemented
+
+    # platforms/{platform}/elements/{probe}/genes, get_platform_element_genes ----
+
+    def get_platform_element_genes(self, platform: PlatformId,
+                                   probe: ProbeId,
+                                   offset: int = 0,
+                                   limit: int = 20) -> DataFrame:
+
+        """Retrieve the genes associated to a probe in a given platform
+
+        :param platform: A platform numerical identifier or a platform short name
+        :type platform: Platform
+        :param probe: A probe name, or it's numerical identifier
+        :type probe: Probe
+        :param offset: The offset of the first retrieved result., defaults to 0
+        :type offset: int, optional
+        :param limit: Limits the result to specified amount of objects.
+          Has a maximum value of 100. Use together with offset and the
+          total_elements attribute in the output to compile all data if needed.
+          Alternatively get_all_pages function can be used with all functions
+          including offset and limit parameters, defaults to 20
+        :type limit: int, optional
+        :return: A DataFrame with the information about queried gene(s).
+          The fields of the output DataFrame are:
+            - gene_symbol: Symbol for the gene
+            - gene_ensembl: Ensembl ID for the gene
+            - gene_NCBI: NCBI id for the gene
+            - gene_name: Name of the gene
+            - gene_aliases: Gene aliases. Each row includes a vector
+            - gene_MFX_rank: Multifunctionality rank for the gene
+            - taxon_name: Name of the species
+            - taxon_scientific: Scientific name for the taxon
+            - taxon_ID: Internal identifier given to the species by Gemma
+            - taxon_NCBI: NCBI ID of the taxon
+            - taxon_database_name: Underlying database used in Gemma for the taxon
+            - taxon_database_ID: ID of the underlying database used in Gemma for the taxon
+        :rtype: DataFrame
+
+        """
+
+        kwargs = vs.remove_nones(offset=offset,
+                                 limit=limit)
+
+        response = self.raw.get_platform_element_genes(platform, probe,
+                                                       **kwargs)
         df = ps.process_genes(response.data)
         ps.attach_attributes(df, response.to_dict())
         return df
+
     # platforms/{platform}/elements ----
     # unimplemented
-    # reduntant with annotation files
+    # redundant with annotation files
 
     # platforms get_platforms -----
     # unimplemented in R but easier to keep things separate here
     def get_platforms(self,
-                      filter:str = None,
-                      taxa:List[str] = None,
-                      offset:int=0,
-                      limit:int = 20,
-                      sort:str="+id",
-                      **kwargs)->DataFrame:
+                      filter: str = "",
+                      taxa: List[str] = None,
+                      offset: int = 0,
+                      limit: int = 20,
+                      sort: str = "+id") -> DataFrame:
         """
         Retrieve all platforms
-        
-        :param filter: Filter results by matching expression. Use 
+
+        :param filter: Filter results by matching expression. Use
           filter_properties function to get a list of all available parameters.
-          These properties can be combined using "and" "or" clauses and may 
-          contain common operators such as "=", "<" or "in". (e.g. 
-          "taxon.commonName = human", "taxon.commonName in (human,mouse), 
-          "id < 1000"), defaults to None
+          These properties can be combined using "and" "or" clauses and may
+          contain common operators such as "=", "<" or "in". (e.g.
+          "taxon.commonName = human", "taxon.commonName in (human,mouse),
+          "id < 1000"). Defaults to None
         :type filter: str, optional
-        :param taxa: A list of taxon common names (e.g. human, mouse, rat). 
-          Providing multiple species will return results for all species. These 
-          are appended to the filter and equivalent to filtering for 
-          taxon.commonName property, defaults to None
+        :param taxa: A list of taxon common names (e.g. human, mouse, rat).
+          Providing multiple species will return results for all species. These
+          are appended to the filter and equivalent to filtering for
+          taxon.commonName property. Defaults to None
         :type taxa: List[str], optional
         :param offset: The offset of the first retrieved result., defaults to 0
         :type offset: int, optional
         :param limit: Limits the result to specified amount of objects.
-          Has a maximum value of 100. Use together with offset and the 
+          Has a maximum value of 100. Use together with offset and the
           total_elements attribute in the output to compile all data if needed.
           Alternatively get_all_pages function can be used with all functions
           including offset and limit parameters, defaults to 20
@@ -1098,16 +1060,15 @@ class GemmaPy(object):
           sign indicate ascending order whereas the '-' indicate descending,
           defaults to "+id"
         :type sort: str, optional
-        :param **kwargs: Additional arguments to raw.get_platforms_by_ids
         :return: A DataFrame with information about the platform(s).
-        
+
           The fields of the output DataFrame are:
 
             - platform_ID: Internal identifier of the platform
             - platform_short_name: Shortname of the platform.
             - platform_name: Full name of the platform.
             - platform_description: Free text description of the platform
-            - platform_troubled: Whether or not the platform was marked "troubled" by a Gemma process or a curator
+            - platform_troubled: Whether the platform was marked "troubled" by a Gemma process or a curator
             - platform_experiment_count: Number of experiments using the platform within Gemma
             - platform_type: Technology type for the platform.
             - taxon_name: Name of the species platform was made for
@@ -1115,56 +1076,52 @@ class GemmaPy(object):
             - taxon_ID: Internal identifier given to the species by Gemma
             - taxon_NCBI: NCBI ID of the taxon
             - taxon_database_name: Underlying database used in Gemma for the taxon
-            - taxon_database_ID: ID of the underyling database used in Gemma for the taxon
+            - taxon_database_ID: ID of the underlying database used in Gemma for the taxon
         :rtype: DataFrame
 
         """
-        
-        filter = vs.add_to_filter(filter,"taxon.commonName",taxa)
-        
-        kwargs = vs.remove_nones(filter = filter,
-                                 offset = offset,
-                                 limit = limit,
-                                 sort = sort,
-                                 **kwargs)
-        
-        response =  self.raw.get_platforms(**kwargs)
+
+        filter = vs.add_to_filter(filter, "taxon.commonName", taxa)
+
+        kwargs = vs.remove_nones(filter=filter,
+                                 offset=offset,
+                                 limit=limit,
+                                 sort=sort)
+
+        response = self.raw.get_platforms(**kwargs)
         df = ps.process_platforms(response.data)
         ps.attach_attributes(df, response.to_dict())
         return df
 
-    # platforms/{platform}, get_platforms_by_ids ---- 
-    def get_platforms_by_ids(self, platforms:List[str|int], 
-                             filter:str = None,
-                             taxa:List[str] = None,
-                             offset:int=0,
-                             limit:int = 20,
-                             sort:str="+id",
-                             **kwargs)->DataFrame:
-   
-        
-        
+    # platforms/{platform}, get_platforms_by_ids ----
+    def get_platforms_by_ids(self, platforms: List[PlatformId],
+                             filter: str = "",
+                             taxa: List[str] = None,
+                             offset: int = 0,
+                             limit: int = 20,
+                             sort: str = "+id") -> DataFrame:
+
         """Retrieve platforms by their identifiers
 
-        
+
         :param platforms: Platform numerical identifiers or platform short names.
-        :type platforms: List[str|int]
-        :param filter: Filter results by matching expression. Use 
+        :type platforms: List[Platform]
+        :param filter: Filter results by matching expression. Use
           filter_properties function to get a list of all available parameters.
-          These properties can be combined using "and" "or" clauses and may 
-          contain common operators such as "=", "<" or "in". (e.g. 
-          "taxon.commonName = human", "taxon.commonName in (human,mouse), 
-          "id < 1000"), defaults to None
+          These properties can be combined using "and" "or" clauses and may
+          contain common operators such as "=", "<" or "in". (e.g.
+          "taxon.commonName = human", "taxon.commonName in (human,mouse),
+          "id < 1000"). Defaults to None
         :type filter: str, optional
-        :param taxa: A list of taxon common names (e.g. human, mouse, rat). 
-          Providing multiple species will return results for all species. These 
-          are appended to the filter and equivalent to filtering for 
-          taxon.commonName property, defaults to None
+        :param taxa: A list of taxon common names (e.g. human, mouse, rat).
+          Providing multiple species will return results for all species. These
+          are appended to the filter and equivalent to filtering for
+          taxon.commonName property. Defaults to None
         :type taxa: List[str], optional
         :param offset: The offset of the first retrieved result., defaults to 0
         :type offset: int, optional
         :param limit: Limits the result to specified amount of objects.
-          Has a maximum value of 100. Use together with offset and the 
+          Has a maximum value of 100. Use together with offset and the
           total_elements attribute in the output to compile all data if needed.
           Alternatively get_all_pages function can be used with all functions
           including offset and limit parameters, defaults to 20
@@ -1173,16 +1130,15 @@ class GemmaPy(object):
           sign indicate ascending order whereas the '-' indicate descending,
           defaults to "+id"
         :type sort: str, optional
-        :param **kwargs: Additional arguments to raw.get_platforms_by_ids
         :return: A DataFrame with information about the platform(s).
-        
+
           The fields of the output DataFrame are:
 
             - platform_ID: Internal identifier of the platform
             - platform_short_name: Shortname of the platform.
             - platform_name: Full name of the platform.
             - platform_description: Free text description of the platform
-            - platform_troubled: Whether or not the platform was marked "troubled" by a Gemma process or a curator
+            - platform_troubled: Whether the platform was marked "troubled" by a Gemma process or a curator
             - platform_experiment_count: Number of experiments using the platform within Gemma
             - platform_type: Technology type for the platform.
             - taxon_name: Name of the species platform was made for
@@ -1190,51 +1146,48 @@ class GemmaPy(object):
             - taxon_ID: Internal identifier given to the species by Gemma
             - taxon_NCBI: NCBI ID of the taxon
             - taxon_database_name: Underlying database used in Gemma for the taxon
-            - taxon_database_ID: ID of the underyling database used in Gemma for the taxon
+            - taxon_database_ID: ID of the underlying database used in Gemma for the taxon
         :rtype: DataFrame
 
         """
-        filter = vs.add_to_filter(filter,"taxon.commonName",taxa)
+        filter = vs.add_to_filter(filter, "taxon.commonName", taxa)
         filter = vs.compress_arg(filter)
-        kwargs = vs.remove_nones(filter = filter,
-                                 offset = offset,
-                                 limit = limit,
-                                 sort = sort,
-                                 **kwargs)
-        
-        response =  self.raw.get_platforms_by_ids(platforms, **kwargs)
+        kwargs = vs.remove_nones(filter=filter,
+                                 offset=offset,
+                                 limit=limit,
+                                 sort=sort)
+
+        response = self.raw.get_platforms_by_ids(platforms, **kwargs)
         df = ps.process_platforms(response.data)
         ps.attach_attributes(df, response.to_dict())
         return df
-    
-    
-    # search search ------
-    # this enpdoint is not very useful when specific endpoints exist for specific
-    # result types. keeping here for now for compatibility with R
-    
-    def search_gemma(self,
-                     query:str,
-                     taxon:Optional[str|int]=None,
-                     platform:Optional[str|int] = None,
-                     limit:int = 100,
-                     result_type:str = "experiment",
-                     **kwargs)->list[sdk.SearchResultValueObjectObject]:
 
-        
+    # search search ------
+    # this endpoint is not very useful when specific endpoints exist for specific
+    # result types. keeping here for now for compatibility with R
+
+    def search_gemma(self,
+                     query: str,
+                     taxon: Optional[TaxonId] = None,
+                     platform: Optional[PlatformId] = None,
+                     limit: int = 100,
+                     result_type: str = "experiment") -> list[
+        sdk.SearchResultValueObjectObject]:
+
         """
         Search everything in Gemma
-        
-        :param query: The search query. Either plain text ('traumatic'), or an 
+
+        :param query: The search query. Either plain text ('traumatic'), or an
           ontology term URI ('http://purl.obolibrary.org/obo/UBERON_0002048').
           Datasets that contain the given string in their short of full name
           will also be matched. Can be multiple identifiers separated by commas.
         :type query: str
-        :param taxon: A numerical taxon identifier or an ncbi taxon identifier
+        :param taxon: A numerical taxon identifier or an NCBI taxon identifier
           or a taxon identifier that matches either its scientific or common
-          name, defaults to None
+          name. Defaults to None
         :type taxon: Optional[str|int], optional
-        :param platform: A platform numerical identifier or a platform short 
-          name, defaults to None
+        :param platform: A platform numerical identifier or a platform short
+          name. Defaults to None
         :type platform: Optional[str|int], optional
         :param limit: Defaults to 100 with a maximum value of 2000. Limits the
           number of returned results. Note that this function does not support
@@ -1244,61 +1197,54 @@ class GemmaPy(object):
           output. Can be "experiment", "gene", "platform" or a long object type name,
           documented in the API documentation., defaults to "experiment"
         :type result_type: str, optional
-        :param **kwargs: Additional arguments to raw.search
-        :return: A list containing the results. Actual results are under the 
+        :return: A list containing the results. Actual results are under the
           result_object component as dicts
         :rtype: list[sdk.SearchResultValueObjectObject]
 
         """
-        
+
         result_type = vs.check_result_type(result_type)
-        
-        kwargs = vs.remove_nones(query =query,
-                                 taxon = taxon,
-                                 platform = platform,
-                                 limit = limit,
-                                 result_types = [result_type],
-                                 **kwargs)
-        
+
+        kwargs = vs.remove_nones(query=query,
+                                 taxon=taxon,
+                                 platform=platform,
+                                 limit=limit,
+                                 result_types=[result_type])
+
         response = self.raw.search(**kwargs)
         # df = ps.process_search(response.data,result_type)
-        
+
         return response.data
-    
+
     # taxa/{taxon}/genes/{gene}/locations----
     # unimplemented, redundant with get_gene_locations
 
     # taxa ----
-    def get_taxa(self, **kwargs)->DataFrame:
+    def get_taxa(self) -> DataFrame:
         """
         Get all taxa within Gemma
-        
-        :param **kwargs: Additional arguments to raw.get_taxa
+
         :return: A DataFrame including the names, IDs and database information
           about the taxons
         :rtype: DataFrame
 
         """
-        
-        response =  self.raw.get_taxa(**kwargs)
-        
+
+        response = self.raw.get_taxa()
+
         df = ps.process_taxon(response.data)
         return df[df.isnull().taxon_name != True]
-        
-        
-    
+
     # taxa/{taxa}, get_taxa_by_ids -----
-    # implemented, hardly needed with 3 taxa  
+    # implemented, hardly needed with 3 taxa
 
-
-
-# Below are "Convenience" (combination) functions
+    # Below are "Convenience" (combination) functions
 
     # set_gemma_user is not needed since it's wrapped in the GemmaPy class
     # get_platform_annotations is the default get_platform_annotations
-    
 
-    def make_design(self,samples:DataFrame,meta_type:str = 'text')->DataFrame:
+    @staticmethod
+    def make_design(samples: DataFrame, meta_type: str = 'text') -> DataFrame:
         """
         Using on the output of get_dataset_samples, this function creates a
         simplified design table, granting one column to each experimental variable
@@ -1313,408 +1259,419 @@ class GemmaPy(object):
         :rtype: DataFrame
 
         """
-        
-        categories = pd.concat([x[["factor_ID","factor_category","factor_category_URI"]] 
-                                for x in samples.sample_factor_values],
-                  ignore_index = True).drop_duplicates()
-        
-        
+
+        categories = pd.concat(
+            [x[["factor_ID", "factor_category", "factor_category_URI"]]
+             for x in samples.sample_factor_values],
+            ignore_index=True).drop_duplicates()
+
         def get_val_uri(x):
-            return [",".join([str(z) if z is not None else "" 
-                              for z in y[y.factor_ID==x].value_URI]) 
+            return [",".join([str(z) if z is not None else ""
+                              for z in y[y.factor_ID == x].value_URI])
                     for y in samples.sample_factor_values]
-        
+
         factor_URIs = [get_val_uri(x) for x in categories.factor_ID]
-        
+
         def get_text(x):
             def get_summary(y):
                 return ','.join([z[1].summary
-                                 if z[1].summary is not None else z[1].value 
-                                 for z in y[y.factor_ID==x].iterrows()])
-            
+                                 if z[1].summary is not None else z[1].value
+                                 for z in y[y.factor_ID == x].iterrows()])
+
             return [get_summary(y) for y in samples.sample_factor_values]
-            
-            
-        
+
         text = [get_text(x) for x in categories.factor_ID]
-        
-        
-        if meta_type =='text':
+
+        if meta_type == 'text':
             design_frame = pd.DataFrame({
-                categories.factor_category[i]:text[i] for i in range(len(text))
-                })
+                categories.factor_category[i]: text[i] for i in range(len(text))
+            })
         elif meta_type == 'uri':
             design_frame = pd.DataFrame({
-                categories.factor_category_URI[i]:factor_URIs[i] for i in range(len(factor_URIs))
-                })
-        elif meta_type =='both':
+                categories.factor_category_URI[i]: factor_URIs[i] for i in
+                range(len(factor_URIs))
+            })
+        elif meta_type == 'both':
             merged_name = [["|".join([categories.factor_category[i],
-                                      categories.factor_category_URI[i]])] for i in range(len(text))]
-            
-            merged_col = [["|".join([text[i][j],factor_URIs[i][j]]) 
-                           for j in range(len(text[i]))] for i in range(len(text))]
-            
-            
+                                      categories.factor_category_URI[i]])] for i
+                           in range(len(text))]
+
+            merged_col = [["|".join([text[i][j], factor_URIs[i][j]])
+                           for j in range(len(text[i]))] for i in
+                          range(len(text))]
+
             design_frame = pd.DataFrame({
-                merged_name[i]:merged_col[i]
+                merged_name[i]: merged_col[i]
                 for i in range(len(text))})
-            
-        design_frame.insert(loc = 0,column = "factor_values",
-                            value = samples.sample_factor_values)
+
+        else:
+            raise NotImplementedError('Unsupported meta type: ' + meta_type)
+
+        design_frame.insert(loc=0, column="factor_values",
+                            value=samples.sample_factor_values)
         design_frame.index = samples.sample_name
-        
+
         return design_frame
-        
-        
-    
-    def __subset_factor_values(self,
-                               factor_values,
-                               differential_expressions:pd.DataFrame,
+
+    @staticmethod
+    def __subset_factor_values(factor_values,
+                               differential_expressions: pd.DataFrame,
                                result_set,
                                contrast):
-        out = sub.rep(True,len(factor_values))
+        out = sub.rep(True, len(factor_values))
         if differential_expressions is not None:
-            subset = differential_expressions[differential_expressions.result_ID == 
-                                     result_set].subset_factor.drop_duplicates()
+            subset = differential_expressions[
+                differential_expressions.result_ID == result_set][
+                'subset_factor'].drop_duplicates()
             # result set should have the same subset for all contrasts
             assert len(subset) == 1
-            if subset[0].shape[0]!=0:
+            if subset[0].shape[0] != 0:
                 subset_ids = subset[0].ID
-                
-                in_subset = [any(sub.list_in_list(x.ID, subset_ids)) for x in factor_values]
-                
+
+                in_subset = [any(sub.list_in_list(x.ID, subset_ids)) for x in
+                             factor_values]
+
                 out = out and in_subset
-            
+
             if contrast is not None:
                 cn = differential_expressions[
-                    list(differential_expressions.result_ID == result_set) and 
+                    list(differential_expressions.result_ID == result_set) and
                     list(differential_expressions.contrast_ID == str(contrast))]
-                
-                baseline_id = list(sub.unique(sub.break_list([list(x.ID) for x in cn.baseline_factors])))
-                baseline_factor_id = list(sub.unique(sub.break_list([list(x.factor_ID) for x in cn.baseline_factors])))
-                
-                contrast_id =  list(sub.unique(sub.break_list([list(x.ID) for x in cn.experimental_factors])))
-                contrast_factor_id =  list(sub.unique(sub.break_list([list(x.factor_ID) for x in cn.experimental_factors])))
-                
-                contrast_id = sub.match_by(contrast_id,baseline_factor_id, contrast_factor_id)
-                
+
+                baseline_id = list(sub.unique(
+                    sub.break_list([list(x.ID) for x in cn.baseline_factors])))
+                baseline_factor_id = list(sub.unique(sub.break_list(
+                    [list(x.factor_ID) for x in cn.baseline_factors])))
+
+                contrast_id = list(sub.unique(sub.break_list(
+                    [list(x.ID) for x in cn.experimental_factors])))
+                contrast_factor_id = list(sub.unique(sub.break_list(
+                    [list(x.factor_ID) for x in cn.experimental_factors])))
+
+                contrast_id = sub.match_by(contrast_id, baseline_factor_id,
+                                           contrast_factor_id)
+
                 def in_con(factor_value):
-                    cond1 = all(sub.list_in_list(contrast_id, factor_value.ID)) or \
-                            all(sub.list_in_list(baseline_id,factor_value.ID))                   
-                    
-                    if len(contrast_id)==2:
-                        cond2 = (contrast_id[0] in factor_value.ID and \
-                                    baseline_id[1] in factor_value.ID) or \
-                            (contrast_id[1] in factor_value.ID and \
-                                       baseline_id[0] in factor_value.ID)
-                        
+                    cond1 = all(
+                        sub.list_in_list(contrast_id, factor_value.ID)) or \
+                            all(sub.list_in_list(baseline_id, factor_value.ID))
+
+                    if len(contrast_id) == 2:
+                        cond2 = (contrast_id[0] in factor_value.ID and
+                                 baseline_id[1] in factor_value.ID) or \
+                                (contrast_id[1] in factor_value.ID and
+                                 baseline_id[0] in factor_value.ID)
+
                         cond1 = cond1 or cond2
-                    
+
                     return cond1
-                        
+
                 in_contrast = [in_con(x) for x in factor_values]
-                
+
                 out = out and in_contrast
-        
+
         return out
-        
 
+    def get_dataset_object(self, datasets: List[DatasetId],
+                           genes: Optional[List[GeneId]] = None,
+                           keep_non_specific=False,
+                           consolidate: Optional[str] = None,
+                           result_sets: Optional[List[ResultSetId]] = None,
+                           contrasts: Optional[List[str]] = None,
+                           meta_type: str = 'text',
+                           output_type: str = 'anndata') -> \
+        Union[dict[str, AnnData], dict[str, dict[str, Optional[DataFrame]]]]:
 
-    def get_dataset_object(self, datasets:List[str|int],
-                           genes:Optional[List[str|int]] = None,
-                           keep_non_specific = False,
-                           consolidate:Optional[str] = None,
-                           result_sets:Optional[List[int]] = None,
-                           contrasts:Optional[List[str]] = None,
-                           meta_type:str = 'text',
-                           output_type:str = 'anndata',
-                           **kwargs)->dict[int:dict|AnnData]:
-        
         """Return a data structure including all relevant data related to
-        gene expression in a dataset. Either returns an anndata object or 
+        gene expression in a dataset. Either returns an anndata object or
         a dictionary with all the needed fields.
-        
-        
+
+
         :param datasets: Numerical dataset identifier
           dataset short names
-        :type datasets: List[str|int]
-        :param genes: An ncbi gene identifier an, 
-          ensembl gene identifier which typically starts with ensg or an 
-          official gene symbol approved by hgnc, defaults to None
-        :type genes: Optional[List[str|int]], optional
-        :param keep_non_specific: If True, results from 
+        :type datasets: List[Dataset]
+        :param genes: An NCBI gene identifier, an Ensembl gene identifier which
+        typically starts with ENSG (or ENSM) or an official gene symbol approved
+         by HGNC. Defaults to None.
+        :type genes: Optional[List[Gene]], optional
+        :param keep_non_specific: If True, results from
           probesets that are not specific to the gene will also be returned,
           defaults to False
         :type keep_non_specific: TYPE, optional
-        :param consolidate: DESCRIPTION, An option for gene expression level consolidation. 
-          If empty, will return every probe for the genes. "pickmax" to pick 
-          the probe with the highest expression, "pickvar" to pick the prove 
-          with the highest variance and "average" for returning the average 
+        :param consolidate: An option for gene expression level consolidation.
+          If empty, will return every probe for the genes. "pickmax" to pick
+          the probe with the highest expression, "pickvar" to pick the probe
+          with the highest variance and "average" for returning the average
           expression to None
         :type consolidate: Optional[str], optional
-        :param result_sets: Result set IDs of the a 
-          differential expression analysis. If provided, the output will only 
-          include the samples from the subset used in the result set ID. Must 
-          be the same length as datasets, defaults to None
+        :param result_sets: Result set IDs of the differential expression
+          analysis. If provided, the output will only include the samples from
+          the subset used in the result set ID. Must be the same length as
+          datasets. Defaults to None
         :type result_sets: Optional[List[int]], optional
-        :param contrasts: Contrast IDs of a differential 
-          expression contrast. Need result_sets to be defined to work. If 
+        :param contrasts: Contrast IDs of a differential
+          expression contrast. Need result_sets to be defined to work. If
           provided, the output will only include samples relevant to the '
           specific contrats. Must be the same length as datasets.
-        :param str meta_type: How should the metadata information should be 
-          included. Can be "text", "uri" or "both". "text" and "uri" options, defaults to None
+        :param str meta_type: How should the metadata information should be
+          included. Can be "text", "uri" or "both". "text" and "uri" options. Defaults to None
         :type contrasts: Optional[List[str]], optional
-        :param meta_type: How should the metadata information should be 
+        :param meta_type: How should the metadata information should be
           included. Can be "text", "uri" or "both". "text" and "uri" options, defaults to 'text'
         :type meta_type: str, optional
-        :param output_type: Type of the returned object. "anndata" for an 
+        :param output_type: Type of the returned object. "anndata" for an
           AnnData object and "dict" for a dictionary populated with DataFrames,
           defaults to 'anndata'
         :type output_type: str, optional
-        :param **kwargs: DESCRIPTION
-        :type **kwargs: TYPE
-        :raises ValueError: DESCRIPTION
+        :raises ValueError: If the requested output type or meta type is not
+          among the possible values.
         :return: A dictionary containing AnnData objects or nested dictionaries
           that contain expression and sample metada of the requested experiments
-        :rtype: dict[int:dict|AnnData]
+        :rtype: dict[int,Union[dict,AnnData]]
 
         """
-        
 
-        
-        
-
-        
-        if output_type not in ["anndata","tidy","dict"]:
+        if output_type not in ["anndata", "tidy", "dict"]:
             raise ValueError('Please enter a valid output_type. anndata for'
                              '"anndata" objects, "tidy" for long form pandas'
                              'DataFrames, "dict" for dictionaries with separate'
                              'expression and metadata fields'
-                              )
-            
+                             )
+
         unique_sets = list(set(datasets))
-        
-        metadata = {k:self.get_dataset_samples(k) for k in unique_sets}
-        
-        
+
+        metadata = {k: self.get_dataset_samples(k) for k in unique_sets}
+
         if genes is None:
             def get_exp(dataset):
                 exp = self.get_dataset_processed_expression(dataset)
                 meta = metadata[dataset]
-                
+
                 if not keep_non_specific:
-                    exp = exp[~exp.GeneSymbol.str.contains("|",regex = False,na = True)]
-                
-                if consolidate is not None and consolidate =='pickmax':
-                    mean_exp = exp[meta.sample_name].mean(axis=1,skipna=True)
-                    exp = exp.iloc[list(sub.order(mean_exp,decreasing = True))]
+                    exp = exp[
+                        ~exp.GeneSymbol.str.contains("|", regex=False, na=True)]
+
+                if consolidate is not None and consolidate == 'pickmax':
+                    mean_exp = exp[meta.sample_name].mean(axis=1, skipna=True)
+                    exp = exp.iloc[list(sub.order(mean_exp, decreasing=True))]
                     exp = exp[~exp.duplicated('GeneSymbol')]
                 elif consolidate is not None and consolidate == 'pickvar':
-                    exp_var = exp[meta.sample_name].var(axis = 1, skipna= True)
-                    exp = exp.iloc[list(sub.order(exp_var,decreasing = True))]
+                    exp_var = exp[meta.sample_name].var(axis=1, skipna=True)
+                    exp = exp.iloc[list(sub.order(exp_var, decreasing=True))]
                     exp = exp[~exp.duplicated('GeneSymbol')]
                 elif consolidate is not None and consolidate == 'average':
                     dups = list(
                         set(list(
                             exp[exp.duplicated("GeneSymbol")]["GeneSymbol"]
-                            ))
-                        )
-                    
+                        ))
+                    )
+
                     def get_mean(dup):
                         dup_subset = exp[exp.GeneSymbol == dup]
-                        dup_mean =  exp[meta.sample_name].mean(axis = 0)
+                        dup_mean = exp[meta.sample_name].mean(axis=0)
                         probe = "Averaged from " + " ".join(dup_subset.Probe)
-                        
-                        gene_info = dup_subset.\
+
+                        gene_info = dup_subset. \
                             loc[:,
-                                np.array(~np.array(
-                                    sub.list_in_list(
-                                        dup_subset.columns,["Probe"] +\
-                                            list(meta.sample_name))))].iloc[0].\
-                                to_frame().T
-                        
+                        np.array(~np.array(
+                            sub.list_in_list(
+                                dup_subset.columns, ["Probe"] + \
+                                                    list(
+                                                        meta.sample_name))))].iloc[
+                            0]. \
+                            to_frame().T
+
                         probe = pd.DataFrame({
                             "Probe": [probe]})
                         data = dup_mean.to_frame().T
-                        return pd.concat([probe,gene_info.reset_index(drop = True),data],
-                                         axis = 1)
-                    
+                        return pd.concat(
+                            [probe, gene_info.reset_index(drop=True), data],
+                            axis=1)
+
                     dup_means = [get_mean(dup) for dup in dups]
-                    exp = pd.concat([exp[~exp.GeneSymbol.isin(dups)]] + dup_means, 
-                                    ignore_index = True)
+                    exp = pd.concat(
+                        [exp[~exp.GeneSymbol.isin(dups)]] + dup_means,
+                        ignore_index=True)
                 return exp
-            #get_exp
-            
-            expression = {k:get_exp(k) for k in unique_sets}
-            
+
+            # get_exp
+
+            expression = {k: get_exp(k) for k in unique_sets}
+
         else:
-            expression = self.\
+            expression = self. \
                 get_dataset_expression_for_genes(unique_sets,
-                                                 genes = genes,
-                                                 keep_non_specific = keep_non_specific,
-                                                 consolidate = consolidate)
-            expression = sub.make_dict(unique_sets,  list(expression.values()))
-                    
-        designs = {k:self.make_design(metadata[k]) for k in metadata.keys()}
+                                                 genes=genes,
+                                                 keep_non_specific=keep_non_specific,
+                                                 consolidate=consolidate)
+            expression = sub.make_dict(unique_sets, list(expression.values()))
+
+        designs = {k: self.make_design(metadata[k]) for k in metadata.keys()}
         dat = self.get_datasets_by_ids(unique_sets)
+
         def pack_data(i):
             dataset = datasets[i]
             packed_info = {
-                "design":designs[dataset].copy(),
+                "design": designs[dataset].copy(),
                 "exp": expression[dataset].copy(),
                 "dat": dat[(dat.experiment_ID == dataset) | \
-                           (dat.experiment_short_name == dataset)].copy().reset_index(),
+                           (
+                               dat.experiment_short_name == dataset)].copy().reset_index(),
                 "result_set": None,
                 "contrasts": None
-                }
-            # create unique probe ids. needed for rownames and merging
+            }
+            # create unique probe ids. needed for row names and merging
             # probe ids are usually unique but there are exceptions
-            
+
             unique_probes = packed_info['exp'].Probe
-            append = pd.Series(sub.rep(0,len(unique_probes)))
+            append = pd.Series(sub.rep(0, len(unique_probes)))
             dups = unique_probes.duplicated()
             while dups.any():
-                append[dups] = append[dups]+1
+                append[dups] = append[dups] + 1
                 dups = (unique_probes + append.astype('string')).duplicated()
-            
+
             append = append.astype('string')
-            append[append=='0'] = ""
+            append[append == '0'] = ""
             unique_probes = unique_probes + append
             packed_info['unique_probes'] = unique_probes
-            
-            
+
             if result_sets is not None:
                 packed_info['result_set'] = result_sets[i]
             if contrasts is not None:
                 packed_info['contrasts'] = contrasts[i]
-            # reordering to match expression/metadata no longer necesarry
-            
-            
-            if result_sets is not None:
-                diff = self.get_dataset_differential_expression_analyses(dataset)
+            # reordering to match expression/metadata no longer necessary
 
-                
-                gene_info = packed_info['exp'].\
-                    columns[[not x 
-                             for x in sub.list_in_list(packed_info['exp'].columns,
-                                                       packed_info['design'].index)]]
-                
+            if result_sets is not None:
+                diff = self.get_dataset_differential_expression_analyses(
+                    dataset)
+
+                gene_info = packed_info['exp']. \
+                    columns[[not x
+                             for x in
+                             sub.list_in_list(packed_info['exp'].columns,
+                                              packed_info['design'].index)]]
+
                 cons = None if contrasts is None else contrasts[i]
-                
-                relevant = self.__subset_factor_values(packed_info['design'].\
+
+                relevant = self.__subset_factor_values(packed_info['design']. \
                                                        factor_values,
                                                        diff,
                                                        result_sets[i],
                                                        cons)
                 packed_info['design'] = packed_info['design'][relevant]
-                packed_info['exp'] = packed_info['exp'][gene_info.append(packed_info['design'].index)]
-                
-                    
+                packed_info['exp'] = packed_info['exp'][
+                    gene_info.append(packed_info['design'].index)]
+
             return packed_info
-        
-        
-        
+
         # packed_data = [pack_data(i) for i in range(len(datasets))]
         packed_data = [pack_data(i) for i in range(len(datasets))]
         keys = [str(x['dat'].experiment_ID[0]) for x in packed_data]
 
         if result_sets is not None:
-            keys = [keys[i] + "_" + str(result_sets[i]) for i in range(len(datasets))]
+            keys = [keys[i] + "_" + str(result_sets[i]) for i in
+                    range(len(datasets))]
             if contrasts is not None:
-                keys = [keys[i] + "_" + str(contrasts[i]) for i in range(len(datasets))] 
-        
-        packed_data = {keys[i]:packed_data[i] for i in range(len(datasets))}
-        
-        
-        
+                keys = [keys[i] + "_" + str(contrasts[i]) for i in
+                        range(len(datasets))]
+
+        packed_data = {keys[i]: packed_data[i] for i in range(len(datasets))}
+
         if output_type == 'anndata':
             def make_anndata(pack):
                 pack['exp'].index = pack['unique_probes']
-                try: 
+                try:
                     gene_data = pack['exp'][['GeneSymbol', 'NCBIid']]
                 except KeyError:
-                    warnings.warn("WARNING: One or more gene descriptions are missing in Expression table")
+                    warnings.warn(
+                        "WARNING: One or more gene descriptions are missing in Expression table")
                     gene_data = None
-                
+
                 mda = {
                     'title': pack['dat'].experiment_name[0],
                     'abstract': pack['dat'].experiment_description[0],
-                    'url': 'https://gemma.msl.ubc.ca/expressionExperiment/showExpressionExperiment.html?id='+ \
-                        str(pack['dat'].experiment_ID[0]),
+                    'url': 'https://gemma.msl.ubc.ca/expressionExperiment/showExpressionExperiment.html?id=' + \
+                           str(pack['dat'].experiment_ID[0]),
                     'database': pack['dat'].experiment_database[0],
-                    'accesion':  pack['dat'].experiment_accession[0],
-                    "GemmaQualityScore":  pack['dat'].geeq_q_score[0],
-                    "GemmaSuitabilityScore":  pack['dat'].geeq_s_score[0],
-                    "taxon":  pack['dat'].taxon_name[0]
-                    }
-                
+                    # TODO: remove this spelling mistake
+                    'accesion': pack['dat'].experiment_accession[0],
+                    'accession': pack['dat'].experiment_accession[0],
+                    "GemmaQualityScore": pack['dat'].geeq_q_score[0],
+                    "GemmaSuitabilityScore": pack['dat'].geeq_s_score[0],
+                    "taxon": pack['dat'].taxon_name[0]
+                }
+
                 exp = pack['exp'][pack['design'].index]
                 adata = ad.AnnData(exp)
                 if not (gene_data is None):
                     adata.obs = adata.obs.join(gene_data)
-                    
-                
+
                 adata.var = adata.var.join(pack['design'])
                 adata.uns = mda
                 return adata
-            # make_anndata
-            
-            out = {k:make_anndata(packed_data[k]) for k in packed_data.keys()}
-        elif output_type == 'dict':
-            out = packed_data
-        elif output_type == "tidy":
-            pass
-        return out
 
-    def get_differential_expression_values(self, 
-                                           dataset:Optional[str|int] = None,
-                                           keep_non_specific:bool = False,
-                                           result_sets:Optional[List[str|int]] = None,
-                                           readable_contrasts:bool = False, 
-                                           **kwargs)->List[DataFrame]:
+            # make_anndata
+
+            return {k: make_anndata(packed_data[k]) for k in packed_data.keys()}
+        elif output_type == 'dict':
+            return packed_data
+        elif output_type == "tidy":
+            raise NotImplementedError
+        else:
+            raise NotImplementedError
+
+    def get_differential_expression_values(self,
+                                           dataset: Optional[DatasetId] = None,
+                                           keep_non_specific: bool = False,
+                                           result_sets: Optional[
+                                               List[ResultSetId]] = None,
+                                           readable_contrasts: bool = False) -> \
+        dict[
+            ResultSetId, DataFrame]:
         """
         Retrieves the differential expression resultSet(s) associated with the dataset.
         If there is more than one resultSet, use get_result_sets() to see the options
         and get the ID you want. Alternatively, you can query the resultSet directly
         if you know its ID beforehand.
-        
-        In Gemma each result set corresponds to the estimated effects 
-        associated with a single factor in the design, and each can have 
-        multiple contrasts (for each level compared to baseline). Thus a 
-        dataset with a 2x3 factorial design will have two result sets, one of 
+
+        In Gemma each result set corresponds to the estimated effects
+        associated with a single factor in the design, and each can have
+        multiple contrasts (for each level compared to baseline). Thus, a
+        dataset with a 2x3 factorial design will have two result sets, one of
         which will have one contrast, and one having two contrasts.
-        
-        The methodology for differential expression is explained in `Curation 
+
+        The methodology for differential expression is explained in `Curation
         of over 10000 transcriptomic studies to enable data reuse <https://doi.org/10.1093/database/baab006>`_.
         Briefly, differential expression analysis is performed on the dataset
         based on the annotated experimental design with up two three potentially
         nested factors. Gemma attempts to automatically assign baseline conditions
-        for each factor. In the absence of a clear control condition, a baseline 
+        for each factor. In the absence of a clear control condition, a baseline
         is arbitrarily selected. A generalized linear model with empirical Bayes
-        shrinkage of t-statistics is fit to the data for each platform element 
-        (probe/gene) using an implementation of the limma algorithm. For 
+        shrinkage of t-statistics is fit to the data for each platform element
+        (probe/gene) using an implementation of the limma algorithm. For
         RNA-seq data, we use weighted regression, applying the voom algorithm
-        to compute weights from the mean–variance relationship of the data. 
-        Contrasts of each condition are then computed compared to the selected 
+        to compute weights from the mean–variance relationship of the data.
+        Contrasts of each condition are then computed compared to the selected
         baseline. In some situations, Gemma will split the data into subsets for
-        analysis. A typical such situation is when a ‘batch’ factor is present 
+        analysis. A typical such situation is when a ‘batch’ factor is present
         and confounded with another factor, the subsets being determined by the
         levels of the confounding factor.
-        
-        
-        :param dataset: A dataset identifier, defaults to None
-        :type dataset: Optional[str|int], optional
+
+
+        :param dataset: A dataset identifier. Defaults to None
+        :type dataset: Optional[Dataset], optional
+        :param keep_non_specific: Keep non-specific probes in the results (i.e.
+          probes that are mapping to more than one gene). These are excluded by
+          default because they are highly unreliable.
         :param result_sets: result set identifiers. If a dataset
           is not provided, all result sets will be downloaded. If it is provided
-          it will only be used to ensure all result sets belong to the dataset, defaults to None
-        :type result_sets: Optional[List[str|int]], optional
+          it will only be used to ensure all result sets belong to the dataset. Defaults to None
+        :type result_sets: Optional[List[ResultSet]], optional
         :param readable_contrasts: If False (default), the returned columns
-          will use internal constrasts IDs as names. Details about the contrasts can be
+          will use internal contrast IDs as names. Details about the contrasts can be
           accessed using get_dataset_differential_expression_analyses(). If True IDs
-          will be replaced with human readable contrast information, defaults to False
+          will be replaced with human-readable contrast information, defaults to False
         :type readable_contrasts: bool, optional
-        :param **kwargs: 
-        :type **kwargs: TYPE
         :raises ValueError: Will return a value error if neither result_sets nor a dataset
           is provided
         :return: A list of data frames with differential expression values per result set.
@@ -1722,134 +1679,156 @@ class GemmaPy(object):
 
         """
         if dataset is not None and result_sets is not None:
-            diffs =  self.get_dataset_differential_expression_analyses(dataset)
+            diffs = self.get_dataset_differential_expression_analyses(dataset)
             rss = diffs.result_ID
             if not all(sub.list_in_list(result_sets, rss)):
-                warnings.warn('The queried resultSet is not derived from this dataset. ' 
-                              'Check the available resultSets with "get_result_sets()" '
-                              'or query without the dataset parameter.')
-                return
+                warnings.warn(
+                    'The queried resultSet is not derived from this dataset. '
+                    'Check the available resultSets with "get_result_sets()" '
+                    'or query without the dataset parameter.')
+                return {}
         elif dataset is not None and result_sets is None:
-            diffs =  self.get_dataset_differential_expression_analyses(dataset)
+            diffs = self.get_dataset_differential_expression_analyses(dataset)
             result_sets = diffs.result_ID.unique()
         elif dataset is None and result_sets is None:
             raise ValueError('You must specify a dataset or result_sets')
-            
+
         rss = {}
         if readable_contrasts:
-            all_factors =  self.get_result_sets(result_sets = result_sets)
-        
+            all_factors = self.get_result_sets(result_sets=result_sets)
+        else:
+            all_factors = None
+
         for rs in result_sets:
             df = self.__get_result_set(rs)
-            
+
             if not keep_non_specific:
-                df = df[~df.GeneSymbol.str.contains("|",regex = False,na = True)]
-            
+                df = df[~df.GeneSymbol.str.contains("|", regex=False, na=True)]
+
             if readable_contrasts:
                 factors = pd.concat(
-                    list(all_factors[all_factors.result_ID == rs].experimental_factors)
-                    ).drop_duplicates()
-                cols = [s.replace('log2fc','logFoldChange') for s in df.columns]
+                    list(all_factors[
+                             all_factors.result_ID == rs].experimental_factors)
+                ).drop_duplicates()
+                cols = [s.replace('log2fc', 'logFoldChange') for s in
+                        df.columns]
                 for i in range(factors.shape[0]):
-                    cols = [s.replace(str(list(factors.ID)[i]),list(factors.summary)[i]) for s in cols]
+                    cols = [s.replace(str(list(factors.ID)[i]),
+                                      list(factors.summary)[i]) for s in cols]
                 df.columns = cols
             rss[rs] = df
         return rss
-            
 
     # get_taxa is moved to base. only removes the nameless rat now
 
-    # gemma_call unimplemented, not needed    
+    # gemma_call unimplemented, not needed
 
-    def get_all_pages(self,fun:Callable,step_size:int = 100,**kwargs)->list|DataFrame:
+    @staticmethod
+    def get_all_pages(fun: Callable, step_size: int = 100) -> \
+        Union[list, DataFrame]:
         """
         A convenience function to allow easy iteration over paginated outputs.
         If the function returns a DataFrame output will be merged by the rows,
-        if the function returns a list (eg. 'raw' functions) a concatanated list
+        if the function returns a list (e.g. 'raw' functions) a concatenated list
         will be returned
-        
-        
+
+
         :param fun: A callable from gemmapy with offset and limit
           functions
         :type fun: Callable
-        :param step_size: Size of individual calls to the server. 100 is 
+        :param step_size: Size of individual calls to the server. 100 is
           the maximum value and the default.
         :type step_size: int, optional
-        :param **kwargs: arguments for the callable fun
-        :return: A DataFrame or a list containing all the output depending on 
+        :return: A DataFrame or a list containing all the output depending on
           output of the callable
         :rtype: list|DataFrame
         """
 
-        out = []        
-        poke_call = fun(limit =1,**kwargs)
-        
-        if type(poke_call) == pd.core.frame.DataFrame:
+        out = []
+        poke_call = fun(limit=1)
+
+        if isinstance(poke_call, pd.DataFrame):
             count = poke_call.attributes["total_elements"]
         else:
             count = poke_call.total_elements
-        
-        for i in range(0,count,step_size):
-            out.append(fun(limit = step_size,offset = i,**kwargs))
-        
-        if type(poke_call) == pd.core.frame.DataFrame:
-            return pd.concat(out,ignore_index = True)
+
+        for i in range(0, count, step_size):
+            out.append(fun(limit=step_size, offset=i))
+
+        if isinstance(poke_call, pd.DataFrame):
+            return pd.concat(out, ignore_index=True)
         else:
             return sub.break_list([x.data for x in out])
-        
 
-    
-    def filter_properties(self, output_type:str = 'DataFrame')->dict|DataFrame:
+    def filter_properties(self, output_type: str = 'DataFrame') -> Optional[
+        Union[dict[str, dict[Any, dict[str, Any]]], dict[str, DataFrame]]]:
         """
         Some functions such as get_datasets and get_platforms include a filter
-        argument that allows creation of more complex queries. This function 
+        argument that allows creation of more complex queries. This function
         returns a list of supported properties to be used in those filters
-        
+
         :param output_type: Type to return. "DataFrame" or "dict", defaults to 'DataFrame'
         :type output_type: str, optional
         :return: DataFrame or dict containing supported properties and their data types
         :rtype: dict|DataFrame
 
         """
-        
-        d = self.raw.api_client.rest_client.GET("https://gemma.msl.ubc.ca/rest/v2/openapi.json").urllib3_response
+
+        d = self.raw.api_client.rest_client.GET(
+            "https://gemma.msl.ubc.ca/rest/v2/openapi.json").urllib3_response
         api_file = json.loads(d.data)
-        
-        dataset_filter = api_file["components"]["schemas"]["FilterArgExpressionExperiment"]["x-gemma-filterable-properties"]
-        
-        platform_filter = api_file["components"]["schemas"]["FilterArgArrayDesign"]["x-gemma-filterable-properties"]
-        
-        result_set_filter = api_file["components"]["schemas"]["FilterArgExpressionAnalysisResultSet"]["x-gemma-filterable-properties"]
-        
+
+        dataset_filter = \
+            api_file["components"]["schemas"]["FilterArgExpressionExperiment"][
+                "x-gemma-filterable-properties"]
+
+        platform_filter = \
+            api_file["components"]["schemas"]["FilterArgArrayDesign"][
+                "x-gemma-filterable-properties"]
+
+        result_set_filter = api_file["components"]["schemas"][
+            "FilterArgExpressionAnalysisResultSet"][
+            "x-gemma-filterable-properties"]
+
         if output_type == 'DataFrame':
             return {
-                "dataset":pd.DataFrame({
-                    "name": sub.field_in_list(dataset_filter,'name'),
-                    "type": sub.field_in_list(dataset_filter,'type'),
-                    "description": sub.field_in_list(dataset_filter,'description')
-                    }),
-                "platform":pd.DataFrame({
-                    "name": sub.field_in_list(platform_filter,'name'),
-                    "type": sub.field_in_list(platform_filter,'type'),
-                    "description": sub.field_in_list(platform_filter,'description')
-                    }),
-                "result_set":pd.DataFrame({
-                    "name": sub.field_in_list(result_set_filter,'name'),
-                    "type": sub.field_in_list(result_set_filter,'type'),
-                    "description": sub.field_in_list(result_set_filter,'description')
-                    })
-                }
+                "dataset": pd.DataFrame({
+                    "name": sub.field_in_list(dataset_filter, 'name'),
+                    "type": sub.field_in_list(dataset_filter, 'type'),
+                    "description": sub.field_in_list(dataset_filter,
+                                                     'description')
+                }),
+                "platform": pd.DataFrame({
+                    "name": sub.field_in_list(platform_filter, 'name'),
+                    "type": sub.field_in_list(platform_filter, 'type'),
+                    "description": sub.field_in_list(platform_filter,
+                                                     'description')
+                }),
+                "result_set": pd.DataFrame({
+                    "name": sub.field_in_list(result_set_filter, 'name'),
+                    "type": sub.field_in_list(result_set_filter, 'type'),
+                    "description": sub.field_in_list(result_set_filter,
+                                                     'description')
+                })
+            }
         elif output_type == 'dict':
             return {
-                "dataset": {x['name']:{"type":x['type'],
-                                              "description":sub.access_field(x,'description',None)} for x in dataset_filter},
-                'platform':{x['name']:{"type":x['type'],
-                                              "description":sub.access_field(x,'description',None)} for x in platform_filter},
-                'result_set':{x['name']:{"type":x['type'],
-                                              "description":sub.access_field(x,'description',None)} for x in result_set_filter}
-                
-                }
-            
-        
-    
+                "dataset": {x['name']: {"type": x['type'],
+                                        "description": sub.access_field(x,
+                                                                        'description',
+                                                                        None)}
+                            for x in dataset_filter},
+                'platform': {x['name']: {"type": x['type'],
+                                         "description": sub.access_field(x,
+                                                                         'description',
+                                                                         None)}
+                             for x in platform_filter},
+                'result_set': {x['name']: {"type": x['type'],
+                                           "description": sub.access_field(x,
+                                                                           'description',
+                                                                           None)}
+                               for x in result_set_filter}
 
+            }
+        else:
+            raise NotImplementedError
