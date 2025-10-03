@@ -5,13 +5,16 @@ Created on Tue Mar  5 18:06:47 2024
 
 @author: omancarci
 """
-import pytest
-import gemmapy
-import pandas as pd
-from gemmapy import _subprocessors as sub
-import anndata as ad
+import os
 import time
 
+import anndata as ad
+import pandas as pd
+import pytest
+
+import gemmapy
+from gemmapy import _subprocessors as sub
+from gemmapy.gemmapy_api import GemmaPath
 
 api = gemmapy.GemmaPy()
 
@@ -20,6 +23,52 @@ def slow_down_tests():
     yield
     time.sleep(1)
 
+def test_path():
+    client = gemmapy.GemmaPy(path=GemmaPath.PROD)
+    assert client.raw.api_client.configuration.host == 'https://gemma.msl.ubc.ca/rest/v2'
+    client = gemmapy.GemmaPy(path=GemmaPath.DEV)
+    assert client.raw.api_client.configuration.host == 'https://dev.gemma.msl.ubc.ca/rest/v2'
+    client = gemmapy.GemmaPy(path=GemmaPath.STAGING)
+    assert client.raw.api_client.configuration.host == 'https://staging-gemma.msl.ubc.ca/rest/v2'
+    client = gemmapy.GemmaPy(path='dev')
+    assert client.raw.api_client.configuration.host == 'https://dev.gemma.msl.ubc.ca/rest/v2'
+    client = gemmapy.GemmaPy(path='https://example.com/rest/v2')
+    assert client.raw.api_client.configuration.host == 'https://example.com/rest/v2'
+
+def test_auth(monkeypatch):
+    monkeypatch.setitem(os.environ, 'GEMMA_USERNAME', '')
+    monkeypatch.setitem(os.environ, 'GEMMA_PASSWORD', '')
+    monkeypatch.setitem(os.environ, 'GEMMA_PASSWORD_CMD', '')
+
+    client = gemmapy.GemmaPy()
+    assert client.raw.api_client.configuration.username == ''
+    assert client.raw.api_client.configuration.password == ''
+
+    client = gemmapy.GemmaPy(auth=['foo', 'bar'])
+    assert client.raw.api_client.configuration.username == 'foo'
+    assert client.raw.api_client.configuration.password == 'bar'
+
+    with pytest.raises(OSError):
+        gemmapy.GemmaPy(auth=('username',))
+
+    monkeypatch.setitem(os.environ, 'GEMMA_USERNAME', 'foo')
+    monkeypatch.setitem(os.environ, 'GEMMA_PASSWORD', 'bar')
+    client = gemmapy.GemmaPy()
+    assert client.raw.api_client.configuration.username == 'foo'
+    assert client.raw.api_client.configuration.password == 'bar'
+
+    monkeypatch.setitem(os.environ, 'GEMMA_USERNAME', 'foo')
+    monkeypatch.setitem(os.environ, 'GEMMA_PASSWORD', '')
+    monkeypatch.setitem(os.environ, 'GEMMA_PASSWORD_CMD', 'echo 1234')
+    client = gemmapy.GemmaPy()
+    assert client.raw.api_client.configuration.username == 'foo'
+    assert client.raw.api_client.configuration.password == '1234'
+
+    with pytest.raises(OSError):
+        monkeypatch.setitem(os.environ, 'GEMMA_USERNAME', 'foo')
+        monkeypatch.setitem(os.environ, 'GEMMA_PASSWORD', '')
+        monkeypatch.setitem(os.environ, 'GEMMA_PASSWORD_CMD', '')
+        gemmapy.GemmaPy()
 
 def test_get_result_sets():
     res = api.get_result_sets([200])

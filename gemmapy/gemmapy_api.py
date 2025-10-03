@@ -2,50 +2,105 @@
 """
 Gemma python API (https://gemma.msl.ubc.ca/rest/v2/)
 """
-
-from gemmapy import sdk
-from gemmapy import _processors as ps
-from gemmapy import _validators as vs
-from gemmapy import _subprocessors as sub
-from typing import Optional, List, Callable
-from pandas import DataFrame
-import pandas as pd
-import numpy as np
-import anndata as ad
-from anndata import AnnData
-from io import StringIO
-import warnings
+import enum
 import json
+import logging
+import os
+import subprocess
+import warnings
+from getpass import getpass
+from io import StringIO
+from typing import Optional, List, Callable
 
+import anndata as ad
+import numpy as np
+import pandas as pd
+from anndata import AnnData
+from pandas import DataFrame
+
+from gemmapy import _processors as ps
+from gemmapy import _subprocessors as sub
+from gemmapy import _validators as vs
+from gemmapy import sdk
+
+logger = logging.getLogger(__name__)
+
+class GemmaPath(enum.Enum):
+    PROD = "prod"
+    DEV = "dev"
+    STAGING = "staging"
 
 class GemmaPy(object):
     """
     Main API class
     """
 
-    def __init__(self, auth:list|tuple=None, path="prod"):
+    def __init__(self, auth: Optional[list | tuple] = None,
+                 path: Optional[GemmaPath | str] = None):
         """
         :param list auth: (optional) A list or tuple of credential strings, e.g.
-          (your_username, your_password)
-        :param bool devel: (optional) If True development version of Gemma API will be
-          used. Default is False.
+         (your_username, your_password). Note that you may also define your Gemma
+         credentials using `GEMMA_USERNAME` and `GEMMA_PASSWORD` environment
+         variables. For a more secure approach, you can also provide a
+         `GEMMA_PASSWORD_CMD` variable that produces your password
+         (e.g. `pass gemma` using https://www.passwordstore.org/). If only a
+         username is supplied, a password prompt will be used.
+        :param str path: (optional) Override the path to use for the REST API.
+         You may use one of the enumerated values in GemmaPath or a string.
+         Three special values are recognized: "prod", "staging" and "dev",
+         although only "prod" is publicly accessible. The default is the value
+         from the OpenAPI specification used to generate the SDK, which is
+         usually equivalent to PROD.
         """
 
         configuration = sdk.Configuration()
-        if path == "prod":
-            pass
-            # configuration.host = 'https://gemma.msl.ubc.ca/rest/v2'
-        elif path == 'dev':
+        if path == GemmaPath.PROD or path == 'prod':
+            logger.debug("Using production endpoint.")
+            configuration.host = 'https://gemma.msl.ubc.ca/rest/v2'
+        elif path == GemmaPath.DEV or path == 'dev':
             configuration.host = 'https://dev.gemma.msl.ubc.ca/rest/v2'
-        elif path == 'staging':
+        elif path == GemmaPath.STAGING or path == 'staging':
             configuration.host = "https://staging-gemma.msl.ubc.ca/rest/v2"
-        else:
+        elif path is not None:
             configuration.host = path
-        
+        else:
+            # use the default configuration in the openapi.json file
+            pass
 
         if auth is not None:
+            if len(auth) != 1 and len(auth) != 2:
+                raise ValueError(
+                    'There must be exactly one or two values in the auth parameter.')
             configuration.username = auth[0]
-            configuration.password = auth[1]
+            if len(auth) == 2:
+                configuration.password = auth[1]
+            else:
+                configuration.password = getpass(
+                    f'Supply your password for {configuration.username}@{configuration.host}: ')
+        elif os.environ.get('GEMMA_USERNAME'):
+            logger.debug(
+                'Reading username for %s from $GEMMA_USERNAME.',
+                configuration.host)
+            configuration.username = os.getenv('GEMMA_USERNAME')
+            if os.getenv('GEMMA_PASSWORD'):
+                logger.debug("Reading password for %s@%s from $GEMMA_PASSWORD.",
+                             configuration.username, configuration.host)
+                configuration.password = os.getenv('GEMMA_PASSWORD')
+            elif os.getenv('GEMMA_PASSWORD_CMD'):
+                logger.debug(
+                    "Reading password for %s@%s from $GEMMA_PASSWORD_CMD (%s).",
+                    configuration.username, configuration.host,
+                    os.getenv('GEMMA_PASSWORD_CMD'))
+                password = subprocess.run(os.getenv('GEMMA_PASSWORD_CMD'),
+                                          shell=True, check=True,
+                                          stdout=subprocess.PIPE,
+                                          text=True).stdout
+                configuration.password = password.splitlines()[0]
+            else:
+                logger.debug(
+                    'Could not read GEMMA_PASSWORD nor GEMMA_PASSWORD_CMD from environment, the password will be prompted.')
+                configuration.password = getpass(
+                    f'Supply your password for {configuration.username}@{configuration.host}: ')
 
         # create an instance of the API class
         self.raw = sdk.DefaultApi(sdk.ApiClient(configuration))
