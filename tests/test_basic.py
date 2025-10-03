@@ -70,6 +70,18 @@ def test_auth(monkeypatch):
         monkeypatch.setitem(os.environ, 'GEMMA_PASSWORD_CMD', '')
         gemmapy.GemmaPy()
 
+def test_get_single_cell_data():
+    # TODO: use a publicly available dataset
+    client = gemmapy.GemmaPy()
+    ad = client.get_single_cell_dataset_object('GSE227313', download_dir='.')
+
+def test_get_genes():
+    assert len(api.get_genes('BRCA1')) > 0
+    assert len(api.get_genes(['BRCA1'])) > 0
+    assert len(api.get_genes(672)) > 0
+    assert len(api.get_genes([672])) > 0
+    assert len(api.get_genes([672, 'BRCA1'])) > 0
+
 def test_get_result_sets():
     res = api.get_result_sets([200])
     
