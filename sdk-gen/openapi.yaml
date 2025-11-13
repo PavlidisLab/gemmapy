@@ -14,7 +14,7 @@ info:
     name: Pavlidis Lab Support
     url: https://pavlab.msl.ubc.ca/
     email: pavlab-support@msl.ubc.ca
-  version: 2.9.1
+  version: 2.9.2
 servers:
 - url: https://gemma.msl.ubc.ca/rest/v2
 security:
@@ -654,6 +654,35 @@ paths:
               schema:
                 $ref: "#/components/schemas/ResponseErrorObject"
       deprecated: true
+  /datasets/{dataset}/publications:
+    get:
+      summary: Retrieve all publications associated with a dataset
+      operationId: getDatasetAllPublications
+      parameters:
+      - name: dataset
+        in: path
+        required: true
+        schema:
+          required:
+          - value
+          oneOf:
+          - type: integer
+            description: A numerical dataset identifier.
+            format: int64
+          - type: string
+            description: A dataset short name.
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseDataObjectListBibliographicReferenceValueObject"
+        "404":
+          description: The dataset does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseErrorObject"
   /datasets/{dataset}/annotations:
     get:
       summary: Retrieve the annotations of a dataset
@@ -3445,15 +3474,15 @@ paths:
           items:
             type: string
             enum:
-            - ubic.gemma.model.expression.designElement.CompositeSequence
-            - ubic.gemma.model.common.description.BibliographicReference
             - ubic.gemma.model.analysis.expression.ExpressionExperimentSet
-            - ubic.gemma.model.expression.arrayDesign.ArrayDesign
-            - ubic.gemma.model.expression.experiment.ExpressionExperiment
-            - ubic.gemma.model.genome.gene.GeneSet
             - ubic.gemma.model.genome.biosequence.BioSequence
-            - ubic.gemma.model.blacklist.BlacklistedEntity
+            - ubic.gemma.model.genome.gene.GeneSet
+            - ubic.gemma.model.expression.arrayDesign.ArrayDesign
             - ubic.gemma.model.genome.Gene
+            - ubic.gemma.model.common.description.BibliographicReference
+            - ubic.gemma.model.blacklist.BlacklistedEntity
+            - ubic.gemma.model.expression.experiment.ExpressionExperiment
+            - ubic.gemma.model.expression.designElement.CompositeSequence
       - name: limit
         in: query
         description: Maximum number of search results to return; capped at 2000 unless
@@ -3948,42 +3977,42 @@ components:
 
         Available properties:
 
-        - analysis.experimentAnalyzed.id `integer`
-        - analysis.experimentAnalyzed.name `string`
-        - analysis.id `integer`
-        - analysis.numberOfElementsAnalyzed `integer`
-        - analysis.resultSets.size `integer`
-        - analysis.subsetFactorValue.characteristics.category `string`
-        - analysis.subsetFactorValue.characteristics.categoryUri `string`
-        - analysis.subsetFactorValue.characteristics.evidenceCode `string` (possible values: IC, IDA, IEA, IEP, IGI, IMP, IPI, ISS, NAS, ND, RCA, TAS, NR, EXP, ISA, ISM, IGC, ISO, IIA, IBA, IBD, IKR, IRD, IMR, IED, IAGP, IPM, QTM, HDA, HEP, HGI, HMP, HTP, OTHER)
-        - analysis.subsetFactorValue.characteristics.id `integer`
-        - analysis.subsetFactorValue.characteristics.name `string`
-        - analysis.subsetFactorValue.characteristics.size `integer`
-        - analysis.subsetFactorValue.characteristics.value `string`
-        - analysis.subsetFactorValue.characteristics.valueUri `string`
-        - analysis.subsetFactorValue.id `integer`
-        - baselineGroup.characteristics.category `string`
-        - baselineGroup.characteristics.categoryUri `string`
-        - baselineGroup.characteristics.evidenceCode `string` (possible values: IC, IDA, IEA, IEP, IGI, IMP, IPI, ISS, NAS, ND, RCA, TAS, NR, EXP, ISA, ISM, IGC, ISO, IIA, IBA, IBD, IKR, IRD, IMR, IED, IAGP, IPM, QTM, HDA, HEP, HGI, HMP, HTP, OTHER)
-        - baselineGroup.characteristics.id `integer`
-        - baselineGroup.characteristics.name `string`
-        - baselineGroup.characteristics.size `integer`
-        - baselineGroup.characteristics.value `string`
-        - baselineGroup.characteristics.valueUri `string`
-        - baselineGroup.experimentalFactor.id `integer`
-        - baselineGroup.experimentalFactor.name `string`
-        - baselineGroup.experimentalFactor.type `string` (possible values: CONTINUOUS, CATEGORICAL)
-        - baselineGroup.id `integer`
-        - baselineGroup.measurement.id `integer`
-        - baselineGroup.measurement.kindCV `string` (possible values: TIME, DISTANCE, TEMPERATURE, QUANTITY, MASS, VOLUME, CONC, OTHER, COUNT)
-        - baselineGroup.measurement.otherKind `string`
-        - baselineGroup.measurement.representation `string` (possible values: FLOAT, DOUBLE, INT, LONG, CHAR, BOOLEAN, STRING)
-        - baselineGroup.measurement.type `string` (possible values: ABSOLUTE, CHANGE)
-        - baselineGroup.measurement.value `string`
+        - analysis\.experimentAnalyzed\.id `integer`
+        - analysis\.experimentAnalyzed\.name `string`
+        - analysis\.id `integer`
+        - analysis\.numberOfElementsAnalyzed `integer`
+        - analysis\.resultSets\.size `integer`
+        - analysis\.subsetFactorValue\.characteristics\.category `string`
+        - analysis\.subsetFactorValue\.characteristics\.categoryUri `string`
+        - analysis\.subsetFactorValue\.characteristics\.evidenceCode `string` \(possible values\: IC\, IDA\, IEA\, IEP\, IGI\, IMP\, IPI\, ISS\, NAS\, ND\, RCA\, TAS\, NR\, EXP\, ISA\, ISM\, IGC\, ISO\, IIA\, IBA\, IBD\, IKR\, IRD\, IMR\, IED\, IAGP\, IPM\, QTM\, HDA\, HEP\, HGI\, HMP\, HTP\, OTHER\)
+        - analysis\.subsetFactorValue\.characteristics\.id `integer`
+        - analysis\.subsetFactorValue\.characteristics\.name `string`
+        - analysis\.subsetFactorValue\.characteristics\.size `integer`
+        - analysis\.subsetFactorValue\.characteristics\.value `string`
+        - analysis\.subsetFactorValue\.characteristics\.valueUri `string`
+        - analysis\.subsetFactorValue\.id `integer`
+        - baselineGroup\.characteristics\.category `string`
+        - baselineGroup\.characteristics\.categoryUri `string`
+        - baselineGroup\.characteristics\.evidenceCode `string` \(possible values\: IC\, IDA\, IEA\, IEP\, IGI\, IMP\, IPI\, ISS\, NAS\, ND\, RCA\, TAS\, NR\, EXP\, ISA\, ISM\, IGC\, ISO\, IIA\, IBA\, IBD\, IKR\, IRD\, IMR\, IED\, IAGP\, IPM\, QTM\, HDA\, HEP\, HGI\, HMP\, HTP\, OTHER\)
+        - baselineGroup\.characteristics\.id `integer`
+        - baselineGroup\.characteristics\.name `string`
+        - baselineGroup\.characteristics\.size `integer`
+        - baselineGroup\.characteristics\.value `string`
+        - baselineGroup\.characteristics\.valueUri `string`
+        - baselineGroup\.experimentalFactor\.id `integer`
+        - baselineGroup\.experimentalFactor\.name `string`
+        - baselineGroup\.experimentalFactor\.type `string` \(possible values\: CONTINUOUS\, CATEGORICAL\)
+        - baselineGroup\.id `integer`
+        - baselineGroup\.measurement\.id `integer`
+        - baselineGroup\.measurement\.kindCV `string` \(possible values\: TIME\, DISTANCE\, TEMPERATURE\, QUANTITY\, MASS\, VOLUME\, CONC\, OTHER\, COUNT\)
+        - baselineGroup\.measurement\.otherKind `string`
+        - baselineGroup\.measurement\.representation `string` \(possible values\: FLOAT\, DOUBLE\, INT\, LONG\, CHAR\, BOOLEAN\, STRING\)
+        - baselineGroup\.measurement\.type `string` \(possible values\: ABSOLUTE\, CHANGE\)
+        - baselineGroup\.measurement\.value `string`
         - id `integer`
         - numberOfGenesTested `integer`
         - numberOfProbesTested `integer`
-        - results.size `integer`
+        - results\.size `integer`
       externalDocs:
         url: https://gemma.msl.ubc.ca/resources/apidocs/ubic/gemma/rest/util/args/FilterArg.html
       x-gemma-filterable-properties:
@@ -4332,15 +4361,15 @@ components:
         downregulatedCount:
           type: integer
           format: int32
+        qvalue:
+          type: number
+          format: double
         numberOfUpregulatedProbes:
           type: integer
           format: int32
         numberOfDownregulatedProbes:
           type: integer
           format: int32
-        qvalue:
-          type: number
-          format: double
     DifferentialExpressionAnalysisResultSetValueObject:
       type: object
       properties:
@@ -4436,11 +4465,6 @@ components:
           type: integer
           description: This property is mutually exclusive with `subsetFactorValue`.
           format: int64
-        bioAssaySetId:
-          type: integer
-          description: "This is deprecated, use experimentAnalyzedId instead."
-          format: int64
-          deprecated: true
         sourceExperiment:
           type: integer
           description: "This is deprecated, use sourceExperimentId instead."
@@ -4452,6 +4476,11 @@ components:
             type: array
             items:
               $ref: "#/components/schemas/FactorValueValueObject"
+        bioAssaySetId:
+          type: integer
+          description: "This is deprecated, use experimentAnalyzedId instead."
+          format: int64
+          deprecated: true
         isSubset:
           type: boolean
           description: "Indicate if this analysis is a subset of another experiment.\
@@ -4636,12 +4665,12 @@ components:
           type: string
         officialSymbol:
           type: string
+        taxon:
+          $ref: "#/components/schemas/TaxonValueObject"
         taxonId:
           type: integer
           description: This property is mutually exclusive with `taxon`.
           format: int64
-        taxon:
-          $ref: "#/components/schemas/TaxonValueObject"
     MeasurementValueObject:
       type: object
       properties:
@@ -4850,35 +4879,35 @@ components:
 
         Available properties:
 
-        - analysis.experimentAnalyzed.id `integer`
-        - analysis.experimentAnalyzed.name `string`
-        - analysis.id `integer`
-        - analysis.numberOfElementsAnalyzed `integer`
-        - analysis.subsetFactorValue.characteristics.category `string`
-        - analysis.subsetFactorValue.characteristics.categoryUri `string`
-        - analysis.subsetFactorValue.characteristics.evidenceCode `string` (possible values: IC, IDA, IEA, IEP, IGI, IMP, IPI, ISS, NAS, ND, RCA, TAS, NR, EXP, ISA, ISM, IGC, ISO, IIA, IBA, IBD, IKR, IRD, IMR, IED, IAGP, IPM, QTM, HDA, HEP, HGI, HMP, HTP, OTHER)
-        - analysis.subsetFactorValue.characteristics.id `integer`
-        - analysis.subsetFactorValue.characteristics.name `string`
-        - analysis.subsetFactorValue.characteristics.value `string`
-        - analysis.subsetFactorValue.characteristics.valueUri `string`
-        - analysis.subsetFactorValue.id `integer`
-        - baselineGroup.characteristics.category `string`
-        - baselineGroup.characteristics.categoryUri `string`
-        - baselineGroup.characteristics.evidenceCode `string` (possible values: IC, IDA, IEA, IEP, IGI, IMP, IPI, ISS, NAS, ND, RCA, TAS, NR, EXP, ISA, ISM, IGC, ISO, IIA, IBA, IBD, IKR, IRD, IMR, IED, IAGP, IPM, QTM, HDA, HEP, HGI, HMP, HTP, OTHER)
-        - baselineGroup.characteristics.id `integer`
-        - baselineGroup.characteristics.name `string`
-        - baselineGroup.characteristics.value `string`
-        - baselineGroup.characteristics.valueUri `string`
-        - baselineGroup.experimentalFactor.id `integer`
-        - baselineGroup.experimentalFactor.name `string`
-        - baselineGroup.experimentalFactor.type `string` (possible values: CONTINUOUS, CATEGORICAL)
-        - baselineGroup.id `integer`
-        - baselineGroup.measurement.id `integer`
-        - baselineGroup.measurement.kindCV `string` (possible values: TIME, DISTANCE, TEMPERATURE, QUANTITY, MASS, VOLUME, CONC, OTHER, COUNT)
-        - baselineGroup.measurement.otherKind `string`
-        - baselineGroup.measurement.representation `string` (possible values: FLOAT, DOUBLE, INT, LONG, CHAR, BOOLEAN, STRING)
-        - baselineGroup.measurement.type `string` (possible values: ABSOLUTE, CHANGE)
-        - baselineGroup.measurement.value `string`
+        - analysis\.experimentAnalyzed\.id `integer`
+        - analysis\.experimentAnalyzed\.name `string`
+        - analysis\.id `integer`
+        - analysis\.numberOfElementsAnalyzed `integer`
+        - analysis\.subsetFactorValue\.characteristics\.category `string`
+        - analysis\.subsetFactorValue\.characteristics\.categoryUri `string`
+        - analysis\.subsetFactorValue\.characteristics\.evidenceCode `string` \(possible values\: IC\, IDA\, IEA\, IEP\, IGI\, IMP\, IPI\, ISS\, NAS\, ND\, RCA\, TAS\, NR\, EXP\, ISA\, ISM\, IGC\, ISO\, IIA\, IBA\, IBD\, IKR\, IRD\, IMR\, IED\, IAGP\, IPM\, QTM\, HDA\, HEP\, HGI\, HMP\, HTP\, OTHER\)
+        - analysis\.subsetFactorValue\.characteristics\.id `integer`
+        - analysis\.subsetFactorValue\.characteristics\.name `string`
+        - analysis\.subsetFactorValue\.characteristics\.value `string`
+        - analysis\.subsetFactorValue\.characteristics\.valueUri `string`
+        - analysis\.subsetFactorValue\.id `integer`
+        - baselineGroup\.characteristics\.category `string`
+        - baselineGroup\.characteristics\.categoryUri `string`
+        - baselineGroup\.characteristics\.evidenceCode `string` \(possible values\: IC\, IDA\, IEA\, IEP\, IGI\, IMP\, IPI\, ISS\, NAS\, ND\, RCA\, TAS\, NR\, EXP\, ISA\, ISM\, IGC\, ISO\, IIA\, IBA\, IBD\, IKR\, IRD\, IMR\, IED\, IAGP\, IPM\, QTM\, HDA\, HEP\, HGI\, HMP\, HTP\, OTHER\)
+        - baselineGroup\.characteristics\.id `integer`
+        - baselineGroup\.characteristics\.name `string`
+        - baselineGroup\.characteristics\.value `string`
+        - baselineGroup\.characteristics\.valueUri `string`
+        - baselineGroup\.experimentalFactor\.id `integer`
+        - baselineGroup\.experimentalFactor\.name `string`
+        - baselineGroup\.experimentalFactor\.type `string` \(possible values\: CONTINUOUS\, CATEGORICAL\)
+        - baselineGroup\.id `integer`
+        - baselineGroup\.measurement\.id `integer`
+        - baselineGroup\.measurement\.kindCV `string` \(possible values\: TIME\, DISTANCE\, TEMPERATURE\, QUANTITY\, MASS\, VOLUME\, CONC\, OTHER\, COUNT\)
+        - baselineGroup\.measurement\.otherKind `string`
+        - baselineGroup\.measurement\.representation `string` \(possible values\: FLOAT\, DOUBLE\, INT\, LONG\, CHAR\, BOOLEAN\, STRING\)
+        - baselineGroup\.measurement\.type `string` \(possible values\: ABSOLUTE\, CHANGE\)
+        - baselineGroup\.measurement\.value `string`
         - id `integer`
         - numberOfGenesTested `integer`
         - numberOfProbesTested `integer`
@@ -5244,12 +5273,12 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/CharacteristicValueObject"
-        bioAssayCount:
-          type: integer
-          format: int32
         taxonId:
           type: integer
           format: int64
+        bioAssayCount:
+          type: integer
+          format: int32
         troubleDetails:
           type: string
         numberOfArrayDesigns:
@@ -5282,6 +5311,74 @@ components:
           format: byte
         batchCorrected:
           type: boolean
+        qscorePublicBatchEffect:
+          type: number
+          format: double
+          writeOnly: true
+        qscorePublicBatchConfound:
+          type: number
+          format: double
+          writeOnly: true
+        sscorePublication:
+          type: number
+          format: double
+          writeOnly: true
+        sscorePlatformAmount:
+          type: number
+          format: double
+          writeOnly: true
+        sscorePlatformsTechMulti:
+          type: number
+          format: double
+          writeOnly: true
+        sscoreAvgPlatformPopularity:
+          type: number
+          format: double
+          writeOnly: true
+        sscoreAvgPlatformSize:
+          type: number
+          format: double
+          writeOnly: true
+        sscoreRawData:
+          type: number
+          format: double
+          writeOnly: true
+        sscoreSampleSize:
+          type: number
+          format: double
+          writeOnly: true
+        sscoreMissingValues:
+          type: number
+          format: double
+          writeOnly: true
+        qscoreOutliers:
+          type: number
+          format: double
+          writeOnly: true
+        qscoreSampleMeanCorrelation:
+          type: number
+          format: double
+          writeOnly: true
+        qscoreSampleMedianCorrelation:
+          type: number
+          format: double
+          writeOnly: true
+        qscoreSampleCorrelationVariance:
+          type: number
+          format: double
+          writeOnly: true
+        qscorePlatformsTech:
+          type: number
+          format: double
+          writeOnly: true
+        qscoreReplicates:
+          type: number
+          format: double
+          writeOnly: true
+        qscoreBatchInfo:
+          type: number
+          format: double
+          writeOnly: true
         sScorePublication:
           type: number
           format: double
@@ -5370,145 +5467,158 @@ components:
 
         Available properties:
 
-        - accession.accession `string`
-        - accession.accessionVersion `string`
-        - accession.externalDatabase.ftpUri `string`
-        - accession.externalDatabase.id `integer`
-        - accession.externalDatabase.lastUpdated `string`
-        - accession.externalDatabase.localInstallDbName `string`
-        - accession.externalDatabase.name `string`
-        - accession.externalDatabase.releaseUrl `object`
-        - accession.externalDatabase.releaseVersion `string`
-        - accession.externalDatabase.type `string` (possible values: ONTOLOGY, SEQUENCE, LITERATURE, EXPRESSION, GENOME, OTHER, PROTEIN)
-        - accession.externalDatabase.webUri `string`
-        - accession.id `integer`
-        - allCharacteristics.category `string[]`
-        - allCharacteristics.categoryUri `string[]`
-        - allCharacteristics.evidenceCode `string[]` (possible values: IC, IDA, IEA, IEP, IGI, IMP, IPI, ISS, NAS, ND, RCA, TAS, NR, EXP, ISA, ISM, IGC, ISO, IIA, IBA, IBD, IKR, IRD, IMR, IED, IAGP, IPM, QTM, HDA, HEP, HGI, HMP, HTP, OTHER)
-        - allCharacteristics.id `integer[]`
-        - allCharacteristics.name `string[]`
-        - allCharacteristics.size `integer`
-        - allCharacteristics.value `string[]`
-        - allCharacteristics.valueUri `string[]`
-        - batchEffect `string` (possible values: NO_BATCH_INFO, SINGLETON_BATCHES_FAILURE, UNINFORMATIVE_HEADERS_FAILURE, PROBLEMATIC_BATCH_INFO_FAILURE, BATCH_EFFECT_FAILURE, BATCH_CORRECTED_SUCCESS, SINGLE_BATCH_SUCCESS, BATCH_EFFECT_UNDETERMINED_FAILURE, NO_BATCH_EFFECT_SUCCESS)
+        - accession\.accession `string`
+        - accession\.accessionVersion `string`
+        - accession\.externalDatabase\.ftpUri `string`
+        - accession\.externalDatabase\.id `integer`
+        - accession\.externalDatabase\.lastUpdated `string`
+        - accession\.externalDatabase\.localInstallDbName `string`
+        - accession\.externalDatabase\.name `string`
+        - accession\.externalDatabase\.releaseUrl `object`
+        - accession\.externalDatabase\.releaseVersion `string`
+        - accession\.externalDatabase\.type `string` \(possible values\: ONTOLOGY\, SEQUENCE\, LITERATURE\, EXPRESSION\, GENOME\, OTHER\, PROTEIN\)
+        - accession\.externalDatabase\.webUri `string`
+        - accession\.id `integer`
+        - allCharacteristics\.category `string[]`
+        - allCharacteristics\.categoryUri `string[]`
+        - allCharacteristics\.evidenceCode `string[]` \(possible values\: IC\, IDA\, IEA\, IEP\, IGI\, IMP\, IPI\, ISS\, NAS\, ND\, RCA\, TAS\, NR\, EXP\, ISA\, ISM\, IGC\, ISO\, IIA\, IBA\, IBD\, IKR\, IRD\, IMR\, IED\, IAGP\, IPM\, QTM\, HDA\, HEP\, HGI\, HMP\, HTP\, OTHER\)
+        - allCharacteristics\.id `integer[]`
+        - allCharacteristics\.name `string[]`
+        - allCharacteristics\.object `string[]` \(only applicable to statements\)
+        - allCharacteristics\.objectUri `string[]` \(will be expanded with ontology inference\; only applicable to statements\)
+        - allCharacteristics\.predicate `string[]` \(only applicable to statements\)
+        - allCharacteristics\.predicateUri `string[]` \(will be expanded with ontology inference\; only applicable to statements\)
+        - allCharacteristics\.size `integer`
+        - allCharacteristics\.subject `string` \(only applicable to statements\)
+        - allCharacteristics\.subjectUri `string` \(will be expanded with ontology inference\; only applicable to statements\)
+        - allCharacteristics\.value `string[]`
+        - allCharacteristics\.valueUri `string[]` \(will be expanded with ontology inference\)
+        - batchEffect `string` \(possible values\: NO\_BATCH\_INFO\, SINGLETON\_BATCHES\_FAILURE\, UNINFORMATIVE\_HEADERS\_FAILURE\, PROBLEMATIC\_BATCH\_INFO\_FAILURE\, BATCH\_EFFECT\_FAILURE\, BATCH\_CORRECTED\_SUCCESS\, SINGLE\_BATCH\_SUCCESS\, BATCH\_EFFECT\_UNDETERMINED\_FAILURE\, NO\_BATCH\_EFFECT\_SUCCESS\)
         - batchEffectStatistics `string`
-        - bioAssayCount `integer` (alias for bioAssays.size)
-        - bioAssays.accession.accession `string[]`
-        - bioAssays.accession.accessionVersion `string[]`
-        - bioAssays.accession.id `integer[]`
-        - bioAssays.arrayDesignUsed.advertisedNumberOfDesignElements `integer[]`
-        - bioAssays.arrayDesignUsed.compositeSequences.size `integer[]`
-        - bioAssays.arrayDesignUsed.externalReferences.size `integer[]`
-        - bioAssays.arrayDesignUsed.id `integer[]`
-        - bioAssays.arrayDesignUsed.mergees.size `integer[]`
-        - bioAssays.arrayDesignUsed.name `string[]`
-        - bioAssays.arrayDesignUsed.shortName `string[]`
-        - bioAssays.arrayDesignUsed.subsumedArrayDesigns.size `integer[]`
-        - bioAssays.arrayDesignUsed.technologyType `string[]` (possible values: TWOCOLOR, DUALMODE, ONECOLOR, SEQUENCING, GENELIST, OTHER)
-        - bioAssays.id `integer[]`
-        - bioAssays.isOutlier `boolean[]`
-        - bioAssays.name `string[]`
-        - bioAssays.numberOfCells `integer[]`
-        - bioAssays.numberOfCellsByDesignElements `integer[]`
-        - bioAssays.numberOfDesignElements `integer[]`
-        - bioAssays.originalPlatform.advertisedNumberOfDesignElements `integer[]`
-        - bioAssays.originalPlatform.compositeSequences.size `integer[]`
-        - bioAssays.originalPlatform.externalReferences.size `integer[]`
-        - bioAssays.originalPlatform.id `integer[]`
-        - bioAssays.originalPlatform.mergees.size `integer[]`
-        - bioAssays.originalPlatform.name `string[]`
-        - bioAssays.originalPlatform.shortName `string[]`
-        - bioAssays.originalPlatform.subsumedArrayDesigns.size `integer[]`
-        - bioAssays.originalPlatform.technologyType `string[]` (possible values: TWOCOLOR, DUALMODE, ONECOLOR, SEQUENCING, GENELIST, OTHER)
-        - bioAssays.processingDate `string[]`
-        - bioAssays.sampleUsed.bioAssaysUsedIn.size `integer[]`
-        - bioAssays.sampleUsed.characteristics.category `string[]`
-        - bioAssays.sampleUsed.characteristics.categoryUri `string[]`
-        - bioAssays.sampleUsed.characteristics.evidenceCode `string[]` (possible values: IC, IDA, IEA, IEP, IGI, IMP, IPI, ISS, NAS, ND, RCA, TAS, NR, EXP, ISA, ISM, IGC, ISO, IIA, IBA, IBD, IKR, IRD, IMR, IED, IAGP, IPM, QTM, HDA, HEP, HGI, HMP, HTP, OTHER)
-        - bioAssays.sampleUsed.characteristics.id `integer[]`
-        - bioAssays.sampleUsed.characteristics.name `string[]`
-        - bioAssays.sampleUsed.characteristics.size `integer[]`
-        - bioAssays.sampleUsed.characteristics.value `string[]`
-        - bioAssays.sampleUsed.characteristics.valueUri `string[]`
-        - bioAssays.sampleUsed.id `integer[]`
-        - bioAssays.sampleUsed.name `string[]`
-        - bioAssays.sequencePairedReads `boolean[]`
-        - bioAssays.sequenceReadCount `integer[]`
-        - bioAssays.sequenceReadLength `integer[]`
-        - bioAssays.shortName `string[]`
-        - bioAssays.size `integer`
-        - characteristics.category `string[]`
-        - characteristics.categoryUri `string[]`
-        - characteristics.evidenceCode `string[]` (possible values: IC, IDA, IEA, IEP, IGI, IMP, IPI, ISS, NAS, ND, RCA, TAS, NR, EXP, ISA, ISM, IGC, ISO, IIA, IBA, IBD, IKR, IRD, IMR, IED, IAGP, IPM, QTM, HDA, HEP, HGI, HMP, HTP, OTHER)
-        - characteristics.id `integer[]`
-        - characteristics.name `string[]`
-        - characteristics.size `integer`
-        - characteristics.value `string[]`
-        - characteristics.valueUri `string[]`
-        - curationDetails.lastUpdated `string`
-        - curationDetails.needsAttention `boolean`
-        - curationDetails.troubled `boolean`
-        - experimentalDesign.experimentalFactors.factorValues.characteristics.category `string[]`
-        - experimentalDesign.experimentalFactors.factorValues.characteristics.categoryUri `string[]`
-        - experimentalDesign.experimentalFactors.factorValues.characteristics.evidenceCode `string[]` (possible values: IC, IDA, IEA, IEP, IGI, IMP, IPI, ISS, NAS, ND, RCA, TAS, NR, EXP, ISA, ISM, IGC, ISO, IIA, IBA, IBD, IKR, IRD, IMR, IED, IAGP, IPM, QTM, HDA, HEP, HGI, HMP, HTP, OTHER)
-        - experimentalDesign.experimentalFactors.factorValues.characteristics.id `integer[]`
-        - experimentalDesign.experimentalFactors.factorValues.characteristics.name `string[]`
-        - experimentalDesign.experimentalFactors.factorValues.characteristics.value `string[]`
-        - experimentalDesign.experimentalFactors.factorValues.characteristics.valueUri `string[]`
-        - experimentalDesign.experimentalFactors.size `integer`
-        - experimentalDesign.id `integer`
-        - experimentalDesign.name `string`
-        - experimentalDesign.normalizationDescription `string`
-        - experimentalDesign.qualityControlDescription `string`
-        - experimentalDesign.replicateDescription `string`
-        - experimentalDesign.types.size `integer`
-        - geeq.publicQualityScore `number`
-        - geeq.publicSuitabilityScore `number` (security: GROUP_ADMIN)
+        - bioAssayCount `integer` \(alias for bioAssays\.size\)
+        - bioAssays\.accession\.accession `string[]`
+        - bioAssays\.accession\.accessionVersion `string[]`
+        - bioAssays\.accession\.id `integer[]`
+        - bioAssays\.arrayDesignUsed\.advertisedNumberOfDesignElements `integer[]`
+        - bioAssays\.arrayDesignUsed\.compositeSequences\.size `integer[]`
+        - bioAssays\.arrayDesignUsed\.externalReferences\.size `integer[]`
+        - bioAssays\.arrayDesignUsed\.id `integer[]`
+        - bioAssays\.arrayDesignUsed\.mergees\.size `integer[]`
+        - bioAssays\.arrayDesignUsed\.name `string[]`
+        - bioAssays\.arrayDesignUsed\.shortName `string[]`
+        - bioAssays\.arrayDesignUsed\.subsumedArrayDesigns\.size `integer[]`
+        - bioAssays\.arrayDesignUsed\.technologyType `string[]` \(possible values\: TWOCOLOR\, DUALMODE\, ONECOLOR\, SEQUENCING\, GENELIST\, OTHER\)
+        - bioAssays\.id `integer[]`
+        - bioAssays\.isOutlier `boolean[]`
+        - bioAssays\.name `string[]`
+        - bioAssays\.numberOfCells `integer[]`
+        - bioAssays\.numberOfCellsByDesignElements `integer[]`
+        - bioAssays\.numberOfDesignElements `integer[]`
+        - bioAssays\.originalPlatform\.advertisedNumberOfDesignElements `integer[]`
+        - bioAssays\.originalPlatform\.compositeSequences\.size `integer[]`
+        - bioAssays\.originalPlatform\.externalReferences\.size `integer[]`
+        - bioAssays\.originalPlatform\.id `integer[]`
+        - bioAssays\.originalPlatform\.mergees\.size `integer[]`
+        - bioAssays\.originalPlatform\.name `string[]`
+        - bioAssays\.originalPlatform\.shortName `string[]`
+        - bioAssays\.originalPlatform\.subsumedArrayDesigns\.size `integer[]`
+        - bioAssays\.originalPlatform\.technologyType `string[]` \(possible values\: TWOCOLOR\, DUALMODE\, ONECOLOR\, SEQUENCING\, GENELIST\, OTHER\)
+        - bioAssays\.processingDate `string[]`
+        - bioAssays\.sampleUsed\.bioAssaysUsedIn\.size `integer[]`
+        - bioAssays\.sampleUsed\.characteristics\.category `string[]`
+        - bioAssays\.sampleUsed\.characteristics\.categoryUri `string[]`
+        - bioAssays\.sampleUsed\.characteristics\.evidenceCode `string[]` \(possible values\: IC\, IDA\, IEA\, IEP\, IGI\, IMP\, IPI\, ISS\, NAS\, ND\, RCA\, TAS\, NR\, EXP\, ISA\, ISM\, IGC\, ISO\, IIA\, IBA\, IBD\, IKR\, IRD\, IMR\, IED\, IAGP\, IPM\, QTM\, HDA\, HEP\, HGI\, HMP\, HTP\, OTHER\)
+        - bioAssays\.sampleUsed\.characteristics\.id `integer[]`
+        - bioAssays\.sampleUsed\.characteristics\.name `string[]`
+        - bioAssays\.sampleUsed\.characteristics\.size `integer[]`
+        - bioAssays\.sampleUsed\.characteristics\.value `string[]`
+        - bioAssays\.sampleUsed\.characteristics\.valueUri `string[]` \(will be expanded with ontology inference\)
+        - bioAssays\.sampleUsed\.id `integer[]`
+        - bioAssays\.sampleUsed\.name `string[]`
+        - bioAssays\.sequencePairedReads `boolean[]`
+        - bioAssays\.sequenceReadCount `integer[]`
+        - bioAssays\.sequenceReadLength `integer[]`
+        - bioAssays\.shortName `string[]`
+        - bioAssays\.size `integer`
+        - characteristics\.category `string[]`
+        - characteristics\.categoryUri `string[]`
+        - characteristics\.evidenceCode `string[]` \(possible values\: IC\, IDA\, IEA\, IEP\, IGI\, IMP\, IPI\, ISS\, NAS\, ND\, RCA\, TAS\, NR\, EXP\, ISA\, ISM\, IGC\, ISO\, IIA\, IBA\, IBD\, IKR\, IRD\, IMR\, IED\, IAGP\, IPM\, QTM\, HDA\, HEP\, HGI\, HMP\, HTP\, OTHER\)
+        - characteristics\.id `integer[]`
+        - characteristics\.name `string[]`
+        - characteristics\.size `integer`
+        - characteristics\.value `string[]`
+        - characteristics\.valueUri `string[]` \(will be expanded with ontology inference\)
+        - curationDetails\.lastUpdated `string`
+        - curationDetails\.needsAttention `boolean`
+        - curationDetails\.troubled `boolean`
+        - experimentalDesign\.experimentalFactors\.factorValues\.characteristics\.category `string[]`
+        - experimentalDesign\.experimentalFactors\.factorValues\.characteristics\.categoryUri `string[]`
+        - experimentalDesign\.experimentalFactors\.factorValues\.characteristics\.evidenceCode `string[]` \(possible values\: IC\, IDA\, IEA\, IEP\, IGI\, IMP\, IPI\, ISS\, NAS\, ND\, RCA\, TAS\, NR\, EXP\, ISA\, ISM\, IGC\, ISO\, IIA\, IBA\, IBD\, IKR\, IRD\, IMR\, IED\, IAGP\, IPM\, QTM\, HDA\, HEP\, HGI\, HMP\, HTP\, OTHER\)
+        - experimentalDesign\.experimentalFactors\.factorValues\.characteristics\.id `integer[]`
+        - experimentalDesign\.experimentalFactors\.factorValues\.characteristics\.name `string[]`
+        - experimentalDesign\.experimentalFactors\.factorValues\.characteristics\.object `string[]`
+        - experimentalDesign\.experimentalFactors\.factorValues\.characteristics\.objectUri `string[]` \(will be expanded with ontology inference\)
+        - experimentalDesign\.experimentalFactors\.factorValues\.characteristics\.predicate `string[]`
+        - experimentalDesign\.experimentalFactors\.factorValues\.characteristics\.predicateUri `string[]` \(will be expanded with ontology inference\)
+        - experimentalDesign\.experimentalFactors\.factorValues\.characteristics\.subject `string`
+        - experimentalDesign\.experimentalFactors\.factorValues\.characteristics\.subjectUri `string` \(will be expanded with ontology inference\)
+        - <s>experimentalDesign\.experimentalFactors\.factorValues\.characteristics\.value</s> `string[]` \(use experimentalDesign\.experimentalFactors\.factorValues\.characteristics\.subject instead\; alias for experimentalDesign\.experimentalFactors\.factorValues\.characteristics\.subject\)
+        - <s>experimentalDesign\.experimentalFactors\.factorValues\.characteristics\.valueUri</s> `string[]` \(will be expanded with ontology inference\; use experimentalDesign\.experimentalFactors\.factorValues\.characteristics\.subjectUri instead\; alias for experimentalDesign\.experimentalFactors\.factorValues\.characteristics\.subjectUri\)
+        - experimentalDesign\.experimentalFactors\.size `integer`
+        - experimentalDesign\.id `integer`
+        - experimentalDesign\.name `string`
+        - experimentalDesign\.normalizationDescription `string`
+        - experimentalDesign\.qualityControlDescription `string`
+        - experimentalDesign\.replicateDescription `string`
+        - experimentalDesign\.types\.size `integer`
+        - geeq\.publicQualityScore `number`
+        - geeq\.publicSuitabilityScore `number` \(security\: GROUP\_ADMIN\)
         - id `integer`
-        - lastUpdated `string` (alias for curationDetails.lastUpdated)
-        - meanVarianceRelation.id `integer`
+        - lastUpdated `string` \(alias for curationDetails\.lastUpdated\)
+        - meanVarianceRelation\.id `integer`
         - name `string`
-        - needsAttention `boolean` (alias for curationDetails.needsAttention)
+        - needsAttention `boolean` \(alias for curationDetails\.needsAttention\)
+        - numberOfCells `integer`
         - numberOfDataVectors `integer`
         - numberOfSamples `integer`
-        - owner.email `string`
-        - owner.id `integer`
-        - owner.name `string`
-        - primaryPublication.pubAccession.accession `string`
-        - primaryPublication.pubAccession.accessionVersion `string`
-        - primaryPublication.pubAccession.externalDatabase.externalDatabases.size `integer`
-        - primaryPublication.pubAccession.externalDatabase.ftpUri `string`
-        - primaryPublication.pubAccession.externalDatabase.id `integer`
-        - primaryPublication.pubAccession.externalDatabase.lastUpdated `string`
-        - primaryPublication.pubAccession.externalDatabase.localInstallDbName `string`
-        - primaryPublication.pubAccession.externalDatabase.name `string`
-        - primaryPublication.pubAccession.externalDatabase.releaseUrl `object`
-        - primaryPublication.pubAccession.externalDatabase.releaseVersion `string`
-        - primaryPublication.pubAccession.externalDatabase.type `string` (possible values: ONTOLOGY, SEQUENCE, LITERATURE, EXPRESSION, GENOME, OTHER, PROTEIN)
-        - primaryPublication.pubAccession.externalDatabase.webUri `string`
-        - primaryPublication.pubAccession.id `integer`
-        - processedExpressionDataVectors.size `integer`
-        - quantitationTypes.size `integer`
-        - rawExpressionDataVectors.size `integer`
+        - owner\.email `string`
+        - owner\.id `integer`
+        - owner\.name `string`
+        - primaryPublication\.pubAccession\.accession `string`
+        - primaryPublication\.pubAccession\.accessionVersion `string`
+        - primaryPublication\.pubAccession\.externalDatabase\.externalDatabases\.size `integer`
+        - primaryPublication\.pubAccession\.externalDatabase\.ftpUri `string`
+        - primaryPublication\.pubAccession\.externalDatabase\.id `integer`
+        - primaryPublication\.pubAccession\.externalDatabase\.lastUpdated `string`
+        - primaryPublication\.pubAccession\.externalDatabase\.localInstallDbName `string`
+        - primaryPublication\.pubAccession\.externalDatabase\.name `string`
+        - primaryPublication\.pubAccession\.externalDatabase\.releaseUrl `object`
+        - primaryPublication\.pubAccession\.externalDatabase\.releaseVersion `string`
+        - primaryPublication\.pubAccession\.externalDatabase\.type `string` \(possible values\: ONTOLOGY\, SEQUENCE\, LITERATURE\, EXPRESSION\, GENOME\, OTHER\, PROTEIN\)
+        - primaryPublication\.pubAccession\.externalDatabase\.webUri `string`
+        - primaryPublication\.pubAccession\.id `integer`
+        - processedExpressionDataVectors\.size `integer`
+        - quantitationTypes\.size `integer`
+        - rawExpressionDataVectors\.size `integer`
         - shortName `string`
-        - singleCellExpressionDataVectors.size `integer`
-        - taxon `integer` (alias for taxon.id)
-        - taxon.commonName `string`
-        - taxon.externalDatabase.ftpUri `string`
-        - taxon.externalDatabase.id `integer`
-        - taxon.externalDatabase.lastUpdated `string`
-        - taxon.externalDatabase.localInstallDbName `string`
-        - taxon.externalDatabase.name `string`
-        - taxon.externalDatabase.releaseUrl `object`
-        - taxon.externalDatabase.releaseVersion `string`
-        - taxon.externalDatabase.type `string` (possible values: ONTOLOGY, SEQUENCE, LITERATURE, EXPRESSION, GENOME, OTHER, PROTEIN)
-        - taxon.externalDatabase.webUri `string`
-        - taxon.id `integer`
-        - taxon.isGenesUsable `boolean`
-        - taxon.ncbiId `integer`
-        - taxon.scientificName `string`
-        - taxon.secondaryNcbiId `integer`
-        - troubled `boolean` (alias for curationDetails.troubled)
+        - singleCellExpressionDataVectors\.size `integer`
+        - taxon `integer` \(alias for taxon\.id\)
+        - taxon\.commonName `string`
+        - taxon\.externalDatabase\.ftpUri `string`
+        - taxon\.externalDatabase\.id `integer`
+        - taxon\.externalDatabase\.lastUpdated `string`
+        - taxon\.externalDatabase\.localInstallDbName `string`
+        - taxon\.externalDatabase\.name `string`
+        - taxon\.externalDatabase\.releaseUrl `object`
+        - taxon\.externalDatabase\.releaseVersion `string`
+        - taxon\.externalDatabase\.type `string` \(possible values\: ONTOLOGY\, SEQUENCE\, LITERATURE\, EXPRESSION\, GENOME\, OTHER\, PROTEIN\)
+        - taxon\.externalDatabase\.webUri `string`
+        - taxon\.id `integer`
+        - taxon\.isGenesUsable `boolean`
+        - taxon\.ncbiId `integer`
+        - taxon\.scientificName `string`
+        - taxon\.secondaryNcbiId `integer`
+        - troubled `boolean` \(alias for curationDetails\.troubled\)
       externalDocs:
         url: https://gemma.msl.ubc.ca/resources/apidocs/ubic/gemma/rest/util/args/FilterArg.html
       x-gemma-filterable-properties:
@@ -5630,12 +5740,34 @@ components:
         type: "integer[]"
       - name: allCharacteristics.name
         type: "string[]"
+      - name: allCharacteristics.object
+        type: "string[]"
+        description: only applicable to statements
+      - name: allCharacteristics.objectUri
+        type: "string[]"
+        description: will be expanded with ontology inference; only applicable to
+          statements
+      - name: allCharacteristics.predicate
+        type: "string[]"
+        description: only applicable to statements
+      - name: allCharacteristics.predicateUri
+        type: "string[]"
+        description: will be expanded with ontology inference; only applicable to
+          statements
       - name: allCharacteristics.size
         type: integer
+      - name: allCharacteristics.subject
+        type: string
+        description: only applicable to statements
+      - name: allCharacteristics.subjectUri
+        type: string
+        description: will be expanded with ontology inference; only applicable to
+          statements
       - name: allCharacteristics.value
         type: "string[]"
       - name: allCharacteristics.valueUri
         type: "string[]"
+        description: will be expanded with ontology inference
       - name: batchEffect
         type: string
         allowedValues:
@@ -5831,6 +5963,7 @@ components:
         type: "string[]"
       - name: bioAssays.sampleUsed.characteristics.valueUri
         type: "string[]"
+        description: will be expanded with ontology inference
       - name: bioAssays.sampleUsed.id
         type: "integer[]"
       - name: bioAssays.sampleUsed.name
@@ -5930,6 +6063,7 @@ components:
         type: "string[]"
       - name: characteristics.valueUri
         type: "string[]"
+        description: will be expanded with ontology inference
       - name: curationDetails.lastUpdated
         type: string
       - name: curationDetails.needsAttention
@@ -6015,10 +6149,31 @@ components:
         type: "integer[]"
       - name: experimentalDesign.experimentalFactors.factorValues.characteristics.name
         type: "string[]"
+      - name: experimentalDesign.experimentalFactors.factorValues.characteristics.object
+        type: "string[]"
+      - name: experimentalDesign.experimentalFactors.factorValues.characteristics.objectUri
+        type: "string[]"
+        description: will be expanded with ontology inference
+      - name: experimentalDesign.experimentalFactors.factorValues.characteristics.predicate
+        type: "string[]"
+      - name: experimentalDesign.experimentalFactors.factorValues.characteristics.predicateUri
+        type: "string[]"
+        description: will be expanded with ontology inference
+      - name: experimentalDesign.experimentalFactors.factorValues.characteristics.subject
+        type: string
+      - name: experimentalDesign.experimentalFactors.factorValues.characteristics.subjectUri
+        type: string
+        description: will be expanded with ontology inference
       - name: experimentalDesign.experimentalFactors.factorValues.characteristics.value
         type: "string[]"
+        description: use experimentalDesign.experimentalFactors.factorValues.characteristics.subject
+          instead; alias for experimentalDesign.experimentalFactors.factorValues.characteristics.subject
+        deprecated: true
       - name: experimentalDesign.experimentalFactors.factorValues.characteristics.valueUri
         type: "string[]"
+        description: will be expanded with ontology inference; use experimentalDesign.experimentalFactors.factorValues.characteristics.subjectUri
+          instead; alias for experimentalDesign.experimentalFactors.factorValues.characteristics.subjectUri
+        deprecated: true
       - name: experimentalDesign.experimentalFactors.size
         type: integer
       - name: experimentalDesign.id
@@ -6054,6 +6209,8 @@ components:
       - name: needsAttention
         type: boolean
         description: alias for curationDetails.needsAttention
+      - name: numberOfCells
+        type: integer
       - name: numberOfDataVectors
         type: integer
       - name: numberOfSamples
@@ -6174,145 +6331,158 @@ components:
 
         Available properties:
 
-        - accession.accession `string`
-        - accession.accessionVersion `string`
-        - accession.externalDatabase.ftpUri `string`
-        - accession.externalDatabase.id `integer`
-        - accession.externalDatabase.lastUpdated `string`
-        - accession.externalDatabase.localInstallDbName `string`
-        - accession.externalDatabase.name `string`
-        - accession.externalDatabase.releaseUrl `object`
-        - accession.externalDatabase.releaseVersion `string`
-        - accession.externalDatabase.type `string` (possible values: ONTOLOGY, SEQUENCE, LITERATURE, EXPRESSION, GENOME, OTHER, PROTEIN)
-        - accession.externalDatabase.webUri `string`
-        - accession.id `integer`
-        - allCharacteristics.category `string[]`
-        - allCharacteristics.categoryUri `string[]`
-        - allCharacteristics.evidenceCode `string[]` (possible values: IC, IDA, IEA, IEP, IGI, IMP, IPI, ISS, NAS, ND, RCA, TAS, NR, EXP, ISA, ISM, IGC, ISO, IIA, IBA, IBD, IKR, IRD, IMR, IED, IAGP, IPM, QTM, HDA, HEP, HGI, HMP, HTP, OTHER)
-        - allCharacteristics.id `integer[]`
-        - allCharacteristics.name `string[]`
-        - allCharacteristics.size `integer`
-        - allCharacteristics.value `string[]`
-        - allCharacteristics.valueUri `string[]`
-        - batchEffect `string` (possible values: NO_BATCH_INFO, SINGLETON_BATCHES_FAILURE, UNINFORMATIVE_HEADERS_FAILURE, PROBLEMATIC_BATCH_INFO_FAILURE, BATCH_EFFECT_FAILURE, BATCH_CORRECTED_SUCCESS, SINGLE_BATCH_SUCCESS, BATCH_EFFECT_UNDETERMINED_FAILURE, NO_BATCH_EFFECT_SUCCESS)
+        - accession\.accession `string`
+        - accession\.accessionVersion `string`
+        - accession\.externalDatabase\.ftpUri `string`
+        - accession\.externalDatabase\.id `integer`
+        - accession\.externalDatabase\.lastUpdated `string`
+        - accession\.externalDatabase\.localInstallDbName `string`
+        - accession\.externalDatabase\.name `string`
+        - accession\.externalDatabase\.releaseUrl `object`
+        - accession\.externalDatabase\.releaseVersion `string`
+        - accession\.externalDatabase\.type `string` \(possible values\: ONTOLOGY\, SEQUENCE\, LITERATURE\, EXPRESSION\, GENOME\, OTHER\, PROTEIN\)
+        - accession\.externalDatabase\.webUri `string`
+        - accession\.id `integer`
+        - allCharacteristics\.category `string[]`
+        - allCharacteristics\.categoryUri `string[]`
+        - allCharacteristics\.evidenceCode `string[]` \(possible values\: IC\, IDA\, IEA\, IEP\, IGI\, IMP\, IPI\, ISS\, NAS\, ND\, RCA\, TAS\, NR\, EXP\, ISA\, ISM\, IGC\, ISO\, IIA\, IBA\, IBD\, IKR\, IRD\, IMR\, IED\, IAGP\, IPM\, QTM\, HDA\, HEP\, HGI\, HMP\, HTP\, OTHER\)
+        - allCharacteristics\.id `integer[]`
+        - allCharacteristics\.name `string[]`
+        - allCharacteristics\.object `string[]` \(only applicable to statements\)
+        - allCharacteristics\.objectUri `string[]` \(will be expanded with ontology inference\; only applicable to statements\)
+        - allCharacteristics\.predicate `string[]` \(only applicable to statements\)
+        - allCharacteristics\.predicateUri `string[]` \(will be expanded with ontology inference\; only applicable to statements\)
+        - allCharacteristics\.size `integer`
+        - allCharacteristics\.subject `string` \(only applicable to statements\)
+        - allCharacteristics\.subjectUri `string` \(will be expanded with ontology inference\; only applicable to statements\)
+        - allCharacteristics\.value `string[]`
+        - allCharacteristics\.valueUri `string[]` \(will be expanded with ontology inference\)
+        - batchEffect `string` \(possible values\: NO\_BATCH\_INFO\, SINGLETON\_BATCHES\_FAILURE\, UNINFORMATIVE\_HEADERS\_FAILURE\, PROBLEMATIC\_BATCH\_INFO\_FAILURE\, BATCH\_EFFECT\_FAILURE\, BATCH\_CORRECTED\_SUCCESS\, SINGLE\_BATCH\_SUCCESS\, BATCH\_EFFECT\_UNDETERMINED\_FAILURE\, NO\_BATCH\_EFFECT\_SUCCESS\)
         - batchEffectStatistics `string`
-        - bioAssayCount `integer` (alias for bioAssays.size)
-        - bioAssays.accession.accession `string[]`
-        - bioAssays.accession.accessionVersion `string[]`
-        - bioAssays.accession.id `integer[]`
-        - bioAssays.arrayDesignUsed.advertisedNumberOfDesignElements `integer[]`
-        - bioAssays.arrayDesignUsed.compositeSequences.size `integer[]`
-        - bioAssays.arrayDesignUsed.externalReferences.size `integer[]`
-        - bioAssays.arrayDesignUsed.id `integer[]`
-        - bioAssays.arrayDesignUsed.mergees.size `integer[]`
-        - bioAssays.arrayDesignUsed.name `string[]`
-        - bioAssays.arrayDesignUsed.shortName `string[]`
-        - bioAssays.arrayDesignUsed.subsumedArrayDesigns.size `integer[]`
-        - bioAssays.arrayDesignUsed.technologyType `string[]` (possible values: TWOCOLOR, DUALMODE, ONECOLOR, SEQUENCING, GENELIST, OTHER)
-        - bioAssays.id `integer[]`
-        - bioAssays.isOutlier `boolean[]`
-        - bioAssays.name `string[]`
-        - bioAssays.numberOfCells `integer[]`
-        - bioAssays.numberOfCellsByDesignElements `integer[]`
-        - bioAssays.numberOfDesignElements `integer[]`
-        - bioAssays.originalPlatform.advertisedNumberOfDesignElements `integer[]`
-        - bioAssays.originalPlatform.compositeSequences.size `integer[]`
-        - bioAssays.originalPlatform.externalReferences.size `integer[]`
-        - bioAssays.originalPlatform.id `integer[]`
-        - bioAssays.originalPlatform.mergees.size `integer[]`
-        - bioAssays.originalPlatform.name `string[]`
-        - bioAssays.originalPlatform.shortName `string[]`
-        - bioAssays.originalPlatform.subsumedArrayDesigns.size `integer[]`
-        - bioAssays.originalPlatform.technologyType `string[]` (possible values: TWOCOLOR, DUALMODE, ONECOLOR, SEQUENCING, GENELIST, OTHER)
-        - bioAssays.processingDate `string[]`
-        - bioAssays.sampleUsed.bioAssaysUsedIn.size `integer[]`
-        - bioAssays.sampleUsed.characteristics.category `string[]`
-        - bioAssays.sampleUsed.characteristics.categoryUri `string[]`
-        - bioAssays.sampleUsed.characteristics.evidenceCode `string[]` (possible values: IC, IDA, IEA, IEP, IGI, IMP, IPI, ISS, NAS, ND, RCA, TAS, NR, EXP, ISA, ISM, IGC, ISO, IIA, IBA, IBD, IKR, IRD, IMR, IED, IAGP, IPM, QTM, HDA, HEP, HGI, HMP, HTP, OTHER)
-        - bioAssays.sampleUsed.characteristics.id `integer[]`
-        - bioAssays.sampleUsed.characteristics.name `string[]`
-        - bioAssays.sampleUsed.characteristics.size `integer[]`
-        - bioAssays.sampleUsed.characteristics.value `string[]`
-        - bioAssays.sampleUsed.characteristics.valueUri `string[]`
-        - bioAssays.sampleUsed.id `integer[]`
-        - bioAssays.sampleUsed.name `string[]`
-        - bioAssays.sequencePairedReads `boolean[]`
-        - bioAssays.sequenceReadCount `integer[]`
-        - bioAssays.sequenceReadLength `integer[]`
-        - bioAssays.shortName `string[]`
-        - bioAssays.size `integer`
-        - characteristics.category `string[]`
-        - characteristics.categoryUri `string[]`
-        - characteristics.evidenceCode `string[]` (possible values: IC, IDA, IEA, IEP, IGI, IMP, IPI, ISS, NAS, ND, RCA, TAS, NR, EXP, ISA, ISM, IGC, ISO, IIA, IBA, IBD, IKR, IRD, IMR, IED, IAGP, IPM, QTM, HDA, HEP, HGI, HMP, HTP, OTHER)
-        - characteristics.id `integer[]`
-        - characteristics.name `string[]`
-        - characteristics.size `integer`
-        - characteristics.value `string[]`
-        - characteristics.valueUri `string[]`
-        - curationDetails.lastUpdated `string`
-        - curationDetails.needsAttention `boolean`
-        - curationDetails.troubled `boolean`
-        - experimentalDesign.experimentalFactors.factorValues.characteristics.category `string[]`
-        - experimentalDesign.experimentalFactors.factorValues.characteristics.categoryUri `string[]`
-        - experimentalDesign.experimentalFactors.factorValues.characteristics.evidenceCode `string[]` (possible values: IC, IDA, IEA, IEP, IGI, IMP, IPI, ISS, NAS, ND, RCA, TAS, NR, EXP, ISA, ISM, IGC, ISO, IIA, IBA, IBD, IKR, IRD, IMR, IED, IAGP, IPM, QTM, HDA, HEP, HGI, HMP, HTP, OTHER)
-        - experimentalDesign.experimentalFactors.factorValues.characteristics.id `integer[]`
-        - experimentalDesign.experimentalFactors.factorValues.characteristics.name `string[]`
-        - experimentalDesign.experimentalFactors.factorValues.characteristics.value `string[]`
-        - experimentalDesign.experimentalFactors.factorValues.characteristics.valueUri `string[]`
-        - experimentalDesign.experimentalFactors.size `integer`
-        - experimentalDesign.id `integer`
-        - experimentalDesign.name `string`
-        - experimentalDesign.normalizationDescription `string`
-        - experimentalDesign.qualityControlDescription `string`
-        - experimentalDesign.replicateDescription `string`
-        - experimentalDesign.types.size `integer`
-        - geeq.publicQualityScore `number`
-        - geeq.publicSuitabilityScore `number` (security: GROUP_ADMIN)
+        - bioAssayCount `integer` \(alias for bioAssays\.size\)
+        - bioAssays\.accession\.accession `string[]`
+        - bioAssays\.accession\.accessionVersion `string[]`
+        - bioAssays\.accession\.id `integer[]`
+        - bioAssays\.arrayDesignUsed\.advertisedNumberOfDesignElements `integer[]`
+        - bioAssays\.arrayDesignUsed\.compositeSequences\.size `integer[]`
+        - bioAssays\.arrayDesignUsed\.externalReferences\.size `integer[]`
+        - bioAssays\.arrayDesignUsed\.id `integer[]`
+        - bioAssays\.arrayDesignUsed\.mergees\.size `integer[]`
+        - bioAssays\.arrayDesignUsed\.name `string[]`
+        - bioAssays\.arrayDesignUsed\.shortName `string[]`
+        - bioAssays\.arrayDesignUsed\.subsumedArrayDesigns\.size `integer[]`
+        - bioAssays\.arrayDesignUsed\.technologyType `string[]` \(possible values\: TWOCOLOR\, DUALMODE\, ONECOLOR\, SEQUENCING\, GENELIST\, OTHER\)
+        - bioAssays\.id `integer[]`
+        - bioAssays\.isOutlier `boolean[]`
+        - bioAssays\.name `string[]`
+        - bioAssays\.numberOfCells `integer[]`
+        - bioAssays\.numberOfCellsByDesignElements `integer[]`
+        - bioAssays\.numberOfDesignElements `integer[]`
+        - bioAssays\.originalPlatform\.advertisedNumberOfDesignElements `integer[]`
+        - bioAssays\.originalPlatform\.compositeSequences\.size `integer[]`
+        - bioAssays\.originalPlatform\.externalReferences\.size `integer[]`
+        - bioAssays\.originalPlatform\.id `integer[]`
+        - bioAssays\.originalPlatform\.mergees\.size `integer[]`
+        - bioAssays\.originalPlatform\.name `string[]`
+        - bioAssays\.originalPlatform\.shortName `string[]`
+        - bioAssays\.originalPlatform\.subsumedArrayDesigns\.size `integer[]`
+        - bioAssays\.originalPlatform\.technologyType `string[]` \(possible values\: TWOCOLOR\, DUALMODE\, ONECOLOR\, SEQUENCING\, GENELIST\, OTHER\)
+        - bioAssays\.processingDate `string[]`
+        - bioAssays\.sampleUsed\.bioAssaysUsedIn\.size `integer[]`
+        - bioAssays\.sampleUsed\.characteristics\.category `string[]`
+        - bioAssays\.sampleUsed\.characteristics\.categoryUri `string[]`
+        - bioAssays\.sampleUsed\.characteristics\.evidenceCode `string[]` \(possible values\: IC\, IDA\, IEA\, IEP\, IGI\, IMP\, IPI\, ISS\, NAS\, ND\, RCA\, TAS\, NR\, EXP\, ISA\, ISM\, IGC\, ISO\, IIA\, IBA\, IBD\, IKR\, IRD\, IMR\, IED\, IAGP\, IPM\, QTM\, HDA\, HEP\, HGI\, HMP\, HTP\, OTHER\)
+        - bioAssays\.sampleUsed\.characteristics\.id `integer[]`
+        - bioAssays\.sampleUsed\.characteristics\.name `string[]`
+        - bioAssays\.sampleUsed\.characteristics\.size `integer[]`
+        - bioAssays\.sampleUsed\.characteristics\.value `string[]`
+        - bioAssays\.sampleUsed\.characteristics\.valueUri `string[]` \(will be expanded with ontology inference\)
+        - bioAssays\.sampleUsed\.id `integer[]`
+        - bioAssays\.sampleUsed\.name `string[]`
+        - bioAssays\.sequencePairedReads `boolean[]`
+        - bioAssays\.sequenceReadCount `integer[]`
+        - bioAssays\.sequenceReadLength `integer[]`
+        - bioAssays\.shortName `string[]`
+        - bioAssays\.size `integer`
+        - characteristics\.category `string[]`
+        - characteristics\.categoryUri `string[]`
+        - characteristics\.evidenceCode `string[]` \(possible values\: IC\, IDA\, IEA\, IEP\, IGI\, IMP\, IPI\, ISS\, NAS\, ND\, RCA\, TAS\, NR\, EXP\, ISA\, ISM\, IGC\, ISO\, IIA\, IBA\, IBD\, IKR\, IRD\, IMR\, IED\, IAGP\, IPM\, QTM\, HDA\, HEP\, HGI\, HMP\, HTP\, OTHER\)
+        - characteristics\.id `integer[]`
+        - characteristics\.name `string[]`
+        - characteristics\.size `integer`
+        - characteristics\.value `string[]`
+        - characteristics\.valueUri `string[]` \(will be expanded with ontology inference\)
+        - curationDetails\.lastUpdated `string`
+        - curationDetails\.needsAttention `boolean`
+        - curationDetails\.troubled `boolean`
+        - experimentalDesign\.experimentalFactors\.factorValues\.characteristics\.category `string[]`
+        - experimentalDesign\.experimentalFactors\.factorValues\.characteristics\.categoryUri `string[]`
+        - experimentalDesign\.experimentalFactors\.factorValues\.characteristics\.evidenceCode `string[]` \(possible values\: IC\, IDA\, IEA\, IEP\, IGI\, IMP\, IPI\, ISS\, NAS\, ND\, RCA\, TAS\, NR\, EXP\, ISA\, ISM\, IGC\, ISO\, IIA\, IBA\, IBD\, IKR\, IRD\, IMR\, IED\, IAGP\, IPM\, QTM\, HDA\, HEP\, HGI\, HMP\, HTP\, OTHER\)
+        - experimentalDesign\.experimentalFactors\.factorValues\.characteristics\.id `integer[]`
+        - experimentalDesign\.experimentalFactors\.factorValues\.characteristics\.name `string[]`
+        - experimentalDesign\.experimentalFactors\.factorValues\.characteristics\.object `string[]`
+        - experimentalDesign\.experimentalFactors\.factorValues\.characteristics\.objectUri `string[]` \(will be expanded with ontology inference\)
+        - experimentalDesign\.experimentalFactors\.factorValues\.characteristics\.predicate `string[]`
+        - experimentalDesign\.experimentalFactors\.factorValues\.characteristics\.predicateUri `string[]` \(will be expanded with ontology inference\)
+        - experimentalDesign\.experimentalFactors\.factorValues\.characteristics\.subject `string`
+        - experimentalDesign\.experimentalFactors\.factorValues\.characteristics\.subjectUri `string` \(will be expanded with ontology inference\)
+        - <s>experimentalDesign\.experimentalFactors\.factorValues\.characteristics\.value</s> `string[]` \(use experimentalDesign\.experimentalFactors\.factorValues\.characteristics\.subject instead\; alias for experimentalDesign\.experimentalFactors\.factorValues\.characteristics\.subject\)
+        - <s>experimentalDesign\.experimentalFactors\.factorValues\.characteristics\.valueUri</s> `string[]` \(will be expanded with ontology inference\; use experimentalDesign\.experimentalFactors\.factorValues\.characteristics\.subjectUri instead\; alias for experimentalDesign\.experimentalFactors\.factorValues\.characteristics\.subjectUri\)
+        - experimentalDesign\.experimentalFactors\.size `integer`
+        - experimentalDesign\.id `integer`
+        - experimentalDesign\.name `string`
+        - experimentalDesign\.normalizationDescription `string`
+        - experimentalDesign\.qualityControlDescription `string`
+        - experimentalDesign\.replicateDescription `string`
+        - experimentalDesign\.types\.size `integer`
+        - geeq\.publicQualityScore `number`
+        - geeq\.publicSuitabilityScore `number` \(security\: GROUP\_ADMIN\)
         - id `integer`
-        - lastUpdated `string` (alias for curationDetails.lastUpdated)
-        - meanVarianceRelation.id `integer`
+        - lastUpdated `string` \(alias for curationDetails\.lastUpdated\)
+        - meanVarianceRelation\.id `integer`
         - name `string`
-        - needsAttention `boolean` (alias for curationDetails.needsAttention)
+        - needsAttention `boolean` \(alias for curationDetails\.needsAttention\)
+        - numberOfCells `integer`
         - numberOfDataVectors `integer`
         - numberOfSamples `integer`
-        - owner.email `string`
-        - owner.id `integer`
-        - owner.name `string`
-        - primaryPublication.pubAccession.accession `string`
-        - primaryPublication.pubAccession.accessionVersion `string`
-        - primaryPublication.pubAccession.externalDatabase.externalDatabases.size `integer`
-        - primaryPublication.pubAccession.externalDatabase.ftpUri `string`
-        - primaryPublication.pubAccession.externalDatabase.id `integer`
-        - primaryPublication.pubAccession.externalDatabase.lastUpdated `string`
-        - primaryPublication.pubAccession.externalDatabase.localInstallDbName `string`
-        - primaryPublication.pubAccession.externalDatabase.name `string`
-        - primaryPublication.pubAccession.externalDatabase.releaseUrl `object`
-        - primaryPublication.pubAccession.externalDatabase.releaseVersion `string`
-        - primaryPublication.pubAccession.externalDatabase.type `string` (possible values: ONTOLOGY, SEQUENCE, LITERATURE, EXPRESSION, GENOME, OTHER, PROTEIN)
-        - primaryPublication.pubAccession.externalDatabase.webUri `string`
-        - primaryPublication.pubAccession.id `integer`
-        - processedExpressionDataVectors.size `integer`
-        - quantitationTypes.size `integer`
-        - rawExpressionDataVectors.size `integer`
+        - owner\.email `string`
+        - owner\.id `integer`
+        - owner\.name `string`
+        - primaryPublication\.pubAccession\.accession `string`
+        - primaryPublication\.pubAccession\.accessionVersion `string`
+        - primaryPublication\.pubAccession\.externalDatabase\.externalDatabases\.size `integer`
+        - primaryPublication\.pubAccession\.externalDatabase\.ftpUri `string`
+        - primaryPublication\.pubAccession\.externalDatabase\.id `integer`
+        - primaryPublication\.pubAccession\.externalDatabase\.lastUpdated `string`
+        - primaryPublication\.pubAccession\.externalDatabase\.localInstallDbName `string`
+        - primaryPublication\.pubAccession\.externalDatabase\.name `string`
+        - primaryPublication\.pubAccession\.externalDatabase\.releaseUrl `object`
+        - primaryPublication\.pubAccession\.externalDatabase\.releaseVersion `string`
+        - primaryPublication\.pubAccession\.externalDatabase\.type `string` \(possible values\: ONTOLOGY\, SEQUENCE\, LITERATURE\, EXPRESSION\, GENOME\, OTHER\, PROTEIN\)
+        - primaryPublication\.pubAccession\.externalDatabase\.webUri `string`
+        - primaryPublication\.pubAccession\.id `integer`
+        - processedExpressionDataVectors\.size `integer`
+        - quantitationTypes\.size `integer`
+        - rawExpressionDataVectors\.size `integer`
         - shortName `string`
-        - singleCellExpressionDataVectors.size `integer`
-        - taxon `integer` (alias for taxon.id)
-        - taxon.commonName `string`
-        - taxon.externalDatabase.ftpUri `string`
-        - taxon.externalDatabase.id `integer`
-        - taxon.externalDatabase.lastUpdated `string`
-        - taxon.externalDatabase.localInstallDbName `string`
-        - taxon.externalDatabase.name `string`
-        - taxon.externalDatabase.releaseUrl `object`
-        - taxon.externalDatabase.releaseVersion `string`
-        - taxon.externalDatabase.type `string` (possible values: ONTOLOGY, SEQUENCE, LITERATURE, EXPRESSION, GENOME, OTHER, PROTEIN)
-        - taxon.externalDatabase.webUri `string`
-        - taxon.id `integer`
-        - taxon.isGenesUsable `boolean`
-        - taxon.ncbiId `integer`
-        - taxon.scientificName `string`
-        - taxon.secondaryNcbiId `integer`
-        - troubled `boolean` (alias for curationDetails.troubled)
+        - singleCellExpressionDataVectors\.size `integer`
+        - taxon `integer` \(alias for taxon\.id\)
+        - taxon\.commonName `string`
+        - taxon\.externalDatabase\.ftpUri `string`
+        - taxon\.externalDatabase\.id `integer`
+        - taxon\.externalDatabase\.lastUpdated `string`
+        - taxon\.externalDatabase\.localInstallDbName `string`
+        - taxon\.externalDatabase\.name `string`
+        - taxon\.externalDatabase\.releaseUrl `object`
+        - taxon\.externalDatabase\.releaseVersion `string`
+        - taxon\.externalDatabase\.type `string` \(possible values\: ONTOLOGY\, SEQUENCE\, LITERATURE\, EXPRESSION\, GENOME\, OTHER\, PROTEIN\)
+        - taxon\.externalDatabase\.webUri `string`
+        - taxon\.id `integer`
+        - taxon\.isGenesUsable `boolean`
+        - taxon\.ncbiId `integer`
+        - taxon\.scientificName `string`
+        - taxon\.secondaryNcbiId `integer`
+        - troubled `boolean` \(alias for curationDetails\.troubled\)
       x-gemma-filterable-properties:
       - name: accession.accession
         type: string
@@ -6432,12 +6602,34 @@ components:
         type: "integer[]"
       - name: allCharacteristics.name
         type: "string[]"
+      - name: allCharacteristics.object
+        type: "string[]"
+        description: only applicable to statements
+      - name: allCharacteristics.objectUri
+        type: "string[]"
+        description: will be expanded with ontology inference; only applicable to
+          statements
+      - name: allCharacteristics.predicate
+        type: "string[]"
+        description: only applicable to statements
+      - name: allCharacteristics.predicateUri
+        type: "string[]"
+        description: will be expanded with ontology inference; only applicable to
+          statements
       - name: allCharacteristics.size
         type: integer
+      - name: allCharacteristics.subject
+        type: string
+        description: only applicable to statements
+      - name: allCharacteristics.subjectUri
+        type: string
+        description: will be expanded with ontology inference; only applicable to
+          statements
       - name: allCharacteristics.value
         type: "string[]"
       - name: allCharacteristics.valueUri
         type: "string[]"
+        description: will be expanded with ontology inference
       - name: batchEffect
         type: string
         allowedValues:
@@ -6633,6 +6825,7 @@ components:
         type: "string[]"
       - name: bioAssays.sampleUsed.characteristics.valueUri
         type: "string[]"
+        description: will be expanded with ontology inference
       - name: bioAssays.sampleUsed.id
         type: "integer[]"
       - name: bioAssays.sampleUsed.name
@@ -6732,6 +6925,7 @@ components:
         type: "string[]"
       - name: characteristics.valueUri
         type: "string[]"
+        description: will be expanded with ontology inference
       - name: curationDetails.lastUpdated
         type: string
       - name: curationDetails.needsAttention
@@ -6817,10 +7011,31 @@ components:
         type: "integer[]"
       - name: experimentalDesign.experimentalFactors.factorValues.characteristics.name
         type: "string[]"
+      - name: experimentalDesign.experimentalFactors.factorValues.characteristics.object
+        type: "string[]"
+      - name: experimentalDesign.experimentalFactors.factorValues.characteristics.objectUri
+        type: "string[]"
+        description: will be expanded with ontology inference
+      - name: experimentalDesign.experimentalFactors.factorValues.characteristics.predicate
+        type: "string[]"
+      - name: experimentalDesign.experimentalFactors.factorValues.characteristics.predicateUri
+        type: "string[]"
+        description: will be expanded with ontology inference
+      - name: experimentalDesign.experimentalFactors.factorValues.characteristics.subject
+        type: string
+      - name: experimentalDesign.experimentalFactors.factorValues.characteristics.subjectUri
+        type: string
+        description: will be expanded with ontology inference
       - name: experimentalDesign.experimentalFactors.factorValues.characteristics.value
         type: "string[]"
+        description: use experimentalDesign.experimentalFactors.factorValues.characteristics.subject
+          instead; alias for experimentalDesign.experimentalFactors.factorValues.characteristics.subject
+        deprecated: true
       - name: experimentalDesign.experimentalFactors.factorValues.characteristics.valueUri
         type: "string[]"
+        description: will be expanded with ontology inference; use experimentalDesign.experimentalFactors.factorValues.characteristics.subjectUri
+          instead; alias for experimentalDesign.experimentalFactors.factorValues.characteristics.subjectUri
+        deprecated: true
       - name: experimentalDesign.experimentalFactors.size
         type: integer
       - name: experimentalDesign.id
@@ -6856,6 +7071,8 @@ components:
       - name: needsAttention
         type: boolean
         description: alias for curationDetails.needsAttention
+      - name: numberOfCells
+        type: integer
       - name: numberOfDataVectors
         type: integer
       - name: numberOfSamples
@@ -6983,6 +7200,74 @@ components:
       - type: string
         description: A taxon identifier that matches either its scientific or common
           name.
+    BibliographicReferenceValueObject:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        abstractText:
+          type: string
+        authorList:
+          type: string
+        citation:
+          $ref: "#/components/schemas/CitationValueObject"
+        experiments:
+          type: array
+          items:
+            $ref: "#/components/schemas/ExpressionExperimentValueObject"
+        issue:
+          type: string
+        pages:
+          type: string
+        pubAccession:
+          type: string
+        publication:
+          type: string
+        publicationDate:
+          type: string
+          format: date-time
+        publisher:
+          type: string
+        title:
+          type: string
+        volume:
+          type: string
+        meshTerms:
+          type: array
+          items:
+            type: string
+        chemicalsTerms:
+          type: array
+          items:
+            type: string
+        retracted:
+          type: boolean
+    CitationValueObject:
+      type: object
+      properties:
+        citation:
+          type: string
+        id:
+          type: integer
+          format: int64
+        pubmedAccession:
+          type: string
+        pubmedURL:
+          type: string
+        retracted:
+          type: boolean
+    ResponseDataObjectListBibliographicReferenceValueObject:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/BibliographicReferenceValueObject"
+        warnings:
+          type: array
+          items:
+            $ref: "#/components/schemas/WellComposedWarning"
     AnnotationValueObject:
       type: object
       properties:
@@ -7194,10 +7479,10 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/DatabaseEntryValueObject"
-        taxonID:
+        numberOfExpressionExperiments:
           type: integer
           format: int64
-        numberOfExpressionExperiments:
+        taxonID:
           type: integer
           format: int64
         troubleDetails:
@@ -7374,6 +7659,10 @@ components:
             deprecated: true
           description: "This is deprecated, use the `factorValues` collection instead."
           deprecated: true
+        fvbasicVOs:
+          type: array
+          items:
+            $ref: "#/components/schemas/FactorValueBasicValueObject"
         factorValueObjects:
           type: array
           description: "This property is redundant, use `factorValues` instead."
@@ -7414,7 +7703,7 @@ components:
           type: array
           items:
             type: string
-        numberOfCells:
+        numberOfCellIds:
           type: integer
           format: int32
         bioAssayIds:
@@ -7432,6 +7721,11 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/CellLevelCharacteristicsValueObject"
+        numberOfCells:
+          type: integer
+          description: Use numberOfCellIds instead.
+          format: int32
+          deprecated: true
     ExpressionExperimentSubSetWithGroupsValueObject:
       type: object
       properties:
@@ -7587,49 +7881,6 @@ components:
             items:
               type: number
               format: double
-    BibliographicReferenceValueObject:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        abstractText:
-          type: string
-        authorList:
-          type: string
-        citation:
-          $ref: "#/components/schemas/CitationValueObject"
-        experiments:
-          type: array
-          items:
-            $ref: "#/components/schemas/ExpressionExperimentValueObject"
-        issue:
-          type: string
-        pages:
-          type: string
-        pubAccession:
-          type: string
-        publication:
-          type: string
-        publicationDate:
-          type: string
-          format: date-time
-        publisher:
-          type: string
-        title:
-          type: string
-        volume:
-          type: string
-        meshTerms:
-          type: array
-          items:
-            type: string
-        chemicalsTerms:
-          type: array
-          items:
-            type: string
-        retracted:
-          type: boolean
     BioSequenceValueObject:
       type: object
       properties:
@@ -7669,20 +7920,6 @@ components:
           - AFFY_COLLAPSED
           - OLIGO
           - DUMMY
-    CitationValueObject:
-      type: object
-      properties:
-        citation:
-          type: string
-        id:
-          type: integer
-          format: int64
-        pubmedAccession:
-          type: string
-        pubmedURL:
-          type: string
-        retracted:
-          type: boolean
     CompositeSequenceValueObject:
       type: object
       properties:
@@ -7803,12 +8040,12 @@ components:
             $ref: "#/components/schemas/CharacteristicValueObject"
         searchResult:
           $ref: "#/components/schemas/SearchResultValueObjectExpressionExperimentValueObject"
-        bioAssayCount:
-          type: integer
-          format: int32
         taxonId:
           type: integer
           format: int64
+        bioAssayCount:
+          type: integer
+          format: int32
         troubleDetails:
           type: string
         numberOfArrayDesigns:
@@ -7907,7 +8144,7 @@ components:
         \ the exact phrase \"alpha beta gamma\".                                 \
         \                             |\n| Field        | `shortName:GSE00001`   \
         \     | Results with short name GSE00001. <details><summary>List of supported\
-        \ fields</summary><h2>ubic.gemma.model.expression.experiment.ExpressionExperiment</h2><ul><li>description</li><li>name</li><li>shortName</li><li>accession.accession</li><li>bioAssays.description</li><li>bioAssays.name</li><li>characteristics.value</li><li>characteristics.valueUri</li><li>experimentalDesign.description</li><li>experimentalDesign.name</li><li>otherRelevantPublications.abstractText</li><li>otherRelevantPublications.authorList</li><li>otherRelevantPublications.fullTextUri</li><li>otherRelevantPublications.name</li><li>otherRelevantPublications.title</li><li>primaryPublication.abstractText</li><li>primaryPublication.authorList</li><li>primaryPublication.fullTextUri</li><li>primaryPublication.name</li><li>primaryPublication.title</li><li>bioAssays.accession.accession</li><li>bioAssays.sampleUsed.name</li><li>experimentalDesign.experimentalFactors.description</li><li>experimentalDesign.experimentalFactors.name</li><li>otherRelevantPublications.chemicals.name</li><li>otherRelevantPublications.chemicals.registryNumber</li><li>otherRelevantPublications.keywords.term</li><li>otherRelevantPublications.meshTerms.term</li><li>otherRelevantPublications.pubAccession.accession</li><li>primaryPublication.chemicals.name</li><li>primaryPublication.chemicals.registryNumber</li><li>primaryPublication.keywords.term</li><li>primaryPublication.meshTerms.term</li><li>primaryPublication.pubAccession.accession</li><li>bioAssays.sampleUsed.characteristics.value</li><li>bioAssays.sampleUsed.characteristics.valueUri</li><li>experimentalDesign.experimentalFactors.category.category</li><li>experimentalDesign.experimentalFactors.category.categoryUri</li><li>experimentalDesign.experimentalFactors.factorValues.characteristics.object</li><li>experimentalDesign.experimentalFactors.factorValues.characteristics.objectUri</li><li>experimentalDesign.experimentalFactors.factorValues.characteristics.secondObject</li><li>experimentalDesign.experimentalFactors.factorValues.characteristics.secondObjectUri</li><li>experimentalDesign.experimentalFactors.factorValues.characteristics.value</li><li>experimentalDesign.experimentalFactors.factorValues.characteristics.valueUri</li></ul><h2>ubic.gemma.model.genome.gene.GeneSet</h2><ul><li>description</li><li>name</li><li>characteristics.value</li><li>characteristics.valueUri</li><li>literatureSources.abstractText</li><li>literatureSources.authorList</li><li>literatureSources.fullTextUri</li><li>literatureSources.name</li><li>literatureSources.title</li><li>sourceAccession.accession</li><li>literatureSources.chemicals.name</li><li>literatureSources.chemicals.registryNumber</li><li>literatureSources.keywords.term</li><li>literatureSources.meshTerms.term</li><li>literatureSources.pubAccession.accession</li><li>members.gene.ensemblId</li><li>members.gene.name</li><li>members.gene.ncbiGeneId</li><li>members.gene.officialName</li><li>members.gene.officialSymbol</li><li>members.gene.accessions.accession</li><li>members.gene.aliases.alias</li><li>members.gene.products.name</li><li>members.gene.products.ncbiGi</li><li>members.gene.products.previousNcbiId</li><li>members.gene.products.accessions.accession</li></ul><h2>ubic.gemma.model.expression.designElement.CompositeSequence</h2><ul><li>description</li><li>name</li><li>biologicalCharacteristic.name</li><li>biologicalCharacteristic.sequenceDatabaseEntry.accession</li></ul><h2>ubic.gemma.model.expression.arrayDesign.ArrayDesign</h2><ul><li>description</li><li>name</li><li>shortName</li><li>alternateNames.name</li><li>externalReferences.accession</li></ul><h2>ubic.gemma.model.genome.Gene</h2><ul><li>ensemblId</li><li>name</li><li>ncbiGeneId</li><li>officialName</li><li>officialSymbol</li><li>accessions.accession</li><li>aliases.alias</li><li>products.name</li><li>products.ncbiGi</li><li>products.previousNcbiId</li><li>products.accessions.accession</li></ul><h2>ubic.gemma.model.genome.biosequence.BioSequence</h2><ul><li>name</li><li>sequenceDatabaseEntry.accession</li></ul></details>\
+        \ fields</summary><h2>ubic.gemma.model.genome.gene.GeneSet</h2><ul><li>description</li><li>name</li><li>characteristics.value</li><li>characteristics.valueUri</li><li>literatureSources.abstractText</li><li>literatureSources.authorList</li><li>literatureSources.fullTextUri</li><li>literatureSources.name</li><li>literatureSources.title</li><li>sourceAccession.accession</li><li>literatureSources.chemicals.name</li><li>literatureSources.chemicals.registryNumber</li><li>literatureSources.keywords.term</li><li>literatureSources.meshTerms.term</li><li>literatureSources.pubAccession.accession</li><li>members.gene.ensemblId</li><li>members.gene.name</li><li>members.gene.ncbiGeneId</li><li>members.gene.officialName</li><li>members.gene.officialSymbol</li><li>members.gene.accessions.accession</li><li>members.gene.aliases.alias</li><li>members.gene.products.name</li><li>members.gene.products.ncbiGi</li><li>members.gene.products.previousNcbiId</li><li>members.gene.products.accessions.accession</li></ul><h2>ubic.gemma.model.expression.experiment.ExpressionExperiment</h2><ul><li>description</li><li>name</li><li>shortName</li><li>accession.accession</li><li>bioAssays.description</li><li>bioAssays.name</li><li>characteristics.value</li><li>characteristics.valueUri</li><li>experimentalDesign.description</li><li>experimentalDesign.name</li><li>otherRelevantPublications.abstractText</li><li>otherRelevantPublications.authorList</li><li>otherRelevantPublications.fullTextUri</li><li>otherRelevantPublications.name</li><li>otherRelevantPublications.title</li><li>primaryPublication.abstractText</li><li>primaryPublication.authorList</li><li>primaryPublication.fullTextUri</li><li>primaryPublication.name</li><li>primaryPublication.title</li><li>bioAssays.accession.accession</li><li>bioAssays.sampleUsed.name</li><li>experimentalDesign.experimentalFactors.description</li><li>experimentalDesign.experimentalFactors.name</li><li>otherRelevantPublications.chemicals.name</li><li>otherRelevantPublications.chemicals.registryNumber</li><li>otherRelevantPublications.keywords.term</li><li>otherRelevantPublications.meshTerms.term</li><li>otherRelevantPublications.pubAccession.accession</li><li>primaryPublication.chemicals.name</li><li>primaryPublication.chemicals.registryNumber</li><li>primaryPublication.keywords.term</li><li>primaryPublication.meshTerms.term</li><li>primaryPublication.pubAccession.accession</li><li>bioAssays.sampleUsed.characteristics.value</li><li>bioAssays.sampleUsed.characteristics.valueUri</li><li>experimentalDesign.experimentalFactors.category.category</li><li>experimentalDesign.experimentalFactors.category.categoryUri</li><li>experimentalDesign.experimentalFactors.factorValues.characteristics.object</li><li>experimentalDesign.experimentalFactors.factorValues.characteristics.objectUri</li><li>experimentalDesign.experimentalFactors.factorValues.characteristics.predicate</li><li>experimentalDesign.experimentalFactors.factorValues.characteristics.predicateUri</li><li>experimentalDesign.experimentalFactors.factorValues.characteristics.secondObject</li><li>experimentalDesign.experimentalFactors.factorValues.characteristics.secondObjectUri</li><li>experimentalDesign.experimentalFactors.factorValues.characteristics.secondPredicate</li><li>experimentalDesign.experimentalFactors.factorValues.characteristics.secondPredicateUri</li><li>experimentalDesign.experimentalFactors.factorValues.characteristics.value</li><li>experimentalDesign.experimentalFactors.factorValues.characteristics.valueUri</li></ul><h2>ubic.gemma.model.expression.designElement.CompositeSequence</h2><ul><li>description</li><li>name</li><li>biologicalCharacteristic.name</li><li>biologicalCharacteristic.sequenceDatabaseEntry.accession</li></ul><h2>ubic.gemma.model.expression.arrayDesign.ArrayDesign</h2><ul><li>description</li><li>name</li><li>shortName</li><li>alternateNames.name</li><li>externalReferences.accession</li></ul><h2>ubic.gemma.model.genome.Gene</h2><ul><li>ensemblId</li><li>name</li><li>ncbiGeneId</li><li>officialName</li><li>officialSymbol</li><li>accessions.accession</li><li>aliases.alias</li><li>products.name</li><li>products.ncbiGi</li><li>products.previousNcbiId</li><li>products.accessions.accession</li></ul><h2>ubic.gemma.model.genome.biosequence.BioSequence</h2><ul><li>name</li><li>sequenceDatabaseEntry.accession</li></ul></details>\
         \ |\n| Prefix       | `alpha*`                    | Results must start with\
         \ \"alpha\".                                                             \
         \                          |\n| Wildcard     | `BRCA?`                   \
@@ -7925,6 +8162,33 @@ components:
       externalDocs:
         url: https://lucene.apache.org/core/3_6_2/queryparsersyntax.html
       x-gemma-searchable-properties:
+        ubic.gemma.model.genome.gene.GeneSet:
+        - description
+        - name
+        - characteristics.value
+        - characteristics.valueUri
+        - literatureSources.abstractText
+        - literatureSources.authorList
+        - literatureSources.fullTextUri
+        - literatureSources.name
+        - literatureSources.title
+        - sourceAccession.accession
+        - literatureSources.chemicals.name
+        - literatureSources.chemicals.registryNumber
+        - literatureSources.keywords.term
+        - literatureSources.meshTerms.term
+        - literatureSources.pubAccession.accession
+        - members.gene.ensemblId
+        - members.gene.name
+        - members.gene.ncbiGeneId
+        - members.gene.officialName
+        - members.gene.officialSymbol
+        - members.gene.accessions.accession
+        - members.gene.aliases.alias
+        - members.gene.products.name
+        - members.gene.products.ncbiGi
+        - members.gene.products.previousNcbiId
+        - members.gene.products.accessions.accession
         ubic.gemma.model.expression.experiment.ExpressionExperiment:
         - description
         - name
@@ -7966,37 +8230,14 @@ components:
         - experimentalDesign.experimentalFactors.category.categoryUri
         - experimentalDesign.experimentalFactors.factorValues.characteristics.object
         - experimentalDesign.experimentalFactors.factorValues.characteristics.objectUri
+        - experimentalDesign.experimentalFactors.factorValues.characteristics.predicate
+        - experimentalDesign.experimentalFactors.factorValues.characteristics.predicateUri
         - experimentalDesign.experimentalFactors.factorValues.characteristics.secondObject
         - experimentalDesign.experimentalFactors.factorValues.characteristics.secondObjectUri
+        - experimentalDesign.experimentalFactors.factorValues.characteristics.secondPredicate
+        - experimentalDesign.experimentalFactors.factorValues.characteristics.secondPredicateUri
         - experimentalDesign.experimentalFactors.factorValues.characteristics.value
         - experimentalDesign.experimentalFactors.factorValues.characteristics.valueUri
-        ubic.gemma.model.genome.gene.GeneSet:
-        - description
-        - name
-        - characteristics.value
-        - characteristics.valueUri
-        - literatureSources.abstractText
-        - literatureSources.authorList
-        - literatureSources.fullTextUri
-        - literatureSources.name
-        - literatureSources.title
-        - sourceAccession.accession
-        - literatureSources.chemicals.name
-        - literatureSources.chemicals.registryNumber
-        - literatureSources.keywords.term
-        - literatureSources.meshTerms.term
-        - literatureSources.pubAccession.accession
-        - members.gene.ensemblId
-        - members.gene.name
-        - members.gene.ncbiGeneId
-        - members.gene.officialName
-        - members.gene.officialSymbol
-        - members.gene.accessions.accession
-        - members.gene.aliases.alias
-        - members.gene.products.name
-        - members.gene.products.ncbiGi
-        - members.gene.products.previousNcbiId
-        - members.gene.products.accessions.accession
         ubic.gemma.model.expression.designElement.CompositeSequence:
         - description
         - name
@@ -8632,135 +8873,135 @@ components:
         Available properties:
 
         - advertisedNumberOfDesignElements `integer`
-        - alternativeTo.advertisedNumberOfDesignElements `integer`
-        - alternativeTo.compositeSequences.size `integer`
-        - alternativeTo.curationDetails.id `integer`
-        - alternativeTo.curationDetails.lastUpdated `string`
-        - alternativeTo.curationDetails.needsAttention `boolean`
-        - alternativeTo.curationDetails.troubled `boolean`
-        - alternativeTo.designProvider.email `string`
-        - alternativeTo.designProvider.id `integer`
-        - alternativeTo.designProvider.name `string`
-        - alternativeTo.externalReferences.size `integer`
-        - alternativeTo.id `integer`
-        - alternativeTo.mergees.size `integer`
-        - alternativeTo.name `string`
-        - alternativeTo.primaryTaxon.commonName `string`
-        - alternativeTo.primaryTaxon.id `integer`
-        - alternativeTo.primaryTaxon.isGenesUsable `boolean`
-        - alternativeTo.primaryTaxon.ncbiId `integer`
-        - alternativeTo.primaryTaxon.scientificName `string`
-        - alternativeTo.primaryTaxon.secondaryNcbiId `integer`
-        - alternativeTo.shortName `string`
-        - alternativeTo.subsumedArrayDesigns.size `integer`
-        - alternativeTo.technologyType `string` (possible values: TWOCOLOR, DUALMODE, ONECOLOR, SEQUENCING, GENELIST, OTHER)
-        - compositeSequences.size `integer`
-        - curationDetails.lastUpdated `string`
-        - curationDetails.needsAttention `boolean`
-        - curationDetails.troubled `boolean`
-        - designProvider.email `string`
-        - designProvider.id `integer`
-        - designProvider.name `string`
-        - externalReferences.Uri `string[]`
-        - externalReferences.accession `string[]`
-        - externalReferences.accessionVersion `string[]`
-        - externalReferences.externalDatabase.externalDatabases.size `integer[]`
-        - externalReferences.externalDatabase.ftpUri `string[]`
-        - externalReferences.externalDatabase.id `integer[]`
-        - externalReferences.externalDatabase.lastUpdated `string[]`
-        - externalReferences.externalDatabase.localInstallDbName `string[]`
-        - externalReferences.externalDatabase.name `string[]`
-        - externalReferences.externalDatabase.releaseUrl `object[]`
-        - externalReferences.externalDatabase.releaseVersion `string[]`
-        - externalReferences.externalDatabase.type `string[]` (possible values: ONTOLOGY, SEQUENCE, LITERATURE, EXPRESSION, GENOME, OTHER, PROTEIN)
-        - externalReferences.externalDatabase.webUri `string[]`
-        - externalReferences.id `integer[]`
-        - externalReferences.size `integer`
+        - alternativeTo\.advertisedNumberOfDesignElements `integer`
+        - alternativeTo\.compositeSequences\.size `integer`
+        - alternativeTo\.curationDetails\.id `integer`
+        - alternativeTo\.curationDetails\.lastUpdated `string`
+        - alternativeTo\.curationDetails\.needsAttention `boolean`
+        - alternativeTo\.curationDetails\.troubled `boolean`
+        - alternativeTo\.designProvider\.email `string`
+        - alternativeTo\.designProvider\.id `integer`
+        - alternativeTo\.designProvider\.name `string`
+        - alternativeTo\.externalReferences\.size `integer`
+        - alternativeTo\.id `integer`
+        - alternativeTo\.mergees\.size `integer`
+        - alternativeTo\.name `string`
+        - alternativeTo\.primaryTaxon\.commonName `string`
+        - alternativeTo\.primaryTaxon\.id `integer`
+        - alternativeTo\.primaryTaxon\.isGenesUsable `boolean`
+        - alternativeTo\.primaryTaxon\.ncbiId `integer`
+        - alternativeTo\.primaryTaxon\.scientificName `string`
+        - alternativeTo\.primaryTaxon\.secondaryNcbiId `integer`
+        - alternativeTo\.shortName `string`
+        - alternativeTo\.subsumedArrayDesigns\.size `integer`
+        - alternativeTo\.technologyType `string` \(possible values\: TWOCOLOR\, DUALMODE\, ONECOLOR\, SEQUENCING\, GENELIST\, OTHER\)
+        - compositeSequences\.size `integer`
+        - curationDetails\.lastUpdated `string`
+        - curationDetails\.needsAttention `boolean`
+        - curationDetails\.troubled `boolean`
+        - designProvider\.email `string`
+        - designProvider\.id `integer`
+        - designProvider\.name `string`
+        - externalReferences\.Uri `string[]`
+        - externalReferences\.accession `string[]`
+        - externalReferences\.accessionVersion `string[]`
+        - externalReferences\.externalDatabase\.externalDatabases\.size `integer[]`
+        - externalReferences\.externalDatabase\.ftpUri `string[]`
+        - externalReferences\.externalDatabase\.id `integer[]`
+        - externalReferences\.externalDatabase\.lastUpdated `string[]`
+        - externalReferences\.externalDatabase\.localInstallDbName `string[]`
+        - externalReferences\.externalDatabase\.name `string[]`
+        - externalReferences\.externalDatabase\.releaseUrl `object[]`
+        - externalReferences\.externalDatabase\.releaseVersion `string[]`
+        - externalReferences\.externalDatabase\.type `string[]` \(possible values\: ONTOLOGY\, SEQUENCE\, LITERATURE\, EXPRESSION\, GENOME\, OTHER\, PROTEIN\)
+        - externalReferences\.externalDatabase\.webUri `string[]`
+        - externalReferences\.id `integer[]`
+        - externalReferences\.size `integer`
         - id `integer`
-        - lastUpdated `string` (alias for curationDetails.lastUpdated)
-        - mergedInto.advertisedNumberOfDesignElements `integer`
-        - mergedInto.compositeSequences.size `integer`
-        - mergedInto.curationDetails.id `integer`
-        - mergedInto.curationDetails.lastUpdated `string`
-        - mergedInto.curationDetails.needsAttention `boolean`
-        - mergedInto.curationDetails.troubled `boolean`
-        - mergedInto.designProvider.email `string`
-        - mergedInto.designProvider.id `integer`
-        - mergedInto.designProvider.name `string`
-        - mergedInto.externalReferences.size `integer`
-        - mergedInto.id `integer`
-        - mergedInto.mergees.size `integer`
-        - mergedInto.name `string`
-        - mergedInto.primaryTaxon.commonName `string`
-        - mergedInto.primaryTaxon.id `integer`
-        - mergedInto.primaryTaxon.isGenesUsable `boolean`
-        - mergedInto.primaryTaxon.ncbiId `integer`
-        - mergedInto.primaryTaxon.scientificName `string`
-        - mergedInto.primaryTaxon.secondaryNcbiId `integer`
-        - mergedInto.shortName `string`
-        - mergedInto.subsumedArrayDesigns.size `integer`
-        - mergedInto.technologyType `string` (possible values: TWOCOLOR, DUALMODE, ONECOLOR, SEQUENCING, GENELIST, OTHER)
-        - mergees.size `integer`
+        - lastUpdated `string` \(alias for curationDetails\.lastUpdated\)
+        - mergedInto\.advertisedNumberOfDesignElements `integer`
+        - mergedInto\.compositeSequences\.size `integer`
+        - mergedInto\.curationDetails\.id `integer`
+        - mergedInto\.curationDetails\.lastUpdated `string`
+        - mergedInto\.curationDetails\.needsAttention `boolean`
+        - mergedInto\.curationDetails\.troubled `boolean`
+        - mergedInto\.designProvider\.email `string`
+        - mergedInto\.designProvider\.id `integer`
+        - mergedInto\.designProvider\.name `string`
+        - mergedInto\.externalReferences\.size `integer`
+        - mergedInto\.id `integer`
+        - mergedInto\.mergees\.size `integer`
+        - mergedInto\.name `string`
+        - mergedInto\.primaryTaxon\.commonName `string`
+        - mergedInto\.primaryTaxon\.id `integer`
+        - mergedInto\.primaryTaxon\.isGenesUsable `boolean`
+        - mergedInto\.primaryTaxon\.ncbiId `integer`
+        - mergedInto\.primaryTaxon\.scientificName `string`
+        - mergedInto\.primaryTaxon\.secondaryNcbiId `integer`
+        - mergedInto\.shortName `string`
+        - mergedInto\.subsumedArrayDesigns\.size `integer`
+        - mergedInto\.technologyType `string` \(possible values\: TWOCOLOR\, DUALMODE\, ONECOLOR\, SEQUENCING\, GENELIST\, OTHER\)
+        - mergees\.size `integer`
         - name `string`
-        - needsAttention `boolean` (alias for curationDetails.needsAttention)
-        - primaryTaxon.commonName `string`
-        - primaryTaxon.externalDatabase.ftpUri `string`
-        - primaryTaxon.externalDatabase.id `integer`
-        - primaryTaxon.externalDatabase.lastUpdated `string`
-        - primaryTaxon.externalDatabase.localInstallDbName `string`
-        - primaryTaxon.externalDatabase.name `string`
-        - primaryTaxon.externalDatabase.releaseUrl `object`
-        - primaryTaxon.externalDatabase.releaseVersion `string`
-        - primaryTaxon.externalDatabase.type `string` (possible values: ONTOLOGY, SEQUENCE, LITERATURE, EXPRESSION, GENOME, OTHER, PROTEIN)
-        - primaryTaxon.externalDatabase.webUri `string`
-        - primaryTaxon.id `integer`
-        - primaryTaxon.isGenesUsable `boolean`
-        - primaryTaxon.ncbiId `integer`
-        - primaryTaxon.scientificName `string`
-        - primaryTaxon.secondaryNcbiId `integer`
+        - needsAttention `boolean` \(alias for curationDetails\.needsAttention\)
+        - primaryTaxon\.commonName `string`
+        - primaryTaxon\.externalDatabase\.ftpUri `string`
+        - primaryTaxon\.externalDatabase\.id `integer`
+        - primaryTaxon\.externalDatabase\.lastUpdated `string`
+        - primaryTaxon\.externalDatabase\.localInstallDbName `string`
+        - primaryTaxon\.externalDatabase\.name `string`
+        - primaryTaxon\.externalDatabase\.releaseUrl `object`
+        - primaryTaxon\.externalDatabase\.releaseVersion `string`
+        - primaryTaxon\.externalDatabase\.type `string` \(possible values\: ONTOLOGY\, SEQUENCE\, LITERATURE\, EXPRESSION\, GENOME\, OTHER\, PROTEIN\)
+        - primaryTaxon\.externalDatabase\.webUri `string`
+        - primaryTaxon\.id `integer`
+        - primaryTaxon\.isGenesUsable `boolean`
+        - primaryTaxon\.ncbiId `integer`
+        - primaryTaxon\.scientificName `string`
+        - primaryTaxon\.secondaryNcbiId `integer`
         - shortName `string`
-        - subsumedArrayDesigns.size `integer`
-        - subsumingArrayDesign.advertisedNumberOfDesignElements `integer`
-        - subsumingArrayDesign.compositeSequences.size `integer`
-        - subsumingArrayDesign.curationDetails.id `integer`
-        - subsumingArrayDesign.curationDetails.lastUpdated `string`
-        - subsumingArrayDesign.curationDetails.needsAttention `boolean`
-        - subsumingArrayDesign.curationDetails.troubled `boolean`
-        - subsumingArrayDesign.designProvider.email `string`
-        - subsumingArrayDesign.designProvider.id `integer`
-        - subsumingArrayDesign.designProvider.name `string`
-        - subsumingArrayDesign.externalReferences.size `integer`
-        - subsumingArrayDesign.id `integer`
-        - subsumingArrayDesign.mergees.size `integer`
-        - subsumingArrayDesign.name `string`
-        - subsumingArrayDesign.primaryTaxon.commonName `string`
-        - subsumingArrayDesign.primaryTaxon.id `integer`
-        - subsumingArrayDesign.primaryTaxon.isGenesUsable `boolean`
-        - subsumingArrayDesign.primaryTaxon.ncbiId `integer`
-        - subsumingArrayDesign.primaryTaxon.scientificName `string`
-        - subsumingArrayDesign.primaryTaxon.secondaryNcbiId `integer`
-        - subsumingArrayDesign.shortName `string`
-        - subsumingArrayDesign.subsumedArrayDesigns.size `integer`
-        - subsumingArrayDesign.technologyType `string` (possible values: TWOCOLOR, DUALMODE, ONECOLOR, SEQUENCING, GENELIST, OTHER)
-        - taxon `integer` (alias for taxon.id)
-        - taxon.commonName `string` (alias for primaryTaxon.commonName)
-        - taxon.externalDatabase.externalDatabases.size `integer` (alias for primaryTaxon.externalDatabase.externalDatabases.size)
-        - taxon.externalDatabase.ftpUri `string` (alias for primaryTaxon.externalDatabase.ftpUri)
-        - taxon.externalDatabase.id `integer` (alias for primaryTaxon.externalDatabase.id)
-        - taxon.externalDatabase.lastUpdated `string` (alias for primaryTaxon.externalDatabase.lastUpdated)
-        - taxon.externalDatabase.localInstallDbName `string` (alias for primaryTaxon.externalDatabase.localInstallDbName)
-        - taxon.externalDatabase.name `string` (alias for primaryTaxon.externalDatabase.name)
-        - taxon.externalDatabase.releaseUrl `object` (alias for primaryTaxon.externalDatabase.releaseUrl)
-        - taxon.externalDatabase.releaseVersion `string` (alias for primaryTaxon.externalDatabase.releaseVersion)
-        - taxon.externalDatabase.type `string` (alias for primaryTaxon.externalDatabase.type, possible values: ONTOLOGY, SEQUENCE, LITERATURE, EXPRESSION, GENOME, OTHER, PROTEIN)
-        - taxon.externalDatabase.webUri `string` (alias for primaryTaxon.externalDatabase.webUri)
-        - taxon.id `integer` (alias for primaryTaxon.id)
-        - taxon.isGenesUsable `boolean` (alias for primaryTaxon.isGenesUsable)
-        - taxon.ncbiId `integer` (alias for primaryTaxon.ncbiId)
-        - taxon.scientificName `string` (alias for primaryTaxon.scientificName)
-        - taxon.secondaryNcbiId `integer` (alias for primaryTaxon.secondaryNcbiId)
-        - technologyType `string` (possible values: TWOCOLOR, DUALMODE, ONECOLOR, SEQUENCING, GENELIST, OTHER)
-        - troubled `boolean` (alias for curationDetails.troubled)
+        - subsumedArrayDesigns\.size `integer`
+        - subsumingArrayDesign\.advertisedNumberOfDesignElements `integer`
+        - subsumingArrayDesign\.compositeSequences\.size `integer`
+        - subsumingArrayDesign\.curationDetails\.id `integer`
+        - subsumingArrayDesign\.curationDetails\.lastUpdated `string`
+        - subsumingArrayDesign\.curationDetails\.needsAttention `boolean`
+        - subsumingArrayDesign\.curationDetails\.troubled `boolean`
+        - subsumingArrayDesign\.designProvider\.email `string`
+        - subsumingArrayDesign\.designProvider\.id `integer`
+        - subsumingArrayDesign\.designProvider\.name `string`
+        - subsumingArrayDesign\.externalReferences\.size `integer`
+        - subsumingArrayDesign\.id `integer`
+        - subsumingArrayDesign\.mergees\.size `integer`
+        - subsumingArrayDesign\.name `string`
+        - subsumingArrayDesign\.primaryTaxon\.commonName `string`
+        - subsumingArrayDesign\.primaryTaxon\.id `integer`
+        - subsumingArrayDesign\.primaryTaxon\.isGenesUsable `boolean`
+        - subsumingArrayDesign\.primaryTaxon\.ncbiId `integer`
+        - subsumingArrayDesign\.primaryTaxon\.scientificName `string`
+        - subsumingArrayDesign\.primaryTaxon\.secondaryNcbiId `integer`
+        - subsumingArrayDesign\.shortName `string`
+        - subsumingArrayDesign\.subsumedArrayDesigns\.size `integer`
+        - subsumingArrayDesign\.technologyType `string` \(possible values\: TWOCOLOR\, DUALMODE\, ONECOLOR\, SEQUENCING\, GENELIST\, OTHER\)
+        - taxon `integer` \(alias for taxon\.id\)
+        - taxon\.commonName `string` \(alias for primaryTaxon\.commonName\)
+        - taxon\.externalDatabase\.externalDatabases\.size `integer` \(alias for primaryTaxon\.externalDatabase\.externalDatabases\.size\)
+        - taxon\.externalDatabase\.ftpUri `string` \(alias for primaryTaxon\.externalDatabase\.ftpUri\)
+        - taxon\.externalDatabase\.id `integer` \(alias for primaryTaxon\.externalDatabase\.id\)
+        - taxon\.externalDatabase\.lastUpdated `string` \(alias for primaryTaxon\.externalDatabase\.lastUpdated\)
+        - taxon\.externalDatabase\.localInstallDbName `string` \(alias for primaryTaxon\.externalDatabase\.localInstallDbName\)
+        - taxon\.externalDatabase\.name `string` \(alias for primaryTaxon\.externalDatabase\.name\)
+        - taxon\.externalDatabase\.releaseUrl `object` \(alias for primaryTaxon\.externalDatabase\.releaseUrl\)
+        - taxon\.externalDatabase\.releaseVersion `string` \(alias for primaryTaxon\.externalDatabase\.releaseVersion\)
+        - taxon\.externalDatabase\.type `string` \(alias for primaryTaxon\.externalDatabase\.type\, possible values\: ONTOLOGY\, SEQUENCE\, LITERATURE\, EXPRESSION\, GENOME\, OTHER\, PROTEIN\)
+        - taxon\.externalDatabase\.webUri `string` \(alias for primaryTaxon\.externalDatabase\.webUri\)
+        - taxon\.id `integer` \(alias for primaryTaxon\.id\)
+        - taxon\.isGenesUsable `boolean` \(alias for primaryTaxon\.isGenesUsable\)
+        - taxon\.ncbiId `integer` \(alias for primaryTaxon\.ncbiId\)
+        - taxon\.scientificName `string` \(alias for primaryTaxon\.scientificName\)
+        - taxon\.secondaryNcbiId `integer` \(alias for primaryTaxon\.secondaryNcbiId\)
+        - technologyType `string` \(possible values\: TWOCOLOR\, DUALMODE\, ONECOLOR\, SEQUENCING\, GENELIST\, OTHER\)
+        - troubled `boolean` \(alias for curationDetails\.troubled\)
       externalDocs:
         url: https://gemma.msl.ubc.ca/resources/apidocs/ubic/gemma/rest/util/args/FilterArg.html
       x-gemma-filterable-properties:
@@ -9278,135 +9519,135 @@ components:
         Available properties:
 
         - advertisedNumberOfDesignElements `integer`
-        - alternativeTo.advertisedNumberOfDesignElements `integer`
-        - alternativeTo.compositeSequences.size `integer`
-        - alternativeTo.curationDetails.id `integer`
-        - alternativeTo.curationDetails.lastUpdated `string`
-        - alternativeTo.curationDetails.needsAttention `boolean`
-        - alternativeTo.curationDetails.troubled `boolean`
-        - alternativeTo.designProvider.email `string`
-        - alternativeTo.designProvider.id `integer`
-        - alternativeTo.designProvider.name `string`
-        - alternativeTo.externalReferences.size `integer`
-        - alternativeTo.id `integer`
-        - alternativeTo.mergees.size `integer`
-        - alternativeTo.name `string`
-        - alternativeTo.primaryTaxon.commonName `string`
-        - alternativeTo.primaryTaxon.id `integer`
-        - alternativeTo.primaryTaxon.isGenesUsable `boolean`
-        - alternativeTo.primaryTaxon.ncbiId `integer`
-        - alternativeTo.primaryTaxon.scientificName `string`
-        - alternativeTo.primaryTaxon.secondaryNcbiId `integer`
-        - alternativeTo.shortName `string`
-        - alternativeTo.subsumedArrayDesigns.size `integer`
-        - alternativeTo.technologyType `string` (possible values: TWOCOLOR, DUALMODE, ONECOLOR, SEQUENCING, GENELIST, OTHER)
-        - compositeSequences.size `integer`
-        - curationDetails.lastUpdated `string`
-        - curationDetails.needsAttention `boolean`
-        - curationDetails.troubled `boolean`
-        - designProvider.email `string`
-        - designProvider.id `integer`
-        - designProvider.name `string`
-        - externalReferences.Uri `string[]`
-        - externalReferences.accession `string[]`
-        - externalReferences.accessionVersion `string[]`
-        - externalReferences.externalDatabase.externalDatabases.size `integer[]`
-        - externalReferences.externalDatabase.ftpUri `string[]`
-        - externalReferences.externalDatabase.id `integer[]`
-        - externalReferences.externalDatabase.lastUpdated `string[]`
-        - externalReferences.externalDatabase.localInstallDbName `string[]`
-        - externalReferences.externalDatabase.name `string[]`
-        - externalReferences.externalDatabase.releaseUrl `object[]`
-        - externalReferences.externalDatabase.releaseVersion `string[]`
-        - externalReferences.externalDatabase.type `string[]` (possible values: ONTOLOGY, SEQUENCE, LITERATURE, EXPRESSION, GENOME, OTHER, PROTEIN)
-        - externalReferences.externalDatabase.webUri `string[]`
-        - externalReferences.id `integer[]`
-        - externalReferences.size `integer`
+        - alternativeTo\.advertisedNumberOfDesignElements `integer`
+        - alternativeTo\.compositeSequences\.size `integer`
+        - alternativeTo\.curationDetails\.id `integer`
+        - alternativeTo\.curationDetails\.lastUpdated `string`
+        - alternativeTo\.curationDetails\.needsAttention `boolean`
+        - alternativeTo\.curationDetails\.troubled `boolean`
+        - alternativeTo\.designProvider\.email `string`
+        - alternativeTo\.designProvider\.id `integer`
+        - alternativeTo\.designProvider\.name `string`
+        - alternativeTo\.externalReferences\.size `integer`
+        - alternativeTo\.id `integer`
+        - alternativeTo\.mergees\.size `integer`
+        - alternativeTo\.name `string`
+        - alternativeTo\.primaryTaxon\.commonName `string`
+        - alternativeTo\.primaryTaxon\.id `integer`
+        - alternativeTo\.primaryTaxon\.isGenesUsable `boolean`
+        - alternativeTo\.primaryTaxon\.ncbiId `integer`
+        - alternativeTo\.primaryTaxon\.scientificName `string`
+        - alternativeTo\.primaryTaxon\.secondaryNcbiId `integer`
+        - alternativeTo\.shortName `string`
+        - alternativeTo\.subsumedArrayDesigns\.size `integer`
+        - alternativeTo\.technologyType `string` \(possible values\: TWOCOLOR\, DUALMODE\, ONECOLOR\, SEQUENCING\, GENELIST\, OTHER\)
+        - compositeSequences\.size `integer`
+        - curationDetails\.lastUpdated `string`
+        - curationDetails\.needsAttention `boolean`
+        - curationDetails\.troubled `boolean`
+        - designProvider\.email `string`
+        - designProvider\.id `integer`
+        - designProvider\.name `string`
+        - externalReferences\.Uri `string[]`
+        - externalReferences\.accession `string[]`
+        - externalReferences\.accessionVersion `string[]`
+        - externalReferences\.externalDatabase\.externalDatabases\.size `integer[]`
+        - externalReferences\.externalDatabase\.ftpUri `string[]`
+        - externalReferences\.externalDatabase\.id `integer[]`
+        - externalReferences\.externalDatabase\.lastUpdated `string[]`
+        - externalReferences\.externalDatabase\.localInstallDbName `string[]`
+        - externalReferences\.externalDatabase\.name `string[]`
+        - externalReferences\.externalDatabase\.releaseUrl `object[]`
+        - externalReferences\.externalDatabase\.releaseVersion `string[]`
+        - externalReferences\.externalDatabase\.type `string[]` \(possible values\: ONTOLOGY\, SEQUENCE\, LITERATURE\, EXPRESSION\, GENOME\, OTHER\, PROTEIN\)
+        - externalReferences\.externalDatabase\.webUri `string[]`
+        - externalReferences\.id `integer[]`
+        - externalReferences\.size `integer`
         - id `integer`
-        - lastUpdated `string` (alias for curationDetails.lastUpdated)
-        - mergedInto.advertisedNumberOfDesignElements `integer`
-        - mergedInto.compositeSequences.size `integer`
-        - mergedInto.curationDetails.id `integer`
-        - mergedInto.curationDetails.lastUpdated `string`
-        - mergedInto.curationDetails.needsAttention `boolean`
-        - mergedInto.curationDetails.troubled `boolean`
-        - mergedInto.designProvider.email `string`
-        - mergedInto.designProvider.id `integer`
-        - mergedInto.designProvider.name `string`
-        - mergedInto.externalReferences.size `integer`
-        - mergedInto.id `integer`
-        - mergedInto.mergees.size `integer`
-        - mergedInto.name `string`
-        - mergedInto.primaryTaxon.commonName `string`
-        - mergedInto.primaryTaxon.id `integer`
-        - mergedInto.primaryTaxon.isGenesUsable `boolean`
-        - mergedInto.primaryTaxon.ncbiId `integer`
-        - mergedInto.primaryTaxon.scientificName `string`
-        - mergedInto.primaryTaxon.secondaryNcbiId `integer`
-        - mergedInto.shortName `string`
-        - mergedInto.subsumedArrayDesigns.size `integer`
-        - mergedInto.technologyType `string` (possible values: TWOCOLOR, DUALMODE, ONECOLOR, SEQUENCING, GENELIST, OTHER)
-        - mergees.size `integer`
+        - lastUpdated `string` \(alias for curationDetails\.lastUpdated\)
+        - mergedInto\.advertisedNumberOfDesignElements `integer`
+        - mergedInto\.compositeSequences\.size `integer`
+        - mergedInto\.curationDetails\.id `integer`
+        - mergedInto\.curationDetails\.lastUpdated `string`
+        - mergedInto\.curationDetails\.needsAttention `boolean`
+        - mergedInto\.curationDetails\.troubled `boolean`
+        - mergedInto\.designProvider\.email `string`
+        - mergedInto\.designProvider\.id `integer`
+        - mergedInto\.designProvider\.name `string`
+        - mergedInto\.externalReferences\.size `integer`
+        - mergedInto\.id `integer`
+        - mergedInto\.mergees\.size `integer`
+        - mergedInto\.name `string`
+        - mergedInto\.primaryTaxon\.commonName `string`
+        - mergedInto\.primaryTaxon\.id `integer`
+        - mergedInto\.primaryTaxon\.isGenesUsable `boolean`
+        - mergedInto\.primaryTaxon\.ncbiId `integer`
+        - mergedInto\.primaryTaxon\.scientificName `string`
+        - mergedInto\.primaryTaxon\.secondaryNcbiId `integer`
+        - mergedInto\.shortName `string`
+        - mergedInto\.subsumedArrayDesigns\.size `integer`
+        - mergedInto\.technologyType `string` \(possible values\: TWOCOLOR\, DUALMODE\, ONECOLOR\, SEQUENCING\, GENELIST\, OTHER\)
+        - mergees\.size `integer`
         - name `string`
-        - needsAttention `boolean` (alias for curationDetails.needsAttention)
-        - primaryTaxon.commonName `string`
-        - primaryTaxon.externalDatabase.ftpUri `string`
-        - primaryTaxon.externalDatabase.id `integer`
-        - primaryTaxon.externalDatabase.lastUpdated `string`
-        - primaryTaxon.externalDatabase.localInstallDbName `string`
-        - primaryTaxon.externalDatabase.name `string`
-        - primaryTaxon.externalDatabase.releaseUrl `object`
-        - primaryTaxon.externalDatabase.releaseVersion `string`
-        - primaryTaxon.externalDatabase.type `string` (possible values: ONTOLOGY, SEQUENCE, LITERATURE, EXPRESSION, GENOME, OTHER, PROTEIN)
-        - primaryTaxon.externalDatabase.webUri `string`
-        - primaryTaxon.id `integer`
-        - primaryTaxon.isGenesUsable `boolean`
-        - primaryTaxon.ncbiId `integer`
-        - primaryTaxon.scientificName `string`
-        - primaryTaxon.secondaryNcbiId `integer`
+        - needsAttention `boolean` \(alias for curationDetails\.needsAttention\)
+        - primaryTaxon\.commonName `string`
+        - primaryTaxon\.externalDatabase\.ftpUri `string`
+        - primaryTaxon\.externalDatabase\.id `integer`
+        - primaryTaxon\.externalDatabase\.lastUpdated `string`
+        - primaryTaxon\.externalDatabase\.localInstallDbName `string`
+        - primaryTaxon\.externalDatabase\.name `string`
+        - primaryTaxon\.externalDatabase\.releaseUrl `object`
+        - primaryTaxon\.externalDatabase\.releaseVersion `string`
+        - primaryTaxon\.externalDatabase\.type `string` \(possible values\: ONTOLOGY\, SEQUENCE\, LITERATURE\, EXPRESSION\, GENOME\, OTHER\, PROTEIN\)
+        - primaryTaxon\.externalDatabase\.webUri `string`
+        - primaryTaxon\.id `integer`
+        - primaryTaxon\.isGenesUsable `boolean`
+        - primaryTaxon\.ncbiId `integer`
+        - primaryTaxon\.scientificName `string`
+        - primaryTaxon\.secondaryNcbiId `integer`
         - shortName `string`
-        - subsumedArrayDesigns.size `integer`
-        - subsumingArrayDesign.advertisedNumberOfDesignElements `integer`
-        - subsumingArrayDesign.compositeSequences.size `integer`
-        - subsumingArrayDesign.curationDetails.id `integer`
-        - subsumingArrayDesign.curationDetails.lastUpdated `string`
-        - subsumingArrayDesign.curationDetails.needsAttention `boolean`
-        - subsumingArrayDesign.curationDetails.troubled `boolean`
-        - subsumingArrayDesign.designProvider.email `string`
-        - subsumingArrayDesign.designProvider.id `integer`
-        - subsumingArrayDesign.designProvider.name `string`
-        - subsumingArrayDesign.externalReferences.size `integer`
-        - subsumingArrayDesign.id `integer`
-        - subsumingArrayDesign.mergees.size `integer`
-        - subsumingArrayDesign.name `string`
-        - subsumingArrayDesign.primaryTaxon.commonName `string`
-        - subsumingArrayDesign.primaryTaxon.id `integer`
-        - subsumingArrayDesign.primaryTaxon.isGenesUsable `boolean`
-        - subsumingArrayDesign.primaryTaxon.ncbiId `integer`
-        - subsumingArrayDesign.primaryTaxon.scientificName `string`
-        - subsumingArrayDesign.primaryTaxon.secondaryNcbiId `integer`
-        - subsumingArrayDesign.shortName `string`
-        - subsumingArrayDesign.subsumedArrayDesigns.size `integer`
-        - subsumingArrayDesign.technologyType `string` (possible values: TWOCOLOR, DUALMODE, ONECOLOR, SEQUENCING, GENELIST, OTHER)
-        - taxon `integer` (alias for taxon.id)
-        - taxon.commonName `string` (alias for primaryTaxon.commonName)
-        - taxon.externalDatabase.externalDatabases.size `integer` (alias for primaryTaxon.externalDatabase.externalDatabases.size)
-        - taxon.externalDatabase.ftpUri `string` (alias for primaryTaxon.externalDatabase.ftpUri)
-        - taxon.externalDatabase.id `integer` (alias for primaryTaxon.externalDatabase.id)
-        - taxon.externalDatabase.lastUpdated `string` (alias for primaryTaxon.externalDatabase.lastUpdated)
-        - taxon.externalDatabase.localInstallDbName `string` (alias for primaryTaxon.externalDatabase.localInstallDbName)
-        - taxon.externalDatabase.name `string` (alias for primaryTaxon.externalDatabase.name)
-        - taxon.externalDatabase.releaseUrl `object` (alias for primaryTaxon.externalDatabase.releaseUrl)
-        - taxon.externalDatabase.releaseVersion `string` (alias for primaryTaxon.externalDatabase.releaseVersion)
-        - taxon.externalDatabase.type `string` (alias for primaryTaxon.externalDatabase.type, possible values: ONTOLOGY, SEQUENCE, LITERATURE, EXPRESSION, GENOME, OTHER, PROTEIN)
-        - taxon.externalDatabase.webUri `string` (alias for primaryTaxon.externalDatabase.webUri)
-        - taxon.id `integer` (alias for primaryTaxon.id)
-        - taxon.isGenesUsable `boolean` (alias for primaryTaxon.isGenesUsable)
-        - taxon.ncbiId `integer` (alias for primaryTaxon.ncbiId)
-        - taxon.scientificName `string` (alias for primaryTaxon.scientificName)
-        - taxon.secondaryNcbiId `integer` (alias for primaryTaxon.secondaryNcbiId)
-        - technologyType `string` (possible values: TWOCOLOR, DUALMODE, ONECOLOR, SEQUENCING, GENELIST, OTHER)
-        - troubled `boolean` (alias for curationDetails.troubled)
+        - subsumedArrayDesigns\.size `integer`
+        - subsumingArrayDesign\.advertisedNumberOfDesignElements `integer`
+        - subsumingArrayDesign\.compositeSequences\.size `integer`
+        - subsumingArrayDesign\.curationDetails\.id `integer`
+        - subsumingArrayDesign\.curationDetails\.lastUpdated `string`
+        - subsumingArrayDesign\.curationDetails\.needsAttention `boolean`
+        - subsumingArrayDesign\.curationDetails\.troubled `boolean`
+        - subsumingArrayDesign\.designProvider\.email `string`
+        - subsumingArrayDesign\.designProvider\.id `integer`
+        - subsumingArrayDesign\.designProvider\.name `string`
+        - subsumingArrayDesign\.externalReferences\.size `integer`
+        - subsumingArrayDesign\.id `integer`
+        - subsumingArrayDesign\.mergees\.size `integer`
+        - subsumingArrayDesign\.name `string`
+        - subsumingArrayDesign\.primaryTaxon\.commonName `string`
+        - subsumingArrayDesign\.primaryTaxon\.id `integer`
+        - subsumingArrayDesign\.primaryTaxon\.isGenesUsable `boolean`
+        - subsumingArrayDesign\.primaryTaxon\.ncbiId `integer`
+        - subsumingArrayDesign\.primaryTaxon\.scientificName `string`
+        - subsumingArrayDesign\.primaryTaxon\.secondaryNcbiId `integer`
+        - subsumingArrayDesign\.shortName `string`
+        - subsumingArrayDesign\.subsumedArrayDesigns\.size `integer`
+        - subsumingArrayDesign\.technologyType `string` \(possible values\: TWOCOLOR\, DUALMODE\, ONECOLOR\, SEQUENCING\, GENELIST\, OTHER\)
+        - taxon `integer` \(alias for taxon\.id\)
+        - taxon\.commonName `string` \(alias for primaryTaxon\.commonName\)
+        - taxon\.externalDatabase\.externalDatabases\.size `integer` \(alias for primaryTaxon\.externalDatabase\.externalDatabases\.size\)
+        - taxon\.externalDatabase\.ftpUri `string` \(alias for primaryTaxon\.externalDatabase\.ftpUri\)
+        - taxon\.externalDatabase\.id `integer` \(alias for primaryTaxon\.externalDatabase\.id\)
+        - taxon\.externalDatabase\.lastUpdated `string` \(alias for primaryTaxon\.externalDatabase\.lastUpdated\)
+        - taxon\.externalDatabase\.localInstallDbName `string` \(alias for primaryTaxon\.externalDatabase\.localInstallDbName\)
+        - taxon\.externalDatabase\.name `string` \(alias for primaryTaxon\.externalDatabase\.name\)
+        - taxon\.externalDatabase\.releaseUrl `object` \(alias for primaryTaxon\.externalDatabase\.releaseUrl\)
+        - taxon\.externalDatabase\.releaseVersion `string` \(alias for primaryTaxon\.externalDatabase\.releaseVersion\)
+        - taxon\.externalDatabase\.type `string` \(alias for primaryTaxon\.externalDatabase\.type\, possible values\: ONTOLOGY\, SEQUENCE\, LITERATURE\, EXPRESSION\, GENOME\, OTHER\, PROTEIN\)
+        - taxon\.externalDatabase\.webUri `string` \(alias for primaryTaxon\.externalDatabase\.webUri\)
+        - taxon\.id `integer` \(alias for primaryTaxon\.id\)
+        - taxon\.isGenesUsable `boolean` \(alias for primaryTaxon\.isGenesUsable\)
+        - taxon\.ncbiId `integer` \(alias for primaryTaxon\.ncbiId\)
+        - taxon\.scientificName `string` \(alias for primaryTaxon\.scientificName\)
+        - taxon\.secondaryNcbiId `integer` \(alias for primaryTaxon\.secondaryNcbiId\)
+        - technologyType `string` \(possible values\: TWOCOLOR\, DUALMODE\, ONECOLOR\, SEQUENCING\, GENELIST\, OTHER\)
+        - troubled `boolean` \(alias for curationDetails\.troubled\)
       x-gemma-filterable-properties:
       - name: advertisedNumberOfDesignElements
         type: integer
@@ -9877,15 +10118,15 @@ components:
       items:
         type: string
         enum:
-        - ubic.gemma.model.expression.designElement.CompositeSequence
-        - ubic.gemma.model.common.description.BibliographicReference
         - ubic.gemma.model.analysis.expression.ExpressionExperimentSet
-        - ubic.gemma.model.expression.arrayDesign.ArrayDesign
-        - ubic.gemma.model.expression.experiment.ExpressionExperiment
-        - ubic.gemma.model.genome.gene.GeneSet
         - ubic.gemma.model.genome.biosequence.BioSequence
-        - ubic.gemma.model.blacklist.BlacklistedEntity
+        - ubic.gemma.model.genome.gene.GeneSet
+        - ubic.gemma.model.expression.arrayDesign.ArrayDesign
         - ubic.gemma.model.genome.Gene
+        - ubic.gemma.model.common.description.BibliographicReference
+        - ubic.gemma.model.blacklist.BlacklistedEntity
+        - ubic.gemma.model.expression.experiment.ExpressionExperiment
+        - ubic.gemma.model.expression.designElement.CompositeSequence
     ResponseDataObjectListTaxonValueObject:
       type: object
       properties:
