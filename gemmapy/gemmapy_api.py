@@ -49,6 +49,7 @@ class GemmaPy(object):
 
         # create an instance of the API class
         self.raw = sdk.DefaultApi(sdk.ApiClient(configuration))
+        self.raw.get_api_info()
 
 
     # /resultSets/count get_number_of_result_sets ------
