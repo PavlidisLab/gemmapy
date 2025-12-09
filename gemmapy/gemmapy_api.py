@@ -7,14 +7,18 @@ import json
 import logging
 import os
 import subprocess
+import tarfile
+import tempfile
 import warnings
 from getpass import getpass
-from io import StringIO
-from typing import Optional, List, Callable
+from io import StringIO, BytesIO
+from os.path import join
+from typing import Optional, List, Callable, Any
 
 import anndata as ad
 import numpy as np
 import pandas as pd
+import scanpy
 from anndata import AnnData
 from pandas import DataFrame
 
@@ -1667,7 +1671,45 @@ class GemmaPy(object):
             pass
         return out
 
-    def get_differential_expression_values(self, 
+    def get_single_cell_dataset_object(self, dataset: str | int,
+                                       download_dir=None) -> AnnData:
+        """
+        :param download_dir: Directory where datasets can be downloaded, or else
+        the data will be retrieved in-memory.
+        :return:
+        """
+
+        def resolve():
+            if download_dir:
+                dest = join(download_dir, dataset + '.tar')
+                if not os.path.exists(dest):
+                    logger.info('Downloading single-cell data for %s to %s...',
+                                dataset, download_dir)
+                    with open(dest, 'wb') as f:
+                        f.write(self.raw.get_dataset_single_cell_expression(
+                            dataset))
+                return open(dest, 'rb')
+            else:
+                logger.info("Downloading single-cell data data for %s...",
+                            str(dataset))
+                return BytesIO(
+                    self.raw.get_dataset_single_cell_expression(dataset))
+
+        with (resolve() as f, tarfile.open(fileobj=f) as tf,
+              tempfile.TemporaryDirectory() as tmpdir):
+            logger.info('Extracting TAR file for %s to %s...', str(dataset),
+                        tmpdir)
+            tf.extractall(tmpdir)
+            samples = []
+            for sample_dir in os.listdir(tmpdir):
+                logger.info('Reading MEX data for %s...', sample_dir)
+                # Gemma already guarantees unicity of cell identifiers and
+                # scanpy cannot deal with numeric gene identifiers when
+                # make_unique is True, so we skip that part
+                samples.append(scanpy.read_10x_mtx(join(tmpdir, sample_dir)))
+            return scanpy.concat(samples)
+
+    def get_differential_expression_values(self,
                                            dataset:Optional[str|int] = None,
                                            keep_non_specific:bool = False,
                                            result_sets:Optional[List[str|int]] = None,

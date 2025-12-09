@@ -18,6 +18,7 @@ dependencies = [
     'pandas',
     'numpy',
     'anndata',
+    'scanpy',
     'typing'
 ]
 
