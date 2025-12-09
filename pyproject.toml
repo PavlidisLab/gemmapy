@@ -1,3 +1,28 @@
 [build-system]
 requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "gemmapy"
+description = "a Python Wrapper for the Gemma API"
+keywords = ["gemma", "bioinformatics"]
+readme = "README.rst"
+version = "2.0.4"
+requires-python = ">=3.10"
+dependencies = [
+    'certifi >= 14.05.14',
+    'six >= 1.10',
+    'python_dateutil >= 2.5.3',
+    'setuptools >= 21.0.0',
+    'urllib3 >= 1.15.1',
+    'pandas',
+    'numpy',
+    'anndata',
+    'typing'
+]
+
+[dependency-groups]
+dev = ["pytest"]
+
+[tool.setuptools]
+packages = ["gemmapy"]
