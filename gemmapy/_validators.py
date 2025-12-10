@@ -6,14 +6,15 @@ Created on Wed Feb 28 23:09:30 2024
 @author: omancarci
 """
 
-import typing as T
 import base64
 import gzip
+
+from typing import List, Union, Optional
 
 def compress_arg(arg:str):
     if arg is not None:
         return base64.b64encode(gzip.compress(arg.encode())).decode()
-    else: 
+    else:
         return arg
 
 def remove_nones(**kwargs):
@@ -23,19 +24,19 @@ def remove_nones(**kwargs):
             out.pop(k)
     return out
 
-def add_to_filter(filt:T.Optional[str], prop: str, terms: T.List[T.Union[str,int]]):
+def add_to_filter(filt: Optional[str], prop: str,
+                  terms: Optional[List[Union[str, int]]]):
     if terms is None:
         return filt
-    
-    
+
     if filt is None:
         filt = ""
-    
+
     if len(filt)>0:
         filt = filt + " and "
-    
+
     filt = filt + prop + " in (" +  ",".join([str(x) for x in terms]) + ")"
-    
+
     return filt
 
 
