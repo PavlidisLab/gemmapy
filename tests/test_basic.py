@@ -17,6 +17,7 @@ from gemmapy import _subprocessors as sub
 from gemmapy.gemmapy_api import GemmaPath
 
 api = gemmapy.GemmaPy()
+github_flag = os.getenv("GITHUB_ACTIONS") == 'true'
 
 @pytest.fixture(autouse=True)
 def slow_down_tests():
@@ -26,12 +27,13 @@ def slow_down_tests():
 def test_path():
     client = gemmapy.GemmaPy(path=GemmaPath.PROD)
     assert client.raw.api_client.configuration.host == 'https://gemma.msl.ubc.ca/rest/v2'
-    client = gemmapy.GemmaPy(path=GemmaPath.DEV)
-    assert client.raw.api_client.configuration.host == 'https://dev.gemma.msl.ubc.ca/rest/v2'
-    client = gemmapy.GemmaPy(path=GemmaPath.STAGING)
-    assert client.raw.api_client.configuration.host == 'https://staging-gemma.msl.ubc.ca/rest/v2'
-    client = gemmapy.GemmaPy(path='dev')
-    assert client.raw.api_client.configuration.host == 'https://dev.gemma.msl.ubc.ca/rest/v2'
+    if not github_flag:
+        client = gemmapy.GemmaPy(path=GemmaPath.DEV)
+        assert client.raw.api_client.configuration.host == 'https://dev.gemma.msl.ubc.ca/rest/v2'
+        client = gemmapy.GemmaPy(path=GemmaPath.STAGING)
+        assert client.raw.api_client.configuration.host == 'https://staging-gemma.msl.ubc.ca/rest/v2'
+        client = gemmapy.GemmaPy(path='dev')
+        assert client.raw.api_client.configuration.host == 'https://dev.gemma.msl.ubc.ca/rest/v2'
     client = gemmapy.GemmaPy(path='https://example.com/rest/v2')
     assert client.raw.api_client.configuration.host == 'https://example.com/rest/v2'
 
