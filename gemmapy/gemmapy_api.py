@@ -8,6 +8,7 @@ import logging
 import os
 import subprocess
 import warnings
+import warnings
 from getpass import getpass
 from io import StringIO
 from typing import Optional, List, Callable
@@ -104,7 +105,10 @@ class GemmaPy(object):
 
         # create an instance of the API class
         self.raw = sdk.DefaultApi(sdk.ApiClient(configuration))
-        self.raw.get_api_info()
+        try:
+            self.raw.get_api_info()
+        except:
+            warnings.warn("Unable to connect to API")
 
 
     # /resultSets/count get_number_of_result_sets ------
