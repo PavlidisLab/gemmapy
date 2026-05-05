@@ -70,6 +70,7 @@ def process_annotations(d:list):
         "term_name": sub.field_in_list(d,"term_name"),
         "term_URI": sub.field_in_list(d,"term_uri"),
         "object_class": sub.field_in_list(d,"object_class"),
+        "evidence_code": sub.field_in_list(d,'evidence_code')
         })
     
     return df
