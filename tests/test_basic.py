@@ -104,7 +104,14 @@ def test_search_annotations():
 def test_get_dataset_annotations():
     res = api.get_dataset_annotations(1)
     assert type(res) is pd.core.frame.DataFrame
-    assert res.shape[1] == 5
+    # Expected columns. evidence_code was added in fb7afb8 ("add evidence
+    # code to annotation processing") but the test's bare shape[1] == 5
+    # assertion wasn't updated, so it failed once gemma-rest started
+    # emitting evidenceCode. Check by name instead of count so future
+    # additive fields don't break this test the same way.
+    expected = {"class_name", "class_URI", "term_name", "term_URI",
+                "object_class", "evidence_code"}
+    assert expected.issubset(set(res.columns))
 
 def test_get_dataset_differential_expression_analyses():
     res = api.get_dataset_differential_expression_analyses(200)
