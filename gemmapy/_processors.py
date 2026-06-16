@@ -70,6 +70,7 @@ def process_annotations(d:list):
         "term_name": sub.field_in_list(d,"term_name"),
         "term_URI": sub.field_in_list(d,"term_uri"),
         "object_class": sub.field_in_list(d,"object_class"),
+        "evidence_code": sub.field_in_list(d,'evidence_code')
         })
     
     return df
@@ -476,7 +477,31 @@ def process_samples(d:list):
                                 for x in sub.field_in_list(d,"sample","factor_value_objects")]
         
         }).sort_values(by= ['sample_ID'],ignore_index=True)
-    
+
+    return df
+
+def process_publications(d:list):
+
+    df = pd.DataFrame({
+        "publication_ID": sub.field_in_list(d,"id"),
+        "title": sub.field_in_list(d,"title"),
+        "authors": sub.field_in_list(d,"author_list"),
+        "publication": sub.field_in_list(d,"publication"),
+        "publication_date": sub.field_in_list(d,"publication_date"),
+        "publisher": sub.field_in_list(d,"publisher"),
+        "volume": sub.field_in_list(d,"volume"),
+        "issue": sub.field_in_list(d,"issue"),
+        "pages": sub.field_in_list(d,"pages"),
+        "abstract": sub.field_in_list(d,"abstract_text"),
+        "pubmed_ID": sub.field_in_list(d,"citation","pubmed_accession"),
+        "pubmed_URL": sub.field_in_list(d,"citation","pubmed_url"),
+        "citation": sub.field_in_list(d,"citation","citation"),
+        "pub_accession": sub.field_in_list(d,"pub_accession"),
+        "mesh_terms": sub.field_in_list(d,"mesh_terms"),
+        "chemicals_terms": sub.field_in_list(d,"chemicals_terms"),
+        "retracted": sub.field_in_list(d,"retracted"),
+        })
+
     return df
 
 def process_datasets(d:list):

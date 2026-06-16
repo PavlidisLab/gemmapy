@@ -8,6 +8,7 @@ import logging
 import os
 import subprocess
 import warnings
+import warnings
 from getpass import getpass
 from io import StringIO
 from typing import Optional, List, Callable
@@ -104,7 +105,10 @@ class GemmaPy(object):
 
         # create an instance of the API class
         self.raw = sdk.DefaultApi(sdk.ApiClient(configuration))
-        self.raw.get_api_info()
+        try:
+            self.raw.get_api_info()
+        except:
+            warnings.warn("Unable to connect to API")
 
 
     # /resultSets/count get_number_of_result_sets ------
@@ -568,8 +572,47 @@ class GemmaPy(object):
         response = self.raw.get_dataset_samples(dataset, use_processed_quantitation_type = use_processed_quantitation_type, **kwargs)
         df = ps.process_samples(response.data)
         return df
-        
-    # datasets/{dataset}/svd --- 
+
+    # /datasets/{dataset}/publications, get_dataset_all_publications ------
+    def get_dataset_all_publications(self, dataset:str|int, **kwargs)->DataFrame:
+        """
+        Retrieve all publications associated with a dataset
+
+
+        :param dataset: A numerical dataset identifier or a dataset short name
+        :type dataset: str|int
+        :param **kwargs: Additional arguments to pass to raw.get_dataset_all_publications
+        :return: A DataFrame with one row per publication associated with the
+          dataset (the primary publication and any related references).
+
+          The fields of the DataFrame are:
+            - publication_ID: Internal Gemma ID for the bibliographic reference
+            - title: Title of the publication
+            - authors: Author list as a single string
+            - publication: Journal or venue name
+            - publication_date: Date of publication
+            - publisher: Publisher name
+            - volume: Journal volume
+            - issue: Journal issue
+            - pages: Page range
+            - abstract: Abstract text
+            - pubmed_ID: PubMed accession ID
+            - pubmed_URL: PubMed URL
+            - citation: Formatted citation string
+            - pub_accession: Accession in the source publication database
+            - mesh_terms: List of MeSH terms
+            - chemicals_terms: List of chemicals terms
+            - retracted: Whether the publication has been retracted
+        :rtype: DataFrame
+
+        """
+        response = self.raw.get_dataset_all_publications(dataset, **kwargs)
+        df = ps.process_publications(response.data)
+        ps.attach_attributes(df, response.to_dict())
+
+        return df
+
+    # datasets/{dataset}/svd ---
     # not implemented
     
     # datasets, get_datasets ------

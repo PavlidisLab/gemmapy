@@ -14,7 +14,7 @@ info:
     name: Pavlidis Lab Support
     url: https://pavlab.msl.ubc.ca/
     email: pavlab-support@msl.ubc.ca
-  version: 2.9.2
+  version: 2.9.4
 servers:
 - url: https://gemma.msl.ubc.ca/rest/v2
 security:
@@ -102,49 +102,48 @@ paths:
             text/tab-separated-values; charset=UTF-8; q=0.9:
               schema:
                 type: string
-              example: "# If you use this file for your research, please cite:\r\n\
-                # Lim et al. (2021) Curation of over 10 000 transcriptomic studies\
-                \ to enable data reuse.\r\n# Database, baab006 (doi:10.1093/database/baab006).\r\
-                \n# Experimental factors: [name: Diet, values: [id: 20959, characteristics:\
+              example: "# If you use this file for your research, please cite:\n#\
+                \ Lim et al. (2021) Curation of over 10 000 transcriptomic studies\
+                \ to enable data reuse.\n# Database, baab006 (doi:10.1093/database/baab006).\n\
+                # Experimental factors: [name: Diet, values: [id: 20959, characteristics:\
                 \ [high fat diet], id: 20960, characteristics: [reference subject\
-                \ role]]]\r\n# Baseline: id: 20959, characteristics: [high fat diet]\r\
-                \nid\tprobe_id\tprobe_name\tgene_id\tgene_name\tgene_ncbi_id\tgene_official_symbol\t\
+                \ role]]]\n# Baseline: id: 20959, characteristics: [high fat diet]\n\
+                id\tprobe_id\tprobe_name\tgene_id\tgene_name\tgene_ncbi_id\tgene_official_symbol\t\
                 gene_official_name\tpvalue\tcorrected_pvalue\trank\tcontrast_20960_coefficient\t\
-                contrast_20960_log2fc\tcontrast_20960_tstat\tcontrast_20960_pvalue\r\
-                \n107660162\t6379542\tILMN_1256775\t582688\tThrsp\t21835\tThrsp\t\
-                thyroid hormone responsive\t7.375E-9\t0.0001\t2.144E-5\t3.1352\t3.1352\t\
-                17.6207\t7.375E-9\r\n107678499\t6358971\tILMN_2690657\t813306\tBpifb6\t\
+                contrast_20960_log2fc\tcontrast_20960_tstat\tcontrast_20960_pvalue\n\
+                107660162\t6379542\tILMN_1256775\t582688\tThrsp\t21835\tThrsp\tthyroid\
+                \ hormone responsive\t7.375E-9\t0.0001\t2.144E-5\t3.1352\t3.1352\t\
+                17.6207\t7.375E-9\n107678499\t6358971\tILMN_2690657\t813306\tBpifb6\t\
                 228796\tBpifb6\tBPI fold containing family B, member 6\t7.832E-9\t\
-                0.0001\t4.289E-5\t-1.6286\t-1.6286\t-17.5121\t7.832E-9\r\n107643534\t\
+                0.0001\t4.289E-5\t-1.6286\t-1.6286\t-17.5121\t7.832E-9\n107643534\t\
                 6363391\tILMN_1222060\t619131\tArhgef5\t54324\tArhgef5\tRho guanine\
                 \ nucleotide exchange factor 5\t1.329E-8\t0.0001\t6.433E-5\t-1.2474\t\
-                -1.2474\t-16.5818\t1.329E-8\r\n107647171\t6357370\tILMN_1229667\t\
-                702894\tSlc43a1\t72401\tSlc43a1\tsolute carrier family 43, member\
-                \ 1\t2.093E-8\t0.0001\t8.578E-5\t1.0412\t1.0412\t15.8207\t2.093E-8\r\
-                \n107665034\t6350196\tILMN_2460179\t797000\tTph2\t216343\tTph2\ttryptophan\
-                \ hydroxylase 2\t3.414E-8\t0.0002\t0.0001\t-3.8165\t-3.8165\t-15.037\t\
-                3.414E-8\r\n107671178\t6363608\tILMN_2591159\t695665\tFam13c\t71721\t\
-                Fam13c\tfamily with sequence similarity 13, member C\t4.385E-8\t0.0002\t\
-                0.0001\t-0.5792\t-0.5792\t-14.6504\t4.385E-8\r\n107641223\t6360279\t\
-                ILMN_1217241\t785630\tKlhl25\t207952\tKlhl25\tkelch-like 25\t5.419E-8\t\
-                0.0002\t0.0002\t-0.756\t-0.756\t-14.3302\t5.419E-8\r\n107657532\t\
-                6339362\tILMN_1251292\t502225|502237\tEar1|Ear2\t13586|13587\tEar1|Ear2\t\
-                eosinophil-associated, ribonuclease A family, member 1|eosinophil-associated,\
-                \ ribonuclease A family, member 2\t9.577E-8\t0.0003\t0.0002\t-1.4862\t\
-                -1.4862\t-13.5006\t9.577E-8\r\n107680187\t6345095\tILMN_2713898\t\
-                486090\tDdr1\t12305\tDdr1\tdiscoidin domain receptor family, member\
-                \ 1\t1.172E-7\t0.0003\t0.0002\t-0.8617\t-0.8617\t-13.2167\t1.172E-7\r\
-                \n107684452\t6363087\tILMN_2772273\t724368\tCldn22\t75677\tCldn22\t\
-                claudin 22\t1.634E-7\t0.0004\t0.0002\t0.6557\t0.6557\t12.7622\t1.634E-7\r\
-                \n107641691\t6378887\tILMN_1218223\t561628\tPvalb\t19293\tPvalb\t\
-                parvalbumin\t1.918E-7\t0.0004\t0.0002\t-1.9261\t-1.9261\t-12.5478\t\
-                1.918E-7\r\n107652484\t6371658\tILMN_1240770\t760788\tAcly\t104112\t\
-                Acly\tATP citrate lyase\t2.145E-7\t0.0004\t0.0003\t1.8169\t1.8169\t\
-                12.4002\t2.145E-7\r\n107684617\t6340514\tILMN_2774161\t523186\tHsd11b1\t\
-                15483\tHsd11b1\thydroxysteroid 11-beta dehydrogenase 1\t2.022E-7\t\
-                0.0004\t0.0003\t1.4447\t1.4447\t12.4776\t2.022E-7\r\n107654165\t6372412\t\
-                ILMN_1244211\t\t\t\t\t\t2.463E-7\t0.0005\t0.0003\t1.2247\t1.2247\t\
-                12.2193\t2.463E-7\r\n"
+                -1.2474\t-16.5818\t1.329E-8\n107647171\t6357370\tILMN_1229667\t702894\t\
+                Slc43a1\t72401\tSlc43a1\tsolute carrier family 43, member 1\t2.093E-8\t\
+                0.0001\t8.578E-5\t1.0412\t1.0412\t15.8207\t2.093E-8\n107665034\t6350196\t\
+                ILMN_2460179\t797000\tTph2\t216343\tTph2\ttryptophan hydroxylase 2\t\
+                3.414E-8\t0.0002\t0.0001\t-3.8165\t-3.8165\t-15.037\t3.414E-8\n107671178\t\
+                6363608\tILMN_2591159\t695665\tFam13c\t71721\tFam13c\tfamily with\
+                \ sequence similarity 13, member C\t4.385E-8\t0.0002\t0.0001\t-0.5792\t\
+                -0.5792\t-14.6504\t4.385E-8\n107641223\t6360279\tILMN_1217241\t785630\t\
+                Klhl25\t207952\tKlhl25\tkelch-like 25\t5.419E-8\t0.0002\t0.0002\t\
+                -0.756\t-0.756\t-14.3302\t5.419E-8\n107657532\t6339362\tILMN_1251292\t\
+                502225|502237\tEar1|Ear2\t13586|13587\tEar1|Ear2\teosinophil-associated,\
+                \ ribonuclease A family, member 1|eosinophil-associated, ribonuclease\
+                \ A family, member 2\t9.577E-8\t0.0003\t0.0002\t-1.4862\t-1.4862\t\
+                -13.5006\t9.577E-8\n107680187\t6345095\tILMN_2713898\t486090\tDdr1\t\
+                12305\tDdr1\tdiscoidin domain receptor family, member 1\t1.172E-7\t\
+                0.0003\t0.0002\t-0.8617\t-0.8617\t-13.2167\t1.172E-7\n107684452\t\
+                6363087\tILMN_2772273\t724368\tCldn22\t75677\tCldn22\tclaudin 22\t\
+                1.634E-7\t0.0004\t0.0002\t0.6557\t0.6557\t12.7622\t1.634E-7\n107641691\t\
+                6378887\tILMN_1218223\t561628\tPvalb\t19293\tPvalb\tparvalbumin\t\
+                1.918E-7\t0.0004\t0.0002\t-1.9261\t-1.9261\t-12.5478\t1.918E-7\n107652484\t\
+                6371658\tILMN_1240770\t760788\tAcly\t104112\tAcly\tATP citrate lyase\t\
+                2.145E-7\t0.0004\t0.0003\t1.8169\t1.8169\t12.4002\t2.145E-7\n107684617\t\
+                6340514\tILMN_2774161\t523186\tHsd11b1\t15483\tHsd11b1\thydroxysteroid\
+                \ 11-beta dehydrogenase 1\t2.022E-7\t0.0004\t0.0003\t1.4447\t1.4447\t\
+                12.4776\t2.022E-7\n107654165\t6372412\tILMN_1244211\t\t\t\t\t\t2.463E-7\t\
+                0.0005\t0.0003\t1.2247\t1.2247\t12.2193\t2.463E-7\n"
         "404":
           description: The analysis result set could not be found.
           content:
@@ -222,6 +221,54 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/FilteredAndPaginatedResponseDataObjectDifferentialExpressionAnalysisResultSetValueObject"
+  /annotations/categories:
+    get:
+      summary: Retrieve all ontology categories used in Gemma
+      operationId: getAnnotationCategories
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseDataObjectListOntologyTermSimpleValueObject"
+  /annotations/predicates:
+    get:
+      summary: Retrieve all ontology predicates used in Gemma
+      operationId: getAnnotationPredicates
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseDataObjectListOntologyTermSimpleValueObject"
+  /annotations/term:
+    get:
+      summary: Retrieve an ontology term by its URI
+      operationId: getAnnotationTerm
+      parameters:
+      - name: uri
+        in: query
+        description: Term URI
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseDataObjectOntologyTermValueObject"
+        "404":
+          description: No term matched the given URI.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseErrorObject"
+        "503":
+          description: Ontology lookup timed out.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseErrorObject"
   /annotations/children:
     get:
       summary: Retrieve the children of the given annotations
@@ -712,6 +759,35 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ResponseErrorObject"
+  /datasets/{dataset}/auditEvents:
+    get:
+      summary: Retrieve the audit events of a dataset
+      operationId: getDatasetAuditEvents
+      parameters:
+      - name: dataset
+        in: path
+        required: true
+        schema:
+          required:
+          - value
+          oneOf:
+          - type: integer
+            description: A numerical dataset identifier.
+            format: int64
+          - type: string
+            description: A dataset short name.
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseDataObjectListAuditEventValueObject"
+        "404":
+          description: The dataset does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseErrorObject"
   /datasets/{dataset}/cellLevelCharacteristics:
     get:
       summary: Retrieve all other cell-level characteristics of a single-cell dataset
@@ -750,7 +826,7 @@ paths:
               schema:
                 type: object
               example: "sample_id\tcell_id\tcategory\tcategory_uri\tcategory_id\t\
-                value\tvalue_uri\r\n"
+                value\tvalue_uri\n"
   /datasets/{dataset}/cellTypeAssignment:
     get:
       summary: Retrieve a cell-type assignment of a single-cell dataset
@@ -800,26 +876,26 @@ paths:
             text/tab-separated-values; charset=UTF-8:
               schema:
                 type: object
-              example: "sample_id\tcell_id\tcell_type\tcell_type_uri\r\nH48-g2 , Entorhinal\
-                \ cortex\tAAACCCAAGGTCCAGA-2_1\tExcitatory Neurons\t\r\nH48-g2 , Entorhinal\
-                \ cortex\tAAACCCACAGATAAAC-2_1\tExcitatory Neurons\t\r\nH48-g2 , Entorhinal\
-                \ cortex\tAAACCCAGTCCTTAAG-2_1\tOPCs\t\r\nH48-g2 , Entorhinal cortex\t\
-                AAACGAAAGCCTCAAT-2_1\tOligodendrocytes\t\r\nH48-g2 , Entorhinal cortex\t\
-                AAACGAACAGCGTGAA-2_1\tAstrocytes\t\r\nH48-g2 , Entorhinal cortex\t\
-                AAACGAATCCATAGAC-2_1\tOligodendrocytes\t\r\nH48-g2 , Entorhinal cortex\t\
-                AAACGAATCTCCCTAG-2_1\tOligodendrocytes\t\r\nH48-g2 , Entorhinal cortex\t\
-                AAACGCTAGGCCCAAA-2_1\tExcitatory Neurons\t\r\nH48-g2 , Entorhinal\
-                \ cortex\tAAACGCTAGGTATAGT-2_1\tVascular Cells\t\r\nH48-g2 , Entorhinal\
-                \ cortex\tAAACGCTCAACATACC-2_1\tExcitatory Neurons\t\r\nH48-g2 , Entorhinal\
-                \ cortex\tAAACGCTCAGCTTTCC-2_1\tVascular Cells\t\r\nH48-g2 , Entorhinal\
-                \ cortex\tAAACGCTGTGGTCCCA-2_1\tVascular Cells\t\r\nH48-g2 , Entorhinal\
-                \ cortex\tAAACGCTTCGACACTA-2_1\tExcitatory Neurons\t\r\nH48-g2 , Entorhinal\
-                \ cortex\tAAACGCTTCGGAATGG-2_1\tOligodendrocytes\t\r\nH48-g2 , Entorhinal\
-                \ cortex\tAAAGAACCAAGCGAAC-2_1\tVascular Cells\t\r\nH48-g2 , Entorhinal\
-                \ cortex\tAAAGAACGTTCTAACG-2_1\tExcitatory Neurons\t\r\nH48-g2 , Entorhinal\
-                \ cortex\tAAAGGATAGAAGGATG-2_1\tOligodendrocytes\t\r\nH48-g2 , Entorhinal\
-                \ cortex\tAAAGGATGTTCCCAAA-2_1\tVascular Cells\t\r\nH48-g2 , Entorhinal\
-                \ cortex\tAAAGGATGTTCGGTAT-2_1\tExcitatory Neurons\t\r\n"
+              example: "sample_id\tcell_id\tcell_type\tcell_type_uri\nH48-g2 , Entorhinal\
+                \ cortex\tAAACCCAAGGTCCAGA-2_1\tExcitatory Neurons\t\nH48-g2 , Entorhinal\
+                \ cortex\tAAACCCACAGATAAAC-2_1\tExcitatory Neurons\t\nH48-g2 , Entorhinal\
+                \ cortex\tAAACCCAGTCCTTAAG-2_1\tOPCs\t\nH48-g2 , Entorhinal cortex\t\
+                AAACGAAAGCCTCAAT-2_1\tOligodendrocytes\t\nH48-g2 , Entorhinal cortex\t\
+                AAACGAACAGCGTGAA-2_1\tAstrocytes\t\nH48-g2 , Entorhinal cortex\tAAACGAATCCATAGAC-2_1\t\
+                Oligodendrocytes\t\nH48-g2 , Entorhinal cortex\tAAACGAATCTCCCTAG-2_1\t\
+                Oligodendrocytes\t\nH48-g2 , Entorhinal cortex\tAAACGCTAGGCCCAAA-2_1\t\
+                Excitatory Neurons\t\nH48-g2 , Entorhinal cortex\tAAACGCTAGGTATAGT-2_1\t\
+                Vascular Cells\t\nH48-g2 , Entorhinal cortex\tAAACGCTCAACATACC-2_1\t\
+                Excitatory Neurons\t\nH48-g2 , Entorhinal cortex\tAAACGCTCAGCTTTCC-2_1\t\
+                Vascular Cells\t\nH48-g2 , Entorhinal cortex\tAAACGCTGTGGTCCCA-2_1\t\
+                Vascular Cells\t\nH48-g2 , Entorhinal cortex\tAAACGCTTCGACACTA-2_1\t\
+                Excitatory Neurons\t\nH48-g2 , Entorhinal cortex\tAAACGCTTCGGAATGG-2_1\t\
+                Oligodendrocytes\t\nH48-g2 , Entorhinal cortex\tAAAGAACCAAGCGAAC-2_1\t\
+                Vascular Cells\t\nH48-g2 , Entorhinal cortex\tAAAGAACGTTCTAACG-2_1\t\
+                Excitatory Neurons\t\nH48-g2 , Entorhinal cortex\tAAAGGATAGAAGGATG-2_1\t\
+                Oligodendrocytes\t\nH48-g2 , Entorhinal cortex\tAAAGGATGTTCCCAAA-2_1\t\
+                Vascular Cells\t\nH48-g2 , Entorhinal cortex\tAAAGGATGTTCGGTAT-2_1\t\
+                Excitatory Neurons\t\n"
         "404":
           description: "If the dataset, quantitation type or cell type assignment\
             \ does not exist, or if a preferred cell type assignment is requested\
@@ -828,10 +904,84 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ResponseErrorObject"
+  /datasets/{dataset}/curationDetails:
+    get:
+      summary: Retrieve the curation details of a dataset
+      description: The `curationNote` and `lastNoteUpdateEvent` fields are only populated
+        for administrators.
+      operationId: getDatasetCurationDetails
+      parameters:
+      - name: dataset
+        in: path
+        required: true
+        schema:
+          required:
+          - value
+          oneOf:
+          - type: integer
+            description: A numerical dataset identifier.
+            format: int64
+          - type: string
+            description: A dataset short name.
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseDataObjectCurationDetailsValueObject"
+        "404":
+          description: The dataset does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseErrorObject"
+    put:
+      summary: Update the curation details of a dataset
+      description: "Each field in the request body is optional. Provided fields are\
+        \ applied via the corresponding audit event types (`TroubledStatusFlagEvent`/`NotTroubledStatusFlagEvent`,\
+        \ `NeedsAttentionEvent`/`DoesNotNeedAttentionEvent`, `CurationNoteUpdateEvent`).\
+        \ An optional `note` is attached to the trouble/needs-attention events; `curationNote`\
+        \ is the new note text."
+      operationId: updateDatasetCurationDetails
+      parameters:
+      - name: dataset
+        in: path
+        required: true
+        schema:
+          required:
+          - value
+          oneOf:
+          - type: integer
+            description: A numerical dataset identifier.
+            format: int64
+          - type: string
+            description: A dataset short name.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CurationDetailsUpdateRequest"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseDataObjectCurationDetailsValueObject"
+        "404":
+          description: The dataset does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseErrorObject"
+      security:
+      - basicAuth:
+        - GROUP_ADMIN
+      - cookieAuth:
+        - GROUP_ADMIN
   /datasets/{dataset}/design:
     get:
       summary: Retrieve the design of a dataset
-      operationId: getDatasetDesign
+      operationId: getDatasetDesignJson
       parameters:
       - name: dataset
         in: path
@@ -871,6 +1021,63 @@ paths:
                 GSM36449\tBatch_08_02_10_15\treference_subject_role\nGSE2018_bioMaterial_26.GSM36448___BioAssayId=9Name=BAL_43_A0B0\t\
                 GSM36448\tBatch_09_02_10_25\treference_subject_role\nGSE2018_bioMaterial_25.GSM36447___BioAssayId=10Name=BAL_42_A0B0\t\
                 GSM36447\tBatch_11_02_11_27\treference_subject_role\n"
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseDataObjectExperimentalDesignValueObject"
+        "404":
+          description: The dataset does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseErrorObject"
+    put:
+      summary: Replace the experimental design of a dataset
+      operationId: replaceDatasetDesign
+      parameters:
+      - name: dataset
+        in: path
+        required: true
+        schema:
+          required:
+          - value
+          oneOf:
+          - type: integer
+            description: A numerical dataset identifier.
+            format: int64
+          - type: string
+            description: A dataset short name.
+      - name: force
+        in: query
+        description: Set to true to consent to deleting differential-expression analyses
+          that depend on factors or factor values affected by the change.
+        schema:
+          type: boolean
+          default: false
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ExperimentalDesignValueObject"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseDataObjectExperimentalDesignValueObject"
+        "400":
+          description: The proposed design has validation blockers; see the report
+            in the response body.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseDataObjectDesignPreflightReport"
+        "409":
+          description: The proposed change would delete differential-expression analyses;
+            retry with ?force=true to consent.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseDataObjectDesignPreflightReport"
         "404":
           description: The dataset does not exist.
           content:
@@ -897,6 +1104,8 @@ paths:
             description: A dataset short name.
       - name: offset
         in: query
+        description: This parameter is ignored and will be removed in the 2.10 release.
+        deprecated: true
         schema:
           minimum: 0
           type: integer
@@ -905,6 +1114,8 @@ paths:
           default: 0
       - name: limit
         in: query
+        description: This parameter is ignored and will be removed in the 2.10 release.
+        deprecated: true
         schema:
           maximum: 100
           minimum: 1
@@ -1086,6 +1297,128 @@ paths:
               schema:
                 $ref: "#/components/schemas/ResponseErrorObject"
       deprecated: true
+  /datasets/{dataset}/geeq:
+    get:
+      summary: Retrieve the GEEQ scores of a dataset
+      description: "Returns the administrative GEEQ view exposing the underlying suitability\
+        \ and quality score factors, plus a `lastComputed` timestamp from the most\
+        \ recent `GeeqEvent`. Returns 404 when GEEQ has never been computed for this\
+        \ dataset (use `PUT /geeq` to compute it)."
+      operationId: getDatasetGeeq
+      parameters:
+      - name: dataset
+        in: path
+        required: true
+        schema:
+          required:
+          - value
+          oneOf:
+          - type: integer
+            description: A numerical dataset identifier.
+            format: int64
+          - type: string
+            description: A dataset short name.
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseDataObjectGeeqValueObject"
+        "404":
+          description: The dataset does not exist or GEEQ has not been computed for
+            it.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseErrorObject"
+      security:
+      - basicAuth:
+        - GROUP_ADMIN
+      - cookieAuth:
+        - GROUP_ADMIN
+    put:
+      summary: Recompute GEEQ scores for a dataset
+      description: "Synchronously recomputes the GEEQ quality and suitability scores\
+        \ for the dataset and writes a `GeeqEvent` to the audit log. The optional\
+        \ `mode` query parameter selects which subset of scores to recompute (`all`,\
+        \ `batch`, `reps`, `pub`); defaults to `all`. The returned object includes\
+        \ the updated scores and the `lastComputed` timestamp. Because the endpoint\
+        \ is admin-only, the response is the administrative GEEQ view exposing the\
+        \ underlying score variables."
+      operationId: recomputeDatasetGeeq
+      parameters:
+      - name: dataset
+        in: path
+        required: true
+        schema:
+          required:
+          - value
+          oneOf:
+          - type: integer
+            description: A numerical dataset identifier.
+            format: int64
+          - type: string
+            description: A dataset short name.
+      - name: mode
+        in: query
+        schema:
+          type: string
+          default: all
+          enum:
+          - all
+          - batch
+          - reps
+          - pub
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseDataObjectGeeqValueObject"
+        "404":
+          description: The dataset does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseErrorObject"
+      security:
+      - basicAuth:
+        - GROUP_ADMIN
+      - cookieAuth:
+        - GROUP_ADMIN
+  /datasets/{dataset}/pipelineStatus:
+    get:
+      summary: Retrieve the per-step pipeline status of a dataset
+      description: "Returns a snapshot of each preprocessing/analysis step (`batchInfo`,\
+        \ `preprocess`, `pca`, `dea`, `coexpression`, `missingValue`) with its last-run\
+        \ date, audit-event class name, and state (`ok`, `failed`, `notRun`, or `notApplicable`).\
+        \ The `curationNote` field is admin-only."
+      operationId: getDatasetPipelineStatus
+      parameters:
+      - name: dataset
+        in: path
+        required: true
+        schema:
+          required:
+          - value
+          oneOf:
+          - type: integer
+            description: A numerical dataset identifier.
+            format: int64
+          - type: string
+            description: A dataset short name.
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseDataObjectPipelineStatusValueObject"
+        "404":
+          description: The dataset does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseErrorObject"
   /datasets/{dataset}/platforms:
     get:
       summary: Retrieve the platforms of a dataset
@@ -1504,39 +1837,36 @@ paths:
               schema:
                 type: object
               example: "sample_id\tcell_id\tcategory\tcategory_uri\tcategory_id\t\
-                value\tvalue_uri\r\nH48-g2 , Entorhinal cortex\tAAACCCAAGGTCCAGA-2_1\t\
+                value\tvalue_uri\nH48-g2 , Entorhinal cortex\tAAACCCAAGGTCCAGA-2_1\t\
                 cell type\thttp://www.ebi.ac.uk/efo/EFO_0000324\t1\tExcitatory Neurons\t\
-                \r\nH48-g2 , Entorhinal cortex\tAAACCCACAGATAAAC-2_1\tcell type\t\
-                http://www.ebi.ac.uk/efo/EFO_0000324\t1\tExcitatory Neurons\t\r\n\
-                H48-g2 , Entorhinal cortex\tAAACCCAGTCCTTAAG-2_1\tcell type\thttp://www.ebi.ac.uk/efo/EFO_0000324\t\
-                1\tOPCs\t\r\nH48-g2 , Entorhinal cortex\tAAACGAAAGCCTCAAT-2_1\tcell\
-                \ type\thttp://www.ebi.ac.uk/efo/EFO_0000324\t1\tOligodendrocytes\t\
-                \r\nH48-g2 , Entorhinal cortex\tAAACGAACAGCGTGAA-2_1\tcell type\t\
-                http://www.ebi.ac.uk/efo/EFO_0000324\t1\tAstrocytes\t\r\nH48-g2 ,\
-                \ Entorhinal cortex\tAAACGAATCCATAGAC-2_1\tcell type\thttp://www.ebi.ac.uk/efo/EFO_0000324\t\
-                1\tOligodendrocytes\t\r\nH48-g2 , Entorhinal cortex\tAAACGAATCTCCCTAG-2_1\t\
+                \nH48-g2 , Entorhinal cortex\tAAACCCACAGATAAAC-2_1\tcell type\thttp://www.ebi.ac.uk/efo/EFO_0000324\t\
+                1\tExcitatory Neurons\t\nH48-g2 , Entorhinal cortex\tAAACCCAGTCCTTAAG-2_1\t\
+                cell type\thttp://www.ebi.ac.uk/efo/EFO_0000324\t1\tOPCs\t\nH48-g2\
+                \ , Entorhinal cortex\tAAACGAAAGCCTCAAT-2_1\tcell type\thttp://www.ebi.ac.uk/efo/EFO_0000324\t\
+                1\tOligodendrocytes\t\nH48-g2 , Entorhinal cortex\tAAACGAACAGCGTGAA-2_1\t\
+                cell type\thttp://www.ebi.ac.uk/efo/EFO_0000324\t1\tAstrocytes\t\n\
+                H48-g2 , Entorhinal cortex\tAAACGAATCCATAGAC-2_1\tcell type\thttp://www.ebi.ac.uk/efo/EFO_0000324\t\
+                1\tOligodendrocytes\t\nH48-g2 , Entorhinal cortex\tAAACGAATCTCCCTAG-2_1\t\
                 cell type\thttp://www.ebi.ac.uk/efo/EFO_0000324\t1\tOligodendrocytes\t\
-                \r\nH48-g2 , Entorhinal cortex\tAAACGCTAGGCCCAAA-2_1\tcell type\t\
-                http://www.ebi.ac.uk/efo/EFO_0000324\t1\tExcitatory Neurons\t\r\n\
-                H48-g2 , Entorhinal cortex\tAAACGCTAGGTATAGT-2_1\tcell type\thttp://www.ebi.ac.uk/efo/EFO_0000324\t\
-                1\tVascular Cells\t\r\nH48-g2 , Entorhinal cortex\tAAACGCTCAACATACC-2_1\t\
+                \nH48-g2 , Entorhinal cortex\tAAACGCTAGGCCCAAA-2_1\tcell type\thttp://www.ebi.ac.uk/efo/EFO_0000324\t\
+                1\tExcitatory Neurons\t\nH48-g2 , Entorhinal cortex\tAAACGCTAGGTATAGT-2_1\t\
+                cell type\thttp://www.ebi.ac.uk/efo/EFO_0000324\t1\tVascular Cells\t\
+                \nH48-g2 , Entorhinal cortex\tAAACGCTCAACATACC-2_1\tcell type\thttp://www.ebi.ac.uk/efo/EFO_0000324\t\
+                1\tExcitatory Neurons\t\nH48-g2 , Entorhinal cortex\tAAACGCTCAGCTTTCC-2_1\t\
+                cell type\thttp://www.ebi.ac.uk/efo/EFO_0000324\t1\tVascular Cells\t\
+                \nH48-g2 , Entorhinal cortex\tAAACGCTGTGGTCCCA-2_1\tcell type\thttp://www.ebi.ac.uk/efo/EFO_0000324\t\
+                1\tVascular Cells\t\nH48-g2 , Entorhinal cortex\tAAACGCTTCGACACTA-2_1\t\
                 cell type\thttp://www.ebi.ac.uk/efo/EFO_0000324\t1\tExcitatory Neurons\t\
-                \r\nH48-g2 , Entorhinal cortex\tAAACGCTCAGCTTTCC-2_1\tcell type\t\
-                http://www.ebi.ac.uk/efo/EFO_0000324\t1\tVascular Cells\t\r\nH48-g2\
-                \ , Entorhinal cortex\tAAACGCTGTGGTCCCA-2_1\tcell type\thttp://www.ebi.ac.uk/efo/EFO_0000324\t\
-                1\tVascular Cells\t\r\nH48-g2 , Entorhinal cortex\tAAACGCTTCGACACTA-2_1\t\
+                \nH48-g2 , Entorhinal cortex\tAAACGCTTCGGAATGG-2_1\tcell type\thttp://www.ebi.ac.uk/efo/EFO_0000324\t\
+                1\tOligodendrocytes\t\nH48-g2 , Entorhinal cortex\tAAAGAACCAAGCGAAC-2_1\t\
+                cell type\thttp://www.ebi.ac.uk/efo/EFO_0000324\t1\tVascular Cells\t\
+                \nH48-g2 , Entorhinal cortex\tAAAGAACGTTCTAACG-2_1\tcell type\thttp://www.ebi.ac.uk/efo/EFO_0000324\t\
+                1\tExcitatory Neurons\t\nH48-g2 , Entorhinal cortex\tAAAGGATAGAAGGATG-2_1\t\
+                cell type\thttp://www.ebi.ac.uk/efo/EFO_0000324\t1\tOligodendrocytes\t\
+                \nH48-g2 , Entorhinal cortex\tAAAGGATGTTCCCAAA-2_1\tcell type\thttp://www.ebi.ac.uk/efo/EFO_0000324\t\
+                1\tVascular Cells\t\nH48-g2 , Entorhinal cortex\tAAAGGATGTTCGGTAT-2_1\t\
                 cell type\thttp://www.ebi.ac.uk/efo/EFO_0000324\t1\tExcitatory Neurons\t\
-                \r\nH48-g2 , Entorhinal cortex\tAAACGCTTCGGAATGG-2_1\tcell type\t\
-                http://www.ebi.ac.uk/efo/EFO_0000324\t1\tOligodendrocytes\t\r\nH48-g2\
-                \ , Entorhinal cortex\tAAAGAACCAAGCGAAC-2_1\tcell type\thttp://www.ebi.ac.uk/efo/EFO_0000324\t\
-                1\tVascular Cells\t\r\nH48-g2 , Entorhinal cortex\tAAAGAACGTTCTAACG-2_1\t\
-                cell type\thttp://www.ebi.ac.uk/efo/EFO_0000324\t1\tExcitatory Neurons\t\
-                \r\nH48-g2 , Entorhinal cortex\tAAAGGATAGAAGGATG-2_1\tcell type\t\
-                http://www.ebi.ac.uk/efo/EFO_0000324\t1\tOligodendrocytes\t\r\nH48-g2\
-                \ , Entorhinal cortex\tAAAGGATGTTCCCAAA-2_1\tcell type\thttp://www.ebi.ac.uk/efo/EFO_0000324\t\
-                1\tVascular Cells\t\r\nH48-g2 , Entorhinal cortex\tAAAGGATGTTCGGTAT-2_1\t\
-                cell type\thttp://www.ebi.ac.uk/efo/EFO_0000324\t1\tExcitatory Neurons\t\
-                \r\n"
+                \n"
   /datasets/{dataset}/data/singleCell:
     get:
       summary: Retrieve single-cell expression data of a dataset
@@ -2755,6 +3085,88 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ResponseErrorObject"
+  /datasets/{dataset}/designPreflight:
+    post:
+      summary: Dry-run preflight for a proposed experimental design replacement
+      operationId: previewDatasetDesignChange
+      parameters:
+      - name: dataset
+        in: path
+        required: true
+        schema:
+          required:
+          - value
+          oneOf:
+          - type: integer
+            description: A numerical dataset identifier.
+            format: int64
+          - type: string
+            description: A dataset short name.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ExperimentalDesignValueObject"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseDataObjectDesignPreflightReport"
+        "400":
+          description: Request body is missing or malformed.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseErrorObject"
+        "404":
+          description: The dataset does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseErrorObject"
+  /datasets/{dataset}/tasks/redo/{analysisId}:
+    post:
+      summary: Redo an existing differential expression analysis
+      description: "Re-runs the named differential analysis using its original configuration.\
+        \ Returns 202 with a `Location` header pointing at `/tasks/{taskId}`."
+      operationId: redoDatasetDifferentialAnalysis
+      parameters:
+      - name: dataset
+        in: path
+        required: true
+        schema:
+          required:
+          - value
+          oneOf:
+          - type: integer
+            description: A numerical dataset identifier.
+            format: int64
+          - type: string
+            description: A dataset short name.
+      - name: analysisId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "202":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseDataObjectTaskStatusValueObject"
+        "404":
+          description: The dataset or analysis does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseErrorObject"
+      security:
+      - basicAuth:
+        - GROUP_ADMIN
+      - cookieAuth:
+        - GROUP_ADMIN
   /datasets/{dataset}/refresh:
     get:
       summary: Retrieve a refreshed dataset
@@ -2878,6 +3290,252 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/QueriedAndFilteredAndInferredAndLimitedResponseDataObjectArrayDesignWithUsageStatisticsValueObject"
+      security:
+      - basicAuth:
+        - GROUP_ADMIN
+      - cookieAuth:
+        - GROUP_ADMIN
+  /datasets/{dataset}/tasks/differential/{analysisId}:
+    delete:
+      summary: Remove of a differential expression analysis
+      description: "Asynchronously deletes the named differential analysis from the\
+        \ dataset. Returns 202 with a `Location` header pointing at `/tasks/{taskId}`;\
+        \ the actual delete completes in the background."
+      operationId: removeDatasetDifferentialAnalysis
+      parameters:
+      - name: dataset
+        in: path
+        required: true
+        schema:
+          required:
+          - value
+          oneOf:
+          - type: integer
+            description: A numerical dataset identifier.
+            format: int64
+          - type: string
+            description: A dataset short name.
+      - name: analysisId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "202":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseDataObjectTaskStatusValueObject"
+        "404":
+          description: The dataset or analysis does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseErrorObject"
+      security:
+      - basicAuth:
+        - GROUP_ADMIN
+      - cookieAuth:
+        - GROUP_ADMIN
+  /datasets/{dataset}/tasks/batchInfo:
+    post:
+      summary: Run a batch-information fetch for a dataset
+      description: "Re-fetches batch information from the source data. Returns 202\
+        \ with a `Location` header pointing at `/tasks/{taskId}`."
+      operationId: runDatasetBatchInformationFetch
+      parameters:
+      - name: dataset
+        in: path
+        required: true
+        schema:
+          required:
+          - value
+          oneOf:
+          - type: integer
+            description: A numerical dataset identifier.
+            format: int64
+          - type: string
+            description: A dataset short name.
+      responses:
+        "202":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseDataObjectTaskStatusValueObject"
+        "404":
+          description: The dataset does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseErrorObject"
+      security:
+      - basicAuth:
+        - GROUP_ADMIN
+      - cookieAuth:
+        - GROUP_ADMIN
+  /datasets/{dataset}/tasks/diagnostics:
+    post:
+      summary: Submit a diagnostics-only preprocessing run for a dataset
+      description: "Refreshes mean-variance, PCA and sample-correlation diagnostics\
+        \ without recomputing processed vectors. Returns 202 with a `Location` header\
+        \ pointing at `/tasks/{taskId}`."
+      operationId: runDatasetDiagnostics
+      parameters:
+      - name: dataset
+        in: path
+        required: true
+        schema:
+          required:
+          - value
+          oneOf:
+          - type: integer
+            description: A numerical dataset identifier.
+            format: int64
+          - type: string
+            description: A dataset short name.
+      responses:
+        "202":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseDataObjectTaskStatusValueObject"
+        "404":
+          description: The dataset does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseErrorObject"
+      security:
+      - basicAuth:
+        - GROUP_ADMIN
+      - cookieAuth:
+        - GROUP_ADMIN
+  /datasets/{dataset}/tasks/differential:
+    post:
+      summary: Run differential expression analysis for a dataset
+      description: "If the request body is omitted (or all fields are null), every\
+        \ non-batch experimental factor is included with `includeInteractions=true`.\
+        \ Returns 202 with a `Location` header pointing at `/tasks/{taskId}`. Note:\
+        \ when any selected factor is a batch factor the interaction term is silently\
+        \ dropped, mirroring the legacy controller's behaviour."
+      operationId: runDatasetDifferentialAnalysis
+      parameters:
+      - name: dataset
+        in: path
+        required: true
+        schema:
+          required:
+          - value
+          oneOf:
+          - type: integer
+            description: A numerical dataset identifier.
+            format: int64
+          - type: string
+            description: A dataset short name.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DifferentialAnalysisRunRequest"
+      responses:
+        "202":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseDataObjectTaskStatusValueObject"
+        "400":
+          description: "The request body references factor ids that don't belong to\
+            \ the dataset, or names a subset factor that's also in `factorIds`."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseErrorObject"
+        "404":
+          description: The dataset does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseErrorObject"
+      security:
+      - basicAuth:
+        - GROUP_ADMIN
+      - cookieAuth:
+        - GROUP_ADMIN
+  /datasets/{dataset}/tasks/preprocess:
+    post:
+      summary: Run preprocessing run for a dataset
+      description: "Recomputes processed data vectors and refreshes downstream diagnostics.\
+        \ Returns 202 with a `Location` header pointing at the polling endpoint `/tasks/{taskId}`.\
+        \ Tasks are kept in memory only and evicted ~10 minutes after completion."
+      operationId: runDatasetPreprocess
+      parameters:
+      - name: dataset
+        in: path
+        required: true
+        schema:
+          required:
+          - value
+          oneOf:
+          - type: integer
+            description: A numerical dataset identifier.
+            format: int64
+          - type: string
+            description: A dataset short name.
+      responses:
+        "202":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseDataObjectTaskStatusValueObject"
+        "404":
+          description: The dataset does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseErrorObject"
+      security:
+      - basicAuth:
+        - GROUP_ADMIN
+      - cookieAuth:
+        - GROUP_ADMIN
+  /datasets/{dataset}/permissions:
+    put:
+      summary: Update the sharing permissions of a dataset
+      description: "Toggle whether a dataset is publicly readable. The `isPublic`\
+        \ field is optional; if omitted, no change is made and the current state is\
+        \ returned."
+      operationId: updateDatasetPermissions
+      parameters:
+      - name: dataset
+        in: path
+        required: true
+        schema:
+          required:
+          - value
+          oneOf:
+          - type: integer
+            description: A numerical dataset identifier.
+            format: int64
+          - type: string
+            description: A dataset short name.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PermissionsUpdateRequest"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseDataObjectDatasetPermissionsValueObject"
+        "404":
+          description: The dataset does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseErrorObject"
       security:
       - basicAuth:
         - GROUP_ADMIN
@@ -3439,6 +4097,17 @@ paths:
         in: query
         schema:
           $ref: "#/components/schemas/QueryArg"
+      - name: dataset
+        in: query
+        schema:
+          required:
+          - value
+          oneOf:
+          - type: integer
+            description: A numerical dataset identifier.
+            format: int64
+          - type: string
+            description: A dataset short name.
       - name: taxon
         in: query
         schema:
@@ -3474,15 +4143,15 @@ paths:
           items:
             type: string
             enum:
-            - ubic.gemma.model.analysis.expression.ExpressionExperimentSet
             - ubic.gemma.model.genome.biosequence.BioSequence
+            - ubic.gemma.model.analysis.expression.ExpressionExperimentSet
             - ubic.gemma.model.genome.gene.GeneSet
-            - ubic.gemma.model.expression.arrayDesign.ArrayDesign
             - ubic.gemma.model.genome.Gene
-            - ubic.gemma.model.common.description.BibliographicReference
             - ubic.gemma.model.blacklist.BlacklistedEntity
-            - ubic.gemma.model.expression.experiment.ExpressionExperiment
+            - ubic.gemma.model.expression.arrayDesign.ArrayDesign
+            - ubic.gemma.model.common.description.BibliographicReference
             - ubic.gemma.model.expression.designElement.CompositeSequence
+            - ubic.gemma.model.expression.experiment.ExpressionExperiment
       - name: limit
         in: query
         description: Maximum number of search results to return; capped at 2000 unless
@@ -3524,6 +4193,39 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ResponseErrorObject"
+  /tasks/{taskId}:
+    get:
+      summary: Retrieve the status of a submitted pipeline task
+      description: "Returns a snapshot of the named task's current state (`queued`,\
+        \ `running`, `completed`, `failed`, `cancelling`, `unknown`), its submission/start/finish\
+        \ timestamps, the experiment it operates on, and the most recent progress\
+        \ message. The task store is in-memory and is evicted roughly 10 minutes after\
+        \ completion, after which this endpoint returns 404."
+      operationId: getTaskStatus
+      parameters:
+      - name: taskId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseDataObjectTaskStatusValueObject"
+        "404":
+          description: The task was never submitted or has already been evicted from
+            the in-memory store.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseErrorObject"
+      security:
+      - basicAuth:
+        - GROUP_ADMIN
+      - cookieAuth:
+        - GROUP_ADMIN
   /taxa:
     get:
       summary: Retrieve all available taxa
@@ -4270,6 +4972,202 @@ components:
         type: integer
       - name: results.size
         type: integer
+    ArrayDesignValueObject:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        lastUpdated:
+          type: string
+          format: date-time
+        troubled:
+          type: boolean
+        lastTroubledEvent:
+          $ref: "#/components/schemas/AuditEventValueObject"
+        needsAttention:
+          type: boolean
+        lastNeedsAttentionEvent:
+          $ref: "#/components/schemas/AuditEventValueObject"
+        curationNote:
+          type: string
+        lastNoteUpdateEvent:
+          $ref: "#/components/schemas/AuditEventValueObject"
+        color:
+          type: string
+          enum:
+          - TWOCOLOR
+          - DUALMODE
+          - ONECOLOR
+          - SEQUENCING
+          - GENELIST
+          - OTHER
+        description:
+          type: string
+        expressionExperimentCount:
+          type: integer
+          format: int64
+        isMerged:
+          type: boolean
+        isMergee:
+          type: boolean
+        name:
+          type: string
+        shortName:
+          type: string
+        technologyType:
+          type: string
+          enum:
+          - TWOCOLOR
+          - DUALMODE
+          - ONECOLOR
+          - SEQUENCING
+          - GENELIST
+          - OTHER
+        releaseVersion:
+          type: string
+        releaseUrl:
+          type: string
+          format: url
+        externalReferences:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: "#/components/schemas/DatabaseEntryValueObject"
+        numberOfExpressionExperiments:
+          type: integer
+          format: int64
+        taxonID:
+          type: integer
+          format: int64
+        troubleDetails:
+          type: string
+        numberOfSwitchedExpressionExperiments:
+          type: integer
+          format: int64
+        taxon:
+          $ref: "#/components/schemas/TaxonValueObject"
+    AuditEventValueObject:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        performer:
+          type: string
+        date:
+          type: string
+          format: date-time
+        action:
+          type: string
+          enum:
+          - C
+          - R
+          - U
+          - D
+        note:
+          type: string
+        detail:
+          type: string
+        actionName:
+          type: string
+        eventTypeName:
+          type: string
+    BioAssayValueObject:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        shortName:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        metadata:
+          type: string
+        accession:
+          $ref: "#/components/schemas/DatabaseEntryValueObject"
+        arrayDesign:
+          $ref: "#/components/schemas/ArrayDesignValueObject"
+        originalPlatform:
+          $ref: "#/components/schemas/ArrayDesignValueObject"
+        processingDate:
+          type: string
+          format: date-time
+        sample:
+          $ref: "#/components/schemas/BioMaterialValueObject"
+        sequencePairedReads:
+          type: boolean
+        sequenceReadCount:
+          type: integer
+          format: int64
+        sequenceReadLength:
+          type: integer
+          format: int32
+        numberOfCells:
+          type: integer
+          format: int32
+        numberOfDesignElements:
+          type: integer
+          format: int32
+        numberOfCellsByDesignElements:
+          type: integer
+          format: int32
+        outlier:
+          type: boolean
+        predictedOutlier:
+          type: boolean
+        userFlaggedOutlier:
+          type: boolean
+        sourceBioAssayId:
+          type: integer
+          format: int64
+    BioMaterialValueObject:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        description:
+          type: string
+        bioAssayIds:
+          type: array
+          items:
+            type: integer
+            format: int64
+        characteristics:
+          type: array
+          items:
+            $ref: "#/components/schemas/CharacteristicValueObject"
+        sourceBioMaterialId:
+          type: integer
+          format: int64
+        factors:
+          type: object
+          additionalProperties:
+            type: string
+            description: "This is deprecated, use the `factorValues` collection instead."
+            deprecated: true
+          description: "This is deprecated, use the `factorValues` collection instead."
+          deprecated: true
+        fvbasicVOs:
+          type: array
+          items:
+            $ref: "#/components/schemas/FactorValueBasicValueObject"
+        factorValueObjects:
+          type: array
+          description: "This property is redundant, use `factorValues` instead."
+          deprecated: true
+          items:
+            $ref: "#/components/schemas/FactorValueBasicValueObject"
+        factorValues:
+          type: array
+          items:
+            $ref: "#/components/schemas/FactorValueBasicValueObject"
     CharacteristicValueObject:
       type: object
       properties:
@@ -4324,6 +5222,10 @@ components:
           format: int64
         accession:
           type: string
+        uri:
+          type: string
+        label:
+          type: string
         externalDatabase:
           $ref: "#/components/schemas/ExternalDatabaseValueObject"
     DiffExResultSetSummaryValueObject:
@@ -4343,6 +5245,10 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/ExperimentalFactorValueObject"
+        bioAssaysAnalyzed:
+          type: array
+          items:
+            $ref: "#/components/schemas/BioAssayValueObject"
         numberOfGenesAnalyzed:
           type: integer
           format: int32
@@ -4401,6 +5307,9 @@ components:
         id:
           type: integer
           format: int64
+        resultSetId:
+          type: integer
+          format: int64
         probeId:
           type: integer
           format: int64
@@ -4451,6 +5360,10 @@ components:
         experimentAnalyzedId:
           type: integer
           format: int64
+        bioAssaysAnalyzed:
+          type: array
+          items:
+            $ref: "#/components/schemas/BioAssayValueObject"
         sourceExperimentId:
           type: integer
           format: int64
@@ -4578,6 +5491,7 @@ components:
           type: boolean
           description: "Indicate if this factor value represents a measurement. When\
             \ this is true, the `measurement` field will be populated."
+          readOnly: true
     FactorValueValueObject:
       type: object
       properties:
@@ -4637,6 +5551,7 @@ components:
           type: boolean
           description: "Indicate if this factor value represents a measurement. When\
             \ this is true, the `measurement` field will be populated."
+          readOnly: true
     GeneValueObject:
       type: object
       properties:
@@ -4648,6 +5563,9 @@ components:
           type: array
           items:
             type: string
+        associatedExperimentCount:
+          type: integer
+          format: int32
         multifunctionalityRank:
           type: number
           format: double
@@ -4665,6 +5583,10 @@ components:
           type: string
         officialSymbol:
           type: string
+        ncbiUri:
+          type: string
+          description: "Synthetic ontology-style URI for this gene, derived from its\
+            \ NCBI gene ID. Null when no NCBI ID is available."
         taxon:
           $ref: "#/components/schemas/TaxonValueObject"
         taxonId:
@@ -4743,6 +5665,9 @@ components:
     StatementValueObject:
       type: object
       properties:
+        id:
+          type: integer
+          format: int64
         category:
           type: string
         categoryUri:
@@ -5158,6 +6083,45 @@ components:
         type: integer
       - name: numberOfProbesTested
         type: integer
+    OntologyTermSimpleValueObject:
+      type: object
+      properties:
+        uri:
+          type: string
+        label:
+          type: string
+    ResponseDataObjectListOntologyTermSimpleValueObject:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/OntologyTermSimpleValueObject"
+        warnings:
+          type: array
+          items:
+            $ref: "#/components/schemas/WellComposedWarning"
+    OntologyTermValueObject:
+      type: object
+      properties:
+        uri:
+          type: string
+        name:
+          type: string
+        parentTerms:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: "#/components/schemas/OntologyTermValueObject"
+    ResponseDataObjectOntologyTermValueObject:
+      type: object
+      properties:
+        data:
+          $ref: "#/components/schemas/OntologyTermValueObject"
+        warnings:
+          type: array
+          items:
+            $ref: "#/components/schemas/WellComposedWarning"
     AnnotationSearchResultValueObject:
       type: object
       properties:
@@ -5169,6 +6133,9 @@ components:
           type: string
         categoryUri:
           type: string
+        usageCount:
+          type: integer
+          format: int32
     ResponseDataObjectListAnnotationSearchResultValueObject:
       type: object
       properties:
@@ -5180,32 +6147,6 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/WellComposedWarning"
-    AuditEventValueObject:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        performer:
-          type: string
-        date:
-          type: string
-          format: date-time
-        action:
-          type: string
-          enum:
-          - C
-          - R
-          - U
-          - D
-        note:
-          type: string
-        detail:
-          type: string
-        actionName:
-          type: string
-        eventTypeName:
-          type: string
     ExpressionExperimentValueObject:
       type: object
       properties:
@@ -5236,6 +6177,14 @@ components:
           type: string
         accession:
           type: string
+        externalUri:
+          type: string
+        externalLabel:
+          type: string
+        externalDatabase:
+          type: string
+        externalDatabaseUri:
+          type: string
         batchConfound:
           type: string
         batchEffect:
@@ -5252,12 +6201,6 @@ components:
           - NO_BATCH_EFFECT_SUCCESS
         batchEffectStatistics:
           type: string
-        externalDatabase:
-          type: string
-        externalDatabaseUri:
-          type: string
-        externalUri:
-          type: string
         geeq:
           $ref: "#/components/schemas/GeeqValueObject"
         metadata:
@@ -5266,6 +6209,9 @@ components:
           type: string
         source:
           type: string
+        isPublic:
+          type: boolean
+          readOnly: true
         technologyType:
           type: string
         characteristics:
@@ -5273,12 +6219,12 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/CharacteristicValueObject"
-        taxonId:
-          type: integer
-          format: int64
         bioAssayCount:
           type: integer
           format: int32
+        taxonId:
+          type: integer
+          format: int64
         troubleDetails:
           type: string
         numberOfArrayDesigns:
@@ -5311,6 +6257,9 @@ components:
           format: byte
         batchCorrected:
           type: boolean
+        lastComputed:
+          type: string
+          format: date-time
         qscorePublicBatchEffect:
           type: number
           format: double
@@ -5339,11 +6288,11 @@ components:
           type: number
           format: double
           writeOnly: true
-        sscoreRawData:
+        sscoreSampleSize:
           type: number
           format: double
           writeOnly: true
-        sscoreSampleSize:
+        sscoreRawData:
           type: number
           format: double
           writeOnly: true
@@ -7246,11 +8195,11 @@ components:
     CitationValueObject:
       type: object
       properties:
-        citation:
-          type: string
         id:
           type: integer
           format: int64
+        citation:
+          type: string
         pubmedAccession:
           type: string
         pubmedURL:
@@ -7333,6 +8282,17 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/WellComposedWarning"
+    ResponseDataObjectListAuditEventValueObject:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/AuditEventValueObject"
+        warnings:
+          type: array
+          items:
+            $ref: "#/components/schemas/WellComposedWarning"
     CellLevelCharacteristicsValueObject:
       type: object
       properties:
@@ -7406,18 +8366,7 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/WellComposedWarning"
-    ResponseDataObjectListDifferentialExpressionAnalysisValueObject:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: "#/components/schemas/DifferentialExpressionAnalysisValueObject"
-        warnings:
-          type: array
-          items:
-            $ref: "#/components/schemas/WellComposedWarning"
-    ArrayDesignValueObject:
+    CurationDetailsValueObject:
       type: object
       properties:
         id:
@@ -7438,60 +8387,153 @@ components:
           type: string
         lastNoteUpdateEvent:
           $ref: "#/components/schemas/AuditEventValueObject"
-        color:
-          type: string
-          enum:
-          - TWOCOLOR
-          - DUALMODE
-          - ONECOLOR
-          - SEQUENCING
-          - GENELIST
-          - OTHER
-        description:
-          type: string
-        expressionExperimentCount:
-          type: integer
-          format: int64
-        isMerged:
-          type: boolean
-        isMergee:
-          type: boolean
-        name:
-          type: string
-        shortName:
-          type: string
-        technologyType:
-          type: string
-          enum:
-          - TWOCOLOR
-          - DUALMODE
-          - ONECOLOR
-          - SEQUENCING
-          - GENELIST
-          - OTHER
-        releaseVersion:
-          type: string
-        releaseUrl:
-          type: string
-          format: url
-        externalReferences:
-          uniqueItems: true
+    ResponseDataObjectCurationDetailsValueObject:
+      type: object
+      properties:
+        data:
+          $ref: "#/components/schemas/CurationDetailsValueObject"
+        warnings:
           type: array
           items:
-            $ref: "#/components/schemas/DatabaseEntryValueObject"
-        numberOfExpressionExperiments:
+            $ref: "#/components/schemas/WellComposedWarning"
+    BioMaterialFactorValueAssignment:
+      type: object
+      properties:
+        bioMaterialId:
           type: integer
           format: int64
-        taxonID:
+        bioMaterialName:
+          type: string
+        factorValueIds:
+          type: array
+          items:
+            type: integer
+            format: int64
+    ExperimentalDesignValueObject:
+      type: object
+      properties:
+        id:
           type: integer
           format: int64
+        name:
+          type: string
+        description:
+          type: string
+        replicateDescription:
+          type: string
+        qualityControlDescription:
+          type: string
+        normalizationDescription:
+          type: string
+        experimentalFactors:
+          type: array
+          items:
+            $ref: "#/components/schemas/ExperimentalFactorEntry"
+        bioMaterialAssignments:
+          type: array
+          items:
+            $ref: "#/components/schemas/BioMaterialFactorValueAssignment"
+    ExperimentalFactorEntry:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        description:
+          type: string
+        type:
+          type: string
+          enum:
+          - categorical
+          - continuous
+        category:
+          $ref: "#/components/schemas/CharacteristicValueObject"
+        values:
+          type: array
+          items:
+            $ref: "#/components/schemas/FactorValueBasicValueObject"
+    ResponseDataObjectExperimentalDesignValueObject:
+      type: object
+      properties:
+        data:
+          $ref: "#/components/schemas/ExperimentalDesignValueObject"
+        warnings:
+          type: array
+          items:
+            $ref: "#/components/schemas/WellComposedWarning"
+    ResponseDataObjectListDifferentialExpressionAnalysisValueObject:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/DifferentialExpressionAnalysisValueObject"
+        warnings:
+          type: array
+          items:
+            $ref: "#/components/schemas/WellComposedWarning"
+    ResponseDataObjectGeeqValueObject:
+      type: object
+      properties:
+        data:
+          $ref: "#/components/schemas/GeeqValueObject"
+        warnings:
+          type: array
+          items:
+            $ref: "#/components/schemas/WellComposedWarning"
+    PipelineStatusValueObject:
+      type: object
+      properties:
+        experimentId:
+          type: integer
+          format: int64
+        steps:
+          type: array
+          items:
+            $ref: "#/components/schemas/PipelineStepValueObject"
+        hasBatchInformation:
+          type: boolean
+        hasDifferentialExpressionAnalysis:
+          type: boolean
+        hasCoexpressionAnalysis:
+          type: boolean
+        troubled:
+          type: boolean
         troubleDetails:
           type: string
-        numberOfSwitchedExpressionExperiments:
-          type: integer
-          format: int64
-        taxon:
-          $ref: "#/components/schemas/TaxonValueObject"
+        needsAttention:
+          type: boolean
+        curationNote:
+          type: string
+        isPublic:
+          type: boolean
+        geeq:
+          $ref: "#/components/schemas/GeeqValueObject"
+    PipelineStepValueObject:
+      type: object
+      properties:
+        step:
+          type: string
+        state:
+          type: string
+        lastRun:
+          type: string
+          format: date-time
+        eventType:
+          type: string
+        message:
+          type: string
+    ResponseDataObjectPipelineStatusValueObject:
+      type: object
+      properties:
+        data:
+          $ref: "#/components/schemas/PipelineStatusValueObject"
+        warnings:
+          type: array
+          items:
+            $ref: "#/components/schemas/WellComposedWarning"
     ResponseDataObjectListArrayDesignValueObject:
       type: object
       properties:
@@ -7587,92 +8629,6 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/WellComposedWarning"
-    BioAssayValueObject:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        shortName:
-          type: string
-        name:
-          type: string
-        description:
-          type: string
-        metadata:
-          type: string
-        accession:
-          $ref: "#/components/schemas/DatabaseEntryValueObject"
-        arrayDesign:
-          $ref: "#/components/schemas/ArrayDesignValueObject"
-        originalPlatform:
-          $ref: "#/components/schemas/ArrayDesignValueObject"
-        processingDate:
-          type: string
-          format: date-time
-        sample:
-          $ref: "#/components/schemas/BioMaterialValueObject"
-        sequencePairedReads:
-          type: boolean
-        sequenceReadCount:
-          type: integer
-          format: int64
-        sequenceReadLength:
-          type: integer
-          format: int32
-        outlier:
-          type: boolean
-        predictedOutlier:
-          type: boolean
-        userFlaggedOutlier:
-          type: boolean
-        sourceBioAssayId:
-          type: integer
-          format: int64
-    BioMaterialValueObject:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        name:
-          type: string
-        description:
-          type: string
-        bioAssayIds:
-          type: array
-          items:
-            type: integer
-            format: int64
-        characteristics:
-          type: array
-          items:
-            $ref: "#/components/schemas/CharacteristicValueObject"
-        sourceBioMaterialId:
-          type: integer
-          format: int64
-        factors:
-          type: object
-          additionalProperties:
-            type: string
-            description: "This is deprecated, use the `factorValues` collection instead."
-            deprecated: true
-          description: "This is deprecated, use the `factorValues` collection instead."
-          deprecated: true
-        fvbasicVOs:
-          type: array
-          items:
-            $ref: "#/components/schemas/FactorValueBasicValueObject"
-        factorValueObjects:
-          type: array
-          description: "This property is redundant, use `factorValues` instead."
-          deprecated: true
-          items:
-            $ref: "#/components/schemas/FactorValueBasicValueObject"
-        factorValues:
-          type: array
-          items:
-            $ref: "#/components/schemas/FactorValueBasicValueObject"
     ResponseDataObjectListBioAssayValueObject:
       type: object
       properties:
@@ -8001,6 +8957,14 @@ components:
           type: string
         accession:
           type: string
+        externalUri:
+          type: string
+        externalLabel:
+          type: string
+        externalDatabase:
+          type: string
+        externalDatabaseUri:
+          type: string
         batchConfound:
           type: string
         batchEffect:
@@ -8017,12 +8981,6 @@ components:
           - NO_BATCH_EFFECT_SUCCESS
         batchEffectStatistics:
           type: string
-        externalDatabase:
-          type: string
-        externalDatabaseUri:
-          type: string
-        externalUri:
-          type: string
         geeq:
           $ref: "#/components/schemas/GeeqValueObject"
         metadata:
@@ -8031,6 +8989,9 @@ components:
           type: string
         source:
           type: string
+        isPublic:
+          type: boolean
+          readOnly: true
         technologyType:
           type: string
         characteristics:
@@ -8040,12 +9001,12 @@ components:
             $ref: "#/components/schemas/CharacteristicValueObject"
         searchResult:
           $ref: "#/components/schemas/SearchResultValueObjectExpressionExperimentValueObject"
-        taxonId:
-          type: integer
-          format: int64
         bioAssayCount:
           type: integer
           format: int32
+        taxonId:
+          type: integer
+          format: int64
         troubleDetails:
           type: string
         numberOfArrayDesigns:
@@ -8127,6 +9088,10 @@ components:
             type: string
         resultObject:
           $ref: "#/components/schemas/ExpressionExperimentValueObject"
+        resultObjectUrl:
+          type: string
+        resultObjectUrlExternal:
+          type: boolean
     QueryArg:
       type: string
       description: "Filter results matching the given full-text query.\n\nThe search\
@@ -8320,18 +9285,6 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/OntologyTermValueObject"
-    OntologyTermValueObject:
-      type: object
-      properties:
-        uri:
-          type: string
-        name:
-          type: string
-        parentTerms:
-          uniqueItems: true
-          type: array
-          items:
-            $ref: "#/components/schemas/OntologyTermValueObject"
     QueriedAndFilteredAndInferredAndLimitedResponseDataObjectAnnotationWithUsageStatisticsValueObject:
       type: object
       properties:
@@ -8479,6 +9432,9 @@ components:
         id:
           type: integer
           format: int64
+        resultSetId:
+          type: integer
+          format: int64
         probeId:
           type: integer
           format: int64
@@ -8502,9 +9458,6 @@ components:
           type: integer
           format: int64
         experimentAnalyzedId:
-          type: integer
-          format: int64
-        resultSetId:
           type: integer
           format: int64
         baseline:
@@ -8733,6 +9686,123 @@ components:
         numberOfExpressionExperiments:
           type: integer
           format: int64
+    AnalysisRef:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        subsetFactorValueId:
+          type: integer
+          description: Set when the analysis is scoped to a subset factor value (subset-level
+            analysis). Null for whole-experiment analyses.
+          format: int64
+    Blocker:
+      type: object
+      properties:
+        type:
+          type: string
+          description: "Stable identifier for this blocker kind, e.g. UNKNOWN_FACTOR_VALUE_ID,\
+            \ FACTOR_TYPE_CHANGE_WITH_VALUES, ORPHAN_STATEMENT, ASSIGNMENT_REFERENCES_DELETED_FV."
+        message:
+          type: string
+        factorId:
+          type: integer
+          format: int64
+        factorValueId:
+          type: integer
+          format: int64
+        bioMaterialId:
+          type: integer
+          format: int64
+        statementId:
+          type: integer
+          format: int64
+    DesignPreflightReport:
+      type: object
+      properties:
+        blockers:
+          type: array
+          items:
+            $ref: "#/components/schemas/Blocker"
+        summary:
+          $ref: "#/components/schemas/Summary"
+        factorsToDelete:
+          type: array
+          items:
+            $ref: "#/components/schemas/EntityRef"
+        factorValuesToDelete:
+          type: array
+          items:
+            $ref: "#/components/schemas/EntityRef"
+        differentialExpressionAnalysesToDelete:
+          type: array
+          items:
+            $ref: "#/components/schemas/AnalysisRef"
+        subsetsWithStaleAnchor:
+          type: array
+          items:
+            $ref: "#/components/schemas/SubsetRef"
+    EntityRef:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+    ResponseDataObjectDesignPreflightReport:
+      type: object
+      properties:
+        data:
+          $ref: "#/components/schemas/DesignPreflightReport"
+        warnings:
+          type: array
+          items:
+            $ref: "#/components/schemas/WellComposedWarning"
+    SubsetRef:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        lostFactorValueIds:
+          type: array
+          description: "FactorValue IDs that this subset currently relies on (transitively,\
+            \ via its biomaterials) that would be deleted by the proposed change."
+          items:
+            type: integer
+            description: "FactorValue IDs that this subset currently relies on (transitively,\
+              \ via its biomaterials) that would be deleted by the proposed change."
+            format: int64
+    Summary:
+      type: object
+      properties:
+        factorsToDelete:
+          type: integer
+          format: int32
+        factorValuesToDelete:
+          type: integer
+          format: int32
+        factorsToCreate:
+          type: integer
+          format: int32
+        factorValuesToCreate:
+          type: integer
+          format: int32
+        differentialExpressionAnalysesToDelete:
+          type: integer
+          format: int32
+        subsetsWithStaleAnchor:
+          type: integer
+          format: int32
+        biomaterialsWithChangedAssignments:
+          type: integer
+          format: int32
     ResponseDataObjectExpressionExperimentValueObject:
       type: object
       properties:
@@ -8742,6 +9812,51 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/WellComposedWarning"
+    DifferentialAnalysisRunRequest:
+      type: object
+      properties:
+        factorIds:
+          type: array
+          items:
+            type: integer
+            format: int64
+        includeInteractions:
+          type: boolean
+        subsetFactorId:
+          type: integer
+          format: int64
+    CurationDetailsUpdateRequest:
+      type: object
+      properties:
+        troubled:
+          type: boolean
+        needsAttention:
+          type: boolean
+        curationNote:
+          type: string
+        note:
+          type: string
+    DatasetPermissionsValueObject:
+      type: object
+      properties:
+        isPublic:
+          type: boolean
+        isShared:
+          type: boolean
+    ResponseDataObjectDatasetPermissionsValueObject:
+      type: object
+      properties:
+        data:
+          $ref: "#/components/schemas/DatasetPermissionsValueObject"
+        warnings:
+          type: array
+          items:
+            $ref: "#/components/schemas/WellComposedWarning"
+    PermissionsUpdateRequest:
+      type: object
+      properties:
+        isPublic:
+          type: boolean
     GeneOntologyTermValueObject:
       type: object
       properties:
@@ -8902,7 +10017,6 @@ components:
         - designProvider\.email `string`
         - designProvider\.id `integer`
         - designProvider\.name `string`
-        - externalReferences\.Uri `string[]`
         - externalReferences\.accession `string[]`
         - externalReferences\.accessionVersion `string[]`
         - externalReferences\.externalDatabase\.externalDatabases\.size `integer[]`
@@ -8917,6 +10031,7 @@ components:
         - externalReferences\.externalDatabase\.webUri `string[]`
         - externalReferences\.id `integer[]`
         - externalReferences\.size `integer`
+        - externalReferences\.uri `string[]`
         - id `integer`
         - lastUpdated `string` \(alias for curationDetails\.lastUpdated\)
         - mergedInto\.advertisedNumberOfDesignElements `integer`
@@ -9078,8 +10193,6 @@ components:
         type: integer
       - name: designProvider.name
         type: string
-      - name: externalReferences.Uri
-        type: "string[]"
       - name: externalReferences.accession
         type: "string[]"
       - name: externalReferences.accessionVersion
@@ -9123,6 +10236,8 @@ components:
         type: "integer[]"
       - name: externalReferences.size
         type: integer
+      - name: externalReferences.uri
+        type: "string[]"
       - name: id
         type: integer
       - name: lastUpdated
@@ -9548,7 +10663,6 @@ components:
         - designProvider\.email `string`
         - designProvider\.id `integer`
         - designProvider\.name `string`
-        - externalReferences\.Uri `string[]`
         - externalReferences\.accession `string[]`
         - externalReferences\.accessionVersion `string[]`
         - externalReferences\.externalDatabase\.externalDatabases\.size `integer[]`
@@ -9563,6 +10677,7 @@ components:
         - externalReferences\.externalDatabase\.webUri `string[]`
         - externalReferences\.id `integer[]`
         - externalReferences\.size `integer`
+        - externalReferences\.uri `string[]`
         - id `integer`
         - lastUpdated `string` \(alias for curationDetails\.lastUpdated\)
         - mergedInto\.advertisedNumberOfDesignElements `integer`
@@ -9722,8 +10837,6 @@ components:
         type: integer
       - name: designProvider.name
         type: string
-      - name: externalReferences.Uri
-        type: "string[]"
       - name: externalReferences.accession
         type: "string[]"
       - name: externalReferences.accessionVersion
@@ -9767,6 +10880,8 @@ components:
         type: "integer[]"
       - name: externalReferences.size
         type: integer
+      - name: externalReferences.uri
+        type: "string[]"
       - name: id
         type: integer
       - name: lastUpdated
@@ -10084,6 +11199,10 @@ components:
           - $ref: "#/components/schemas/GeneValueObject"
           - $ref: "#/components/schemas/GeneSetValueObject"
           - $ref: "#/components/schemas/CharacteristicValueObject"
+        resultObjectUrl:
+          type: string
+        resultObjectUrlExternal:
+          type: boolean
     SearchResultsResponseDataObject:
       type: object
       properties:
@@ -10118,15 +11237,47 @@ components:
       items:
         type: string
         enum:
-        - ubic.gemma.model.analysis.expression.ExpressionExperimentSet
         - ubic.gemma.model.genome.biosequence.BioSequence
+        - ubic.gemma.model.analysis.expression.ExpressionExperimentSet
         - ubic.gemma.model.genome.gene.GeneSet
-        - ubic.gemma.model.expression.arrayDesign.ArrayDesign
         - ubic.gemma.model.genome.Gene
-        - ubic.gemma.model.common.description.BibliographicReference
         - ubic.gemma.model.blacklist.BlacklistedEntity
-        - ubic.gemma.model.expression.experiment.ExpressionExperiment
+        - ubic.gemma.model.expression.arrayDesign.ArrayDesign
+        - ubic.gemma.model.common.description.BibliographicReference
         - ubic.gemma.model.expression.designElement.CompositeSequence
+        - ubic.gemma.model.expression.experiment.ExpressionExperiment
+    ResponseDataObjectTaskStatusValueObject:
+      type: object
+      properties:
+        data:
+          $ref: "#/components/schemas/TaskStatusValueObject"
+        warnings:
+          type: array
+          items:
+            $ref: "#/components/schemas/WellComposedWarning"
+    TaskStatusValueObject:
+      type: object
+      properties:
+        taskId:
+          type: string
+        experimentId:
+          type: integer
+          format: int64
+        step:
+          type: string
+        status:
+          type: string
+        submittedAt:
+          type: string
+          format: date-time
+        startedAt:
+          type: string
+          format: date-time
+        completedAt:
+          type: string
+          format: date-time
+        message:
+          type: string
     ResponseDataObjectListTaxonValueObject:
       type: object
       properties:
