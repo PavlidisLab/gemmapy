@@ -1580,6 +1580,7 @@ class GemmaPy(object):
             
             append = append.astype('string')
             append[append=='0'] = ""
+            append.index= unique_probes.index
             unique_probes = unique_probes + append
             packed_info['unique_probes'] = unique_probes
             
