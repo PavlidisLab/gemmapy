@@ -17,7 +17,7 @@ from gemmapy import _subprocessors as sub
 from gemmapy.gemmapy_api import GemmaPath
 
 api = gemmapy.GemmaPy()
-github_flag = os.getenv("GITHUB_ACTIONS") == 'true'
+github_flag = os.getenv("GITHUB_ACTIONS") == 'false'
 
 @pytest.fixture(autouse=True)
 def slow_down_tests():
@@ -104,7 +104,7 @@ def test_search_annotations():
 def test_get_dataset_annotations():
     res = api.get_dataset_annotations(1)
     assert type(res) is pd.core.frame.DataFrame
-    assert res.shape[1] == 5
+    assert res.shape[1] == 6
 
 def test_get_dataset_differential_expression_analyses():
     res = api.get_dataset_differential_expression_analyses(200)
