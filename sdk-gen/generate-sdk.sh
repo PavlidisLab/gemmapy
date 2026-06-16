@@ -3,7 +3,7 @@ set -e
 swagger_version=3.0.73
 temp_sdk_dir=$(mktemp -d)
 script_dir=$(dirname "${BASH_SOURCE[0]}")
-gemmapy_version=$(grep 'version' "$script_dir/../setup.cfg" | sed 's/version = //')
+gemmapy_version=$(grep 'version' "$script_dir/../pyproject.toml" | sed 's/version = //')
 echo "Updating openapi.yaml..."
 curl https://gemma.msl.ubc.ca/rest/v2/openapi.yaml -o "$script_dir/openapi.yaml" --compressed
 echo "Downloading swagger-codegen-cli.jar..."
