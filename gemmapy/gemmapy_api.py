@@ -1382,18 +1382,17 @@ class GemmaPy(object):
         
         text = [get_text(x) for x in categories.factor_ID]
         
-        
         if meta_type =='text':
             design_frame = pd.DataFrame({
-                categories.factor_category[i]:text[i] for i in range(len(text))
+                categories.factor_category.tolist()[i]:text[i] for i in range(len(text))
                 })
         elif meta_type == 'uri':
             design_frame = pd.DataFrame({
-                categories.factor_category_URI[i]:factor_URIs[i] for i in range(len(factor_URIs))
+                categories.factor_category_URI.tolist()[i]:factor_URIs[i] for i in range(len(factor_URIs))
                 })
         elif meta_type =='both':
-            merged_name = [["|".join([categories.factor_category[i],
-                                      categories.factor_category_URI[i]])] for i in range(len(text))]
+            merged_name = [["|".join([categories.factor_category.tolist()[i],
+                                      categories.factor_category_URI.tolist()[i]])] for i in range(len(text))]
             
             merged_col = [["|".join([text[i][j],factor_URIs[i][j]]) 
                            for j in range(len(text[i]))] for i in range(len(text))]
