@@ -438,16 +438,17 @@ def process_expression(d, dataset, api):
     sample_names = samples.sample_name
     
     sample_internal_names = [x.replace("|",".").replace("-",".").replace(" ","") for x in sample_internal_names]
-    
+
     def find_match(x):
-        match = None
-        for i in range(len(m_cols)):
-            if m_cols[i].find(x+"_") != -1:
-                match = i
-        return match
-    
+        pattern = r"(?<![A-Za-z])" + re.escape(x) + r"_"
+        o = [i for i, col in enumerate(m_cols) if re.search(pattern, col)]
+        if (len(o)==0 | len(o)>1):
+            return None
+        else:
+            return o[0]
+
     sample_matches = [find_match(x) for x in sample_internal_names]
-    
+
     
     rename_dict = sub.make_dict([m_cols[i] for i in sample_matches],sample_names)
 
