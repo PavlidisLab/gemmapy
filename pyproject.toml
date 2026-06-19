@@ -7,7 +7,7 @@ name = "gemmapy"
 description = "a Python Wrapper for the Gemma API"
 keywords = ["gemma", "bioinformatics"]
 readme = "README.rst"
-version = "2.0.6"
+version = "2.0.7"
 requires-python = ">=3.10"
 dependencies = [
     'certifi >= 14.05.14',
