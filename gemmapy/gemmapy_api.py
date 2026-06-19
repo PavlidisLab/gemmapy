@@ -1421,7 +1421,7 @@ class GemmaPy(object):
                                      result_set].subset_factor.drop_duplicates()
             # result set should have the same subset for all contrasts
             assert len(subset) == 1
-            if subset[0].shape[0]!=0:
+            if subset.tolist()[0].shape[0]!=0:
                 subset_ids = subset[0].ID
                 
                 in_subset = [any(sub.list_in_list(x.ID, subset_ids)) for x in factor_values]
