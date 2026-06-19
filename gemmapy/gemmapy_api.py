@@ -1614,15 +1614,14 @@ class GemmaPy(object):
             # probe ids are usually unique but there are exceptions
             
             unique_probes = packed_info['exp'].Probe
-            append = pd.Series(sub.rep(0,len(unique_probes)))
+            append = pd.Series(sub.rep(0,len(unique_probes)), index = unique_probes.index)
             dups = unique_probes.duplicated()
             while dups.any():
                 append[dups] = append[dups]+1
                 dups = (unique_probes + append.astype('string')).duplicated()
-            
+
             append = append.astype('string')
             append[append=='0'] = ""
-            append.index= unique_probes.index
             unique_probes = unique_probes + append
             packed_info['unique_probes'] = unique_probes
             
