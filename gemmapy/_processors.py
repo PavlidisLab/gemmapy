@@ -422,6 +422,8 @@ def process_expression(d, dataset, api):
     # more non-uniformities
     df = sub.read_tsv(d)
     m_cols = list(df.columns)
+    m_cols = [x.replace(".","") for x in m_cols]
+    df.columns = m_cols
     # we use the order returned by get_dataset_samples as authoritative which makes
     # it a bit awkward when we need to access a property left out of the processed output
     # this could be simplified by ordering by ids but I don't want to break
@@ -437,7 +439,7 @@ def process_expression(d, dataset, api):
     
     sample_names = samples.sample_name
     
-    sample_internal_names = [x.replace("|",".").replace("-",".").replace(" ","") for x in sample_internal_names]
+    sample_internal_names = [x.replace("|","").replace("-","").replace(" ","").replace(".","").replace("/","") for x in sample_internal_names]
 
     def find_match(x):
         pattern = r"(?<![A-Za-z])" + re.escape(x) + r"_"
