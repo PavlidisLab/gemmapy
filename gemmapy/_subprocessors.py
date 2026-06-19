@@ -146,7 +146,7 @@ def process_FactorValueBasicValueObject(d):
             "predicate.URI":[np.nan],
             "object":[np.nan],
             "object_URI":[np.nan],
-            "summary":[np.nan],
+            "summary":[access_field(d,"summary")],
             "ID":[access_field(d,'id')],
             "factor_ID":[access_field(d,"experimental_factor_id")],
             "factor_category":[access_field(d,"experimental_factor_category","category")],
