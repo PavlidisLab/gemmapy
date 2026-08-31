@@ -306,9 +306,11 @@ class GemmaPy(object):
           The fields of the DataFrame are:
             - class_name: Name of the annotation class (e.g. organism part)
             - class_URI: URI for the annotation class
-            - term_name: Name of the annotation term (e.g. lung)
+            - term_name: Name of the annotation term (e.g. lung). On a factor-value
+              row this is the term as curated, not a composed sentence such as
+              "wild type genotype has background APP/PS1".
             - term_URI: URI for the annotation term
-            - object_class: Class of object that the term originated from.       
+            - object_class: Class of object that the term originated from.
         :rtype: DataFrame
 
         """

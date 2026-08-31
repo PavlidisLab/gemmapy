@@ -63,16 +63,21 @@ def process_search_annotations(d:list):
     return df
 
 def process_annotations(d:list):
-    
+
+    # The SDK attributes read here are category/category_uri/value/value_uri because
+    # AnnotationValueObject renamed the four wire fields (className -> category,
+    # classUri -> categoryUri, termName -> value, termUri -> valueUri). The DataFrame
+    # column names are left as they were so the DataFrame stays a stable surface;
+    # the column/attribute mismatch below is deliberate, not an oversight.
     df = pd.DataFrame({
-        "class_name": sub.field_in_list(d,"class_name"),
-        "class_URI": sub.field_in_list(d,"class_uri"),
-        "term_name": sub.field_in_list(d,"term_name"),
-        "term_URI": sub.field_in_list(d,"term_uri"),
+        "class_name": sub.field_in_list(d,"category"),
+        "class_URI": sub.field_in_list(d,"category_uri"),
+        "term_name": sub.field_in_list(d,"value"),
+        "term_URI": sub.field_in_list(d,"value_uri"),
         "object_class": sub.field_in_list(d,"object_class"),
         "evidence_code": sub.field_in_list(d,'evidence_code')
         })
-    
+
     return df
 
 def attach_attributes(df:pd.DataFrame,attributes:dict,pop:T.List= ['data']):
