@@ -28,43 +28,43 @@ class AnnotationWithUsageStatisticsValueObject(object):
                             and the value is json key in definition.
     """
     swagger_types = {
-        'class_uri': 'str',
-        'class_name': 'str',
-        'term_uri': 'str',
-        'term_name': 'str',
+        'category_uri': 'str',
+        'category': 'str',
+        'value_uri': 'str',
+        'value': 'str',
         'evidence_code': 'str',
         'number_of_expression_experiments': 'int',
         'parent_terms': 'list[OntologyTermValueObject]'
     }
 
     attribute_map = {
-        'class_uri': 'classUri',
-        'class_name': 'className',
-        'term_uri': 'termUri',
-        'term_name': 'termName',
+        'category_uri': 'categoryUri',
+        'category': 'category',
+        'value_uri': 'valueUri',
+        'value': 'value',
         'evidence_code': 'evidenceCode',
         'number_of_expression_experiments': 'numberOfExpressionExperiments',
         'parent_terms': 'parentTerms'
     }
 
-    def __init__(self, class_uri=None, class_name=None, term_uri=None, term_name=None, evidence_code=None, number_of_expression_experiments=None, parent_terms=None):  # noqa: E501
+    def __init__(self, category_uri=None, category=None, value_uri=None, value=None, evidence_code=None, number_of_expression_experiments=None, parent_terms=None):  # noqa: E501
         """AnnotationWithUsageStatisticsValueObject - a model defined in Swagger"""  # noqa: E501
-        self._class_uri = None
-        self._class_name = None
-        self._term_uri = None
-        self._term_name = None
+        self._category_uri = None
+        self._category = None
+        self._value_uri = None
+        self._value = None
         self._evidence_code = None
         self._number_of_expression_experiments = None
         self._parent_terms = None
         self.discriminator = None
-        if class_uri is not None:
-            self.class_uri = class_uri
-        if class_name is not None:
-            self.class_name = class_name
-        if term_uri is not None:
-            self.term_uri = term_uri
-        if term_name is not None:
-            self.term_name = term_name
+        if category_uri is not None:
+            self.category_uri = category_uri
+        if category is not None:
+            self.category = category
+        if value_uri is not None:
+            self.value_uri = value_uri
+        if value is not None:
+            self.value = value
         if evidence_code is not None:
             self.evidence_code = evidence_code
         if number_of_expression_experiments is not None:
@@ -73,88 +73,88 @@ class AnnotationWithUsageStatisticsValueObject(object):
             self.parent_terms = parent_terms
 
     @property
-    def class_uri(self):
-        """Gets the class_uri of this AnnotationWithUsageStatisticsValueObject.  # noqa: E501
+    def category_uri(self):
+        """Gets the category_uri of this AnnotationWithUsageStatisticsValueObject.  # noqa: E501
 
 
-        :return: The class_uri of this AnnotationWithUsageStatisticsValueObject.  # noqa: E501
+        :return: The category_uri of this AnnotationWithUsageStatisticsValueObject.  # noqa: E501
         :rtype: str
         """
-        return self._class_uri
+        return self._category_uri
 
-    @class_uri.setter
-    def class_uri(self, class_uri):
-        """Sets the class_uri of this AnnotationWithUsageStatisticsValueObject.
+    @category_uri.setter
+    def category_uri(self, category_uri):
+        """Sets the category_uri of this AnnotationWithUsageStatisticsValueObject.
 
 
-        :param class_uri: The class_uri of this AnnotationWithUsageStatisticsValueObject.  # noqa: E501
+        :param category_uri: The category_uri of this AnnotationWithUsageStatisticsValueObject.  # noqa: E501
         :type: str
         """
 
-        self._class_uri = class_uri
+        self._category_uri = category_uri
 
     @property
-    def class_name(self):
-        """Gets the class_name of this AnnotationWithUsageStatisticsValueObject.  # noqa: E501
+    def category(self):
+        """Gets the category of this AnnotationWithUsageStatisticsValueObject.  # noqa: E501
 
 
-        :return: The class_name of this AnnotationWithUsageStatisticsValueObject.  # noqa: E501
+        :return: The category of this AnnotationWithUsageStatisticsValueObject.  # noqa: E501
         :rtype: str
         """
-        return self._class_name
+        return self._category
 
-    @class_name.setter
-    def class_name(self, class_name):
-        """Sets the class_name of this AnnotationWithUsageStatisticsValueObject.
+    @category.setter
+    def category(self, category):
+        """Sets the category of this AnnotationWithUsageStatisticsValueObject.
 
 
-        :param class_name: The class_name of this AnnotationWithUsageStatisticsValueObject.  # noqa: E501
+        :param category: The category of this AnnotationWithUsageStatisticsValueObject.  # noqa: E501
         :type: str
         """
 
-        self._class_name = class_name
+        self._category = category
 
     @property
-    def term_uri(self):
-        """Gets the term_uri of this AnnotationWithUsageStatisticsValueObject.  # noqa: E501
+    def value_uri(self):
+        """Gets the value_uri of this AnnotationWithUsageStatisticsValueObject.  # noqa: E501
 
 
-        :return: The term_uri of this AnnotationWithUsageStatisticsValueObject.  # noqa: E501
+        :return: The value_uri of this AnnotationWithUsageStatisticsValueObject.  # noqa: E501
         :rtype: str
         """
-        return self._term_uri
+        return self._value_uri
 
-    @term_uri.setter
-    def term_uri(self, term_uri):
-        """Sets the term_uri of this AnnotationWithUsageStatisticsValueObject.
+    @value_uri.setter
+    def value_uri(self, value_uri):
+        """Sets the value_uri of this AnnotationWithUsageStatisticsValueObject.
 
 
-        :param term_uri: The term_uri of this AnnotationWithUsageStatisticsValueObject.  # noqa: E501
+        :param value_uri: The value_uri of this AnnotationWithUsageStatisticsValueObject.  # noqa: E501
         :type: str
         """
 
-        self._term_uri = term_uri
+        self._value_uri = value_uri
 
     @property
-    def term_name(self):
-        """Gets the term_name of this AnnotationWithUsageStatisticsValueObject.  # noqa: E501
+    def value(self):
+        """Gets the value of this AnnotationWithUsageStatisticsValueObject.  # noqa: E501
 
 
-        :return: The term_name of this AnnotationWithUsageStatisticsValueObject.  # noqa: E501
+        :return: The value of this AnnotationWithUsageStatisticsValueObject.  # noqa: E501
         :rtype: str
         """
-        return self._term_name
+        return self._value
 
-    @term_name.setter
-    def term_name(self, term_name):
-        """Sets the term_name of this AnnotationWithUsageStatisticsValueObject.
+    @value.setter
+    def value(self, value):
+        """Sets the value of this AnnotationWithUsageStatisticsValueObject.
 
 
-        :param term_name: The term_name of this AnnotationWithUsageStatisticsValueObject.  # noqa: E501
+        :param value: The value of this AnnotationWithUsageStatisticsValueObject.  # noqa: E501
         :type: str
         """
 
-        self._term_name = term_name
+        self._value = value
 
     @property
     def evidence_code(self):

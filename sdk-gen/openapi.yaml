@@ -8223,13 +8223,13 @@ components:
         id:
           type: integer
           format: int64
-        classUri:
+        categoryUri:
           type: string
-        className:
+        category:
           type: string
-        termUri:
+        valueUri:
           type: string
-        termName:
+        value:
           type: string
         evidenceCode:
           type: string
@@ -9232,13 +9232,13 @@ components:
     AnnotationWithUsageStatisticsValueObject:
       type: object
       properties:
-        classUri:
+        categoryUri:
           type: string
-        className:
+        category:
           type: string
-        termUri:
+        valueUri:
           type: string
-        termName:
+        value:
           type: string
         evidenceCode:
           type: string
@@ -9348,9 +9348,9 @@ components:
     CategoryWithUsageStatisticsValueObject:
       type: object
       properties:
-        classUri:
+        categoryUri:
           type: string
-        className:
+        category:
           type: string
         numberOfExpressionExperiments:
           type: integer

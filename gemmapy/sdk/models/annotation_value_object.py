@@ -29,44 +29,44 @@ class AnnotationValueObject(object):
     """
     swagger_types = {
         'id': 'int',
-        'class_uri': 'str',
-        'class_name': 'str',
-        'term_uri': 'str',
-        'term_name': 'str',
+        'category_uri': 'str',
+        'category': 'str',
+        'value_uri': 'str',
+        'value': 'str',
         'evidence_code': 'str',
         'object_class': 'str'
     }
 
     attribute_map = {
         'id': 'id',
-        'class_uri': 'classUri',
-        'class_name': 'className',
-        'term_uri': 'termUri',
-        'term_name': 'termName',
+        'category_uri': 'categoryUri',
+        'category': 'category',
+        'value_uri': 'valueUri',
+        'value': 'value',
         'evidence_code': 'evidenceCode',
         'object_class': 'objectClass'
     }
 
-    def __init__(self, id=None, class_uri=None, class_name=None, term_uri=None, term_name=None, evidence_code=None, object_class=None):  # noqa: E501
+    def __init__(self, id=None, category_uri=None, category=None, value_uri=None, value=None, evidence_code=None, object_class=None):  # noqa: E501
         """AnnotationValueObject - a model defined in Swagger"""  # noqa: E501
         self._id = None
-        self._class_uri = None
-        self._class_name = None
-        self._term_uri = None
-        self._term_name = None
+        self._category_uri = None
+        self._category = None
+        self._value_uri = None
+        self._value = None
         self._evidence_code = None
         self._object_class = None
         self.discriminator = None
         if id is not None:
             self.id = id
-        if class_uri is not None:
-            self.class_uri = class_uri
-        if class_name is not None:
-            self.class_name = class_name
-        if term_uri is not None:
-            self.term_uri = term_uri
-        if term_name is not None:
-            self.term_name = term_name
+        if category_uri is not None:
+            self.category_uri = category_uri
+        if category is not None:
+            self.category = category
+        if value_uri is not None:
+            self.value_uri = value_uri
+        if value is not None:
+            self.value = value
         if evidence_code is not None:
             self.evidence_code = evidence_code
         if object_class is not None:
@@ -94,88 +94,88 @@ class AnnotationValueObject(object):
         self._id = id
 
     @property
-    def class_uri(self):
-        """Gets the class_uri of this AnnotationValueObject.  # noqa: E501
+    def category_uri(self):
+        """Gets the category_uri of this AnnotationValueObject.  # noqa: E501
 
 
-        :return: The class_uri of this AnnotationValueObject.  # noqa: E501
+        :return: The category_uri of this AnnotationValueObject.  # noqa: E501
         :rtype: str
         """
-        return self._class_uri
+        return self._category_uri
 
-    @class_uri.setter
-    def class_uri(self, class_uri):
-        """Sets the class_uri of this AnnotationValueObject.
+    @category_uri.setter
+    def category_uri(self, category_uri):
+        """Sets the category_uri of this AnnotationValueObject.
 
 
-        :param class_uri: The class_uri of this AnnotationValueObject.  # noqa: E501
+        :param category_uri: The category_uri of this AnnotationValueObject.  # noqa: E501
         :type: str
         """
 
-        self._class_uri = class_uri
+        self._category_uri = category_uri
 
     @property
-    def class_name(self):
-        """Gets the class_name of this AnnotationValueObject.  # noqa: E501
+    def category(self):
+        """Gets the category of this AnnotationValueObject.  # noqa: E501
 
 
-        :return: The class_name of this AnnotationValueObject.  # noqa: E501
+        :return: The category of this AnnotationValueObject.  # noqa: E501
         :rtype: str
         """
-        return self._class_name
+        return self._category
 
-    @class_name.setter
-    def class_name(self, class_name):
-        """Sets the class_name of this AnnotationValueObject.
+    @category.setter
+    def category(self, category):
+        """Sets the category of this AnnotationValueObject.
 
 
-        :param class_name: The class_name of this AnnotationValueObject.  # noqa: E501
+        :param category: The category of this AnnotationValueObject.  # noqa: E501
         :type: str
         """
 
-        self._class_name = class_name
+        self._category = category
 
     @property
-    def term_uri(self):
-        """Gets the term_uri of this AnnotationValueObject.  # noqa: E501
+    def value_uri(self):
+        """Gets the value_uri of this AnnotationValueObject.  # noqa: E501
 
 
-        :return: The term_uri of this AnnotationValueObject.  # noqa: E501
+        :return: The value_uri of this AnnotationValueObject.  # noqa: E501
         :rtype: str
         """
-        return self._term_uri
+        return self._value_uri
 
-    @term_uri.setter
-    def term_uri(self, term_uri):
-        """Sets the term_uri of this AnnotationValueObject.
+    @value_uri.setter
+    def value_uri(self, value_uri):
+        """Sets the value_uri of this AnnotationValueObject.
 
 
-        :param term_uri: The term_uri of this AnnotationValueObject.  # noqa: E501
+        :param value_uri: The value_uri of this AnnotationValueObject.  # noqa: E501
         :type: str
         """
 
-        self._term_uri = term_uri
+        self._value_uri = value_uri
 
     @property
-    def term_name(self):
-        """Gets the term_name of this AnnotationValueObject.  # noqa: E501
+    def value(self):
+        """Gets the value of this AnnotationValueObject.  # noqa: E501
 
 
-        :return: The term_name of this AnnotationValueObject.  # noqa: E501
+        :return: The value of this AnnotationValueObject.  # noqa: E501
         :rtype: str
         """
-        return self._term_name
+        return self._value
 
-    @term_name.setter
-    def term_name(self, term_name):
-        """Sets the term_name of this AnnotationValueObject.
+    @value.setter
+    def value(self, value):
+        """Sets the value of this AnnotationValueObject.
 
 
-        :param term_name: The term_name of this AnnotationValueObject.  # noqa: E501
+        :param value: The value of this AnnotationValueObject.  # noqa: E501
         :type: str
         """
 
-        self._term_name = term_name
+        self._value = value
 
     @property
     def evidence_code(self):

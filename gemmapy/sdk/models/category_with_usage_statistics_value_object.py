@@ -28,71 +28,71 @@ class CategoryWithUsageStatisticsValueObject(object):
                             and the value is json key in definition.
     """
     swagger_types = {
-        'class_uri': 'str',
-        'class_name': 'str',
+        'category_uri': 'str',
+        'category': 'str',
         'number_of_expression_experiments': 'int'
     }
 
     attribute_map = {
-        'class_uri': 'classUri',
-        'class_name': 'className',
+        'category_uri': 'categoryUri',
+        'category': 'category',
         'number_of_expression_experiments': 'numberOfExpressionExperiments'
     }
 
-    def __init__(self, class_uri=None, class_name=None, number_of_expression_experiments=None):  # noqa: E501
+    def __init__(self, category_uri=None, category=None, number_of_expression_experiments=None):  # noqa: E501
         """CategoryWithUsageStatisticsValueObject - a model defined in Swagger"""  # noqa: E501
-        self._class_uri = None
-        self._class_name = None
+        self._category_uri = None
+        self._category = None
         self._number_of_expression_experiments = None
         self.discriminator = None
-        if class_uri is not None:
-            self.class_uri = class_uri
-        if class_name is not None:
-            self.class_name = class_name
+        if category_uri is not None:
+            self.category_uri = category_uri
+        if category is not None:
+            self.category = category
         if number_of_expression_experiments is not None:
             self.number_of_expression_experiments = number_of_expression_experiments
 
     @property
-    def class_uri(self):
-        """Gets the class_uri of this CategoryWithUsageStatisticsValueObject.  # noqa: E501
+    def category_uri(self):
+        """Gets the category_uri of this CategoryWithUsageStatisticsValueObject.  # noqa: E501
 
 
-        :return: The class_uri of this CategoryWithUsageStatisticsValueObject.  # noqa: E501
+        :return: The category_uri of this CategoryWithUsageStatisticsValueObject.  # noqa: E501
         :rtype: str
         """
-        return self._class_uri
+        return self._category_uri
 
-    @class_uri.setter
-    def class_uri(self, class_uri):
-        """Sets the class_uri of this CategoryWithUsageStatisticsValueObject.
+    @category_uri.setter
+    def category_uri(self, category_uri):
+        """Sets the category_uri of this CategoryWithUsageStatisticsValueObject.
 
 
-        :param class_uri: The class_uri of this CategoryWithUsageStatisticsValueObject.  # noqa: E501
+        :param category_uri: The category_uri of this CategoryWithUsageStatisticsValueObject.  # noqa: E501
         :type: str
         """
 
-        self._class_uri = class_uri
+        self._category_uri = category_uri
 
     @property
-    def class_name(self):
-        """Gets the class_name of this CategoryWithUsageStatisticsValueObject.  # noqa: E501
+    def category(self):
+        """Gets the category of this CategoryWithUsageStatisticsValueObject.  # noqa: E501
 
 
-        :return: The class_name of this CategoryWithUsageStatisticsValueObject.  # noqa: E501
+        :return: The category of this CategoryWithUsageStatisticsValueObject.  # noqa: E501
         :rtype: str
         """
-        return self._class_name
+        return self._category
 
-    @class_name.setter
-    def class_name(self, class_name):
-        """Sets the class_name of this CategoryWithUsageStatisticsValueObject.
+    @category.setter
+    def category(self, category):
+        """Sets the category of this CategoryWithUsageStatisticsValueObject.
 
 
-        :param class_name: The class_name of this CategoryWithUsageStatisticsValueObject.  # noqa: E501
+        :param category: The category of this CategoryWithUsageStatisticsValueObject.  # noqa: E501
         :type: str
         """
 
-        self._class_name = class_name
+        self._category = category
 
     @property
     def number_of_expression_experiments(self):
