@@ -30,9 +30,12 @@ camelCase JSON keys, so every column silently comes back NaN.
 
 What this does
 --------------
-1. Collapses each response-level ``oneOf`` to its single legacy (non-cursor)
+1. Drops every non-GET operation. gemmapy only reads from Gemma; generating the
+   admin, ticket and workflow write endpoints costs hundreds of request-body
+   models for a surface the wrapper never calls.
+2. Collapses each response-level ``oneOf`` to its single legacy (non-cursor)
    variant, dropping the ``Cursor*`` alternatives.
-2. Where that variant is an unparameterized generic, re-points it at a typed
+3. Where that variant is an unparameterized generic, re-points it at a typed
    container (synthesizing the container schema when the spec no longer defines
    it), restoring the payload item type the wrapper's processors need.
 
@@ -43,6 +46,7 @@ copy is a build artifact consumed only by swagger-codegen.
 Usage:
     python patch-openapi.py <in.yaml> <out.yaml> <manifest.md>
 """
+import collections
 import datetime
 import hashlib
 import os
@@ -79,6 +83,83 @@ ITEM_TYPES = {
     "getPlatformTickets": "TicketValueObject",
     "getTicketEvents": "TicketEventValueObject",
 }
+
+
+#: Keys under a path item that are not operations, so they survive the GET-only
+#: filter even though they are not verbs.
+NON_OPERATION_KEYS = frozenset(
+    {"summary", "description", "servers", "parameters", "$ref"})
+
+
+def drop_non_get(spec):
+    """Remove every non-GET operation from the spec, in place.
+
+    gemmapy only ever reads from Gemma, but the spec also describes the admin,
+    ticket and workflow endpoints that write. Generating those produces several
+    hundred request-body models for an API surface the wrapper never calls, and
+    leaves a generated client capable of mutating curation state. gemma.R does
+    the same filtering in inst/script/registry.R.
+
+    Returns the list of (path, verb, operationId) removed.
+    """
+    removed = []
+    for path, item in list(spec.get("paths", {}).items()):
+        if not isinstance(item, dict):
+            continue
+        for verb in list(item):
+            if verb in NON_OPERATION_KEYS or verb.lower() == "get":
+                continue
+            op = item[verb]
+            oid = op.get("operationId", "?") if isinstance(op, dict) else "?"
+            removed.append((path, verb.upper(), oid))
+            del item[verb]
+        # a path whose only operations were writes carries nothing we can call
+        if not any(v.lower() == "get" for v in item):
+            del spec["paths"][path]
+    return removed
+
+
+def refs_in(node):
+    """Every schema name referenced anywhere under `node`."""
+    found = set()
+    stack = [node]
+    while stack:
+        cur = stack.pop()
+        if isinstance(cur, dict):
+            ref = cur.get("$ref")
+            if isinstance(ref, str) and ref.startswith("#/components/schemas/"):
+                found.add(ref.rsplit("/", 1)[1])
+            stack.extend(cur.values())
+        elif isinstance(cur, list):
+            stack.extend(cur)
+    return found
+
+
+def prune_unreachable_schemas(spec):
+    """Drop schemas no remaining operation can reach, in place.
+
+    swagger-codegen emits a model class for every entry in
+    ``components.schemas``, not just the ones the paths use, so dropping the
+    write operations orphans their request bodies rather than removing them.
+    This walks ``$ref`` from the surviving paths and deletes whatever is left
+    unreachable.
+
+    Returns the sorted list of schema names removed.
+    """
+    schemas = spec.get("components", {}).get("schemas", {})
+    reachable = refs_in(spec.get("paths", {}))
+    frontier = list(reachable)
+    while frontier:
+        name = frontier.pop()
+        for nested in refs_in(schemas.get(name, {})):
+            if nested not in reachable:
+                reachable.add(nested)
+                frontier.append(nested)
+
+    removed = sorted(set(schemas) - reachable)
+    for name in removed:
+        del schemas[name]
+    return removed
 
 
 def is_untyped(schema, schemas):
@@ -124,6 +205,8 @@ def main():
 
     collapsed, retyped, synthesized, skipped = [], [], [], []
 
+    dropped = drop_non_get(spec)
+
     for path, item in spec.get("paths", {}).items():
         for verb, op in item.items():
             if not isinstance(op, dict) or "responses" not in op:
@@ -159,21 +242,27 @@ def main():
                         if made:
                             synthesized.append(new_name)
 
+    # after the collapse, so the synthesized containers count as reachable
+    orphaned = prune_unreachable_schemas(spec)
+
     with open(dst, "w", encoding="utf-8") as fh:
         yaml.safe_dump(spec, fh, sort_keys=False, allow_unicode=True, width=1000)
 
     write_manifest(manifest_path, spec, src, digest,
-                   collapsed, retyped, synthesized, skipped)
+                   collapsed, retyped, synthesized, skipped, dropped, orphaned)
 
-    print("patch-openapi: collapsed %d oneOf responses, retyped %d, "
-          "synthesized %d schemas, skipped %d"
-          % (len(collapsed), len(retyped), len(synthesized), len(skipped)))
+    print("patch-openapi: dropped %d non-GET operations and %d now-unreachable "
+          "schemas, collapsed %d oneOf responses, retyped %d, synthesized %d "
+          "schemas, skipped %d"
+          % (len(dropped), len(orphaned), len(collapsed), len(retyped),
+             len(synthesized), len(skipped)))
     if skipped:
         for oid, path, code, refs, why in skipped:
             print("  skipped %s (%s): %s" % (oid, path, why))
 
 
-def write_manifest(out, spec, src, digest, collapsed, retyped, synthesized, skipped):
+def write_manifest(out, spec, src, digest, collapsed, retyped, synthesized,
+                   skipped, dropped, orphaned):
     info = spec.get("info", {})
     servers = spec.get("servers", [{}])
     now = datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds")
@@ -205,7 +294,49 @@ def write_manifest(out, spec, src, digest, collapsed, retyped, synthesized, skip
     w("raw camelCase dicts that the snake_case processors silently read as NaN.")
     w("")
 
-    w("## 1. Collapsed `oneOf` responses (%d)" % len(collapsed))
+    w("## 1. Dropped non-GET operations (%d)" % len(dropped))
+    w("")
+    w("gemmapy only reads from Gemma. Generating the write endpoints produces")
+    w("hundreds of request-body models the wrapper never calls, and yields a")
+    w("client able to mutate curation state. gemma.R filters the same way in")
+    w("`inst/script/registry.R`.")
+    w("")
+    if dropped:
+        by_verb = collections.Counter(verb for _, verb, _ in dropped)
+        w("| verb | operations removed |")
+        w("|---|---|")
+        for verb, n in sorted(by_verb.items()):
+            w("| %s | %d |" % (verb, n))
+        w("")
+        w("<details><summary>full list</summary>")
+        w("")
+        for path, verb, oid in sorted(dropped, key=lambda r: (r[0], r[1])):
+            w("- `%s %s` — `%s`" % (verb, path, oid))
+        w("")
+        w("</details>")
+    else:
+        w("_None._")
+    w("")
+
+    w("## 2. Schemas pruned as unreachable (%d)" % len(orphaned))
+    w("")
+    w("swagger-codegen emits a model for every entry in `components.schemas`,")
+    w("so removing the write operations orphans their request bodies rather")
+    w("than deleting them. These are the schemas no surviving operation can")
+    w("reach through `$ref`.")
+    w("")
+    if orphaned:
+        w("<details><summary>full list</summary>")
+        w("")
+        for name in orphaned:
+            w("- `%s`" % name)
+        w("")
+        w("</details>")
+    else:
+        w("_None._")
+    w("")
+
+    w("## 3. Collapsed `oneOf` responses (%d)" % len(collapsed))
     w("")
     w("The cursor-pagination alternatives are dropped and the legacy")
     w("offset/limit variant is kept, matching how the gemmapy wrapper paginates.")
@@ -217,7 +348,7 @@ def write_manifest(out, spec, src, digest, collapsed, retyped, synthesized, skip
         w("| `%s` | `%s` | %s | %s | `%s` |" % (oid, path, code, dropped, chosen))
     w("")
 
-    w("## 2. Re-typed response payloads (%d)" % len(retyped))
+    w("## 4. Re-typed response payloads (%d)" % len(retyped))
     w("")
     w("These endpoints now reference an unparameterized generic whose `data` is an")
     w("array of bare `object`. Each is re-pointed at a typed container so the")
@@ -232,7 +363,7 @@ def write_manifest(out, spec, src, digest, collapsed, retyped, synthesized, skip
         w("_None._")
     w("")
 
-    w("## 3. Schemas synthesized (%d)" % len(synthesized))
+    w("## 5. Schemas synthesized (%d)" % len(synthesized))
     w("")
     w("Typed containers the spec no longer defines, rebuilt from the generic")
     w("container plus the payload item type.")
@@ -244,7 +375,7 @@ def write_manifest(out, spec, src, digest, collapsed, retyped, synthesized, skip
         w("_None._")
     w("")
 
-    w("## 4. Left alone (%d)" % len(skipped))
+    w("## 6. Left alone (%d)" % len(skipped))
     w("")
     if skipped:
         w("| operationId | path | reason |")

@@ -35,1395 +35,6 @@ class DefaultApi(object):
             api_client = ApiClient()
         self.api_client = api_client
 
-    def acquire_curation_lock(self, dataset, **kwargs):  # noqa: E501
-        """Take, refresh or steal the curation lock  # noqa: E501
-
-        🛑 **Holding this lock now blocks other people's writes.** A commit, restore or sign by anyone else on this dataset is refused 409 `LOCK_REQUIRED` while the lease lasts. It previously gated only sign-off and was advisory everywhere else; that is no longer true, and any client written against \"a held lock is never permission\" needs re-reading.  The correctness guarantee is still the commit's `baseline.lastModified` 409 — the lock does not replace it. What the lock adds is stating a claim BEFORE the work instead of discovering the collision after it, which is what a batch run needs.  A dataset nobody holds commits exactly as before, so acquiring is not a precondition for writing. A dry-run preflight is never gated.  `?steal=true` takes a lock someone else holds. Always available, by design — there is no unlock ceremony to forget — and it destroys nothing, because the displaced curator's draft is a separate row. Their next commit 409s and they re-sync.  Emits no audit event: an audit event moves `lastUpdated`, which is the very token the commit checks, so taking a lock would 409 every draft in flight on the dataset.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.acquire_curation_lock(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset5 dataset: (required)
-        :param bool steal: Take a lock another curator holds.
-        :param int ttl_minutes: Lease length in minutes; defaults to 30.
-        :param str on_behalf_of: Which curator is taking the lock. Agents and admins only.
-        :param str run_id: What is taking the lock, when that is a job — e.g. `category-policy-rebuild-2026-08-09`. Shown to a curator this lock blocks, who has to decide whether to wait or steal. Omit for a person.
-        :param str agent_name: Which agent, when the holder is one. Omit for a person.
-        :return: CurationLockResponse
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.acquire_curation_lock_with_http_info(dataset, **kwargs)  # noqa: E501
-                else:
-                    (data) = self.acquire_curation_lock_with_http_info(dataset, **kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def acquire_curation_lock_with_http_info(self, dataset, **kwargs):  # noqa: E501
-        """Take, refresh or steal the curation lock  # noqa: E501
-
-        🛑 **Holding this lock now blocks other people's writes.** A commit, restore or sign by anyone else on this dataset is refused 409 `LOCK_REQUIRED` while the lease lasts. It previously gated only sign-off and was advisory everywhere else; that is no longer true, and any client written against \"a held lock is never permission\" needs re-reading.  The correctness guarantee is still the commit's `baseline.lastModified` 409 — the lock does not replace it. What the lock adds is stating a claim BEFORE the work instead of discovering the collision after it, which is what a batch run needs.  A dataset nobody holds commits exactly as before, so acquiring is not a precondition for writing. A dry-run preflight is never gated.  `?steal=true` takes a lock someone else holds. Always available, by design — there is no unlock ceremony to forget — and it destroys nothing, because the displaced curator's draft is a separate row. Their next commit 409s and they re-sync.  Emits no audit event: an audit event moves `lastUpdated`, which is the very token the commit checks, so taking a lock would 409 every draft in flight on the dataset.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.acquire_curation_lock_with_http_info(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset5 dataset: (required)
-        :param bool steal: Take a lock another curator holds.
-        :param int ttl_minutes: Lease length in minutes; defaults to 30.
-        :param str on_behalf_of: Which curator is taking the lock. Agents and admins only.
-        :param str run_id: What is taking the lock, when that is a job — e.g. `category-policy-rebuild-2026-08-09`. Shown to a curator this lock blocks, who has to decide whether to wait or steal. Omit for a person.
-        :param str agent_name: Which agent, when the holder is one. Omit for a person.
-        :return: CurationLockResponse
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['dataset', 'steal', 'ttl_minutes', 'on_behalf_of', 'run_id', 'agent_name']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method acquire_curation_lock" % key
-                )
-            params[key] = val
-        del params['kwargs']
-        # verify the required parameter 'dataset' is set
-        if ('dataset' not in params or
-                params['dataset'] is None):
-            raise ValueError("Missing the required parameter `dataset` when calling `acquire_curation_lock`")  # noqa: E501
-
-        collection_formats = {}
-
-        path_params = {}
-        if 'dataset' in params:
-            path_params['dataset'] = params['dataset']  # noqa: E501
-
-        query_params = []
-        if 'steal' in params:
-            query_params.append(('steal', params['steal']))  # noqa: E501
-        if 'ttl_minutes' in params:
-            query_params.append(('ttlMinutes', params['ttl_minutes']))  # noqa: E501
-        if 'on_behalf_of' in params:
-            query_params.append(('onBehalfOf', params['on_behalf_of']))  # noqa: E501
-        if 'run_id' in params:
-            query_params.append(('runId', params['run_id']))  # noqa: E501
-        if 'agent_name' in params:
-            query_params.append(('agentName', params['agent_name']))  # noqa: E501
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = 'CurationLockResponse' # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/datasets/{dataset}/curation/lock', 'POST',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
-    def acquire_curation_locks(self, **kwargs):  # noqa: E501
-        """Take or refresh the curation lock on many datasets in one round-trip  # noqa: E501
-
-        For a batch run that wants to state its claim over the datasets it is about to work on, rather than discovering a collision one dataset at a time after doing each one's work. Holding these locks refuses everyone else's commits on those datasets — see `POST /datasets/{dataset}/curation/lock`.  🛑 **Partial by design: this never fails as a unit.** Each dataset gets its own entry, `granted` true or false with the incumbent named. An all-or-nothing batch would be the wrong shape — one dataset held by a curator would sink a 500-dataset claim, and the caller can simply proceed with what it got and skip the rest.  `steal=true` applies to every id in the request. Prefer taking what is free and skipping the rest: a batch that steals is a batch that overrides whatever a curator is in the middle of, on every dataset at once.  ⚠️ Nothing sweeps expiry, so a run that dies holds its claims until the lease lapses. Keep `ttlMinutes` near the time you actually need and re-take rather than asking for hours up front. Releasing when done is `POST /datasets/curation/locks/release`.  Hard cap: 500 ids per request; a larger run chunks. IDs the caller cannot read are dropped rather than 404ing the batch.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.acquire_curation_locks(async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param CurationLockBulkRequest body:
-        :param bool steal: Take locks other curators hold. Applies to every id in the request.
-        :param int ttl_minutes: Lease length in minutes; defaults to 30.
-        :param str on_behalf_of: Which curator the batch is acting for. Agents and admins only.
-        :param str run_id: What is taking the lock, when that is a job — e.g. `category-policy-rebuild-2026-08-09`. Shown to a curator this lock blocks, who has to decide whether to wait or steal. Omit for a person.
-        :param str agent_name: Which agent, when the holder is one. Omit for a person.
-        :return: ResponseDataObjectMapLongCurationLockBulkResult
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.acquire_curation_locks_with_http_info(**kwargs)  # noqa: E501
-                else:
-                    (data) = self.acquire_curation_locks_with_http_info(**kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def acquire_curation_locks_with_http_info(self, **kwargs):  # noqa: E501
-        """Take or refresh the curation lock on many datasets in one round-trip  # noqa: E501
-
-        For a batch run that wants to state its claim over the datasets it is about to work on, rather than discovering a collision one dataset at a time after doing each one's work. Holding these locks refuses everyone else's commits on those datasets — see `POST /datasets/{dataset}/curation/lock`.  🛑 **Partial by design: this never fails as a unit.** Each dataset gets its own entry, `granted` true or false with the incumbent named. An all-or-nothing batch would be the wrong shape — one dataset held by a curator would sink a 500-dataset claim, and the caller can simply proceed with what it got and skip the rest.  `steal=true` applies to every id in the request. Prefer taking what is free and skipping the rest: a batch that steals is a batch that overrides whatever a curator is in the middle of, on every dataset at once.  ⚠️ Nothing sweeps expiry, so a run that dies holds its claims until the lease lapses. Keep `ttlMinutes` near the time you actually need and re-take rather than asking for hours up front. Releasing when done is `POST /datasets/curation/locks/release`.  Hard cap: 500 ids per request; a larger run chunks. IDs the caller cannot read are dropped rather than 404ing the batch.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.acquire_curation_locks_with_http_info(async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param CurationLockBulkRequest body:
-        :param bool steal: Take locks other curators hold. Applies to every id in the request.
-        :param int ttl_minutes: Lease length in minutes; defaults to 30.
-        :param str on_behalf_of: Which curator the batch is acting for. Agents and admins only.
-        :param str run_id: What is taking the lock, when that is a job — e.g. `category-policy-rebuild-2026-08-09`. Shown to a curator this lock blocks, who has to decide whether to wait or steal. Omit for a person.
-        :param str agent_name: Which agent, when the holder is one. Omit for a person.
-        :return: ResponseDataObjectMapLongCurationLockBulkResult
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['body', 'steal', 'ttl_minutes', 'on_behalf_of', 'run_id', 'agent_name']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method acquire_curation_locks" % key
-                )
-            params[key] = val
-        del params['kwargs']
-
-        collection_formats = {}
-
-        path_params = {}
-
-        query_params = []
-        if 'steal' in params:
-            query_params.append(('steal', params['steal']))  # noqa: E501
-        if 'ttl_minutes' in params:
-            query_params.append(('ttlMinutes', params['ttl_minutes']))  # noqa: E501
-        if 'on_behalf_of' in params:
-            query_params.append(('onBehalfOf', params['on_behalf_of']))  # noqa: E501
-        if 'run_id' in params:
-            query_params.append(('runId', params['run_id']))  # noqa: E501
-        if 'agent_name' in params:
-            query_params.append(('agentName', params['agent_name']))  # noqa: E501
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        if 'body' in params:
-            body_params = params['body']
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = 'ResponseDataObjectMapLongCurationLockBulkResult' # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/datasets/curation/locks', 'POST',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
-    def add_dataset_annotation(self, dataset, **kwargs):  # noqa: E501
-        """Add a single annotation tag to a dataset (legacy path)  # noqa: E501
-
-        Legacy alias of `POST /datasets/{dataset}/annotations`, kept because the curation-agents client already calls this path. New callers should use the canonical one on the datasets resource.  Adds one experiment-level annotation (tag) to the dataset. Emits a TagAddedEvent on the dataset's audit trail. Duplicate tags (same category URI + value URI) are rejected with 409 Conflict. Requires GROUP_CURATOR or GROUP_ADMIN.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.add_dataset_annotation(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset1 dataset: (required)
-        :param AnnotationDto body:
-        :param int annotation_set_id: Optional id of the AnnotationSet this tag is being applied from; linkage is parked until the source-set → emitted-event audit link lands.
-        :param str on_behalf_of: The curator this write is being carried FOR, when an agent is carrying it. The authenticated credential stays the performer on the audit row; this names the person in charge. Agents and admins only — anyone else naming someone else is a 403.
-        :return: None
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.add_dataset_annotation_with_http_info(dataset, **kwargs)  # noqa: E501
-                else:
-                    (data) = self.add_dataset_annotation_with_http_info(dataset, **kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def add_dataset_annotation_with_http_info(self, dataset, **kwargs):  # noqa: E501
-        """Add a single annotation tag to a dataset (legacy path)  # noqa: E501
-
-        Legacy alias of `POST /datasets/{dataset}/annotations`, kept because the curation-agents client already calls this path. New callers should use the canonical one on the datasets resource.  Adds one experiment-level annotation (tag) to the dataset. Emits a TagAddedEvent on the dataset's audit trail. Duplicate tags (same category URI + value URI) are rejected with 409 Conflict. Requires GROUP_CURATOR or GROUP_ADMIN.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.add_dataset_annotation_with_http_info(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset1 dataset: (required)
-        :param AnnotationDto body:
-        :param int annotation_set_id: Optional id of the AnnotationSet this tag is being applied from; linkage is parked until the source-set → emitted-event audit link lands.
-        :param str on_behalf_of: The curator this write is being carried FOR, when an agent is carrying it. The authenticated credential stays the performer on the audit row; this names the person in charge. Agents and admins only — anyone else naming someone else is a 403.
-        :return: None
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['dataset', 'body', 'annotation_set_id', 'on_behalf_of']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method add_dataset_annotation" % key
-                )
-            params[key] = val
-        del params['kwargs']
-        # verify the required parameter 'dataset' is set
-        if ('dataset' not in params or
-                params['dataset'] is None):
-            raise ValueError("Missing the required parameter `dataset` when calling `add_dataset_annotation`")  # noqa: E501
-
-        collection_formats = {}
-
-        path_params = {}
-        if 'dataset' in params:
-            path_params['dataset'] = params['dataset']  # noqa: E501
-
-        query_params = []
-        if 'annotation_set_id' in params:
-            query_params.append(('annotationSetId', params['annotation_set_id']))  # noqa: E501
-        if 'on_behalf_of' in params:
-            query_params.append(('onBehalfOf', params['on_behalf_of']))  # noqa: E501
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        if 'body' in params:
-            body_params = params['body']
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = None # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/annotations/datasets/{dataset}/annotations', 'POST',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
-    def add_dataset_annotation_tag(self, dataset, **kwargs):  # noqa: E501
-        """Add a single annotation tag to a dataset  # noqa: E501
-
-        Adds one experiment-level annotation (tag) to the dataset, leaving the rest of the tag set alone — the additive counterpart to the set-replace `PUT` on this same path. Emits a TagAddedEvent on the dataset's audit trail. Duplicate tags (same category URI + value URI) are rejected with 409 Conflict. Requires GROUP_CURATOR or GROUP_ADMIN.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.add_dataset_annotation_tag(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset9 dataset: (required)
-        :param AnnotationDto body:
-        :param int annotation_set_id: Optional id of the AnnotationSet this tag is being applied from; linkage is parked until the source-set → emitted-event audit link lands.
-        :param str on_behalf_of: The curator this write is being carried FOR, when an agent is carrying it. The authenticated credential stays the performer on the audit row; this names the person in charge. Agents and admins only — anyone else naming someone else is a 403.
-        :return: None
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.add_dataset_annotation_tag_with_http_info(dataset, **kwargs)  # noqa: E501
-                else:
-                    (data) = self.add_dataset_annotation_tag_with_http_info(dataset, **kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def add_dataset_annotation_tag_with_http_info(self, dataset, **kwargs):  # noqa: E501
-        """Add a single annotation tag to a dataset  # noqa: E501
-
-        Adds one experiment-level annotation (tag) to the dataset, leaving the rest of the tag set alone — the additive counterpart to the set-replace `PUT` on this same path. Emits a TagAddedEvent on the dataset's audit trail. Duplicate tags (same category URI + value URI) are rejected with 409 Conflict. Requires GROUP_CURATOR or GROUP_ADMIN.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.add_dataset_annotation_tag_with_http_info(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset9 dataset: (required)
-        :param AnnotationDto body:
-        :param int annotation_set_id: Optional id of the AnnotationSet this tag is being applied from; linkage is parked until the source-set → emitted-event audit link lands.
-        :param str on_behalf_of: The curator this write is being carried FOR, when an agent is carrying it. The authenticated credential stays the performer on the audit row; this names the person in charge. Agents and admins only — anyone else naming someone else is a 403.
-        :return: None
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['dataset', 'body', 'annotation_set_id', 'on_behalf_of']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method add_dataset_annotation_tag" % key
-                )
-            params[key] = val
-        del params['kwargs']
-        # verify the required parameter 'dataset' is set
-        if ('dataset' not in params or
-                params['dataset'] is None):
-            raise ValueError("Missing the required parameter `dataset` when calling `add_dataset_annotation_tag`")  # noqa: E501
-
-        collection_formats = {}
-
-        path_params = {}
-        if 'dataset' in params:
-            path_params['dataset'] = params['dataset']  # noqa: E501
-
-        query_params = []
-        if 'annotation_set_id' in params:
-            query_params.append(('annotationSetId', params['annotation_set_id']))  # noqa: E501
-        if 'on_behalf_of' in params:
-            query_params.append(('onBehalfOf', params['on_behalf_of']))  # noqa: E501
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        if 'body' in params:
-            body_params = params['body']
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = None # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/datasets/{dataset}/annotations', 'POST',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
-    def add_sample_characteristic(self, dataset, bio_assay_id, **kwargs):  # noqa: E501
-        """Add a characteristic (tag) to a sample  # noqa: E501
-
-        Adds a single characteristic to the sample's biomaterial, accepting the full Statement shape (predicate / object / second pair). A `TagAddedEvent` is recorded on the owning experiment. Returns 409 if a tag with the same (category, value) already exists. Requires `ACL_SECURABLE_EDIT` on the dataset.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.add_sample_characteristic(dataset, bio_assay_id, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset12 dataset: (required)
-        :param int bio_assay_id: (required)
-        :param AnnotationTagInput body:
-        :return: ResponseDataObjectAnnotationValueObject
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.add_sample_characteristic_with_http_info(dataset, bio_assay_id, **kwargs)  # noqa: E501
-                else:
-                    (data) = self.add_sample_characteristic_with_http_info(dataset, bio_assay_id, **kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def add_sample_characteristic_with_http_info(self, dataset, bio_assay_id, **kwargs):  # noqa: E501
-        """Add a characteristic (tag) to a sample  # noqa: E501
-
-        Adds a single characteristic to the sample's biomaterial, accepting the full Statement shape (predicate / object / second pair). A `TagAddedEvent` is recorded on the owning experiment. Returns 409 if a tag with the same (category, value) already exists. Requires `ACL_SECURABLE_EDIT` on the dataset.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.add_sample_characteristic_with_http_info(dataset, bio_assay_id, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset12 dataset: (required)
-        :param int bio_assay_id: (required)
-        :param AnnotationTagInput body:
-        :return: ResponseDataObjectAnnotationValueObject
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['dataset', 'bio_assay_id', 'body']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method add_sample_characteristic" % key
-                )
-            params[key] = val
-        del params['kwargs']
-        # verify the required parameter 'dataset' is set
-        if ('dataset' not in params or
-                params['dataset'] is None):
-            raise ValueError("Missing the required parameter `dataset` when calling `add_sample_characteristic`")  # noqa: E501
-        # verify the required parameter 'bio_assay_id' is set
-        if ('bio_assay_id' not in params or
-                params['bio_assay_id'] is None):
-            raise ValueError("Missing the required parameter `bio_assay_id` when calling `add_sample_characteristic`")  # noqa: E501
-
-        collection_formats = {}
-
-        path_params = {}
-        if 'dataset' in params:
-            path_params['dataset'] = params['dataset']  # noqa: E501
-        if 'bio_assay_id' in params:
-            path_params['bioAssayId'] = params['bio_assay_id']  # noqa: E501
-
-        query_params = []
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        if 'body' in params:
-            body_params = params['body']
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = 'ResponseDataObjectAnnotationValueObject' # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/datasets/{dataset}/samples/{bioAssayId}/characteristics', 'POST',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
-    def batch_mark_sample_outliers(self, dataset, **kwargs):  # noqa: E501
-        """Batch mark or unmark sample outliers  # noqa: E501
-
-        Body: `{\"mark\": [bioAssayId,...], \"unmark\": [bioAssayId,...]}`. The listed assays must all belong to the path-derived dataset; otherwise a 400 is returned and NOTHING is mutated (validation runs before any service call). Returns the updated full outlier set (across the dataset).  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.batch_mark_sample_outliers(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset13 dataset: (required)
-        :param BatchOutlierRequest body:
-        :return: ResponseDataObjectBatchOutlierResponse
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.batch_mark_sample_outliers_with_http_info(dataset, **kwargs)  # noqa: E501
-                else:
-                    (data) = self.batch_mark_sample_outliers_with_http_info(dataset, **kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def batch_mark_sample_outliers_with_http_info(self, dataset, **kwargs):  # noqa: E501
-        """Batch mark or unmark sample outliers  # noqa: E501
-
-        Body: `{\"mark\": [bioAssayId,...], \"unmark\": [bioAssayId,...]}`. The listed assays must all belong to the path-derived dataset; otherwise a 400 is returned and NOTHING is mutated (validation runs before any service call). Returns the updated full outlier set (across the dataset).  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.batch_mark_sample_outliers_with_http_info(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset13 dataset: (required)
-        :param BatchOutlierRequest body:
-        :return: ResponseDataObjectBatchOutlierResponse
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['dataset', 'body']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method batch_mark_sample_outliers" % key
-                )
-            params[key] = val
-        del params['kwargs']
-        # verify the required parameter 'dataset' is set
-        if ('dataset' not in params or
-                params['dataset'] is None):
-            raise ValueError("Missing the required parameter `dataset` when calling `batch_mark_sample_outliers`")  # noqa: E501
-
-        collection_formats = {}
-
-        path_params = {}
-        if 'dataset' in params:
-            path_params['dataset'] = params['dataset']  # noqa: E501
-
-        query_params = []
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        if 'body' in params:
-            body_params = params['body']
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = 'ResponseDataObjectBatchOutlierResponse' # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/datasets/{dataset}/samples/outliers', 'POST',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
-    def cancel_task(self, task_id, **kwargs):  # noqa: E501
-        """Request cooperative cancellation of a submitted pipeline task  # noqa: E501
-
-        Sends a cancellation request to the named task. The task is responsible for honouring the cancellation flag at its next preemption point; this endpoint does NOT force-kill the task. Returns the task status snapshot taken immediately after the request was filed.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.cancel_task(task_id, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param str task_id: (required)
-        :return: ResponseDataObjectTaskStatusValueObject
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.cancel_task_with_http_info(task_id, **kwargs)  # noqa: E501
-                else:
-                    (data) = self.cancel_task_with_http_info(task_id, **kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def cancel_task_with_http_info(self, task_id, **kwargs):  # noqa: E501
-        """Request cooperative cancellation of a submitted pipeline task  # noqa: E501
-
-        Sends a cancellation request to the named task. The task is responsible for honouring the cancellation flag at its next preemption point; this endpoint does NOT force-kill the task. Returns the task status snapshot taken immediately after the request was filed.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.cancel_task_with_http_info(task_id, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param str task_id: (required)
-        :return: ResponseDataObjectTaskStatusValueObject
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['task_id']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method cancel_task" % key
-                )
-            params[key] = val
-        del params['kwargs']
-        # verify the required parameter 'task_id' is set
-        if ('task_id' not in params or
-                params['task_id'] is None):
-            raise ValueError("Missing the required parameter `task_id` when calling `cancel_task`")  # noqa: E501
-
-        collection_formats = {}
-
-        path_params = {}
-        if 'task_id' in params:
-            path_params['taskId'] = params['task_id']  # noqa: E501
-
-        query_params = []
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = 'ResponseDataObjectTaskStatusValueObject' # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/tasks/{taskId}', 'DELETE',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
-    def change_my_password(self, **kwargs):  # noqa: E501
-        """Change the authenticated user's own password  # noqa: E501
-
-        Requires the current password and a new password (minimum 8 characters). Returns 204 on success, 400 if the current password is wrong or the new password is too short.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.change_my_password(async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param ChangePasswordRequest body:
-        :return: None
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.change_my_password_with_http_info(**kwargs)  # noqa: E501
-                else:
-                    (data) = self.change_my_password_with_http_info(**kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def change_my_password_with_http_info(self, **kwargs):  # noqa: E501
-        """Change the authenticated user's own password  # noqa: E501
-
-        Requires the current password and a new password (minimum 8 characters). Returns 204 on success, 400 if the current password is wrong or the new password is too short.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.change_my_password_with_http_info(async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param ChangePasswordRequest body:
-        :return: None
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['body']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method change_my_password" % key
-                )
-            params[key] = val
-        del params['kwargs']
-
-        collection_formats = {}
-
-        path_params = {}
-
-        query_params = []
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        if 'body' in params:
-            body_params = params['body']
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = None # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/users/me/password', 'PUT',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
-    def clear_dispositions(self, id, **kwargs):  # noqa: E501
-        """Erase every ruling on an annotation set's findings  # noqa: E501
-
-        🛑 A DO-OVER AFTER A FAULT, not a curator changing their mind. Rulings are append-only everywhere else on this route: a curator who reconsiders POSTs again and both rows survive, which is what makes the history readable. This deletes, so it is admin-only and is for the case where the rulings record a MISTAKE rather than a decision — a calibration package rebuilt underneath them, or a wire-schema bug that made them meaningless. Superseding those one at a time would preserve exactly the noise the caller is trying to be rid of.  🛑 It does NOT undo design edits a curator made in response to those rulings. Those live in the draft; discarding the draft is a separate act, and skipping it leaves a dataset carrying changes whose justification has just been erased.  Reports `deleted`, the number of rows that went. Deleting nothing is a 200 with `deleted: 0`, not a 404 — a set nobody has ruled on is already in the state this asks for.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.clear_dispositions(id, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param int id: (required)
-        :return: ClearDispositionsResponse
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.clear_dispositions_with_http_info(id, **kwargs)  # noqa: E501
-                else:
-                    (data) = self.clear_dispositions_with_http_info(id, **kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def clear_dispositions_with_http_info(self, id, **kwargs):  # noqa: E501
-        """Erase every ruling on an annotation set's findings  # noqa: E501
-
-        🛑 A DO-OVER AFTER A FAULT, not a curator changing their mind. Rulings are append-only everywhere else on this route: a curator who reconsiders POSTs again and both rows survive, which is what makes the history readable. This deletes, so it is admin-only and is for the case where the rulings record a MISTAKE rather than a decision — a calibration package rebuilt underneath them, or a wire-schema bug that made them meaningless. Superseding those one at a time would preserve exactly the noise the caller is trying to be rid of.  🛑 It does NOT undo design edits a curator made in response to those rulings. Those live in the draft; discarding the draft is a separate act, and skipping it leaves a dataset carrying changes whose justification has just been erased.  Reports `deleted`, the number of rows that went. Deleting nothing is a 200 with `deleted: 0`, not a 404 — a set nobody has ruled on is already in the state this asks for.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.clear_dispositions_with_http_info(id, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param int id: (required)
-        :return: ClearDispositionsResponse
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['id']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method clear_dispositions" % key
-                )
-            params[key] = val
-        del params['kwargs']
-        # verify the required parameter 'id' is set
-        if ('id' not in params or
-                params['id'] is None):
-            raise ValueError("Missing the required parameter `id` when calling `clear_dispositions`")  # noqa: E501
-
-        collection_formats = {}
-
-        path_params = {}
-        if 'id' in params:
-            path_params['id'] = params['id']  # noqa: E501
-
-        query_params = []
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = 'ClearDispositionsResponse' # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/annotation-sets/{id}/dispositions', 'DELETE',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
-    def clear_factor_value_needs_attention(self, dataset, factor_value_id, **kwargs):  # noqa: E501
-        """Clear the needs-attention flag on a factor value  # noqa: E501
-
-        Resolves every open ticket targeting the factor value. `note` is recorded as the resolution reason. 409 if the factor value is not currently flagged.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.clear_factor_value_needs_attention(dataset, factor_value_id, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset15 dataset: (required)
-        :param int factor_value_id: (required)
-        :param str note: Resolution reason; recorded on every ticket transition.
-        :return: None
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.clear_factor_value_needs_attention_with_http_info(dataset, factor_value_id, **kwargs)  # noqa: E501
-                else:
-                    (data) = self.clear_factor_value_needs_attention_with_http_info(dataset, factor_value_id, **kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def clear_factor_value_needs_attention_with_http_info(self, dataset, factor_value_id, **kwargs):  # noqa: E501
-        """Clear the needs-attention flag on a factor value  # noqa: E501
-
-        Resolves every open ticket targeting the factor value. `note` is recorded as the resolution reason. 409 if the factor value is not currently flagged.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.clear_factor_value_needs_attention_with_http_info(dataset, factor_value_id, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset15 dataset: (required)
-        :param int factor_value_id: (required)
-        :param str note: Resolution reason; recorded on every ticket transition.
-        :return: None
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['dataset', 'factor_value_id', 'note']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method clear_factor_value_needs_attention" % key
-                )
-            params[key] = val
-        del params['kwargs']
-        # verify the required parameter 'dataset' is set
-        if ('dataset' not in params or
-                params['dataset'] is None):
-            raise ValueError("Missing the required parameter `dataset` when calling `clear_factor_value_needs_attention`")  # noqa: E501
-        # verify the required parameter 'factor_value_id' is set
-        if ('factor_value_id' not in params or
-                params['factor_value_id'] is None):
-            raise ValueError("Missing the required parameter `factor_value_id` when calling `clear_factor_value_needs_attention`")  # noqa: E501
-
-        collection_formats = {}
-
-        path_params = {}
-        if 'dataset' in params:
-            path_params['dataset'] = params['dataset']  # noqa: E501
-        if 'factor_value_id' in params:
-            path_params['factorValueId'] = params['factor_value_id']  # noqa: E501
-
-        query_params = []
-        if 'note' in params:
-            query_params.append(('note', params['note']))  # noqa: E501
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = None # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/datasets/{dataset}/factor-values/{factorValueId}/needs-attention', 'DELETE',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
-    def commit_curation(self, dataset, **kwargs):  # noqa: E501
-        """Commit a curation draft to a dataset (all-or-none)  # noqa: E501
-
-        Applies a whole curation draft (CurationDocument) in one transaction — either every supported section applies or, on any failure, nothing does. Sections: `basics` (name/description/shortName), `publications`, `design` (factors → factor-values → statements, per-sample assignments, baseline flags, split advice), `tags` (experiment-level), `sampleCharacteristics` (per-sample), and `curationDetails` (curationNote only — troubled / needsAttention 400 here and go through the ticket endpoints). New entities carry a `clientRef` (echoed as `clientRef → newGemmaId` in the report `idMap`); deletions are declared via each section's `deletedIds`.  🛑 In `tags` and `sampleCharacteristics`, an item carrying a `gemmaId` is a KEEP-MARKER, not an update: those sections are add/delete only, so the id is the only field read. Sending any other field on such an item — `category`, `value`, `statements`, `supportingEvidence`, `evidenceCode`, `bioassayShortName` — is a 400 naming every offending field, because accepting it would report success for an edit that never happened. To change one of these, drop the `gemmaId`, send the new content under a `clientRef`, and name the old id in the section's `deletedIds`. The `design` section is different: a `gemmaId` factor / factor-value / statement IS updated in place from the fields it carries.  🛑 **What an omission means is a contract** (Paul, 2026-09-13): clients compose minimal documents that rely on every rule below, so changing one changes what their unchanged payloads do. - **Factors:** a factor the document does not mention is carried forward unchanged. On a `gemmaId` item a null or absent field is no change. `deletedIds` removes; an id that is not a factor of this dataset is a 400. - **Factor values:** a value not mentioned is carried forward unchanged. On a `gemmaId` item a null label, baseline flag or measurement is no change; absent sample bindings leave the assignments untouched, a list replaces them, and `[]` clears them. An unknown `deletedIds` entry is a 400. - **Statements:** a statement not mentioned is carried forward unchanged. A `gemmaId` statement is full-record replacement: omitting its subject, `evidenceCode`, `supportingEvidence` or second pair while the stored row has one is a 400. Clear them deliberately with `\"\"` (evidenceCode), `[]` (supportingEvidence) or `clearSecondPair: true`. An unknown `deletedIds` entry is a 400. - **Evidence on a `gemmaId` factor or factor value:** omitted while stored is a 400; `[]` clears it. - **Tags and sample characteristics:** anything not mentioned is untouched; a `gemmaId` item is a keep-marker; `deletedIds` removes, and an id that is not on this dataset is a 400, on the commit and on the preflight.  A design change that would delete differential-expression analyses requires `?force=true` (admin) or returns 409. Optimistic concurrency: `baseline.lastModified` (the dataset `lastUpdated` the draft was built against) is checked; a stale baseline returns 409. Requires `ACL_SECURABLE_EDIT`; a shortName change additionally requires admin. Returns a CurationCommitReport.  A commit that changes anything first keeps what it displaced: the dataset's curation as it stood is stored as a SNAPSHOT AnnotationSet in the same transaction, and its id comes back as `snapshotAnnotationSetId`. Hand that id to `POST /datasets/{id}/annotation-sets/{setId}/restore` to undo the commit, or with `?dryRun=true` to see what the commit changed. The capture covers every section this endpoint writes — basics, publications (with the evidence on record for each), design, tags, sample characteristics and the curation note — the same capture `POST /datasets/{id}/annotation-sets/snapshot` takes.  The report carries `newBaseline`, the dataset's `lastUpdated` after the commit: send it as `baseline.lastModified` on the next commit and a client can edit and commit repeatedly without re-reading the dataset between writes.  Provenance: a `tags` item and a `statements` item each accept `supportingEvidence` (opaque JSON, stored verbatim) and `evidenceCode` (a GOEvidenceCode name — `IC`, `IEA`, `IIA`, `TAS`, …, case-insensitive; an unknown one is a 400 on the commit and on the preflight). Omitting `evidenceCode` preserves the behaviour this route has always had: a tag is recorded as `IC` (curator inference) and a design statement keeps the code it has. The server never picks a code from the caller's identity, so an automated client that should not be claiming a curator's inference has to say so.  🛑 **A free-text experiment tag needs both a declaration and a grounded hook.** A new `tags` item whose `value` carries no URI must set `freeTextIntended: true` (the absence was a decision, not an oversight) AND carry a statement pairing a predicate with a grounded object — e.g. `cell line: WTC-11` + `derives from cell line cell` -> `induced pluripotent stem cell line cell [CLO_0037307]`. Either one missing is a 400 (`UNGROUNDED_NOT_DECLARED`, `FREE_TEXT_NOT_HOOKED`); they ask different questions and neither substitutes for the other. `sampleCharacteristics` and `design` are deliberately NOT gated this way — a GEO characteristic is a string the submitter wrote, and requiring a term there would refuse the corpus.  🛑 **A commit is never only a design write.** On success it also advances the review state of any open CURATION/SCREENING ticket targeting this dataset (each matching target row to DONE, and the ticket to RESOLVED once all its targets are), mints an auto-snapshot of the curation it displaced, and refreshes EE2C. **A no-op payload prevents none of that** — an empty `items` list means \"I mention no factors\", not \"there are none\", so it reconciles to no design change while the rest still fires. There is therefore no free probe of this route: any call against a real dataset is a production write and should be planned as one. Use `POST /datasets/{id}/curation/preflight` to ask what a commit WOULD do; a dry run advances nothing and snapshots nothing.  Every 409 names which conflict it was in `errors[0].reason`, because the client's next move differs per case: `STALE_BASELINE` (re-read, rebuild the diff, commit again — the response deliberately does not hand back a fresher token, since committing over a change you have not seen is what the token prevents), `REQUIRES_FORCE` (get the curator's consent, then retry with `?force=true` as admin), `PUBLICATION_REJECTED` (a paper being attached stands rejected for this dataset), `UNSPECIFIED` (refused as a conflict without a code — e.g. a short name already in use).  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.commit_curation(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset16 dataset: (required)
-        :param CurationDocument body:
-        :param bool force: Consent (admin only) to deleting differential-expression analyses that a design-section change would invalidate. Ignored unless the design section triggers such a cascade.
-        :param str on_behalf_of: Which curator this commit is FOR, when an agent is carrying it. Agents and admins only; refused, not ignored, for anyone else. It is what attributes the restore point this commit mints to the curator rather than to the courier, and what stops the commit being refused as a foreign lock holder when the curator holds the lock.
-        :return: ResponseDataObjectCurationCommitReport
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.commit_curation_with_http_info(dataset, **kwargs)  # noqa: E501
-                else:
-                    (data) = self.commit_curation_with_http_info(dataset, **kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def commit_curation_with_http_info(self, dataset, **kwargs):  # noqa: E501
-        """Commit a curation draft to a dataset (all-or-none)  # noqa: E501
-
-        Applies a whole curation draft (CurationDocument) in one transaction — either every supported section applies or, on any failure, nothing does. Sections: `basics` (name/description/shortName), `publications`, `design` (factors → factor-values → statements, per-sample assignments, baseline flags, split advice), `tags` (experiment-level), `sampleCharacteristics` (per-sample), and `curationDetails` (curationNote only — troubled / needsAttention 400 here and go through the ticket endpoints). New entities carry a `clientRef` (echoed as `clientRef → newGemmaId` in the report `idMap`); deletions are declared via each section's `deletedIds`.  🛑 In `tags` and `sampleCharacteristics`, an item carrying a `gemmaId` is a KEEP-MARKER, not an update: those sections are add/delete only, so the id is the only field read. Sending any other field on such an item — `category`, `value`, `statements`, `supportingEvidence`, `evidenceCode`, `bioassayShortName` — is a 400 naming every offending field, because accepting it would report success for an edit that never happened. To change one of these, drop the `gemmaId`, send the new content under a `clientRef`, and name the old id in the section's `deletedIds`. The `design` section is different: a `gemmaId` factor / factor-value / statement IS updated in place from the fields it carries.  🛑 **What an omission means is a contract** (Paul, 2026-09-13): clients compose minimal documents that rely on every rule below, so changing one changes what their unchanged payloads do. - **Factors:** a factor the document does not mention is carried forward unchanged. On a `gemmaId` item a null or absent field is no change. `deletedIds` removes; an id that is not a factor of this dataset is a 400. - **Factor values:** a value not mentioned is carried forward unchanged. On a `gemmaId` item a null label, baseline flag or measurement is no change; absent sample bindings leave the assignments untouched, a list replaces them, and `[]` clears them. An unknown `deletedIds` entry is a 400. - **Statements:** a statement not mentioned is carried forward unchanged. A `gemmaId` statement is full-record replacement: omitting its subject, `evidenceCode`, `supportingEvidence` or second pair while the stored row has one is a 400. Clear them deliberately with `\"\"` (evidenceCode), `[]` (supportingEvidence) or `clearSecondPair: true`. An unknown `deletedIds` entry is a 400. - **Evidence on a `gemmaId` factor or factor value:** omitted while stored is a 400; `[]` clears it. - **Tags and sample characteristics:** anything not mentioned is untouched; a `gemmaId` item is a keep-marker; `deletedIds` removes, and an id that is not on this dataset is a 400, on the commit and on the preflight.  A design change that would delete differential-expression analyses requires `?force=true` (admin) or returns 409. Optimistic concurrency: `baseline.lastModified` (the dataset `lastUpdated` the draft was built against) is checked; a stale baseline returns 409. Requires `ACL_SECURABLE_EDIT`; a shortName change additionally requires admin. Returns a CurationCommitReport.  A commit that changes anything first keeps what it displaced: the dataset's curation as it stood is stored as a SNAPSHOT AnnotationSet in the same transaction, and its id comes back as `snapshotAnnotationSetId`. Hand that id to `POST /datasets/{id}/annotation-sets/{setId}/restore` to undo the commit, or with `?dryRun=true` to see what the commit changed. The capture covers every section this endpoint writes — basics, publications (with the evidence on record for each), design, tags, sample characteristics and the curation note — the same capture `POST /datasets/{id}/annotation-sets/snapshot` takes.  The report carries `newBaseline`, the dataset's `lastUpdated` after the commit: send it as `baseline.lastModified` on the next commit and a client can edit and commit repeatedly without re-reading the dataset between writes.  Provenance: a `tags` item and a `statements` item each accept `supportingEvidence` (opaque JSON, stored verbatim) and `evidenceCode` (a GOEvidenceCode name — `IC`, `IEA`, `IIA`, `TAS`, …, case-insensitive; an unknown one is a 400 on the commit and on the preflight). Omitting `evidenceCode` preserves the behaviour this route has always had: a tag is recorded as `IC` (curator inference) and a design statement keeps the code it has. The server never picks a code from the caller's identity, so an automated client that should not be claiming a curator's inference has to say so.  🛑 **A free-text experiment tag needs both a declaration and a grounded hook.** A new `tags` item whose `value` carries no URI must set `freeTextIntended: true` (the absence was a decision, not an oversight) AND carry a statement pairing a predicate with a grounded object — e.g. `cell line: WTC-11` + `derives from cell line cell` -> `induced pluripotent stem cell line cell [CLO_0037307]`. Either one missing is a 400 (`UNGROUNDED_NOT_DECLARED`, `FREE_TEXT_NOT_HOOKED`); they ask different questions and neither substitutes for the other. `sampleCharacteristics` and `design` are deliberately NOT gated this way — a GEO characteristic is a string the submitter wrote, and requiring a term there would refuse the corpus.  🛑 **A commit is never only a design write.** On success it also advances the review state of any open CURATION/SCREENING ticket targeting this dataset (each matching target row to DONE, and the ticket to RESOLVED once all its targets are), mints an auto-snapshot of the curation it displaced, and refreshes EE2C. **A no-op payload prevents none of that** — an empty `items` list means \"I mention no factors\", not \"there are none\", so it reconciles to no design change while the rest still fires. There is therefore no free probe of this route: any call against a real dataset is a production write and should be planned as one. Use `POST /datasets/{id}/curation/preflight` to ask what a commit WOULD do; a dry run advances nothing and snapshots nothing.  Every 409 names which conflict it was in `errors[0].reason`, because the client's next move differs per case: `STALE_BASELINE` (re-read, rebuild the diff, commit again — the response deliberately does not hand back a fresher token, since committing over a change you have not seen is what the token prevents), `REQUIRES_FORCE` (get the curator's consent, then retry with `?force=true` as admin), `PUBLICATION_REJECTED` (a paper being attached stands rejected for this dataset), `UNSPECIFIED` (refused as a conflict without a code — e.g. a short name already in use).  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.commit_curation_with_http_info(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset16 dataset: (required)
-        :param CurationDocument body:
-        :param bool force: Consent (admin only) to deleting differential-expression analyses that a design-section change would invalidate. Ignored unless the design section triggers such a cascade.
-        :param str on_behalf_of: Which curator this commit is FOR, when an agent is carrying it. Agents and admins only; refused, not ignored, for anyone else. It is what attributes the restore point this commit mints to the curator rather than to the courier, and what stops the commit being refused as a foreign lock holder when the curator holds the lock.
-        :return: ResponseDataObjectCurationCommitReport
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['dataset', 'body', 'force', 'on_behalf_of']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method commit_curation" % key
-                )
-            params[key] = val
-        del params['kwargs']
-        # verify the required parameter 'dataset' is set
-        if ('dataset' not in params or
-                params['dataset'] is None):
-            raise ValueError("Missing the required parameter `dataset` when calling `commit_curation`")  # noqa: E501
-
-        collection_formats = {}
-
-        path_params = {}
-        if 'dataset' in params:
-            path_params['dataset'] = params['dataset']  # noqa: E501
-
-        query_params = []
-        if 'force' in params:
-            query_params.append(('force', params['force']))  # noqa: E501
-        if 'on_behalf_of' in params:
-            query_params.append(('onBehalfOf', params['on_behalf_of']))  # noqa: E501
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        if 'body' in params:
-            body_params = params['body']
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = 'ResponseDataObjectCurationCommitReport' # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/datasets/{dataset}/curation', 'PUT',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
     def count_genes_by_go_term(self, term_uri, **kwargs):  # noqa: E501
         """Count of genes annotated to a GO term (optionally including descendants)  # noqa: E501
 
@@ -1435,7 +46,7 @@ class DefaultApi(object):
 
         :param async_req bool
         :param str term_uri: (required)
-        :param Taxon8 taxon:
+        :param Taxon7 taxon:
         :param bool propagate:
         :param int max_terms: When `propagate=true`, cap the breadth-first descendant walk at this many terms (including the root). Default 0 = unbounded.
         :return: ResponseDataObjectGoTermGeneCountValueObject
@@ -1472,7 +83,7 @@ class DefaultApi(object):
 
         :param async_req bool
         :param str term_uri: (required)
-        :param Taxon8 taxon:
+        :param Taxon7 taxon:
         :param bool propagate:
         :param int max_terms: When `propagate=true`, cap the breadth-first descendant walk at this many terms (including the root). Default 0 = unbounded.
         :return: ResponseDataObjectGoTermGeneCountValueObject
@@ -1537,488 +148,6 @@ class DefaultApi(object):
 
         return self.api_client.call_api(
             '/goTerms/{termUri}/genes/count', 'GET',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
-    def delete_annotation_set(self, id, **kwargs):  # noqa: E501
-        """Delete an annotation set by id  # noqa: E501
-
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.delete_annotation_set(id, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param int id: (required)
-        :return: None
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.delete_annotation_set_with_http_info(id, **kwargs)  # noqa: E501
-                else:
-                    (data) = self.delete_annotation_set_with_http_info(id, **kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def delete_annotation_set_with_http_info(self, id, **kwargs):  # noqa: E501
-        """Delete an annotation set by id  # noqa: E501
-
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.delete_annotation_set_with_http_info(id, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param int id: (required)
-        :return: None
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['id']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method delete_annotation_set" % key
-                )
-            params[key] = val
-        del params['kwargs']
-        # verify the required parameter 'id' is set
-        if ('id' not in params or
-                params['id'] is None):
-            raise ValueError("Missing the required parameter `id` when calling `delete_annotation_set`")  # noqa: E501
-
-        collection_formats = {}
-
-        path_params = {}
-        if 'id' in params:
-            path_params['id'] = params['id']  # noqa: E501
-
-        query_params = []
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = None # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/annotation-sets/{id}', 'DELETE',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
-    def delete_dataset_processed_data(self, dataset, **kwargs):  # noqa: E501
-        """Delete processed expression data vectors for a dataset  # noqa: E501
-
-        Synchronous deletion of the processed expression data vectors for the dataset. The `confirm=true` query parameter MUST be supplied; without it the call returns `400` to guard against accidental destruction. Port of the `deleteProcessedData` CLI.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.delete_dataset_processed_data(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset18 dataset: (required)
-        :param bool confirm: Must be `true` to authorize the destructive delete.
-        :return: None
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.delete_dataset_processed_data_with_http_info(dataset, **kwargs)  # noqa: E501
-                else:
-                    (data) = self.delete_dataset_processed_data_with_http_info(dataset, **kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def delete_dataset_processed_data_with_http_info(self, dataset, **kwargs):  # noqa: E501
-        """Delete processed expression data vectors for a dataset  # noqa: E501
-
-        Synchronous deletion of the processed expression data vectors for the dataset. The `confirm=true` query parameter MUST be supplied; without it the call returns `400` to guard against accidental destruction. Port of the `deleteProcessedData` CLI.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.delete_dataset_processed_data_with_http_info(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset18 dataset: (required)
-        :param bool confirm: Must be `true` to authorize the destructive delete.
-        :return: None
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['dataset', 'confirm']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method delete_dataset_processed_data" % key
-                )
-            params[key] = val
-        del params['kwargs']
-        # verify the required parameter 'dataset' is set
-        if ('dataset' not in params or
-                params['dataset'] is None):
-            raise ValueError("Missing the required parameter `dataset` when calling `delete_dataset_processed_data`")  # noqa: E501
-
-        collection_formats = {}
-
-        path_params = {}
-        if 'dataset' in params:
-            path_params['dataset'] = params['dataset']  # noqa: E501
-
-        query_params = []
-        if 'confirm' in params:
-            query_params.append(('confirm', params['confirm']))  # noqa: E501
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = None # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/datasets/{dataset}/data/processed', 'DELETE',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
-    def delete_dataset_raw_data(self, dataset, **kwargs):  # noqa: E501
-        """Delete raw expression data vectors for a dataset  # noqa: E501
-
-        Synchronous deletion of the raw expression data vectors for the dataset. The `confirm=true` query parameter MUST be supplied; without it the call returns `400` to guard against accidental destruction. The optional `quantitationType` query param selects which raw QT to delete; if omitted, the preferred raw QT is used. Port of the `deleteRawData` CLI.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.delete_dataset_raw_data(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset20 dataset: (required)
-        :param QuantitationType2 quantitation_type: Optional quantitation-type selector; defaults to the dataset's preferred raw QT.
-        :param bool confirm: Must be `true` to authorize the destructive delete.
-        :return: None
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.delete_dataset_raw_data_with_http_info(dataset, **kwargs)  # noqa: E501
-                else:
-                    (data) = self.delete_dataset_raw_data_with_http_info(dataset, **kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def delete_dataset_raw_data_with_http_info(self, dataset, **kwargs):  # noqa: E501
-        """Delete raw expression data vectors for a dataset  # noqa: E501
-
-        Synchronous deletion of the raw expression data vectors for the dataset. The `confirm=true` query parameter MUST be supplied; without it the call returns `400` to guard against accidental destruction. The optional `quantitationType` query param selects which raw QT to delete; if omitted, the preferred raw QT is used. Port of the `deleteRawData` CLI.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.delete_dataset_raw_data_with_http_info(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset20 dataset: (required)
-        :param QuantitationType2 quantitation_type: Optional quantitation-type selector; defaults to the dataset's preferred raw QT.
-        :param bool confirm: Must be `true` to authorize the destructive delete.
-        :return: None
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['dataset', 'quantitation_type', 'confirm']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method delete_dataset_raw_data" % key
-                )
-            params[key] = val
-        del params['kwargs']
-        # verify the required parameter 'dataset' is set
-        if ('dataset' not in params or
-                params['dataset'] is None):
-            raise ValueError("Missing the required parameter `dataset` when calling `delete_dataset_raw_data`")  # noqa: E501
-
-        collection_formats = {}
-
-        path_params = {}
-        if 'dataset' in params:
-            path_params['dataset'] = params['dataset']  # noqa: E501
-
-        query_params = []
-        if 'quantitation_type' in params:
-            query_params.append(('quantitationType', params['quantitation_type']))  # noqa: E501
-        if 'confirm' in params:
-            query_params.append(('confirm', params['confirm']))  # noqa: E501
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = None # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/datasets/{dataset}/data/raw', 'DELETE',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
-    def finalize_annotation_set(self, id, **kwargs):  # noqa: E501
-        """Mark an annotation set finalized (done editing / polished)  # noqa: E501
-
-        `?onBehalfOf=` records the finalizing curator when the call is relayed by an agent, so `finalizedBy` names the person who decided rather than the software that transmitted it. Honoured only for `GROUP_AGENT` / `GROUP_ADMIN`.  The body is optional and carries one field, `note` — the curator's closing sentence, echoed back as `finalizedNotes`. Trimmed, and cut to 2048 characters rather than refused.  🛑 The note is the one part of this that is not idempotent. A second call on an already-finalized set leaves `finalizedAt` / `finalizedBy` alone — re-stamping them would rewrite when the decision was made — but a non-blank `note` IS recorded, because answering 200 to a dropped sentence is indistinguishable from storing it. Reopening clears the note: it explains one closure and carrying it forward would attach those words to the next.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.finalize_annotation_set(id, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param int id: (required)
-        :param FinalizeRequest body:
-        :param str on_behalf_of: Who is finalizing. Agents and admins only.
-        :return: AnnotationSetResponse
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.finalize_annotation_set_with_http_info(id, **kwargs)  # noqa: E501
-                else:
-                    (data) = self.finalize_annotation_set_with_http_info(id, **kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def finalize_annotation_set_with_http_info(self, id, **kwargs):  # noqa: E501
-        """Mark an annotation set finalized (done editing / polished)  # noqa: E501
-
-        `?onBehalfOf=` records the finalizing curator when the call is relayed by an agent, so `finalizedBy` names the person who decided rather than the software that transmitted it. Honoured only for `GROUP_AGENT` / `GROUP_ADMIN`.  The body is optional and carries one field, `note` — the curator's closing sentence, echoed back as `finalizedNotes`. Trimmed, and cut to 2048 characters rather than refused.  🛑 The note is the one part of this that is not idempotent. A second call on an already-finalized set leaves `finalizedAt` / `finalizedBy` alone — re-stamping them would rewrite when the decision was made — but a non-blank `note` IS recorded, because answering 200 to a dropped sentence is indistinguishable from storing it. Reopening clears the note: it explains one closure and carrying it forward would attach those words to the next.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.finalize_annotation_set_with_http_info(id, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param int id: (required)
-        :param FinalizeRequest body:
-        :param str on_behalf_of: Who is finalizing. Agents and admins only.
-        :return: AnnotationSetResponse
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['id', 'body', 'on_behalf_of']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method finalize_annotation_set" % key
-                )
-            params[key] = val
-        del params['kwargs']
-        # verify the required parameter 'id' is set
-        if ('id' not in params or
-                params['id'] is None):
-            raise ValueError("Missing the required parameter `id` when calling `finalize_annotation_set`")  # noqa: E501
-
-        collection_formats = {}
-
-        path_params = {}
-        if 'id' in params:
-            path_params['id'] = params['id']  # noqa: E501
-
-        query_params = []
-        if 'on_behalf_of' in params:
-            query_params.append(('onBehalfOf', params['on_behalf_of']))  # noqa: E501
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        if 'body' in params:
-            body_params = params['body']
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = 'AnnotationSetResponse' # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/annotation-sets/{id}/finalize', 'POST',
             path_params,
             query_params,
             header_params,
@@ -3205,7 +1334,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset21 dataset: (required)
+        :param Dataset6 dataset: (required)
         :param bool history: Return every decision rather than the standing one per key.
         :return: None
                  If the method is called asynchronously,
@@ -3240,7 +1369,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset21 dataset: (required)
+        :param Dataset6 dataset: (required)
         :param bool history: Return every decision rather than the standing one per key.
         :return: None
                  If the method is called asynchronously,
@@ -3324,7 +1453,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset4 dataset: (required)
+        :param Dataset1 dataset: (required)
         :return: None
                  If the method is called asynchronously,
                  returns the request thread.
@@ -3358,7 +1487,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset4 dataset: (required)
+        :param Dataset1 dataset: (required)
         :return: None
                  If the method is called asynchronously,
                  returns the request thread.
@@ -3541,121 +1670,6 @@ class DefaultApi(object):
             _request_timeout=params.get('_request_timeout'),
             collection_formats=collection_formats)
 
-    def get_curation_locks_bulk(self, **kwargs):  # noqa: E501
-        """Who is curating each of these datasets right now, for a large list  # noqa: E501
-
-        The same answer as `GET /datasets/curation/locks`, with the ids in a body instead of the query string.  🛑 It exists for size. A thousand ids is roughly 7 KB of query string, and the whole request line has to fit the container's header limit — 8 KB by default on Tomcat — so the queue's largest page sits right on that boundary. Past it the request is refused by the container with a 400 that says nothing about datasets, which is a bad way to find out. Use the GET for a handful and this for a page.  A POST that only reads, for the same reason `POST /datasets/pipeline-status` is one. It writes nothing and takes no lock.  Same contract as the GET: only held datasets appear, an absent id is not locked, a lapsed lease is not a holder, and unreadable ids are dropped. Cap: 1000 ids.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.get_curation_locks_bulk(async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param CurationLockBulkRequest body:
-        :return: ResponseDataObjectMapLongCurationLockResponse
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.get_curation_locks_bulk_with_http_info(**kwargs)  # noqa: E501
-                else:
-                    (data) = self.get_curation_locks_bulk_with_http_info(**kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def get_curation_locks_bulk_with_http_info(self, **kwargs):  # noqa: E501
-        """Who is curating each of these datasets right now, for a large list  # noqa: E501
-
-        The same answer as `GET /datasets/curation/locks`, with the ids in a body instead of the query string.  🛑 It exists for size. A thousand ids is roughly 7 KB of query string, and the whole request line has to fit the container's header limit — 8 KB by default on Tomcat — so the queue's largest page sits right on that boundary. Past it the request is refused by the container with a 400 that says nothing about datasets, which is a bad way to find out. Use the GET for a handful and this for a page.  A POST that only reads, for the same reason `POST /datasets/pipeline-status` is one. It writes nothing and takes no lock.  Same contract as the GET: only held datasets appear, an absent id is not locked, a lapsed lease is not a holder, and unreadable ids are dropped. Cap: 1000 ids.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.get_curation_locks_bulk_with_http_info(async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param CurationLockBulkRequest body:
-        :return: ResponseDataObjectMapLongCurationLockResponse
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['body']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method get_curation_locks_bulk" % key
-                )
-            params[key] = val
-        del params['kwargs']
-
-        collection_formats = {}
-
-        path_params = {}
-
-        query_params = []
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        if 'body' in params:
-            body_params = params['body']
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = 'ResponseDataObjectMapLongCurationLockResponse' # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/datasets/curation/locks/query', 'POST',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
     def get_dataset_all_publications(self, dataset, **kwargs):  # noqa: E501
         """Retrieve all publications associated with a dataset  # noqa: E501
 
@@ -3666,7 +1680,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset23 dataset: (required)
+        :param Dataset7 dataset: (required)
         :param bool include_rejected: Also list the publications that were considered for this dataset and ruled out.
         :return: ResponseDataObjectListDatasetPublicationValueObject
                  If the method is called asynchronously,
@@ -3701,7 +1715,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset23 dataset: (required)
+        :param Dataset7 dataset: (required)
         :param bool include_rejected: Also list the publications that were considered for this dataset and ruled out.
         :return: ResponseDataObjectListDatasetPublicationValueObject
                  If the method is called asynchronously,
@@ -3784,7 +1798,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset7 dataset: (required)
+        :param Dataset2 dataset: (required)
         :param bool include_free_text: Return tags that carry no ontology mapping. ON BY DEFAULT: the complete list is the safe one, because a caller cannot tell an incomplete list from a complete one by inspecting it. Set false only for a grounded-only view, and only where an unmapped string genuinely cannot be used — it cannot be searched or reasoned over, which is the whole argument for the old default. That default hid a real strain tag from a curator for an hour and silently truncated a corpus snapshot taken through this route.
         :return: ResponseDataObjectSetAnnotationValueObject
                  If the method is called asynchronously,
@@ -3818,7 +1832,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset7 dataset: (required)
+        :param Dataset2 dataset: (required)
         :param bool include_free_text: Return tags that carry no ontology mapping. ON BY DEFAULT: the complete list is the safe one, because a caller cannot tell an incomplete list from a complete one by inspecting it. Set false only for a grounded-only view, and only where an unmapped string genuinely cannot be used — it cannot be searched or reasoned over, which is the whole argument for the old default. That default hid a real strain tag from a curator for an hour and silently truncated a corpus snapshot taken through this route.
         :return: ResponseDataObjectSetAnnotationValueObject
                  If the method is called asynchronously,
@@ -3902,7 +1916,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset25 dataset: (required)
+        :param Dataset8 dataset: (required)
         :param str cursor: Opaque keyset-pagination cursor token.
         :param int limit: Maximum number of entries to return. In cursor mode this is the page size (default 20). Without a `cursor`, omitting it returns the whole trail; supplying it returns the MOST RECENT `limit` entries, still oldest-first within that window. Applied last, after `excludeEmpty` and `compact`.
         :param bool compact: Collapse runs of consecutive same-(eventType, performer, onBehalfOf) events into one entry with `collapsedCount` + `lastOccurrence`. Default `false`.
@@ -3940,7 +1954,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset25 dataset: (required)
+        :param Dataset8 dataset: (required)
         :param str cursor: Opaque keyset-pagination cursor token.
         :param int limit: Maximum number of entries to return. In cursor mode this is the page size (default 20). Without a `cursor`, omitting it returns the whole trail; supplying it returns the MOST RECENT `limit` entries, still oldest-first within that window. Applied last, after `excludeEmpty` and `compact`.
         :param bool compact: Collapse runs of consecutive same-(eventType, performer, onBehalfOf) events into one entry with `collapsedCount` + `lastOccurrence`. Default `false`.
@@ -4033,8 +2047,8 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset26 dataset: (required)
-        :param QuantitationType3 quantitation_type:
+        :param Dataset9 dataset: (required)
+        :param QuantitationType2 quantitation_type:
         :return: ResponseDataObjectListCellLevelCharacteristicsValueObject
                  If the method is called asynchronously,
                  returns the request thread.
@@ -4068,8 +2082,8 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset26 dataset: (required)
-        :param QuantitationType3 quantitation_type:
+        :param Dataset9 dataset: (required)
+        :param QuantitationType2 quantitation_type:
         :return: ResponseDataObjectListCellLevelCharacteristicsValueObject
                  If the method is called asynchronously,
                  returns the request thread.
@@ -4151,8 +2165,8 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset27 dataset: (required)
-        :param QuantitationType4 quantitation_type:
+        :param Dataset10 dataset: (required)
+        :param QuantitationType3 quantitation_type:
         :param str cell_type_assignment: The name of the cell type assignment to retrieve. If left unset, this the preferred one is returned.
         :param str protocol: The protocol of the cell type assignment to retrieve. This cannot be used in combination with `cellTypeAssignment`.
         :param list[str] exclude: Exclude `cellTypeIds`, the one-entry-per-cell array, from the output. The per-cell-type tally in `numberOfAssignedCellsByCellType` is unaffected, so a client that only needs the counts can drop the array.
@@ -4188,8 +2202,8 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset27 dataset: (required)
-        :param QuantitationType4 quantitation_type:
+        :param Dataset10 dataset: (required)
+        :param QuantitationType3 quantitation_type:
         :param str cell_type_assignment: The name of the cell type assignment to retrieve. If left unset, this the preferred one is returned.
         :param str protocol: The protocol of the cell type assignment to retrieve. This cannot be used in combination with `cellTypeAssignment`.
         :param list[str] exclude: Exclude `cellTypeIds`, the one-entry-per-cell array, from the output. The per-cell-type tally in `numberOfAssignedCellsByCellType` is unaffected, so a client that only needs the counts can drop the array.
@@ -4397,7 +2411,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset28 dataset: (required)
+        :param Dataset11 dataset: (required)
         :return: ResponseDataObjectCurationDetailsValueObject
                  If the method is called asynchronously,
                  returns the request thread.
@@ -4431,7 +2445,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset28 dataset: (required)
+        :param Dataset11 dataset: (required)
         :return: ResponseDataObjectCurationDetailsValueObject
                  If the method is called asynchronously,
                  returns the request thread.
@@ -4511,7 +2525,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset30 dataset: (required)
+        :param Dataset12 dataset: (required)
         :return: str
                  If the method is called asynchronously,
                  returns the request thread.
@@ -4544,7 +2558,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset30 dataset: (required)
+        :param Dataset12 dataset: (required)
         :return: str
                  If the method is called asynchronously,
                  returns the request thread.
@@ -4625,7 +2639,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset32 dataset: (required)
+        :param Dataset13 dataset: (required)
         :param int analysis_id: Identifier of the differential-expression analysis to retrieve. Required when the dataset has more than one analysis.
         :return: str
                  If the method is called asynchronously,
@@ -4660,7 +2674,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset32 dataset: (required)
+        :param Dataset13 dataset: (required)
         :param int analysis_id: Identifier of the differential-expression analysis to retrieve. Required when the dataset has more than one analysis.
         :return: str
                  If the method is called asynchronously,
@@ -4744,7 +2758,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset33 dataset: (required)
+        :param Dataset14 dataset: (required)
         :param int offset: This parameter is ignored and will be removed in the 2.10 release.
         :param int limit: This parameter is ignored and will be removed in the 2.10 release.
         :param bool include_assays: When true, populate the `bioAssaysAnalyzed` collection on each analysis. Defaults to false because thawing every BioAssay is expensive and the field is rarely consumed.
@@ -4781,7 +2795,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset33 dataset: (required)
+        :param Dataset14 dataset: (required)
         :param int offset: This parameter is ignored and will be removed in the 2.10 release.
         :param int limit: This parameter is ignored and will be removed in the 2.10 release.
         :param bool include_assays: When true, populate the `bioAssaysAnalyzed` collection on each analysis. Defaults to false because thawing every BioAssay is expensive and the field is rarely consumed.
@@ -4870,7 +2884,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset35 dataset: (required)
+        :param Dataset15 dataset: (required)
         :return: None
                  If the method is called asynchronously,
                  returns the request thread.
@@ -4903,7 +2917,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset35 dataset: (required)
+        :param Dataset15 dataset: (required)
         :return: None
                  If the method is called asynchronously,
                  returns the request thread.
@@ -4984,7 +2998,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset36 dataset: (required)
+        :param Dataset16 dataset: (required)
         :param str on_behalf_of: Whose draft to read. Agents and admins only; anyone else claiming another identity is refused.
         :return: None
                  If the method is called asynchronously,
@@ -5019,7 +3033,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset36 dataset: (required)
+        :param Dataset16 dataset: (required)
         :param str on_behalf_of: Whose draft to read. Agents and admins only; anyone else claiming another identity is refused.
         :return: None
                  If the method is called asynchronously,
@@ -5103,7 +3117,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset38 dataset: (required)
+        :param Dataset17 dataset: (required)
         :param bool filter:
         :return: str
                  If the method is called asynchronously,
@@ -5138,7 +3152,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset38 dataset: (required)
+        :param Dataset17 dataset: (required)
         :param bool filter:
         :return: str
                  If the method is called asynchronously,
@@ -5222,7 +3236,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset39 dataset: (required)
+        :param Dataset18 dataset: (required)
         :return: ResponseDataObjectGeeqValueObject
                  If the method is called asynchronously,
                  returns the request thread.
@@ -5256,7 +3270,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset39 dataset: (required)
+        :param Dataset18 dataset: (required)
         :return: ResponseDataObjectGeeqValueObject
                  If the method is called asynchronously,
                  returns the request thread.
@@ -5337,7 +3351,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset41 dataset: (required)
+        :param Dataset19 dataset: (required)
         :return: ResponseDataObjectGeeqValueObject
                  If the method is called asynchronously,
                  returns the request thread.
@@ -5371,7 +3385,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset41 dataset: (required)
+        :param Dataset19 dataset: (required)
         :return: ResponseDataObjectGeeqValueObject
                  If the method is called asynchronously,
                  returns the request thread.
@@ -5565,7 +3579,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset42 dataset: (required)
+        :param Dataset20 dataset: (required)
         :param bool include_summaries:
         :return: ResponseDataObjectObject
                  If the method is called asynchronously,
@@ -5600,7 +3614,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset42 dataset: (required)
+        :param Dataset20 dataset: (required)
         :param bool include_summaries:
         :return: ResponseDataObjectObject
                  If the method is called asynchronously,
@@ -5684,7 +3698,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset3 dataset: (required)
+        :param Dataset dataset: (required)
         :param str genes:
         :param str probes:
         :param int result_set:
@@ -5729,7 +3743,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset3 dataset: (required)
+        :param Dataset dataset: (required)
         :param str genes:
         :param str probes:
         :param int result_set:
@@ -5843,7 +3857,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset43 dataset: (required)
+        :param Dataset21 dataset: (required)
         :return: ResponseDataObjectMeanVarianceValueObject
                  If the method is called asynchronously,
                  returns the request thread.
@@ -5877,7 +3891,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset43 dataset: (required)
+        :param Dataset21 dataset: (required)
         :return: ResponseDataObjectMeanVarianceValueObject
                  If the method is called asynchronously,
                  returns the request thread.
@@ -5958,7 +3972,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset44 dataset: (required)
+        :param Dataset22 dataset: (required)
         :param str type: (required)
         :return: str
                  If the method is called asynchronously,
@@ -5993,7 +4007,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset44 dataset: (required)
+        :param Dataset22 dataset: (required)
         :param str type: (required)
         :return: str
                  If the method is called asynchronously,
@@ -6081,7 +4095,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset45 dataset: (required)
+        :param Dataset23 dataset: (required)
         :return: ResponseDataObjectListDatasetMetadataFileValueObject
                  If the method is called asynchronously,
                  returns the request thread.
@@ -6115,7 +4129,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset45 dataset: (required)
+        :param Dataset23 dataset: (required)
         :return: ResponseDataObjectListDatasetMetadataFileValueObject
                  If the method is called asynchronously,
                  returns the request thread.
@@ -6196,7 +4210,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset46 dataset: (required)
+        :param Dataset24 dataset: (required)
         :return: ResponseDataObjectDatasetPermissionsValueObject
                  If the method is called asynchronously,
                  returns the request thread.
@@ -6230,7 +4244,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset46 dataset: (required)
+        :param Dataset24 dataset: (required)
         :return: ResponseDataObjectDatasetPermissionsValueObject
                  If the method is called asynchronously,
                  returns the request thread.
@@ -6311,7 +4325,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset48 dataset: (required)
+        :param Dataset25 dataset: (required)
         :return: ResponseDataObjectPipelineStatusValueObject
                  If the method is called asynchronously,
                  returns the request thread.
@@ -6345,7 +4359,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset48 dataset: (required)
+        :param Dataset25 dataset: (required)
         :return: ResponseDataObjectPipelineStatusValueObject
                  If the method is called asynchronously,
                  returns the request thread.
@@ -6416,121 +4430,6 @@ class DefaultApi(object):
             _request_timeout=params.get('_request_timeout'),
             collection_formats=collection_formats)
 
-    def get_dataset_pipeline_status_bulk(self, **kwargs):  # noqa: E501
-        """Bulk per-step pipeline status for many datasets in one round-trip  # noqa: E501
-
-        Returns a map of dataset ID → {@link PipelineStatusValueObject}, one entry per requested ID that the caller can read. Mirrors the single-EE `GET /{dataset}/pipelineStatus` handler in response shape, but batches the underlying audit-event lookup and DEA-existence query so that loading a workflow-list page of 20–50 experiments costs a fixed number of queries per concern rather than one set per row (the audit-event lookup is one query per event type — 18 of them — whatever the page size). Each entry carries `lastUpdate` — a short label for the most recent recorded change, plus its date and performer — so a list row can read \"Updated from GEO · 3 days ago\" without pulling the audit trail. ACL behaviour: IDs the caller cannot read are silently dropped from the result map (no 403 for the batch). Hard cap: 500 IDs per request.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.get_dataset_pipeline_status_bulk(async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param PipelineStatusBulkRequest body:
-        :return: ResponseDataObjectMapLongPipelineStatusValueObject
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.get_dataset_pipeline_status_bulk_with_http_info(**kwargs)  # noqa: E501
-                else:
-                    (data) = self.get_dataset_pipeline_status_bulk_with_http_info(**kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def get_dataset_pipeline_status_bulk_with_http_info(self, **kwargs):  # noqa: E501
-        """Bulk per-step pipeline status for many datasets in one round-trip  # noqa: E501
-
-        Returns a map of dataset ID → {@link PipelineStatusValueObject}, one entry per requested ID that the caller can read. Mirrors the single-EE `GET /{dataset}/pipelineStatus` handler in response shape, but batches the underlying audit-event lookup and DEA-existence query so that loading a workflow-list page of 20–50 experiments costs a fixed number of queries per concern rather than one set per row (the audit-event lookup is one query per event type — 18 of them — whatever the page size). Each entry carries `lastUpdate` — a short label for the most recent recorded change, plus its date and performer — so a list row can read \"Updated from GEO · 3 days ago\" without pulling the audit trail. ACL behaviour: IDs the caller cannot read are silently dropped from the result map (no 403 for the batch). Hard cap: 500 IDs per request.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.get_dataset_pipeline_status_bulk_with_http_info(async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param PipelineStatusBulkRequest body:
-        :return: ResponseDataObjectMapLongPipelineStatusValueObject
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['body']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method get_dataset_pipeline_status_bulk" % key
-                )
-            params[key] = val
-        del params['kwargs']
-
-        collection_formats = {}
-
-        path_params = {}
-
-        query_params = []
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        if 'body' in params:
-            body_params = params['body']
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = 'ResponseDataObjectMapLongPipelineStatusValueObject' # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/datasets/pipeline-status', 'POST',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
     def get_dataset_platforms(self, dataset, **kwargs):  # noqa: E501
         """Retrieve the platforms of a dataset  # noqa: E501
 
@@ -6541,7 +4440,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset49 dataset: (required)
+        :param Dataset26 dataset: (required)
         :param bool original: Return the platforms the dataset was originally submitted on, rather than the ones in use. Empty when it was never switched.
         :return: ResponseDataObjectListArrayDesignValueObject
                  If the method is called asynchronously,
@@ -6576,7 +4475,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset49 dataset: (required)
+        :param Dataset26 dataset: (required)
         :param bool original: Return the platforms the dataset was originally submitted on, rather than the ones in use. Empty when it was never switched.
         :return: ResponseDataObjectListArrayDesignValueObject
                  If the method is called asynchronously,
@@ -6660,7 +4559,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset17 dataset: (required)
+        :param Dataset4 dataset: (required)
         :param bool filter:
         :return: str
                  If the method is called asynchronously,
@@ -6695,7 +4594,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset17 dataset: (required)
+        :param Dataset4 dataset: (required)
         :param bool filter:
         :return: str
                  If the method is called asynchronously,
@@ -6779,7 +4678,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset50 dataset: (required)
+        :param Dataset27 dataset: (required)
         :return: ResponseDataObjectSequencingQcMetricsValueObject
                  If the method is called asynchronously,
                  returns the request thread.
@@ -6813,7 +4712,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset50 dataset: (required)
+        :param Dataset27 dataset: (required)
         :return: ResponseDataObjectSequencingQcMetricsValueObject
                  If the method is called asynchronously,
                  returns the request thread.
@@ -6893,7 +4792,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset51 dataset: (required)
+        :param Dataset28 dataset: (required)
         :return: ResponseDataObjectSetQuantitationTypeValueObject
                  If the method is called asynchronously,
                  returns the request thread.
@@ -6926,7 +4825,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset51 dataset: (required)
+        :param Dataset28 dataset: (required)
         :return: ResponseDataObjectSetQuantitationTypeValueObject
                  If the method is called asynchronously,
                  returns the request thread.
@@ -7007,7 +4906,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset19 dataset: (required)
+        :param Dataset5 dataset: (required)
         :param QuantitationType1 quantitation_type:
         :return: str
                  If the method is called asynchronously,
@@ -7042,7 +4941,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset19 dataset: (required)
+        :param Dataset5 dataset: (required)
         :param QuantitationType1 quantitation_type:
         :return: str
                  If the method is called asynchronously,
@@ -7126,7 +5025,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset52 dataset: (required)
+        :param Dataset29 dataset: (required)
         :param str matrix: Which stored matrix to return: `best` (the regressed one where it exists, else the full one), `regressed`, or `full`.
         :return: ResponseDataObjectSampleCorrelationMatrixValueObject
                  If the method is called asynchronously,
@@ -7161,7 +5060,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset52 dataset: (required)
+        :param Dataset29 dataset: (required)
         :param str matrix: Which stored matrix to return: `best` (the regressed one where it exists, else the full one), `regressed`, or `full`.
         :return: ResponseDataObjectSampleCorrelationMatrixValueObject
                  If the method is called asynchronously,
@@ -7245,8 +5144,8 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset53 dataset: (required)
-        :param QuantitationType5 quantitation_type:
+        :param Dataset30 dataset: (required)
+        :param QuantitationType4 quantitation_type:
         :param bool use_processed_quantitation_type:
         :param str cursor: Opaque keyset-pagination cursor token; not supported in combination with `quantitationType` or `useProcessedQuantitationType`.
         :param int limit: Page size. Supplying it selects cursor mode, starting at the first page when no `cursor` is given; defaults to 20 when a `cursor` is given without one. Omit both to get the unpaginated legacy body.
@@ -7285,8 +5184,8 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset53 dataset: (required)
-        :param QuantitationType5 quantitation_type:
+        :param Dataset30 dataset: (required)
+        :param QuantitationType4 quantitation_type:
         :param bool use_processed_quantitation_type:
         :param str cursor: Opaque keyset-pagination cursor token; not supported in combination with `quantitationType` or `useProcessedQuantitationType`.
         :param int limit: Page size. Supplying it selects cursor mode, starting at the first page when no `cursor` is given; defaults to 20 when a `cursor` is given without one. Omit both to get the unpaginated legacy body.
@@ -7384,8 +5283,8 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset54 dataset: (required)
-        :param QuantitationType6 quantitation_type:
+        :param Dataset31 dataset: (required)
+        :param QuantitationType5 quantitation_type:
         :param list[str] exclude: Exclude cell IDs from the output
         :return: ResponseDataObjectSingleCellDimensionValueObject
                  If the method is called asynchronously,
@@ -7419,8 +5318,8 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset54 dataset: (required)
-        :param QuantitationType6 quantitation_type:
+        :param Dataset31 dataset: (required)
+        :param QuantitationType5 quantitation_type:
         :param list[str] exclude: Exclude cell IDs from the output
         :return: ResponseDataObjectSingleCellDimensionValueObject
                  If the method is called asynchronously,
@@ -7506,8 +5405,8 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset55 dataset: (required)
-        :param QuantitationType7 quantitation_type:
+        :param Dataset32 dataset: (required)
+        :param QuantitationType6 quantitation_type:
         :return: str
                  If the method is called asynchronously,
                  returns the request thread.
@@ -7540,8 +5439,8 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset55 dataset: (required)
-        :param QuantitationType7 quantitation_type:
+        :param Dataset32 dataset: (required)
+        :param QuantitationType6 quantitation_type:
         :return: str
                  If the method is called asynchronously,
                  returns the request thread.
@@ -7624,7 +5523,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset56 dataset: (required)
+        :param Dataset33 dataset: (required)
         :return: ResponseDataObjectJsonNode
                  If the method is called asynchronously,
                  returns the request thread.
@@ -7658,7 +5557,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset56 dataset: (required)
+        :param Dataset33 dataset: (required)
         :return: ResponseDataObjectJsonNode
                  If the method is called asynchronously,
                  returns the request thread.
@@ -7738,7 +5637,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset57 dataset: (required)
+        :param Dataset34 dataset: (required)
         :param int sub_set: (required)
         :return: ResponseDataObjectExpressionExperimentSubSetWithGroupsValueObject
                  If the method is called asynchronously,
@@ -7772,7 +5671,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset57 dataset: (required)
+        :param Dataset34 dataset: (required)
         :param int sub_set: (required)
         :return: ResponseDataObjectExpressionExperimentSubSetWithGroupsValueObject
                  If the method is called asynchronously,
@@ -7859,7 +5758,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset58 dataset: (required)
+        :param Dataset35 dataset: (required)
         :param int sub_set_group: (required)
         :param bool include_predicted_outliers: Include `predictedOutlier` on each subset's assays. Off by default: it loads the dataset's whole sample-correlation matrix. The curated `outlier` flag is always returned.
         :return: ResponseDataObjectExpressionExperimentSubSetGroupValueObject
@@ -7894,7 +5793,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset58 dataset: (required)
+        :param Dataset35 dataset: (required)
         :param int sub_set_group: (required)
         :param bool include_predicted_outliers: Include `predictedOutlier` on each subset's assays. Off by default: it loads the dataset's whole sample-correlation matrix. The curated `outlier` flag is always returned.
         :return: ResponseDataObjectExpressionExperimentSubSetGroupValueObject
@@ -7984,7 +5883,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset59 dataset: (required)
+        :param Dataset36 dataset: (required)
         :return: ResponseDataObjectListExpressionExperimentSubSetGroupValueObject
                  If the method is called asynchronously,
                  returns the request thread.
@@ -8017,7 +5916,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset59 dataset: (required)
+        :param Dataset36 dataset: (required)
         :return: ResponseDataObjectListExpressionExperimentSubSetGroupValueObject
                  If the method is called asynchronously,
                  returns the request thread.
@@ -8098,7 +5997,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset60 dataset: (required)
+        :param Dataset37 dataset: (required)
         :param int sub_set: (required)
         :param str cursor: Opaque keyset-pagination cursor token.
         :param int limit: Page size. Supplying it selects cursor mode, starting at the first page when no `cursor` is given; defaults to 20 when a `cursor` is given without one. Omit both to get the unpaginated legacy body.
@@ -8136,7 +6035,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset60 dataset: (required)
+        :param Dataset37 dataset: (required)
         :param int sub_set: (required)
         :param str cursor: Opaque keyset-pagination cursor token.
         :param int limit: Page size. Supplying it selects cursor mode, starting at the first page when no `cursor` is given; defaults to 20 when a `cursor` is given without one. Omit both to get the unpaginated legacy body.
@@ -8232,7 +6131,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset61 dataset: (required)
+        :param Dataset38 dataset: (required)
         :return: ResponseDataObjectListExpressionExperimentSubSetWithGroupsValueObject
                  If the method is called asynchronously,
                  returns the request thread.
@@ -8265,7 +6164,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset61 dataset: (required)
+        :param Dataset38 dataset: (required)
         :return: ResponseDataObjectListExpressionExperimentSubSetWithGroupsValueObject
                  If the method is called asynchronously,
                  returns the request thread.
@@ -8345,7 +6244,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset62 dataset: (required)
+        :param Dataset39 dataset: (required)
         :return: ResponseDataObjectSimpleSVDValueObject
                  If the method is called asynchronously,
                  returns the request thread.
@@ -8378,7 +6277,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset62 dataset: (required)
+        :param Dataset39 dataset: (required)
         :return: ResponseDataObjectSimpleSVDValueObject
                  If the method is called asynchronously,
                  returns the request thread.
@@ -8459,7 +6358,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset63 dataset: (required)
+        :param Dataset40 dataset: (required)
         :param int pc: 1-indexed principal component number. (required)
         :param int top: Number of top loadings to return (max 500).
         :param str direction: `both` (sort by |loading| desc, default), `positive` (loading > 0 desc), `negative` (loading < 0 asc).
@@ -8496,7 +6395,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset63 dataset: (required)
+        :param Dataset40 dataset: (required)
         :param int pc: 1-indexed principal component number. (required)
         :param int top: Number of top loadings to return (max 500).
         :param str direction: `both` (sort by |loading| desc, default), `positive` (loading > 0 desc), `negative` (loading < 0 asc).
@@ -8590,7 +6489,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset64 dataset: (required)
+        :param Dataset41 dataset: (required)
         :param str cursor: Opaque keyset-pagination cursor token.
         :param int limit: Page size for cursor mode (ignored when no `cursor` is supplied).
         :return: ResponseDataObjectListTicketValueObject
@@ -8626,7 +6525,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset64 dataset: (required)
+        :param Dataset41 dataset: (required)
         :param str cursor: Opaque keyset-pagination cursor token.
         :param int limit: Page size for cursor mode (ignored when no `cursor` is supplied).
         :return: ResponseDataObjectListTicketValueObject
@@ -8689,121 +6588,6 @@ class DefaultApi(object):
 
         return self.api_client.call_api(
             '/datasets/{dataset}/tickets', 'GET',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
-    def get_dataset_tickets_bulk(self, **kwargs):  # noqa: E501
-        """Which open tickets hold each of these datasets  # noqa: E501
-
-        The bulk read of `GET /datasets/{dataset}/tickets`. Ticket membership is the one thing an experiment-list row cannot get from the dataset itself, and asking per row is a round-trip per row to paint one screen.  **Only datasets that are on an open ticket appear in the map.** An id that is absent is on none — the same key-off-presence contract as `POST /datasets/curation/locks/query`, so a page of fifty quiet rows is not fifty empty arrays. This makes the absence meaningful: a caller that got a 200 can render \"not on a ticket\" rather than \"not known\".  Each entry is a ticket SUMMARY — id, title, type, state, priority, updatedAt, and a `targetCount` the database counts. Not the targets: a scratchpad holding five hundred datasets would otherwise ship five hundred rows per experiment on the page. Fetch `GET /tickets/{id}` when the members are actually wanted.  Each entry also carries `targetStatus`: THIS dataset's status on that ticket (`NOT_DONE`, `UNDERWAY`, `DONE`), never an aggregate over the ticket's other targets. A queue deciding whether a dataset still has outstanding work reads this; without it every summary row looks outstanding, including one already done.  Same scope as the single-dataset route: OPEN and IN_PROGRESS only, scratchpads included (a dataset sitting in a curator's scratchpad is on a ticket). Tickets are ordered most recently updated first.  A POST that only reads, for the same reason `POST /datasets/pipeline-status` is one — a page of ids does not fit a query string. It writes nothing and takes no lock.  Datasets the caller cannot read are dropped rather than failing the request. Cap: 1000 ids.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.get_dataset_tickets_bulk(async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param DatasetTicketsBulkRequest body:
-        :return: ResponseDataObjectMapLongListTicketSummaryForTargetValueObject
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.get_dataset_tickets_bulk_with_http_info(**kwargs)  # noqa: E501
-                else:
-                    (data) = self.get_dataset_tickets_bulk_with_http_info(**kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def get_dataset_tickets_bulk_with_http_info(self, **kwargs):  # noqa: E501
-        """Which open tickets hold each of these datasets  # noqa: E501
-
-        The bulk read of `GET /datasets/{dataset}/tickets`. Ticket membership is the one thing an experiment-list row cannot get from the dataset itself, and asking per row is a round-trip per row to paint one screen.  **Only datasets that are on an open ticket appear in the map.** An id that is absent is on none — the same key-off-presence contract as `POST /datasets/curation/locks/query`, so a page of fifty quiet rows is not fifty empty arrays. This makes the absence meaningful: a caller that got a 200 can render \"not on a ticket\" rather than \"not known\".  Each entry is a ticket SUMMARY — id, title, type, state, priority, updatedAt, and a `targetCount` the database counts. Not the targets: a scratchpad holding five hundred datasets would otherwise ship five hundred rows per experiment on the page. Fetch `GET /tickets/{id}` when the members are actually wanted.  Each entry also carries `targetStatus`: THIS dataset's status on that ticket (`NOT_DONE`, `UNDERWAY`, `DONE`), never an aggregate over the ticket's other targets. A queue deciding whether a dataset still has outstanding work reads this; without it every summary row looks outstanding, including one already done.  Same scope as the single-dataset route: OPEN and IN_PROGRESS only, scratchpads included (a dataset sitting in a curator's scratchpad is on a ticket). Tickets are ordered most recently updated first.  A POST that only reads, for the same reason `POST /datasets/pipeline-status` is one — a page of ids does not fit a query string. It writes nothing and takes no lock.  Datasets the caller cannot read are dropped rather than failing the request. Cap: 1000 ids.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.get_dataset_tickets_bulk_with_http_info(async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param DatasetTicketsBulkRequest body:
-        :return: ResponseDataObjectMapLongListTicketSummaryForTargetValueObject
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['body']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method get_dataset_tickets_bulk" % key
-                )
-            params[key] = val
-        del params['kwargs']
-
-        collection_formats = {}
-
-        path_params = {}
-
-        query_params = []
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        if 'body' in params:
-            body_params = params['body']
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = 'ResponseDataObjectMapLongListTicketSummaryForTargetValueObject' # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/datasets/tickets', 'POST',
             path_params,
             query_params,
             header_params,
@@ -9615,7 +7399,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Taxon4 taxon: (required)
+        :param Taxon3 taxon: (required)
         :param Gene1 gene: (required)
         :param QueryArg query:
         :param FilterArgExpressionExperiment filter:
@@ -9655,7 +7439,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Taxon4 taxon: (required)
+        :param Taxon3 taxon: (required)
         :param Gene1 gene: (required)
         :param QueryArg query:
         :param FilterArgExpressionExperiment filter:
@@ -9905,7 +7689,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Taxon5 taxon: (required)
+        :param Taxon4 taxon: (required)
         :param Gene3 gene: (required)
         :param QueryArg query:
         :param FilterArgExpressionExperiment filter:
@@ -9948,7 +7732,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Taxon5 taxon: (required)
+        :param Taxon4 taxon: (required)
         :param Gene3 gene: (required)
         :param QueryArg query:
         :param FilterArgExpressionExperiment filter:
@@ -10195,7 +7979,7 @@ class DefaultApi(object):
 
         :param async_req bool
         :param list[object] datasets: (required)
-        :param Taxon6 taxon: (required)
+        :param Taxon5 taxon: (required)
         :param list[object] genes: (required)
         :param bool keep_non_specific:
         :param str consolidate:
@@ -10233,7 +8017,7 @@ class DefaultApi(object):
 
         :param async_req bool
         :param list[object] datasets: (required)
-        :param Taxon6 taxon: (required)
+        :param Taxon5 taxon: (required)
         :param list[object] genes: (required)
         :param bool keep_non_specific:
         :param str consolidate:
@@ -11765,7 +9549,7 @@ class DefaultApi(object):
 
         :param async_req bool
         :param str term_uri: (required)
-        :param Taxon9 taxon:
+        :param Taxon8 taxon:
         :param int offset:
         :param int limit: Maximum genes per page; capped at 200.
         :param bool propagate: Walk GO subClassOf descendants of {termUri} and union the gene sets. Default false.
@@ -11804,7 +9588,7 @@ class DefaultApi(object):
 
         :param async_req bool
         :param str term_uri: (required)
-        :param Taxon9 taxon:
+        :param Taxon8 taxon:
         :param int offset:
         :param int limit: Maximum genes per page; capped at 200.
         :param bool propagate: Walk GO subClassOf descendants of {termUri} and union the gene sets. Default false.
@@ -12947,7 +10731,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Platform1 platform: (required)
+        :param Platform platform: (required)
         :param str type: Which annotation file to serve.
         :return: str
                  If the method is called asynchronously,
@@ -12982,7 +10766,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Platform1 platform: (required)
+        :param Platform platform: (required)
         :param str type: Which annotation file to serve.
         :return: str
                  If the method is called asynchronously,
@@ -13185,7 +10969,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Platform2 platform: (required)
+        :param Platform1 platform: (required)
         :param int offset:
         :param int limit:
         :param str cursor: Opaque keyset-pagination cursor token; mutually exclusive with `offset`.
@@ -13222,7 +11006,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Platform2 platform: (required)
+        :param Platform1 platform: (required)
         :param int offset:
         :param int limit:
         :param str cursor: Opaque keyset-pagination cursor token; mutually exclusive with `offset`.
@@ -13312,7 +11096,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Platform3 platform: (required)
+        :param Platform2 platform: (required)
         :param list[object] probes: (required)
         :param int offset:
         :param int limit:
@@ -13352,7 +11136,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Platform3 platform: (required)
+        :param Platform2 platform: (required)
         :param list[object] probes: (required)
         :param int offset:
         :param int limit:
@@ -13456,7 +11240,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Platform4 platform: (required)
+        :param Platform3 platform: (required)
         :param Probe probe: (required)
         :param int offset:
         :param int limit:
@@ -13494,7 +11278,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Platform4 platform: (required)
+        :param Platform3 platform: (required)
         :param Probe probe: (required)
         :param int offset:
         :param int limit:
@@ -13591,7 +11375,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Platform5 platform: (required)
+        :param Platform4 platform: (required)
         :param Probe1 probe: (required)
         :return: ResponseDataObjectCompositeSequenceValueObject
                  If the method is called asynchronously,
@@ -13626,7 +11410,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Platform5 platform: (required)
+        :param Platform4 platform: (required)
         :param Probe1 probe: (required)
         :return: ResponseDataObjectCompositeSequenceValueObject
                  If the method is called asynchronously,
@@ -13714,7 +11498,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Platform6 platform: (required)
+        :param Platform5 platform: (required)
         :param Probe2 probe: (required)
         :return: str
                  If the method is called asynchronously,
@@ -13749,7 +11533,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Platform6 platform: (required)
+        :param Platform5 platform: (required)
         :param Probe2 probe: (required)
         :return: str
                  If the method is called asynchronously,
@@ -13837,7 +11621,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Platform7 platform: (required)
+        :param Platform6 platform: (required)
         :param int offset:
         :param int limit:
         :param str cursor: Opaque keyset-pagination cursor token; mutually exclusive with `offset`.
@@ -13878,7 +11662,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Platform7 platform: (required)
+        :param Platform6 platform: (required)
         :param int offset:
         :param int limit:
         :param str cursor: Opaque keyset-pagination cursor token; mutually exclusive with `offset`.
@@ -13980,7 +11764,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Platform8 platform: (required)
+        :param Platform7 platform: (required)
         :param str cursor: Opaque keyset-pagination cursor token.
         :param int limit: Page size for cursor mode (ignored when no `cursor` is supplied).
         :return: ResponseDataObjectTicketValueObject
@@ -14016,7 +11800,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Platform8 platform: (required)
+        :param Platform7 platform: (required)
         :param str cursor: Opaque keyset-pagination cursor token.
         :param int limit: Page size for cursor mode (ignored when no `cursor` is supplied).
         :return: ResponseDataObjectTicketValueObject
@@ -14882,7 +12666,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset10 dataset: (required)
+        :param Dataset3 dataset: (required)
         :param int bio_assay_id: (required)
         :return: ResponseDataObjectSetAnnotationValueObject
                  If the method is called asynchronously,
@@ -14917,7 +12701,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset10 dataset: (required)
+        :param Dataset3 dataset: (required)
         :param int bio_assay_id: (required)
         :return: ResponseDataObjectSetAnnotationValueObject
                  If the method is called asynchronously,
@@ -15569,7 +13353,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Taxon11 taxon: (required)
+        :param Taxon10 taxon: (required)
         :param FilterArgExpressionExperiment filter:
         :param int offset:
         :param int limit:
@@ -15608,7 +13392,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Taxon11 taxon: (required)
+        :param Taxon10 taxon: (required)
         :param FilterArgExpressionExperiment filter:
         :param int offset:
         :param int limit:
@@ -15703,7 +13487,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Taxon12 taxon: (required)
+        :param Taxon11 taxon: (required)
         :param Gene10 gene: (required)
         :return: ResponseDataObjectListGeneOntologyTermValueObject
                  If the method is called asynchronously,
@@ -15737,7 +13521,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Taxon12 taxon: (required)
+        :param Taxon11 taxon: (required)
         :param Gene10 gene: (required)
         :return: ResponseDataObjectListGeneOntologyTermValueObject
                  If the method is called asynchronously,
@@ -15824,7 +13608,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Taxon13 taxon: (required)
+        :param Taxon12 taxon: (required)
         :param Gene11 gene: (required)
         :return: ResponseDataObjectListPhysicalLocationValueObject
                  If the method is called asynchronously,
@@ -15858,7 +13642,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Taxon13 taxon: (required)
+        :param Taxon12 taxon: (required)
         :param Gene11 gene: (required)
         :return: ResponseDataObjectListPhysicalLocationValueObject
                  If the method is called asynchronously,
@@ -15946,7 +13730,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Taxon14 taxon: (required)
+        :param Taxon13 taxon: (required)
         :param Gene12 gene: (required)
         :param int offset:
         :param int limit:
@@ -15984,7 +13768,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Taxon14 taxon: (required)
+        :param Taxon13 taxon: (required)
         :param Gene12 gene: (required)
         :param int offset:
         :param int limit:
@@ -16081,7 +13865,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Taxon15 taxon: (required)
+        :param Taxon14 taxon: (required)
         :param int offset:
         :param int limit:
         :param str cursor: Opaque keyset-pagination cursor token; mutually exclusive with `offset`.
@@ -16118,7 +13902,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Taxon15 taxon: (required)
+        :param Taxon14 taxon: (required)
         :param int offset:
         :param int limit:
         :param str cursor: Opaque keyset-pagination cursor token; mutually exclusive with `offset`.
@@ -16207,7 +13991,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Taxon16 taxon: (required)
+        :param Taxon15 taxon: (required)
         :param list[object] gene: (required)
         :return: ResponseDataObjectListGeneValueObject
                  If the method is called asynchronously,
@@ -16241,7 +14025,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Taxon16 taxon: (required)
+        :param Taxon15 taxon: (required)
         :param list[object] gene: (required)
         :return: ResponseDataObjectListGeneValueObject
                  If the method is called asynchronously,
@@ -16329,7 +14113,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Taxon17 taxon: (required)
+        :param Taxon16 taxon: (required)
         :param str chromosome: (required)
         :param int start: (required)
         :param int size: (required)
@@ -16366,7 +14150,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Taxon17 taxon: (required)
+        :param Taxon16 taxon: (required)
         :param str chromosome: (required)
         :param int start: (required)
         :param int size: (required)
@@ -16576,121 +14360,6 @@ class DefaultApi(object):
             _request_timeout=params.get('_request_timeout'),
             collection_formats=collection_formats)
 
-    def import_dataset(self, **kwargs):  # noqa: E501
-        """Import a dataset from GEO (or ArrayExpress) by accession  # noqa: E501
-
-        Submits an async load task and returns 202 with a `Location` header pointing at `/tasks/{taskId}`. Body must include `accession`. Optional flags map to the corresponding fields on `ExpressionExperimentLoadTaskCommand`, including `suppressPostProcessing` (skip processed-vector creation and diagnostics, mirroring the CLI `-nopost` flag; the usual case for RNA-seq loads reanalyzed from raw sequence later). The load runs in the background, so its outcome (including any failure) is reported by polling `/tasks/{taskId}`: a failed load carries a structured `error` (`code` + `message`, e.g. `NETWORK_ERROR`, `ALREADY_EXISTS`, `INVALID_ACCESSION`, `BLACKLISTED`, `SUPERSERIES_NOT_ALLOWED`).  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.import_dataset(async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param DatasetImportRequest body:
-        :return: ResponseDataObjectTaskStatusValueObject
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.import_dataset_with_http_info(**kwargs)  # noqa: E501
-                else:
-                    (data) = self.import_dataset_with_http_info(**kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def import_dataset_with_http_info(self, **kwargs):  # noqa: E501
-        """Import a dataset from GEO (or ArrayExpress) by accession  # noqa: E501
-
-        Submits an async load task and returns 202 with a `Location` header pointing at `/tasks/{taskId}`. Body must include `accession`. Optional flags map to the corresponding fields on `ExpressionExperimentLoadTaskCommand`, including `suppressPostProcessing` (skip processed-vector creation and diagnostics, mirroring the CLI `-nopost` flag; the usual case for RNA-seq loads reanalyzed from raw sequence later). The load runs in the background, so its outcome (including any failure) is reported by polling `/tasks/{taskId}`: a failed load carries a structured `error` (`code` + `message`, e.g. `NETWORK_ERROR`, `ALREADY_EXISTS`, `INVALID_ACCESSION`, `BLACKLISTED`, `SUPERSERIES_NOT_ALLOWED`).  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.import_dataset_with_http_info(async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param DatasetImportRequest body:
-        :return: ResponseDataObjectTaskStatusValueObject
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['body']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method import_dataset" % key
-                )
-            params[key] = val
-        del params['kwargs']
-
-        collection_formats = {}
-
-        path_params = {}
-
-        query_params = []
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        if 'body' in params:
-            body_params = params['body']
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = 'ResponseDataObjectTaskStatusValueObject' # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/datasets/import', 'POST',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
     def list_annotation_sets_across(self, **kwargs):  # noqa: E501
         """Cross-experiment list of annotation sets (thin projection)  # noqa: E501
 
@@ -16844,7 +14513,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset66 dataset: (required)
+        :param Dataset42 dataset: (required)
         :param str role: Filter by role: `proposal`, `draft`, `snapshot`, `commit`, or `all` (default).
         :param str source: Filter by source.
         :param str created_by: Filter by createdBy (username or agent run identifier).
@@ -16882,7 +14551,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset66 dataset: (required)
+        :param Dataset42 dataset: (required)
         :param str role: Filter by role: `proposal`, `draft`, `snapshot`, `commit`, or `all` (default).
         :param str source: Filter by source.
         :param str created_by: Filter by createdBy (username or agent run identifier).
@@ -16951,718 +14620,6 @@ class DefaultApi(object):
 
         return self.api_client.call_api(
             '/datasets/{dataset}/annotation-sets', 'GET',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
-    def login(self, **kwargs):  # noqa: E501
-        """Authenticate username/password and mint an opaque bearer token  # noqa: E501
-
-        POST a JSON body {username, password}. On success the response carries {token, user} where token is an opaque random string; send it as Authorization: Bearer <token> on subsequent calls.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.login(async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param LoginRequest body:
-        :return: None
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.login_with_http_info(**kwargs)  # noqa: E501
-                else:
-                    (data) = self.login_with_http_info(**kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def login_with_http_info(self, **kwargs):  # noqa: E501
-        """Authenticate username/password and mint an opaque bearer token  # noqa: E501
-
-        POST a JSON body {username, password}. On success the response carries {token, user} where token is an opaque random string; send it as Authorization: Bearer <token> on subsequent calls.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.login_with_http_info(async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param LoginRequest body:
-        :return: None
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['body']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method login" % key
-                )
-            params[key] = val
-        del params['kwargs']
-
-        collection_formats = {}
-
-        path_params = {}
-
-        query_params = []
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        if 'body' in params:
-            body_params = params['body']
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = None # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/login', 'POST',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
-    def logout(self, **kwargs):  # noqa: E501
-        """Revoke the presented bearer token (idempotent)  # noqa: E501
-
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.logout(async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :return: None
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.logout_with_http_info(**kwargs)  # noqa: E501
-                else:
-                    (data) = self.logout_with_http_info(**kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def logout_with_http_info(self, **kwargs):  # noqa: E501
-        """Revoke the presented bearer token (idempotent)  # noqa: E501
-
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.logout_with_http_info(async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :return: None
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = []  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method logout" % key
-                )
-            params[key] = val
-        del params['kwargs']
-
-        collection_formats = {}
-
-        path_params = {}
-
-        query_params = []
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = None # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/logout', 'POST',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
-    def make_dataset_private(self, dataset, **kwargs):  # noqa: E501
-        """Make a dataset private  # noqa: E501
-
-        Removes the `IS_AUTHENTICATED_ANONYMOUSLY` read ACE from the dataset. Idempotent.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.make_dataset_private(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset68 dataset: (required)
-        :return: ResponseDataObjectDatasetPermissionsValueObject
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.make_dataset_private_with_http_info(dataset, **kwargs)  # noqa: E501
-                else:
-                    (data) = self.make_dataset_private_with_http_info(dataset, **kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def make_dataset_private_with_http_info(self, dataset, **kwargs):  # noqa: E501
-        """Make a dataset private  # noqa: E501
-
-        Removes the `IS_AUTHENTICATED_ANONYMOUSLY` read ACE from the dataset. Idempotent.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.make_dataset_private_with_http_info(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset68 dataset: (required)
-        :return: ResponseDataObjectDatasetPermissionsValueObject
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['dataset']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method make_dataset_private" % key
-                )
-            params[key] = val
-        del params['kwargs']
-        # verify the required parameter 'dataset' is set
-        if ('dataset' not in params or
-                params['dataset'] is None):
-            raise ValueError("Missing the required parameter `dataset` when calling `make_dataset_private`")  # noqa: E501
-
-        collection_formats = {}
-
-        path_params = {}
-        if 'dataset' in params:
-            path_params['dataset'] = params['dataset']  # noqa: E501
-
-        query_params = []
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = 'ResponseDataObjectDatasetPermissionsValueObject' # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/datasets/{dataset}/makePrivate', 'POST',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
-    def make_dataset_public(self, dataset, **kwargs):  # noqa: E501
-        """Make a dataset publicly readable  # noqa: E501
-
-        Performs the raw ACL flip to grant `IS_AUTHENTICATED_ANONYMOUSLY` read on the dataset. Idempotent. See `POST /datasets/{id}/publish` for the curator-workflow transition that also captures a reviewer.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.make_dataset_public(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset69 dataset: (required)
-        :return: ResponseDataObjectDatasetPermissionsValueObject
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.make_dataset_public_with_http_info(dataset, **kwargs)  # noqa: E501
-                else:
-                    (data) = self.make_dataset_public_with_http_info(dataset, **kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def make_dataset_public_with_http_info(self, dataset, **kwargs):  # noqa: E501
-        """Make a dataset publicly readable  # noqa: E501
-
-        Performs the raw ACL flip to grant `IS_AUTHENTICATED_ANONYMOUSLY` read on the dataset. Idempotent. See `POST /datasets/{id}/publish` for the curator-workflow transition that also captures a reviewer.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.make_dataset_public_with_http_info(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset69 dataset: (required)
-        :return: ResponseDataObjectDatasetPermissionsValueObject
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['dataset']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method make_dataset_public" % key
-                )
-            params[key] = val
-        del params['kwargs']
-        # verify the required parameter 'dataset' is set
-        if ('dataset' not in params or
-                params['dataset'] is None):
-            raise ValueError("Missing the required parameter `dataset` when calling `make_dataset_public`")  # noqa: E501
-
-        collection_formats = {}
-
-        path_params = {}
-        if 'dataset' in params:
-            path_params['dataset'] = params['dataset']  # noqa: E501
-
-        query_params = []
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = 'ResponseDataObjectDatasetPermissionsValueObject' # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/datasets/{dataset}/makePublic', 'POST',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
-    def mark_dataset_sample_outlier(self, dataset, bio_assay_id, **kwargs):  # noqa: E501
-        """Mark or unmark a BioAssay as a sample outlier  # noqa: E501
-
-        Body: `{\"outlier\": true|false}`. `true` flags the assay as an outlier (its processed-data values are set to missing); `false` reverts that. Returns the updated `BioAssayValueObject` for the flipped assay. The bioAssay must belong to the path-derived dataset; otherwise a `400` is returned.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.mark_dataset_sample_outlier(dataset, bio_assay_id, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset70 dataset: (required)
-        :param int bio_assay_id: (required)
-        :param SampleOutlierRequest body:
-        :return: ResponseDataObjectBioAssayValueObject
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.mark_dataset_sample_outlier_with_http_info(dataset, bio_assay_id, **kwargs)  # noqa: E501
-                else:
-                    (data) = self.mark_dataset_sample_outlier_with_http_info(dataset, bio_assay_id, **kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def mark_dataset_sample_outlier_with_http_info(self, dataset, bio_assay_id, **kwargs):  # noqa: E501
-        """Mark or unmark a BioAssay as a sample outlier  # noqa: E501
-
-        Body: `{\"outlier\": true|false}`. `true` flags the assay as an outlier (its processed-data values are set to missing); `false` reverts that. Returns the updated `BioAssayValueObject` for the flipped assay. The bioAssay must belong to the path-derived dataset; otherwise a `400` is returned.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.mark_dataset_sample_outlier_with_http_info(dataset, bio_assay_id, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset70 dataset: (required)
-        :param int bio_assay_id: (required)
-        :param SampleOutlierRequest body:
-        :return: ResponseDataObjectBioAssayValueObject
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['dataset', 'bio_assay_id', 'body']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method mark_dataset_sample_outlier" % key
-                )
-            params[key] = val
-        del params['kwargs']
-        # verify the required parameter 'dataset' is set
-        if ('dataset' not in params or
-                params['dataset'] is None):
-            raise ValueError("Missing the required parameter `dataset` when calling `mark_dataset_sample_outlier`")  # noqa: E501
-        # verify the required parameter 'bio_assay_id' is set
-        if ('bio_assay_id' not in params or
-                params['bio_assay_id'] is None):
-            raise ValueError("Missing the required parameter `bio_assay_id` when calling `mark_dataset_sample_outlier`")  # noqa: E501
-
-        collection_formats = {}
-
-        path_params = {}
-        if 'dataset' in params:
-            path_params['dataset'] = params['dataset']  # noqa: E501
-        if 'bio_assay_id' in params:
-            path_params['bioAssayId'] = params['bio_assay_id']  # noqa: E501
-
-        query_params = []
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        if 'body' in params:
-            body_params = params['body']
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = 'ResponseDataObjectBioAssayValueObject' # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/datasets/{dataset}/samples/{bioAssayId}/outlier', 'PUT',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
-    def mark_factor_value_needs_attention(self, dataset, factor_value_id, **kwargs):  # noqa: E501
-        """Mark a factor value as needing curator attention  # noqa: E501
-
-        Opens a curator ticket against the factor value. Body: `{\"note\": \"...\"}` — the note is the ticket title suffix. The factor value must belong to the path-derived dataset; otherwise a 400 is returned. Idempotency is enforced by the underlying service: marking an already-flagged factor value throws 409.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.mark_factor_value_needs_attention(dataset, factor_value_id, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset14 dataset: (required)
-        :param int factor_value_id: (required)
-        :param FactorValueNeedsAttentionRequest body:
-        :return: None
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.mark_factor_value_needs_attention_with_http_info(dataset, factor_value_id, **kwargs)  # noqa: E501
-                else:
-                    (data) = self.mark_factor_value_needs_attention_with_http_info(dataset, factor_value_id, **kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def mark_factor_value_needs_attention_with_http_info(self, dataset, factor_value_id, **kwargs):  # noqa: E501
-        """Mark a factor value as needing curator attention  # noqa: E501
-
-        Opens a curator ticket against the factor value. Body: `{\"note\": \"...\"}` — the note is the ticket title suffix. The factor value must belong to the path-derived dataset; otherwise a 400 is returned. Idempotency is enforced by the underlying service: marking an already-flagged factor value throws 409.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.mark_factor_value_needs_attention_with_http_info(dataset, factor_value_id, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset14 dataset: (required)
-        :param int factor_value_id: (required)
-        :param FactorValueNeedsAttentionRequest body:
-        :return: None
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['dataset', 'factor_value_id', 'body']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method mark_factor_value_needs_attention" % key
-                )
-            params[key] = val
-        del params['kwargs']
-        # verify the required parameter 'dataset' is set
-        if ('dataset' not in params or
-                params['dataset'] is None):
-            raise ValueError("Missing the required parameter `dataset` when calling `mark_factor_value_needs_attention`")  # noqa: E501
-        # verify the required parameter 'factor_value_id' is set
-        if ('factor_value_id' not in params or
-                params['factor_value_id'] is None):
-            raise ValueError("Missing the required parameter `factor_value_id` when calling `mark_factor_value_needs_attention`")  # noqa: E501
-
-        collection_formats = {}
-
-        path_params = {}
-        if 'dataset' in params:
-            path_params['dataset'] = params['dataset']  # noqa: E501
-        if 'factor_value_id' in params:
-            path_params['factorValueId'] = params['factor_value_id']  # noqa: E501
-
-        query_params = []
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        if 'body' in params:
-            body_params = params['body']
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = None # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/datasets/{dataset}/factor-values/{factorValueId}/needs-attention', 'POST',
             path_params,
             query_params,
             header_params,
@@ -17782,996 +14739,6 @@ class DefaultApi(object):
             _request_timeout=params.get('_request_timeout'),
             collection_formats=collection_formats)
 
-    def patch_dataset_quantitation_type(self, dataset, qt_id, **kwargs):  # noqa: E501
-        """Correct a quantitation type's record  # noqa: E501
-
-        Changes what the stored numbers are SAID to be. It does not touch the numbers, so this is how a wrongly-recorded quantitation type is fixed without replacing data — the case it was built for is a pre-2018 Affymetrix `rma value` recorded as `LINEAR` when RMA output is log2.  Every field is optional and only the ones present are changed: `name`, `description`, `generalType`, `type`, `scale`, `isRatio`, `isBackgroundSubtracted`, `isNormalized`. `isPreferred` is also accepted and delegates to the canonical `/preferred` handler, which does the unmark-the-other-one book-keeping and emits its own event.  🛑 `representation` and `isRecomputedFromRawData` are refused rather than ignored. The first describes the stored values themselves — changing it would misdescribe the vectors rather than reinterpret them — and the second records what computed them.  ⚠️ Scale and type govern how downstream code transforms the data, so a correction here changes later results. The change is recorded as an update event naming the old and new values.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.patch_dataset_quantitation_type(dataset, qt_id, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset71 dataset: (required)
-        :param int qt_id: (required)
-        :param QuantitationTypePatchRequest body:
-        :return: ResponseDataObjectQuantitationTypeValueObject
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.patch_dataset_quantitation_type_with_http_info(dataset, qt_id, **kwargs)  # noqa: E501
-                else:
-                    (data) = self.patch_dataset_quantitation_type_with_http_info(dataset, qt_id, **kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def patch_dataset_quantitation_type_with_http_info(self, dataset, qt_id, **kwargs):  # noqa: E501
-        """Correct a quantitation type's record  # noqa: E501
-
-        Changes what the stored numbers are SAID to be. It does not touch the numbers, so this is how a wrongly-recorded quantitation type is fixed without replacing data — the case it was built for is a pre-2018 Affymetrix `rma value` recorded as `LINEAR` when RMA output is log2.  Every field is optional and only the ones present are changed: `name`, `description`, `generalType`, `type`, `scale`, `isRatio`, `isBackgroundSubtracted`, `isNormalized`. `isPreferred` is also accepted and delegates to the canonical `/preferred` handler, which does the unmark-the-other-one book-keeping and emits its own event.  🛑 `representation` and `isRecomputedFromRawData` are refused rather than ignored. The first describes the stored values themselves — changing it would misdescribe the vectors rather than reinterpret them — and the second records what computed them.  ⚠️ Scale and type govern how downstream code transforms the data, so a correction here changes later results. The change is recorded as an update event naming the old and new values.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.patch_dataset_quantitation_type_with_http_info(dataset, qt_id, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset71 dataset: (required)
-        :param int qt_id: (required)
-        :param QuantitationTypePatchRequest body:
-        :return: ResponseDataObjectQuantitationTypeValueObject
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['dataset', 'qt_id', 'body']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method patch_dataset_quantitation_type" % key
-                )
-            params[key] = val
-        del params['kwargs']
-        # verify the required parameter 'dataset' is set
-        if ('dataset' not in params or
-                params['dataset'] is None):
-            raise ValueError("Missing the required parameter `dataset` when calling `patch_dataset_quantitation_type`")  # noqa: E501
-        # verify the required parameter 'qt_id' is set
-        if ('qt_id' not in params or
-                params['qt_id'] is None):
-            raise ValueError("Missing the required parameter `qt_id` when calling `patch_dataset_quantitation_type`")  # noqa: E501
-
-        collection_formats = {}
-
-        path_params = {}
-        if 'dataset' in params:
-            path_params['dataset'] = params['dataset']  # noqa: E501
-        if 'qt_id' in params:
-            path_params['qtId'] = params['qt_id']  # noqa: E501
-
-        query_params = []
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        if 'body' in params:
-            body_params = params['body']
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = 'ResponseDataObjectQuantitationTypeValueObject' # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/datasets/{dataset}/quantitationTypes/{qtId}', 'PATCH',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
-    def preflight_curation(self, dataset, **kwargs):  # noqa: E501
-        """Preflight (dry-run) a curation draft  # noqa: E501
-
-        Same body and validation as the commit, but writes nothing: returns the CurationCommitReport with `applied=false` and the per-section change counts, so the UI can preview the diff before committing. `newBaseline` comes back as the dataset's current `lastUpdated`, so a preflight is also how a client picks up the token to commit with. A dry run never 409s on the force gate — it predicts that consequence rather than hitting it — so check `changes` and `designReport`, not the status code. `designReport.requiresForce` is the verdict: true means the real PUT is refused `409 REQUIRES_FORCE` unless it is signed off (or forced by an admin), and `designReport.differentialExpressionAnalysesToDelete` and `.subsetsWithStaleAnchor` name what you would be consenting to. `designReport` is null when the body carried no design section — that is not the same as no consequences.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.preflight_curation(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset72 dataset: (required)
-        :param CurationDocument body:
-        :param str on_behalf_of: Which curator this preflight is for, when an agent is carrying it. Changes nothing about the dry run's answer — accepted so a relay can send the same parameter to every call in the commit chain instead of special-casing this one.
-        :return: ResponseDataObjectCurationCommitReport
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.preflight_curation_with_http_info(dataset, **kwargs)  # noqa: E501
-                else:
-                    (data) = self.preflight_curation_with_http_info(dataset, **kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def preflight_curation_with_http_info(self, dataset, **kwargs):  # noqa: E501
-        """Preflight (dry-run) a curation draft  # noqa: E501
-
-        Same body and validation as the commit, but writes nothing: returns the CurationCommitReport with `applied=false` and the per-section change counts, so the UI can preview the diff before committing. `newBaseline` comes back as the dataset's current `lastUpdated`, so a preflight is also how a client picks up the token to commit with. A dry run never 409s on the force gate — it predicts that consequence rather than hitting it — so check `changes` and `designReport`, not the status code. `designReport.requiresForce` is the verdict: true means the real PUT is refused `409 REQUIRES_FORCE` unless it is signed off (or forced by an admin), and `designReport.differentialExpressionAnalysesToDelete` and `.subsetsWithStaleAnchor` name what you would be consenting to. `designReport` is null when the body carried no design section — that is not the same as no consequences.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.preflight_curation_with_http_info(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset72 dataset: (required)
-        :param CurationDocument body:
-        :param str on_behalf_of: Which curator this preflight is for, when an agent is carrying it. Changes nothing about the dry run's answer — accepted so a relay can send the same parameter to every call in the commit chain instead of special-casing this one.
-        :return: ResponseDataObjectCurationCommitReport
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['dataset', 'body', 'on_behalf_of']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method preflight_curation" % key
-                )
-            params[key] = val
-        del params['kwargs']
-        # verify the required parameter 'dataset' is set
-        if ('dataset' not in params or
-                params['dataset'] is None):
-            raise ValueError("Missing the required parameter `dataset` when calling `preflight_curation`")  # noqa: E501
-
-        collection_formats = {}
-
-        path_params = {}
-        if 'dataset' in params:
-            path_params['dataset'] = params['dataset']  # noqa: E501
-
-        query_params = []
-        if 'on_behalf_of' in params:
-            query_params.append(('onBehalfOf', params['on_behalf_of']))  # noqa: E501
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        if 'body' in params:
-            body_params = params['body']
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = 'ResponseDataObjectCurationCommitReport' # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/datasets/{dataset}/curation/preflight', 'POST',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
-    def preview_dataset_design_change(self, dataset, **kwargs):  # noqa: E501
-        """Dry-run preflight for a proposed experimental design replacement  # noqa: E501
-
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.preview_dataset_design_change(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset73 dataset: (required)
-        :param ExperimentalDesignValueObject body:
-        :return: ResponseDataObjectDesignPreflightReport
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.preview_dataset_design_change_with_http_info(dataset, **kwargs)  # noqa: E501
-                else:
-                    (data) = self.preview_dataset_design_change_with_http_info(dataset, **kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def preview_dataset_design_change_with_http_info(self, dataset, **kwargs):  # noqa: E501
-        """Dry-run preflight for a proposed experimental design replacement  # noqa: E501
-
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.preview_dataset_design_change_with_http_info(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset73 dataset: (required)
-        :param ExperimentalDesignValueObject body:
-        :return: ResponseDataObjectDesignPreflightReport
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['dataset', 'body']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method preview_dataset_design_change" % key
-                )
-            params[key] = val
-        del params['kwargs']
-        # verify the required parameter 'dataset' is set
-        if ('dataset' not in params or
-                params['dataset'] is None):
-            raise ValueError("Missing the required parameter `dataset` when calling `preview_dataset_design_change`")  # noqa: E501
-
-        collection_formats = {}
-
-        path_params = {}
-        if 'dataset' in params:
-            path_params['dataset'] = params['dataset']  # noqa: E501
-
-        query_params = []
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        if 'body' in params:
-            body_params = params['body']
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = 'ResponseDataObjectDesignPreflightReport' # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/datasets/{dataset}/designPreflight', 'POST',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
-    def publish_dataset(self, dataset, **kwargs):  # noqa: E501
-        """Publish a dataset (curator-workflow transition; records reviewer)  # noqa: E501
-
-        Curator-workflow endpoint distinct from `/makePublic`. Records the reviewer as an audit event and (if the dataset is not already public) performs the ACL flip. The `reviewer` query parameter is required.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.publish_dataset(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset74 dataset: (required)
-        :param str reviewer:
-        :return: ResponseDataObjectDatasetPermissionsValueObject
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.publish_dataset_with_http_info(dataset, **kwargs)  # noqa: E501
-                else:
-                    (data) = self.publish_dataset_with_http_info(dataset, **kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def publish_dataset_with_http_info(self, dataset, **kwargs):  # noqa: E501
-        """Publish a dataset (curator-workflow transition; records reviewer)  # noqa: E501
-
-        Curator-workflow endpoint distinct from `/makePublic`. Records the reviewer as an audit event and (if the dataset is not already public) performs the ACL flip. The `reviewer` query parameter is required.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.publish_dataset_with_http_info(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset74 dataset: (required)
-        :param str reviewer:
-        :return: ResponseDataObjectDatasetPermissionsValueObject
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['dataset', 'reviewer']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method publish_dataset" % key
-                )
-            params[key] = val
-        del params['kwargs']
-        # verify the required parameter 'dataset' is set
-        if ('dataset' not in params or
-                params['dataset'] is None):
-            raise ValueError("Missing the required parameter `dataset` when calling `publish_dataset`")  # noqa: E501
-
-        collection_formats = {}
-
-        path_params = {}
-        if 'dataset' in params:
-            path_params['dataset'] = params['dataset']  # noqa: E501
-
-        query_params = []
-        if 'reviewer' in params:
-            query_params.append(('reviewer', params['reviewer']))  # noqa: E501
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = 'ResponseDataObjectDatasetPermissionsValueObject' # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/datasets/{dataset}/publish', 'POST',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
-    def recompute_dataset_geeq(self, dataset, **kwargs):  # noqa: E501
-        """Recompute GEEQ scores for a dataset  # noqa: E501
-
-        Synchronously recomputes the GEEQ quality scores for the dataset and writes a `GeeqEvent` to the audit log. The optional `mode` query parameter selects which subset of scores to recompute (`all`, `batch`, `reps`, `pub`); defaults to `all`. The returned object includes the updated scores and the `lastComputed` timestamp. Because the endpoint is admin-only, the response is the administrative GEEQ view exposing the underlying score variables.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.recompute_dataset_geeq(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset40 dataset: (required)
-        :param str mode:
-        :return: ResponseDataObjectGeeqValueObject
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.recompute_dataset_geeq_with_http_info(dataset, **kwargs)  # noqa: E501
-                else:
-                    (data) = self.recompute_dataset_geeq_with_http_info(dataset, **kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def recompute_dataset_geeq_with_http_info(self, dataset, **kwargs):  # noqa: E501
-        """Recompute GEEQ scores for a dataset  # noqa: E501
-
-        Synchronously recomputes the GEEQ quality scores for the dataset and writes a `GeeqEvent` to the audit log. The optional `mode` query parameter selects which subset of scores to recompute (`all`, `batch`, `reps`, `pub`); defaults to `all`. The returned object includes the updated scores and the `lastComputed` timestamp. Because the endpoint is admin-only, the response is the administrative GEEQ view exposing the underlying score variables.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.recompute_dataset_geeq_with_http_info(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset40 dataset: (required)
-        :param str mode:
-        :return: ResponseDataObjectGeeqValueObject
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['dataset', 'mode']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method recompute_dataset_geeq" % key
-                )
-            params[key] = val
-        del params['kwargs']
-        # verify the required parameter 'dataset' is set
-        if ('dataset' not in params or
-                params['dataset'] is None):
-            raise ValueError("Missing the required parameter `dataset` when calling `recompute_dataset_geeq`")  # noqa: E501
-
-        collection_formats = {}
-
-        path_params = {}
-        if 'dataset' in params:
-            path_params['dataset'] = params['dataset']  # noqa: E501
-
-        query_params = []
-        if 'mode' in params:
-            query_params.append(('mode', params['mode']))  # noqa: E501
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = 'ResponseDataObjectGeeqValueObject' # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/datasets/{dataset}/geeq', 'PUT',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
-    def recompute_dataset_geeq_via_post(self, dataset, **kwargs):  # noqa: E501
-        """Recompute GEEQ scores for a dataset (alias of PUT /geeq)  # noqa: E501
-
-        Curation-UI compatibility alias for `PUT /datasets/{id}/geeq`. Body: optional `{\"mode\": \"all\"|\"batch\"|\"reps\"|\"pub\"}` (defaults to `all`). Behaviour is identical to the canonical endpoint.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.recompute_dataset_geeq_via_post(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset75 dataset: (required)
-        :param GeeqRecomputeRequest body:
-        :return: ResponseDataObjectGeeqValueObject
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.recompute_dataset_geeq_via_post_with_http_info(dataset, **kwargs)  # noqa: E501
-                else:
-                    (data) = self.recompute_dataset_geeq_via_post_with_http_info(dataset, **kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def recompute_dataset_geeq_via_post_with_http_info(self, dataset, **kwargs):  # noqa: E501
-        """Recompute GEEQ scores for a dataset (alias of PUT /geeq)  # noqa: E501
-
-        Curation-UI compatibility alias for `PUT /datasets/{id}/geeq`. Body: optional `{\"mode\": \"all\"|\"batch\"|\"reps\"|\"pub\"}` (defaults to `all`). Behaviour is identical to the canonical endpoint.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.recompute_dataset_geeq_via_post_with_http_info(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset75 dataset: (required)
-        :param GeeqRecomputeRequest body:
-        :return: ResponseDataObjectGeeqValueObject
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['dataset', 'body']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method recompute_dataset_geeq_via_post" % key
-                )
-            params[key] = val
-        del params['kwargs']
-        # verify the required parameter 'dataset' is set
-        if ('dataset' not in params or
-                params['dataset'] is None):
-            raise ValueError("Missing the required parameter `dataset` when calling `recompute_dataset_geeq_via_post`")  # noqa: E501
-
-        collection_formats = {}
-
-        path_params = {}
-        if 'dataset' in params:
-            path_params['dataset'] = params['dataset']  # noqa: E501
-
-        query_params = []
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        if 'body' in params:
-            body_params = params['body']
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = 'ResponseDataObjectGeeqValueObject' # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/datasets/{dataset}/geeq/recompute', 'POST',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
-    def record_curation_decision(self, dataset, **kwargs):  # noqa: E501
-        """Record a refusal (or an approval) on a dataset  # noqa: E501
-
-        A refusal has nothing to commit -- the whole content is the \"no\" -- so this is where it lives. Without it a curator who rules against a proposed edit can only delete the proposal, losing the fact that they considered it, or leave it, where it reads as pending forever.  `decision` is `refused` or `allowed`. `scope` is `item` (this tag, this deletion), `key` (everything under a key, INCLUDING siblings not yet proposed) or `proposal` (a whole annotation set, which `annotationSetId` names instead of a key).  🛑 `decisionKey` describes WHAT was ruled on, not which proposed item was in front of the curator. The point of a refusal is that the same edit is not proposed again next quarter, and next quarter's proposal is a new item with a new id -- so a ruling keyed on an item can never match the thing it exists to prevent. It is opaque here: Gemma never parses curation content, so the producer computes and matches it.  🛑 GEMMA RECORDS A REFUSAL AND DOES NOT ENFORCE ONE. A commit that violates a standing refusal is not rejected. The gate belongs on the proposing side, where the key means something.  `reason` is REQUIRED -- a refusal has no other content, and a later reader needs it to judge whether the refusal still applies. Free text.  Append-only: lifting a refusal means posting `allowed`, not deleting the `refused`, so why it was refused survives the reversal.  `?onBehalfOf=` names the person deciding and is honoured only for `GROUP_AGENT` / `GROUP_ADMIN`. 🛑 An agent MUST send it, naming the person who directed it and never its own account: `decidedBy` names a person. The agent's part is recorded in `judgeKind`, which defaults to `agent` for an agent caller and `curator` for anyone else.  Per dataset. A ruling that applies corpus-wide is a CONVENTION and belongs in the curation rules the agent reads, not here.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.record_curation_decision(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset22 dataset: (required)
-        :param CurationDecisionRequest body:
-        :param str on_behalf_of: The person deciding. Required from an agent; agents and admins only.
-        :return: CurationDecisionResponse
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.record_curation_decision_with_http_info(dataset, **kwargs)  # noqa: E501
-                else:
-                    (data) = self.record_curation_decision_with_http_info(dataset, **kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def record_curation_decision_with_http_info(self, dataset, **kwargs):  # noqa: E501
-        """Record a refusal (or an approval) on a dataset  # noqa: E501
-
-        A refusal has nothing to commit -- the whole content is the \"no\" -- so this is where it lives. Without it a curator who rules against a proposed edit can only delete the proposal, losing the fact that they considered it, or leave it, where it reads as pending forever.  `decision` is `refused` or `allowed`. `scope` is `item` (this tag, this deletion), `key` (everything under a key, INCLUDING siblings not yet proposed) or `proposal` (a whole annotation set, which `annotationSetId` names instead of a key).  🛑 `decisionKey` describes WHAT was ruled on, not which proposed item was in front of the curator. The point of a refusal is that the same edit is not proposed again next quarter, and next quarter's proposal is a new item with a new id -- so a ruling keyed on an item can never match the thing it exists to prevent. It is opaque here: Gemma never parses curation content, so the producer computes and matches it.  🛑 GEMMA RECORDS A REFUSAL AND DOES NOT ENFORCE ONE. A commit that violates a standing refusal is not rejected. The gate belongs on the proposing side, where the key means something.  `reason` is REQUIRED -- a refusal has no other content, and a later reader needs it to judge whether the refusal still applies. Free text.  Append-only: lifting a refusal means posting `allowed`, not deleting the `refused`, so why it was refused survives the reversal.  `?onBehalfOf=` names the person deciding and is honoured only for `GROUP_AGENT` / `GROUP_ADMIN`. 🛑 An agent MUST send it, naming the person who directed it and never its own account: `decidedBy` names a person. The agent's part is recorded in `judgeKind`, which defaults to `agent` for an agent caller and `curator` for anyone else.  Per dataset. A ruling that applies corpus-wide is a CONVENTION and belongs in the curation rules the agent reads, not here.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.record_curation_decision_with_http_info(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset22 dataset: (required)
-        :param CurationDecisionRequest body:
-        :param str on_behalf_of: The person deciding. Required from an agent; agents and admins only.
-        :return: CurationDecisionResponse
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['dataset', 'body', 'on_behalf_of']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method record_curation_decision" % key
-                )
-            params[key] = val
-        del params['kwargs']
-        # verify the required parameter 'dataset' is set
-        if ('dataset' not in params or
-                params['dataset'] is None):
-            raise ValueError("Missing the required parameter `dataset` when calling `record_curation_decision`")  # noqa: E501
-
-        collection_formats = {}
-
-        path_params = {}
-        if 'dataset' in params:
-            path_params['dataset'] = params['dataset']  # noqa: E501
-
-        query_params = []
-        if 'on_behalf_of' in params:
-            query_params.append(('onBehalfOf', params['on_behalf_of']))  # noqa: E501
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        if 'body' in params:
-            body_params = params['body']
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = 'CurationDecisionResponse' # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/datasets/{dataset}/curation/decisions', 'POST',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
-    def redo_dataset_differential_analysis(self, dataset, analysis_id, **kwargs):  # noqa: E501
-        """Redo an existing differential expression analysis  # noqa: E501
-
-        Re-runs the named differential analysis using its original configuration. Returns 202 with a `Location` header pointing at `/tasks/{taskId}`.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.redo_dataset_differential_analysis(dataset, analysis_id, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset76 dataset: (required)
-        :param int analysis_id: (required)
-        :return: ResponseDataObjectTaskStatusValueObject
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.redo_dataset_differential_analysis_with_http_info(dataset, analysis_id, **kwargs)  # noqa: E501
-                else:
-                    (data) = self.redo_dataset_differential_analysis_with_http_info(dataset, analysis_id, **kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def redo_dataset_differential_analysis_with_http_info(self, dataset, analysis_id, **kwargs):  # noqa: E501
-        """Redo an existing differential expression analysis  # noqa: E501
-
-        Re-runs the named differential analysis using its original configuration. Returns 202 with a `Location` header pointing at `/tasks/{taskId}`.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.redo_dataset_differential_analysis_with_http_info(dataset, analysis_id, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset76 dataset: (required)
-        :param int analysis_id: (required)
-        :return: ResponseDataObjectTaskStatusValueObject
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['dataset', 'analysis_id']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method redo_dataset_differential_analysis" % key
-                )
-            params[key] = val
-        del params['kwargs']
-        # verify the required parameter 'dataset' is set
-        if ('dataset' not in params or
-                params['dataset'] is None):
-            raise ValueError("Missing the required parameter `dataset` when calling `redo_dataset_differential_analysis`")  # noqa: E501
-        # verify the required parameter 'analysis_id' is set
-        if ('analysis_id' not in params or
-                params['analysis_id'] is None):
-            raise ValueError("Missing the required parameter `analysis_id` when calling `redo_dataset_differential_analysis`")  # noqa: E501
-
-        collection_formats = {}
-
-        path_params = {}
-        if 'dataset' in params:
-            path_params['dataset'] = params['dataset']  # noqa: E501
-        if 'analysis_id' in params:
-            path_params['analysisId'] = params['analysis_id']  # noqa: E501
-
-        query_params = []
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = 'ResponseDataObjectTaskStatusValueObject' # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/datasets/{dataset}/tasks/redo/{analysisId}', 'POST',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
     def refresh_dataset(self, dataset, **kwargs):  # noqa: E501
         """Retrieve a refreshed dataset  # noqa: E501
 
@@ -18781,7 +14748,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset77 dataset: (required)
+        :param Dataset43 dataset: (required)
         :param bool refresh_vectors: Refresh processed data vectors.
         :param bool refresh_reports: Refresh experiment reports which include differential expression analyses and batch effects.
         :return: ResponseDataObjectExpressionExperimentValueObject
@@ -18816,7 +14783,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Dataset77 dataset: (required)
+        :param Dataset43 dataset: (required)
         :param bool refresh_vectors: Refresh processed data vectors.
         :param bool refresh_reports: Refresh experiment reports which include differential expression analyses and batch effects.
         :return: ResponseDataObjectExpressionExperimentValueObject
@@ -19245,2561 +15212,6 @@ class DefaultApi(object):
             _request_timeout=params.get('_request_timeout'),
             collection_formats=collection_formats)
 
-    def refresh_home_stats(self, **kwargs):  # noqa: E501
-        """Force a refresh of the home-page statistics snapshot  # noqa: E501
-
-        Recomputes the daily snapshot synchronously and returns the new value. Admin-only.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.refresh_home_stats(async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :return: ResponseDataObjectHomeStats
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.refresh_home_stats_with_http_info(**kwargs)  # noqa: E501
-                else:
-                    (data) = self.refresh_home_stats_with_http_info(**kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def refresh_home_stats_with_http_info(self, **kwargs):  # noqa: E501
-        """Force a refresh of the home-page statistics snapshot  # noqa: E501
-
-        Recomputes the daily snapshot synchronously and returns the new value. Admin-only.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.refresh_home_stats_with_http_info(async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :return: ResponseDataObjectHomeStats
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = []  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method refresh_home_stats" % key
-                )
-            params[key] = val
-        del params['kwargs']
-
-        collection_formats = {}
-
-        path_params = {}
-
-        query_params = []
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = 'ResponseDataObjectHomeStats' # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/stats/home/refresh', 'POST',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
-    def release_curation_lock(self, dataset, **kwargs):  # noqa: E501
-        """Release the curation lock  # noqa: E501
-
-        Releases only your own lock, unless you are an admin. 204 either way — a release that finds nothing has still achieved what it asked for.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.release_curation_lock(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset6 dataset: (required)
-        :param str on_behalf_of: Whose lock to release. Agents and admins only.
-        :return: None
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.release_curation_lock_with_http_info(dataset, **kwargs)  # noqa: E501
-                else:
-                    (data) = self.release_curation_lock_with_http_info(dataset, **kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def release_curation_lock_with_http_info(self, dataset, **kwargs):  # noqa: E501
-        """Release the curation lock  # noqa: E501
-
-        Releases only your own lock, unless you are an admin. 204 either way — a release that finds nothing has still achieved what it asked for.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.release_curation_lock_with_http_info(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset6 dataset: (required)
-        :param str on_behalf_of: Whose lock to release. Agents and admins only.
-        :return: None
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['dataset', 'on_behalf_of']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method release_curation_lock" % key
-                )
-            params[key] = val
-        del params['kwargs']
-        # verify the required parameter 'dataset' is set
-        if ('dataset' not in params or
-                params['dataset'] is None):
-            raise ValueError("Missing the required parameter `dataset` when calling `release_curation_lock`")  # noqa: E501
-
-        collection_formats = {}
-
-        path_params = {}
-        if 'dataset' in params:
-            path_params['dataset'] = params['dataset']  # noqa: E501
-
-        query_params = []
-        if 'on_behalf_of' in params:
-            query_params.append(('onBehalfOf', params['on_behalf_of']))  # noqa: E501
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = None # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/datasets/{dataset}/curation/lock', 'DELETE',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
-    def release_curation_locks(self, **kwargs):  # noqa: E501
-        """Release the curation lock on many datasets in one round-trip  # noqa: E501
-
-        The companion to `POST /datasets/curation/locks`, and the thing a finished batch run should call. Without it a completed run's claims sit until their lease lapses, blocking curators on datasets nothing is working on any more.  Releases only the locks this caller holds; ids held by someone else are reported `released: false` rather than refused, so a batch can release its whole set without first working out which ones it still owns.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.release_curation_locks(async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param CurationLockBulkRequest body:
-        :param str on_behalf_of: Which curator the batch is acting for. Agents and admins only.
-        :return: ResponseDataObjectMapLongBoolean
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.release_curation_locks_with_http_info(**kwargs)  # noqa: E501
-                else:
-                    (data) = self.release_curation_locks_with_http_info(**kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def release_curation_locks_with_http_info(self, **kwargs):  # noqa: E501
-        """Release the curation lock on many datasets in one round-trip  # noqa: E501
-
-        The companion to `POST /datasets/curation/locks`, and the thing a finished batch run should call. Without it a completed run's claims sit until their lease lapses, blocking curators on datasets nothing is working on any more.  Releases only the locks this caller holds; ids held by someone else are reported `released: false` rather than refused, so a batch can release its whole set without first working out which ones it still owns.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.release_curation_locks_with_http_info(async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param CurationLockBulkRequest body:
-        :param str on_behalf_of: Which curator the batch is acting for. Agents and admins only.
-        :return: ResponseDataObjectMapLongBoolean
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['body', 'on_behalf_of']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method release_curation_locks" % key
-                )
-            params[key] = val
-        del params['kwargs']
-
-        collection_formats = {}
-
-        path_params = {}
-
-        query_params = []
-        if 'on_behalf_of' in params:
-            query_params.append(('onBehalfOf', params['on_behalf_of']))  # noqa: E501
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        if 'body' in params:
-            body_params = params['body']
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = 'ResponseDataObjectMapLongBoolean' # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/datasets/curation/locks/release', 'POST',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
-    def remove_dataset_annotation(self, dataset, annotation_id, **kwargs):  # noqa: E501
-        """Remove a single annotation tag from a dataset (legacy path)  # noqa: E501
-
-        Legacy alias of `DELETE /datasets/{dataset}/annotations/{annotationId}`, kept because the curation-agents client already calls this path. New callers should use the canonical one on the datasets resource.  Removes the annotation with the given id from the dataset. Emits a TagRemovedEvent. Returns 404 if no such annotation exists on this dataset. Requires GROUP_CURATOR or GROUP_ADMIN.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.remove_dataset_annotation(dataset, annotation_id, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset2 dataset: (required)
-        :param int annotation_id: (required)
-        :param str on_behalf_of: The curator this write is being carried FOR, when an agent is carrying it. The authenticated credential stays the performer on the audit row; this names the person in charge. Agents and admins only — anyone else naming someone else is a 403.
-        :return: None
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.remove_dataset_annotation_with_http_info(dataset, annotation_id, **kwargs)  # noqa: E501
-                else:
-                    (data) = self.remove_dataset_annotation_with_http_info(dataset, annotation_id, **kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def remove_dataset_annotation_with_http_info(self, dataset, annotation_id, **kwargs):  # noqa: E501
-        """Remove a single annotation tag from a dataset (legacy path)  # noqa: E501
-
-        Legacy alias of `DELETE /datasets/{dataset}/annotations/{annotationId}`, kept because the curation-agents client already calls this path. New callers should use the canonical one on the datasets resource.  Removes the annotation with the given id from the dataset. Emits a TagRemovedEvent. Returns 404 if no such annotation exists on this dataset. Requires GROUP_CURATOR or GROUP_ADMIN.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.remove_dataset_annotation_with_http_info(dataset, annotation_id, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset2 dataset: (required)
-        :param int annotation_id: (required)
-        :param str on_behalf_of: The curator this write is being carried FOR, when an agent is carrying it. The authenticated credential stays the performer on the audit row; this names the person in charge. Agents and admins only — anyone else naming someone else is a 403.
-        :return: None
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['dataset', 'annotation_id', 'on_behalf_of']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method remove_dataset_annotation" % key
-                )
-            params[key] = val
-        del params['kwargs']
-        # verify the required parameter 'dataset' is set
-        if ('dataset' not in params or
-                params['dataset'] is None):
-            raise ValueError("Missing the required parameter `dataset` when calling `remove_dataset_annotation`")  # noqa: E501
-        # verify the required parameter 'annotation_id' is set
-        if ('annotation_id' not in params or
-                params['annotation_id'] is None):
-            raise ValueError("Missing the required parameter `annotation_id` when calling `remove_dataset_annotation`")  # noqa: E501
-
-        collection_formats = {}
-
-        path_params = {}
-        if 'dataset' in params:
-            path_params['dataset'] = params['dataset']  # noqa: E501
-        if 'annotation_id' in params:
-            path_params['annotationId'] = params['annotation_id']  # noqa: E501
-
-        query_params = []
-        if 'on_behalf_of' in params:
-            query_params.append(('onBehalfOf', params['on_behalf_of']))  # noqa: E501
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = None # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/annotations/datasets/{dataset}/annotations/{annotationId}', 'DELETE',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
-    def remove_dataset_annotation_tag(self, dataset, annotation_id, **kwargs):  # noqa: E501
-        """Remove a single annotation tag from a dataset  # noqa: E501
-
-        Removes the annotation with the given id from the dataset. Emits a TagRemovedEvent. Returns 404 if no such annotation exists on this dataset. Requires GROUP_CURATOR or GROUP_ADMIN.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.remove_dataset_annotation_tag(dataset, annotation_id, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset78 dataset: (required)
-        :param int annotation_id: (required)
-        :param str on_behalf_of: The curator this write is being carried FOR, when an agent is carrying it. The authenticated credential stays the performer on the audit row; this names the person in charge. Agents and admins only — anyone else naming someone else is a 403.
-        :return: None
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.remove_dataset_annotation_tag_with_http_info(dataset, annotation_id, **kwargs)  # noqa: E501
-                else:
-                    (data) = self.remove_dataset_annotation_tag_with_http_info(dataset, annotation_id, **kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def remove_dataset_annotation_tag_with_http_info(self, dataset, annotation_id, **kwargs):  # noqa: E501
-        """Remove a single annotation tag from a dataset  # noqa: E501
-
-        Removes the annotation with the given id from the dataset. Emits a TagRemovedEvent. Returns 404 if no such annotation exists on this dataset. Requires GROUP_CURATOR or GROUP_ADMIN.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.remove_dataset_annotation_tag_with_http_info(dataset, annotation_id, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset78 dataset: (required)
-        :param int annotation_id: (required)
-        :param str on_behalf_of: The curator this write is being carried FOR, when an agent is carrying it. The authenticated credential stays the performer on the audit row; this names the person in charge. Agents and admins only — anyone else naming someone else is a 403.
-        :return: None
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['dataset', 'annotation_id', 'on_behalf_of']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method remove_dataset_annotation_tag" % key
-                )
-            params[key] = val
-        del params['kwargs']
-        # verify the required parameter 'dataset' is set
-        if ('dataset' not in params or
-                params['dataset'] is None):
-            raise ValueError("Missing the required parameter `dataset` when calling `remove_dataset_annotation_tag`")  # noqa: E501
-        # verify the required parameter 'annotation_id' is set
-        if ('annotation_id' not in params or
-                params['annotation_id'] is None):
-            raise ValueError("Missing the required parameter `annotation_id` when calling `remove_dataset_annotation_tag`")  # noqa: E501
-
-        collection_formats = {}
-
-        path_params = {}
-        if 'dataset' in params:
-            path_params['dataset'] = params['dataset']  # noqa: E501
-        if 'annotation_id' in params:
-            path_params['annotationId'] = params['annotation_id']  # noqa: E501
-
-        query_params = []
-        if 'on_behalf_of' in params:
-            query_params.append(('onBehalfOf', params['on_behalf_of']))  # noqa: E501
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = None # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/datasets/{dataset}/annotations/{annotationId}', 'DELETE',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
-    def remove_dataset_differential_analysis(self, dataset, analysis_id, **kwargs):  # noqa: E501
-        """Remove of a differential expression analysis  # noqa: E501
-
-        Asynchronously deletes the named differential analysis from the dataset. Returns 202 with a `Location` header pointing at `/tasks/{taskId}`; the actual delete completes in the background.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.remove_dataset_differential_analysis(dataset, analysis_id, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset79 dataset: (required)
-        :param int analysis_id: (required)
-        :return: ResponseDataObjectTaskStatusValueObject
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.remove_dataset_differential_analysis_with_http_info(dataset, analysis_id, **kwargs)  # noqa: E501
-                else:
-                    (data) = self.remove_dataset_differential_analysis_with_http_info(dataset, analysis_id, **kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def remove_dataset_differential_analysis_with_http_info(self, dataset, analysis_id, **kwargs):  # noqa: E501
-        """Remove of a differential expression analysis  # noqa: E501
-
-        Asynchronously deletes the named differential analysis from the dataset. Returns 202 with a `Location` header pointing at `/tasks/{taskId}`; the actual delete completes in the background.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.remove_dataset_differential_analysis_with_http_info(dataset, analysis_id, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset79 dataset: (required)
-        :param int analysis_id: (required)
-        :return: ResponseDataObjectTaskStatusValueObject
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['dataset', 'analysis_id']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method remove_dataset_differential_analysis" % key
-                )
-            params[key] = val
-        del params['kwargs']
-        # verify the required parameter 'dataset' is set
-        if ('dataset' not in params or
-                params['dataset'] is None):
-            raise ValueError("Missing the required parameter `dataset` when calling `remove_dataset_differential_analysis`")  # noqa: E501
-        # verify the required parameter 'analysis_id' is set
-        if ('analysis_id' not in params or
-                params['analysis_id'] is None):
-            raise ValueError("Missing the required parameter `analysis_id` when calling `remove_dataset_differential_analysis`")  # noqa: E501
-
-        collection_formats = {}
-
-        path_params = {}
-        if 'dataset' in params:
-            path_params['dataset'] = params['dataset']  # noqa: E501
-        if 'analysis_id' in params:
-            path_params['analysisId'] = params['analysis_id']  # noqa: E501
-
-        query_params = []
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = 'ResponseDataObjectTaskStatusValueObject' # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/datasets/{dataset}/tasks/differential/{analysisId}', 'DELETE',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
-    def remove_sample_characteristic(self, dataset, bio_assay_id, characteristic_id, **kwargs):  # noqa: E501
-        """Remove a characteristic (tag) from a sample  # noqa: E501
-
-        Removes the characteristic with the given id from the sample's biomaterial. A `TagRemovedEvent` is recorded on the owning experiment. Returns 404 if the characteristic is not present on the sample. Requires `ACL_SECURABLE_EDIT` on the dataset.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.remove_sample_characteristic(dataset, bio_assay_id, characteristic_id, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset80 dataset: (required)
-        :param int bio_assay_id: (required)
-        :param int characteristic_id: (required)
-        :return: ResponseDataObjectAnnotationValueObject
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.remove_sample_characteristic_with_http_info(dataset, bio_assay_id, characteristic_id, **kwargs)  # noqa: E501
-                else:
-                    (data) = self.remove_sample_characteristic_with_http_info(dataset, bio_assay_id, characteristic_id, **kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def remove_sample_characteristic_with_http_info(self, dataset, bio_assay_id, characteristic_id, **kwargs):  # noqa: E501
-        """Remove a characteristic (tag) from a sample  # noqa: E501
-
-        Removes the characteristic with the given id from the sample's biomaterial. A `TagRemovedEvent` is recorded on the owning experiment. Returns 404 if the characteristic is not present on the sample. Requires `ACL_SECURABLE_EDIT` on the dataset.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.remove_sample_characteristic_with_http_info(dataset, bio_assay_id, characteristic_id, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset80 dataset: (required)
-        :param int bio_assay_id: (required)
-        :param int characteristic_id: (required)
-        :return: ResponseDataObjectAnnotationValueObject
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['dataset', 'bio_assay_id', 'characteristic_id']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method remove_sample_characteristic" % key
-                )
-            params[key] = val
-        del params['kwargs']
-        # verify the required parameter 'dataset' is set
-        if ('dataset' not in params or
-                params['dataset'] is None):
-            raise ValueError("Missing the required parameter `dataset` when calling `remove_sample_characteristic`")  # noqa: E501
-        # verify the required parameter 'bio_assay_id' is set
-        if ('bio_assay_id' not in params or
-                params['bio_assay_id'] is None):
-            raise ValueError("Missing the required parameter `bio_assay_id` when calling `remove_sample_characteristic`")  # noqa: E501
-        # verify the required parameter 'characteristic_id' is set
-        if ('characteristic_id' not in params or
-                params['characteristic_id'] is None):
-            raise ValueError("Missing the required parameter `characteristic_id` when calling `remove_sample_characteristic`")  # noqa: E501
-
-        collection_formats = {}
-
-        path_params = {}
-        if 'dataset' in params:
-            path_params['dataset'] = params['dataset']  # noqa: E501
-        if 'bio_assay_id' in params:
-            path_params['bioAssayId'] = params['bio_assay_id']  # noqa: E501
-        if 'characteristic_id' in params:
-            path_params['characteristicId'] = params['characteristic_id']  # noqa: E501
-
-        query_params = []
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = 'ResponseDataObjectAnnotationValueObject' # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/datasets/{dataset}/samples/{bioAssayId}/characteristics/{characteristicId}', 'DELETE',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
-    def rename_dataset_short_name(self, dataset, **kwargs):  # noqa: E501
-        """Rename the shortName of a dataset  # noqa: E501
-
-        Updates the curator-facing shortName identifier on an ExpressionExperiment. Returns 400 on blank/too-long/illegal-character names, 404 on unknown dataset, 409 when the requested shortName is already in use (DB unique constraint).  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.rename_dataset_short_name(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset81 dataset: (required)
-        :param RenameDatasetRequest body:
-        :return: ResponseDataObjectRenameDatasetResponse
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.rename_dataset_short_name_with_http_info(dataset, **kwargs)  # noqa: E501
-                else:
-                    (data) = self.rename_dataset_short_name_with_http_info(dataset, **kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def rename_dataset_short_name_with_http_info(self, dataset, **kwargs):  # noqa: E501
-        """Rename the shortName of a dataset  # noqa: E501
-
-        Updates the curator-facing shortName identifier on an ExpressionExperiment. Returns 400 on blank/too-long/illegal-character names, 404 on unknown dataset, 409 when the requested shortName is already in use (DB unique constraint).  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.rename_dataset_short_name_with_http_info(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset81 dataset: (required)
-        :param RenameDatasetRequest body:
-        :return: ResponseDataObjectRenameDatasetResponse
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['dataset', 'body']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method rename_dataset_short_name" % key
-                )
-            params[key] = val
-        del params['kwargs']
-        # verify the required parameter 'dataset' is set
-        if ('dataset' not in params or
-                params['dataset'] is None):
-            raise ValueError("Missing the required parameter `dataset` when calling `rename_dataset_short_name`")  # noqa: E501
-
-        collection_formats = {}
-
-        path_params = {}
-        if 'dataset' in params:
-            path_params['dataset'] = params['dataset']  # noqa: E501
-
-        query_params = []
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        if 'body' in params:
-            body_params = params['body']
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = 'ResponseDataObjectRenameDatasetResponse' # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/datasets/{dataset}/short-name', 'PUT',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
-    def reopen_annotation_set(self, id, **kwargs):  # noqa: E501
-        """Clear finalized status on an annotation set  # noqa: E501
-
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.reopen_annotation_set(id, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param int id: (required)
-        :return: None
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.reopen_annotation_set_with_http_info(id, **kwargs)  # noqa: E501
-                else:
-                    (data) = self.reopen_annotation_set_with_http_info(id, **kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def reopen_annotation_set_with_http_info(self, id, **kwargs):  # noqa: E501
-        """Clear finalized status on an annotation set  # noqa: E501
-
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.reopen_annotation_set_with_http_info(id, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param int id: (required)
-        :return: None
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['id']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method reopen_annotation_set" % key
-                )
-            params[key] = val
-        del params['kwargs']
-        # verify the required parameter 'id' is set
-        if ('id' not in params or
-                params['id'] is None):
-            raise ValueError("Missing the required parameter `id` when calling `reopen_annotation_set`")  # noqa: E501
-
-        collection_formats = {}
-
-        path_params = {}
-        if 'id' in params:
-            path_params['id'] = params['id']  # noqa: E501
-
-        query_params = []
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = None # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/annotation-sets/{id}/reopen', 'POST',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
-    def replace_dataset_annotations(self, dataset, **kwargs):  # noqa: E501
-        """Bulk-replace a dataset's annotations (diff-then-apply)  # noqa: E501
-
-        Computes the diff between the desired tag set and the dataset's current tag set, then applies adds and removes per-row in a single transaction. Emits one TagAddedEvent per add and one TagRemovedEvent per remove (NOT a single summary event). Idempotent: re-PUTing the same set yields an empty diff and no events. Stays on this path rather than moving to PUT /datasets/{id}/annotations, which is a different operation on the same resource — set-replace under ACL_SECURABLE_EDIT emitting a single aggregate ManualAnnotationEvent. Requires GROUP_CURATOR or GROUP_ADMIN.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.replace_dataset_annotations(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset dataset: (required)
-        :param AnnotationsReplaceRequest body:
-        :param str on_behalf_of: The curator this write is being carried FOR, when an agent is carrying it. The authenticated credential stays the performer on the audit row; this names the person in charge. Agents and admins only — anyone else naming someone else is a 403.
-        :return: ResponseDataObjectAnnotationReplaceReport
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.replace_dataset_annotations_with_http_info(dataset, **kwargs)  # noqa: E501
-                else:
-                    (data) = self.replace_dataset_annotations_with_http_info(dataset, **kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def replace_dataset_annotations_with_http_info(self, dataset, **kwargs):  # noqa: E501
-        """Bulk-replace a dataset's annotations (diff-then-apply)  # noqa: E501
-
-        Computes the diff between the desired tag set and the dataset's current tag set, then applies adds and removes per-row in a single transaction. Emits one TagAddedEvent per add and one TagRemovedEvent per remove (NOT a single summary event). Idempotent: re-PUTing the same set yields an empty diff and no events. Stays on this path rather than moving to PUT /datasets/{id}/annotations, which is a different operation on the same resource — set-replace under ACL_SECURABLE_EDIT emitting a single aggregate ManualAnnotationEvent. Requires GROUP_CURATOR or GROUP_ADMIN.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.replace_dataset_annotations_with_http_info(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset dataset: (required)
-        :param AnnotationsReplaceRequest body:
-        :param str on_behalf_of: The curator this write is being carried FOR, when an agent is carrying it. The authenticated credential stays the performer on the audit row; this names the person in charge. Agents and admins only — anyone else naming someone else is a 403.
-        :return: ResponseDataObjectAnnotationReplaceReport
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['dataset', 'body', 'on_behalf_of']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method replace_dataset_annotations" % key
-                )
-            params[key] = val
-        del params['kwargs']
-        # verify the required parameter 'dataset' is set
-        if ('dataset' not in params or
-                params['dataset'] is None):
-            raise ValueError("Missing the required parameter `dataset` when calling `replace_dataset_annotations`")  # noqa: E501
-
-        collection_formats = {}
-
-        path_params = {}
-        if 'dataset' in params:
-            path_params['dataset'] = params['dataset']  # noqa: E501
-
-        query_params = []
-        if 'on_behalf_of' in params:
-            query_params.append(('onBehalfOf', params['on_behalf_of']))  # noqa: E501
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        if 'body' in params:
-            body_params = params['body']
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = 'ResponseDataObjectAnnotationReplaceReport' # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/annotations/datasets/{dataset}/annotations', 'PUT',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
-    def replace_dataset_design(self, dataset, **kwargs):  # noqa: E501
-        """Replace the experimental design of a dataset  # noqa: E501
-
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.replace_dataset_design(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset31 dataset: (required)
-        :param ExperimentalDesignValueObject body:
-        :param bool force: Set to true to consent to the change's consequences: deleting the differential-expression analyses it invalidates, and leaving subsets anchored on factor values that would no longer exist. An analysis is invalidated when the change reaches a factor it uses: the factor is deleted, one of its values is deleted or added, a sample moves between its values, or its baseline or a measurement on it changes. Adding a factor, deleting a factor no analysis uses, and relabelling kept factor values invalidate nothing. An analysis whose factors cannot be read is invalidated by any structural change.
-        :param int agent_proposal_id: Optional id of the PROPOSAL annotation set driving this apply. On success the apply is recorded as a COMMIT annotation set carrying that proposal's run reference and parented to it, so the trail reads proposal -> decision -> effect. The set must belong to this dataset and must be a PROPOSAL.
-        :return: ResponseDataObjectExperimentalDesignValueObject
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.replace_dataset_design_with_http_info(dataset, **kwargs)  # noqa: E501
-                else:
-                    (data) = self.replace_dataset_design_with_http_info(dataset, **kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def replace_dataset_design_with_http_info(self, dataset, **kwargs):  # noqa: E501
-        """Replace the experimental design of a dataset  # noqa: E501
-
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.replace_dataset_design_with_http_info(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset31 dataset: (required)
-        :param ExperimentalDesignValueObject body:
-        :param bool force: Set to true to consent to the change's consequences: deleting the differential-expression analyses it invalidates, and leaving subsets anchored on factor values that would no longer exist. An analysis is invalidated when the change reaches a factor it uses: the factor is deleted, one of its values is deleted or added, a sample moves between its values, or its baseline or a measurement on it changes. Adding a factor, deleting a factor no analysis uses, and relabelling kept factor values invalidate nothing. An analysis whose factors cannot be read is invalidated by any structural change.
-        :param int agent_proposal_id: Optional id of the PROPOSAL annotation set driving this apply. On success the apply is recorded as a COMMIT annotation set carrying that proposal's run reference and parented to it, so the trail reads proposal -> decision -> effect. The set must belong to this dataset and must be a PROPOSAL.
-        :return: ResponseDataObjectExperimentalDesignValueObject
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['dataset', 'body', 'force', 'agent_proposal_id']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method replace_dataset_design" % key
-                )
-            params[key] = val
-        del params['kwargs']
-        # verify the required parameter 'dataset' is set
-        if ('dataset' not in params or
-                params['dataset'] is None):
-            raise ValueError("Missing the required parameter `dataset` when calling `replace_dataset_design`")  # noqa: E501
-
-        collection_formats = {}
-
-        path_params = {}
-        if 'dataset' in params:
-            path_params['dataset'] = params['dataset']  # noqa: E501
-
-        query_params = []
-        if 'force' in params:
-            query_params.append(('force', params['force']))  # noqa: E501
-        if 'agent_proposal_id' in params:
-            query_params.append(('agentProposalId', params['agent_proposal_id']))  # noqa: E501
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        if 'body' in params:
-            body_params = params['body']
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = 'ResponseDataObjectExperimentalDesignValueObject' # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/datasets/{dataset}/design', 'PUT',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
-    def restore_dataset_curation_from_snapshot(self, dataset, set_id, **kwargs):  # noqa: E501
-        """Restore a dataset's curation from a SNAPSHOT, or compare it with the present.  # noqa: E501
-
-        Replays the snapshot's `CurationDocument` through the ordinary all-or-none commit, so there is no second diff implementation that could disagree with the first.  `?dryRun=true` is the compare: it reports exactly what would change to get back to the snapshot, and writes nothing.  🛑 A restore returns the curation's CONTENT, not its IDENTITY. Entities whose ids no longer exist — because an intervening run deleted and recreated them — come back as new rows with new ids, and any differential-expression analysis that survived that run is cascaded again on the way back. Run with `dryRun=true` first and read `requiresForce`.  Two commit rules read differently on a restore. The free-text experiment-tag checks (`UNGROUNDED_NOT_DECLARED`, `FREE_TEXT_NOT_HOOKED`) do not apply to the tags a snapshot re-creates. And a statement the snapshot holds WITHOUT a second predicate/object pair has the live pair cleared — except in a snapshot captured before 2026-09-08T16:43:10Z, when snapshots did not record pairs at all; there the live pair is kept.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.restore_dataset_curation_from_snapshot(dataset, set_id, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset82 dataset: (required)
-        :param int set_id: (required)
-        :param bool dry_run: Predict the changes without writing. This is the 'compare with the snapshot' mode.
-        :param bool force: Consent to the restore's consequences (analysis cascade, stranded subsets).
-        :param str on_behalf_of: Which curator this restore is FOR, when an agent is carrying it. Agents and admins only. A restore is a write like any other and mints its own snapshot, so it names the curator the same way a commit does; the document is Gemma's own bytes and has nowhere to carry the answer, which makes the parameter the only place it can come from.
-        :return: ResponseDataObjectCurationCommitReport
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.restore_dataset_curation_from_snapshot_with_http_info(dataset, set_id, **kwargs)  # noqa: E501
-                else:
-                    (data) = self.restore_dataset_curation_from_snapshot_with_http_info(dataset, set_id, **kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def restore_dataset_curation_from_snapshot_with_http_info(self, dataset, set_id, **kwargs):  # noqa: E501
-        """Restore a dataset's curation from a SNAPSHOT, or compare it with the present.  # noqa: E501
-
-        Replays the snapshot's `CurationDocument` through the ordinary all-or-none commit, so there is no second diff implementation that could disagree with the first.  `?dryRun=true` is the compare: it reports exactly what would change to get back to the snapshot, and writes nothing.  🛑 A restore returns the curation's CONTENT, not its IDENTITY. Entities whose ids no longer exist — because an intervening run deleted and recreated them — come back as new rows with new ids, and any differential-expression analysis that survived that run is cascaded again on the way back. Run with `dryRun=true` first and read `requiresForce`.  Two commit rules read differently on a restore. The free-text experiment-tag checks (`UNGROUNDED_NOT_DECLARED`, `FREE_TEXT_NOT_HOOKED`) do not apply to the tags a snapshot re-creates. And a statement the snapshot holds WITHOUT a second predicate/object pair has the live pair cleared — except in a snapshot captured before 2026-09-08T16:43:10Z, when snapshots did not record pairs at all; there the live pair is kept.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.restore_dataset_curation_from_snapshot_with_http_info(dataset, set_id, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset82 dataset: (required)
-        :param int set_id: (required)
-        :param bool dry_run: Predict the changes without writing. This is the 'compare with the snapshot' mode.
-        :param bool force: Consent to the restore's consequences (analysis cascade, stranded subsets).
-        :param str on_behalf_of: Which curator this restore is FOR, when an agent is carrying it. Agents and admins only. A restore is a write like any other and mints its own snapshot, so it names the curator the same way a commit does; the document is Gemma's own bytes and has nowhere to carry the answer, which makes the parameter the only place it can come from.
-        :return: ResponseDataObjectCurationCommitReport
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['dataset', 'set_id', 'dry_run', 'force', 'on_behalf_of']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method restore_dataset_curation_from_snapshot" % key
-                )
-            params[key] = val
-        del params['kwargs']
-        # verify the required parameter 'dataset' is set
-        if ('dataset' not in params or
-                params['dataset'] is None):
-            raise ValueError("Missing the required parameter `dataset` when calling `restore_dataset_curation_from_snapshot`")  # noqa: E501
-        # verify the required parameter 'set_id' is set
-        if ('set_id' not in params or
-                params['set_id'] is None):
-            raise ValueError("Missing the required parameter `set_id` when calling `restore_dataset_curation_from_snapshot`")  # noqa: E501
-
-        collection_formats = {}
-
-        path_params = {}
-        if 'dataset' in params:
-            path_params['dataset'] = params['dataset']  # noqa: E501
-        if 'set_id' in params:
-            path_params['setId'] = params['set_id']  # noqa: E501
-
-        query_params = []
-        if 'dry_run' in params:
-            query_params.append(('dryRun', params['dry_run']))  # noqa: E501
-        if 'force' in params:
-            query_params.append(('force', params['force']))  # noqa: E501
-        if 'on_behalf_of' in params:
-            query_params.append(('onBehalfOf', params['on_behalf_of']))  # noqa: E501
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = 'ResponseDataObjectCurationCommitReport' # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/datasets/{dataset}/annotation-sets/{setId}/restore', 'POST',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
-    def rule_on_finding(self, id, **kwargs):  # noqa: E501
-        """Rule on one finding inside an annotation set  # noqa: E501
-
-        `disposition` is one of `accepted`, `dismissed`, `needs_more_info` — the curation store's own per-finding vocabulary, adopted here rather than re-spelled. There is no `pending`: a finding nobody has ruled on has no row, so absence is the state.  🛑 `reason` is REQUIRED for `needs_more_info` and optional for the other two. That value's entire content is the reason — `accepted` and `dismissed` are self-describing, but \"a human looked and stopped\" without the blocker cannot be told apart from nobody having looked. Free text; there is no vocabulary for it. The producing side enforces the same rule, so a ruling without one is a row it would refuse to construct.  🛑 Not `/triage`, which rules on the whole set. A curator routinely accepts one finding and rejects another on the same target, and one set-level verdict cannot carry that outcome.  `targetId` and `findingId` are both the PRODUCER's own strings and both opaque here — the payload is stored as JSON text and never parsed, so an id naming nothing is accepted and only the producer can tell.  🛑 SEND `findingId` WHENEVER YOU HAVE ONE. A target does not name a finding: one target routinely carries several, and two of them can be actionable, so a ruling keyed on the target alone cannot say which finding it ruled on. Standing rulings key on `findingId` where present and `targetId` otherwise, and the two never supersede each other.  Rulings are append-only, so this always writes a new row; `GET` returns the standing ruling per finding and `?history=true` the full sequence. `?onBehalfOf=` names the person ruling and is honoured only for `GROUP_AGENT` / `GROUP_ADMIN`. 🛑 An agent MUST send it, naming the person who directed it and never its own account: `decidedBy` names a person.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.rule_on_finding(id, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param int id: (required)
-        :param DispositionRequest body:
-        :param str on_behalf_of: The person ruling. Required from an agent; agents and admins only.
-        :return: DispositionResponse
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.rule_on_finding_with_http_info(id, **kwargs)  # noqa: E501
-                else:
-                    (data) = self.rule_on_finding_with_http_info(id, **kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def rule_on_finding_with_http_info(self, id, **kwargs):  # noqa: E501
-        """Rule on one finding inside an annotation set  # noqa: E501
-
-        `disposition` is one of `accepted`, `dismissed`, `needs_more_info` — the curation store's own per-finding vocabulary, adopted here rather than re-spelled. There is no `pending`: a finding nobody has ruled on has no row, so absence is the state.  🛑 `reason` is REQUIRED for `needs_more_info` and optional for the other two. That value's entire content is the reason — `accepted` and `dismissed` are self-describing, but \"a human looked and stopped\" without the blocker cannot be told apart from nobody having looked. Free text; there is no vocabulary for it. The producing side enforces the same rule, so a ruling without one is a row it would refuse to construct.  🛑 Not `/triage`, which rules on the whole set. A curator routinely accepts one finding and rejects another on the same target, and one set-level verdict cannot carry that outcome.  `targetId` and `findingId` are both the PRODUCER's own strings and both opaque here — the payload is stored as JSON text and never parsed, so an id naming nothing is accepted and only the producer can tell.  🛑 SEND `findingId` WHENEVER YOU HAVE ONE. A target does not name a finding: one target routinely carries several, and two of them can be actionable, so a ruling keyed on the target alone cannot say which finding it ruled on. Standing rulings key on `findingId` where present and `targetId` otherwise, and the two never supersede each other.  Rulings are append-only, so this always writes a new row; `GET` returns the standing ruling per finding and `?history=true` the full sequence. `?onBehalfOf=` names the person ruling and is honoured only for `GROUP_AGENT` / `GROUP_ADMIN`. 🛑 An agent MUST send it, naming the person who directed it and never its own account: `decidedBy` names a person.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.rule_on_finding_with_http_info(id, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param int id: (required)
-        :param DispositionRequest body:
-        :param str on_behalf_of: The person ruling. Required from an agent; agents and admins only.
-        :return: DispositionResponse
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['id', 'body', 'on_behalf_of']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method rule_on_finding" % key
-                )
-            params[key] = val
-        del params['kwargs']
-        # verify the required parameter 'id' is set
-        if ('id' not in params or
-                params['id'] is None):
-            raise ValueError("Missing the required parameter `id` when calling `rule_on_finding`")  # noqa: E501
-
-        collection_formats = {}
-
-        path_params = {}
-        if 'id' in params:
-            path_params['id'] = params['id']  # noqa: E501
-
-        query_params = []
-        if 'on_behalf_of' in params:
-            query_params.append(('onBehalfOf', params['on_behalf_of']))  # noqa: E501
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        if 'body' in params:
-            body_params = params['body']
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = 'DispositionResponse' # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/annotation-sets/{id}/dispositions', 'POST',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
-    def run_dataset_batch_information_fetch(self, dataset, **kwargs):  # noqa: E501
-        """Run a batch-information fetch for a dataset  # noqa: E501
-
-        Re-fetches batch information from the source data. Returns 202 with a `Location` header pointing at `/tasks/{taskId}`.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.run_dataset_batch_information_fetch(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset83 dataset: (required)
-        :return: ResponseDataObjectTaskStatusValueObject
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.run_dataset_batch_information_fetch_with_http_info(dataset, **kwargs)  # noqa: E501
-                else:
-                    (data) = self.run_dataset_batch_information_fetch_with_http_info(dataset, **kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def run_dataset_batch_information_fetch_with_http_info(self, dataset, **kwargs):  # noqa: E501
-        """Run a batch-information fetch for a dataset  # noqa: E501
-
-        Re-fetches batch information from the source data. Returns 202 with a `Location` header pointing at `/tasks/{taskId}`.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.run_dataset_batch_information_fetch_with_http_info(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset83 dataset: (required)
-        :return: ResponseDataObjectTaskStatusValueObject
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['dataset']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method run_dataset_batch_information_fetch" % key
-                )
-            params[key] = val
-        del params['kwargs']
-        # verify the required parameter 'dataset' is set
-        if ('dataset' not in params or
-                params['dataset'] is None):
-            raise ValueError("Missing the required parameter `dataset` when calling `run_dataset_batch_information_fetch`")  # noqa: E501
-
-        collection_formats = {}
-
-        path_params = {}
-        if 'dataset' in params:
-            path_params['dataset'] = params['dataset']  # noqa: E501
-
-        query_params = []
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = 'ResponseDataObjectTaskStatusValueObject' # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/datasets/{dataset}/tasks/batchInfo', 'POST',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
-    def run_dataset_diagnostics(self, dataset, **kwargs):  # noqa: E501
-        """Submit a diagnostics-only preprocessing run for a dataset  # noqa: E501
-
-        Refreshes mean-variance, PCA and sample-correlation diagnostics without recomputing processed vectors. Returns 202 with a `Location` header pointing at `/tasks/{taskId}`.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.run_dataset_diagnostics(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset84 dataset: (required)
-        :return: ResponseDataObjectTaskStatusValueObject
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.run_dataset_diagnostics_with_http_info(dataset, **kwargs)  # noqa: E501
-                else:
-                    (data) = self.run_dataset_diagnostics_with_http_info(dataset, **kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def run_dataset_diagnostics_with_http_info(self, dataset, **kwargs):  # noqa: E501
-        """Submit a diagnostics-only preprocessing run for a dataset  # noqa: E501
-
-        Refreshes mean-variance, PCA and sample-correlation diagnostics without recomputing processed vectors. Returns 202 with a `Location` header pointing at `/tasks/{taskId}`.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.run_dataset_diagnostics_with_http_info(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset84 dataset: (required)
-        :return: ResponseDataObjectTaskStatusValueObject
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['dataset']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method run_dataset_diagnostics" % key
-                )
-            params[key] = val
-        del params['kwargs']
-        # verify the required parameter 'dataset' is set
-        if ('dataset' not in params or
-                params['dataset'] is None):
-            raise ValueError("Missing the required parameter `dataset` when calling `run_dataset_diagnostics`")  # noqa: E501
-
-        collection_formats = {}
-
-        path_params = {}
-        if 'dataset' in params:
-            path_params['dataset'] = params['dataset']  # noqa: E501
-
-        query_params = []
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = 'ResponseDataObjectTaskStatusValueObject' # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/datasets/{dataset}/tasks/diagnostics', 'POST',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
-    def run_dataset_differential_analysis(self, dataset, **kwargs):  # noqa: E501
-        """Run differential expression analysis for a dataset  # noqa: E501
-
-        If the request body is omitted (or all fields are null), every non-batch experimental factor is included with `includeInteractions=true`. Returns 202 with a `Location` header pointing at `/tasks/{taskId}`. Note: when any selected factor is a batch factor the interaction term is silently dropped, mirroring the legacy controller's behaviour.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.run_dataset_differential_analysis(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset85 dataset: (required)
-        :param DifferentialAnalysisRunRequest body:
-        :return: ResponseDataObjectTaskStatusValueObject
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.run_dataset_differential_analysis_with_http_info(dataset, **kwargs)  # noqa: E501
-                else:
-                    (data) = self.run_dataset_differential_analysis_with_http_info(dataset, **kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def run_dataset_differential_analysis_with_http_info(self, dataset, **kwargs):  # noqa: E501
-        """Run differential expression analysis for a dataset  # noqa: E501
-
-        If the request body is omitted (or all fields are null), every non-batch experimental factor is included with `includeInteractions=true`. Returns 202 with a `Location` header pointing at `/tasks/{taskId}`. Note: when any selected factor is a batch factor the interaction term is silently dropped, mirroring the legacy controller's behaviour.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.run_dataset_differential_analysis_with_http_info(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset85 dataset: (required)
-        :param DifferentialAnalysisRunRequest body:
-        :return: ResponseDataObjectTaskStatusValueObject
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['dataset', 'body']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method run_dataset_differential_analysis" % key
-                )
-            params[key] = val
-        del params['kwargs']
-        # verify the required parameter 'dataset' is set
-        if ('dataset' not in params or
-                params['dataset'] is None):
-            raise ValueError("Missing the required parameter `dataset` when calling `run_dataset_differential_analysis`")  # noqa: E501
-
-        collection_formats = {}
-
-        path_params = {}
-        if 'dataset' in params:
-            path_params['dataset'] = params['dataset']  # noqa: E501
-
-        query_params = []
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        if 'body' in params:
-            body_params = params['body']
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = 'ResponseDataObjectTaskStatusValueObject' # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/datasets/{dataset}/tasks/differential', 'POST',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
-    def run_dataset_differential_analysis_alias(self, dataset, **kwargs):  # noqa: E501
-        """Run differential expression analysis for a dataset (alias of /tasks/differential)  # noqa: E501
-
-        Curation-UI compatibility alias for `POST /datasets/{id}/tasks/differential`. Behaviour is identical to the canonical endpoint.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.run_dataset_differential_analysis_alias(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset34 dataset: (required)
-        :param DifferentialAnalysisRunRequest body:
-        :return: ResponseDataObjectTaskStatusValueObject
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.run_dataset_differential_analysis_alias_with_http_info(dataset, **kwargs)  # noqa: E501
-                else:
-                    (data) = self.run_dataset_differential_analysis_alias_with_http_info(dataset, **kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def run_dataset_differential_analysis_alias_with_http_info(self, dataset, **kwargs):  # noqa: E501
-        """Run differential expression analysis for a dataset (alias of /tasks/differential)  # noqa: E501
-
-        Curation-UI compatibility alias for `POST /datasets/{id}/tasks/differential`. Behaviour is identical to the canonical endpoint.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.run_dataset_differential_analysis_alias_with_http_info(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset34 dataset: (required)
-        :param DifferentialAnalysisRunRequest body:
-        :return: ResponseDataObjectTaskStatusValueObject
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['dataset', 'body']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method run_dataset_differential_analysis_alias" % key
-                )
-            params[key] = val
-        del params['kwargs']
-        # verify the required parameter 'dataset' is set
-        if ('dataset' not in params or
-                params['dataset'] is None):
-            raise ValueError("Missing the required parameter `dataset` when calling `run_dataset_differential_analysis_alias`")  # noqa: E501
-
-        collection_formats = {}
-
-        path_params = {}
-        if 'dataset' in params:
-            path_params['dataset'] = params['dataset']  # noqa: E501
-
-        query_params = []
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        if 'body' in params:
-            body_params = params['body']
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = 'ResponseDataObjectTaskStatusValueObject' # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/datasets/{dataset}/analyses/differential', 'POST',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
-    def run_dataset_geeq(self, dataset, **kwargs):  # noqa: E501
-        """Recompute GEEQ quality scores for a dataset (async)  # noqa: E501
-
-        Submits an async task that recomputes the GEEQ quality scores for the dataset and writes a `GeeqEvent` to the audit log. The optional `mode` query parameter selects which subset of scores to recompute (`all`, `batch`, `reps`, `pub`); defaults to `all`. Returns 202 with a `Location` header pointing at `/tasks/{taskId}`. The companion synchronous endpoint `PUT /{dataset}/geeq` blocks until the recompute finishes; this task variant returns immediately.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.run_dataset_geeq(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset86 dataset: (required)
-        :param str mode:
-        :return: ResponseDataObjectTaskStatusValueObject
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.run_dataset_geeq_with_http_info(dataset, **kwargs)  # noqa: E501
-                else:
-                    (data) = self.run_dataset_geeq_with_http_info(dataset, **kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def run_dataset_geeq_with_http_info(self, dataset, **kwargs):  # noqa: E501
-        """Recompute GEEQ quality scores for a dataset (async)  # noqa: E501
-
-        Submits an async task that recomputes the GEEQ quality scores for the dataset and writes a `GeeqEvent` to the audit log. The optional `mode` query parameter selects which subset of scores to recompute (`all`, `batch`, `reps`, `pub`); defaults to `all`. Returns 202 with a `Location` header pointing at `/tasks/{taskId}`. The companion synchronous endpoint `PUT /{dataset}/geeq` blocks until the recompute finishes; this task variant returns immediately.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.run_dataset_geeq_with_http_info(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset86 dataset: (required)
-        :param str mode:
-        :return: ResponseDataObjectTaskStatusValueObject
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['dataset', 'mode']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method run_dataset_geeq" % key
-                )
-            params[key] = val
-        del params['kwargs']
-        # verify the required parameter 'dataset' is set
-        if ('dataset' not in params or
-                params['dataset'] is None):
-            raise ValueError("Missing the required parameter `dataset` when calling `run_dataset_geeq`")  # noqa: E501
-
-        collection_formats = {}
-
-        path_params = {}
-        if 'dataset' in params:
-            path_params['dataset'] = params['dataset']  # noqa: E501
-
-        query_params = []
-        if 'mode' in params:
-            query_params.append(('mode', params['mode']))  # noqa: E501
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = 'ResponseDataObjectTaskStatusValueObject' # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/datasets/{dataset}/tasks/geeq', 'POST',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
-    def run_dataset_preprocess(self, dataset, **kwargs):  # noqa: E501
-        """Run preprocessing run for a dataset  # noqa: E501
-
-        Recomputes processed data vectors and refreshes downstream diagnostics. Returns 202 with a `Location` header pointing at the polling endpoint `/tasks/{taskId}`. Tasks are kept in memory only and evicted ~10 minutes after completion.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.run_dataset_preprocess(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset87 dataset: (required)
-        :return: ResponseDataObjectTaskStatusValueObject
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.run_dataset_preprocess_with_http_info(dataset, **kwargs)  # noqa: E501
-                else:
-                    (data) = self.run_dataset_preprocess_with_http_info(dataset, **kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def run_dataset_preprocess_with_http_info(self, dataset, **kwargs):  # noqa: E501
-        """Run preprocessing run for a dataset  # noqa: E501
-
-        Recomputes processed data vectors and refreshes downstream diagnostics. Returns 202 with a `Location` header pointing at the polling endpoint `/tasks/{taskId}`. Tasks are kept in memory only and evicted ~10 minutes after completion.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.run_dataset_preprocess_with_http_info(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset87 dataset: (required)
-        :return: ResponseDataObjectTaskStatusValueObject
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['dataset']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method run_dataset_preprocess" % key
-                )
-            params[key] = val
-        del params['kwargs']
-        # verify the required parameter 'dataset' is set
-        if ('dataset' not in params or
-                params['dataset'] is None):
-            raise ValueError("Missing the required parameter `dataset` when calling `run_dataset_preprocess`")  # noqa: E501
-
-        collection_formats = {}
-
-        path_params = {}
-        if 'dataset' in params:
-            path_params['dataset'] = params['dataset']  # noqa: E501
-
-        query_params = []
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = 'ResponseDataObjectTaskStatusValueObject' # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/datasets/{dataset}/tasks/preprocess', 'POST',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
-    def run_dataset_svd(self, dataset, **kwargs):  # noqa: E501
-        """Recompute the singular value decomposition for a dataset  # noqa: E501
-
-        Submits an async task that recomputes the SVD of the dataset's expression matrix and persists the result. The companion `GET /{dataset}/svd` reads the stored result. Returns 202 with a `Location` header pointing at `/tasks/{taskId}`.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.run_dataset_svd(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset88 dataset: (required)
-        :return: ResponseDataObjectTaskStatusValueObject
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.run_dataset_svd_with_http_info(dataset, **kwargs)  # noqa: E501
-                else:
-                    (data) = self.run_dataset_svd_with_http_info(dataset, **kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def run_dataset_svd_with_http_info(self, dataset, **kwargs):  # noqa: E501
-        """Recompute the singular value decomposition for a dataset  # noqa: E501
-
-        Submits an async task that recomputes the SVD of the dataset's expression matrix and persists the result. The companion `GET /{dataset}/svd` reads the stored result. Returns 202 with a `Location` header pointing at `/tasks/{taskId}`.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.run_dataset_svd_with_http_info(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset88 dataset: (required)
-        :return: ResponseDataObjectTaskStatusValueObject
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['dataset']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method run_dataset_svd" % key
-                )
-            params[key] = val
-        del params['kwargs']
-        # verify the required parameter 'dataset' is set
-        if ('dataset' not in params or
-                params['dataset'] is None):
-            raise ValueError("Missing the required parameter `dataset` when calling `run_dataset_svd`")  # noqa: E501
-
-        collection_formats = {}
-
-        path_params = {}
-        if 'dataset' in params:
-            path_params['dataset'] = params['dataset']  # noqa: E501
-
-        query_params = []
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = 'ResponseDataObjectTaskStatusValueObject' # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/datasets/{dataset}/tasks/svd', 'POST',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
-    def run_dataset_switch_platform(self, dataset, **kwargs):  # noqa: E501
-        """Switch a dataset to use a different (typically merged) array design (async)  # noqa: E501
-
-        Submits an async task that switches every BioAssay on the experiment to use the supplied target ArrayDesign (looked up by short name, e.g. `GPL570`), remaps composite-sequence-keyed vectors, and writes an `ExpressionExperimentPlatformSwitchEvent` to the audit log. If `targetArrayDesignName` is omitted (or the request body is omitted entirely) the service auto-detects a merged platform that the experiment's current ArrayDesigns are merged into; fails if none exists or the merge is ambiguous. This task is potentially long-running because it remaps every raw vector and regenerates processed vectors. Returns 202 with a `Location` header pointing at `/tasks/{taskId}`. Mirrors the `switchExperimentPlatform` CLI.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.run_dataset_switch_platform(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset89 dataset: (required)
-        :param PlatformSwitchRequest body:
-        :return: ResponseDataObjectTaskStatusValueObject
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.run_dataset_switch_platform_with_http_info(dataset, **kwargs)  # noqa: E501
-                else:
-                    (data) = self.run_dataset_switch_platform_with_http_info(dataset, **kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def run_dataset_switch_platform_with_http_info(self, dataset, **kwargs):  # noqa: E501
-        """Switch a dataset to use a different (typically merged) array design (async)  # noqa: E501
-
-        Submits an async task that switches every BioAssay on the experiment to use the supplied target ArrayDesign (looked up by short name, e.g. `GPL570`), remaps composite-sequence-keyed vectors, and writes an `ExpressionExperimentPlatformSwitchEvent` to the audit log. If `targetArrayDesignName` is omitted (or the request body is omitted entirely) the service auto-detects a merged platform that the experiment's current ArrayDesigns are merged into; fails if none exists or the merge is ambiguous. This task is potentially long-running because it remaps every raw vector and regenerates processed vectors. Returns 202 with a `Location` header pointing at `/tasks/{taskId}`. Mirrors the `switchExperimentPlatform` CLI.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.run_dataset_switch_platform_with_http_info(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset89 dataset: (required)
-        :param PlatformSwitchRequest body:
-        :return: ResponseDataObjectTaskStatusValueObject
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['dataset', 'body']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method run_dataset_switch_platform" % key
-                )
-            params[key] = val
-        del params['kwargs']
-        # verify the required parameter 'dataset' is set
-        if ('dataset' not in params or
-                params['dataset'] is None):
-            raise ValueError("Missing the required parameter `dataset` when calling `run_dataset_switch_platform`")  # noqa: E501
-
-        collection_formats = {}
-
-        path_params = {}
-        if 'dataset' in params:
-            path_params['dataset'] = params['dataset']  # noqa: E501
-
-        query_params = []
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        if 'body' in params:
-            body_params = params['body']
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = 'ResponseDataObjectTaskStatusValueObject' # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/datasets/{dataset}/tasks/switch-platform', 'POST',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
     def search(self, **kwargs):  # noqa: E501
         """Search everything in Gemma  # noqa: E501
 
@@ -21810,9 +15222,9 @@ class DefaultApi(object):
 
         :param async_req bool
         :param QueryArg query:
-        :param Dataset94 dataset:
-        :param Taxon10 taxon:
-        :param Platform9 platform:
+        :param Dataset44 dataset:
+        :param Taxon9 taxon:
+        :param Platform8 platform:
         :param list[str] result_types:
         :param int limit: Maximum number of search results to return; capped at 2000 unless `resultObject` is excluded.
         :param list[str] exclude: List of fields to exclude from the payload. Only `resultObject` is supported.
@@ -21851,9 +15263,9 @@ class DefaultApi(object):
 
         :param async_req bool
         :param QueryArg query:
-        :param Dataset94 dataset:
-        :param Taxon10 taxon:
-        :param Platform9 platform:
+        :param Dataset44 dataset:
+        :param Taxon9 taxon:
+        :param Platform8 platform:
         :param list[str] result_types:
         :param int limit: Maximum number of search results to return; capped at 2000 unless `resultObject` is excluded.
         :param list[str] exclude: List of fields to exclude from the payload. Only `resultObject` is supported.
@@ -21960,7 +15372,7 @@ class DefaultApi(object):
         :param bool exact_label: When `true`, keep only candidates whose label is case-insensitively equal to the (trimmed) query string. Cuts wire traffic for resolver-style callers that already know the exact label and only need the canonical row(s). Filter is applied BEFORE ranking + truncation, so `top_k`/`limit` still applies when an exact match has multiple alternate-URI rows. Empty result is `200` with `data: []`. Default `false` (current substring behaviour). See handoffs/HANDOFF_2026-05-25_EXACT_LABEL_PARAM.md.
         :param str category: Hint from the calling widget about what kind of annotation is being edited. Accepts the category label (e.g. `genotype`, `organism part`), the matching EFO URI, or any spelling that differs only in case and separators — `cell line`, `cellLine`, `Cell Line` and `cell_line` are one category. An unrecognised value is ignored (no promotion), never an error. Gene-symbol matches (value=symbol, valueUri=NCBI Gene URI, category=`gene`) are merged in unconditionally so STAT5B finds the gene whether the picker is on Genotype, Treatment, or a generic characteristic. When supplied WITHOUT an explicit `prefixes` allow-list, the category's preferred ontology namespaces (configured by `annotation.category.prefixes`, and readable per-category from `/annotations/categories`) promote *exactly-matching* hits in those namespaces to the front. \"Exactly-matching\" means the hit NAMES the query through its preferred label, an OBO exact/narrow synonym, or an alt label — an OBO *related* synonym does not qualify. That gate is why promotion cannot separate drug abbreviations: ChEBI files most abbreviations as related synonyms (`FTC` on both ferroptocide and emtricitabine, `DMSO` on dimethyl sulfoxide), so under `category=treatment` no CHEBI candidate is promotable and `FTC` still leads with the identically-named MGI gene. Loosening the gate would not fix it either — it would promote ferroptocide, which the corpus never uses, ahead of emtricitabine, whose matched string is `(-)-FTC` rather than `FTC`. Only corpus usage separates that pair; pass `rank=usage`. Promotion never filters and never applies to near-matches; see `suppress_near_matches` for the filtering counterpart. The parameter keys the response cache.
         :param bool suppress_near_matches: When `true`, drop near-matches for *designation-shaped* queries — a single token carrying both letters and digits, which is the shape of a compound code (`MK-2206`, `GSK2879552`), a cell-line designation (`NCI-H358`), or a mouse strain (`C57BL/6J`). For those, a hit that merely shares a prefix or some tokens is never the same entity — `MK-8353` is a different compound from `MK-2206` — so only hits matching the query exactly on the preferred label or a declared synonym are kept (compared hyphen- and `cell`-suffix-insensitively, so `MK2206` still finds `MK-2206`). Descriptive queries (`diamide`, `high fat diet`) are left alone: there a near-match is often the right term, and returning nothing just pushes the caller onto a fuzzy fallback, which is the failure mode this flag exists to prevent. Off by default — typeahead needs prefix matching, and a curator mid-way through typing `NCI-H3` must still see candidates. Resolver-style callers that hold a complete name should pass `true`.  When identity matching runs, the response carries a `negativeEvidence` object beside `data`. `solidMatch: false` is a CONFIDENT negative — we searched and nothing names this string — which an empty `data` array alone cannot tell you apart from \"the ontology wasn't loaded\" or \"this call never ran\". `ruledOut` lists the terms that came back and are NOT it, because knowing there is no match does not stop a downstream stage from proposing `mk-8353` for `MK-8722`, whereas knowing it is not `mk-8353` does. The ruled-out terms are deliberately kept OUT of `data`, so a client that ignores the new field can never pick one up by reading `data[0]`.
-        :param Taxon1 taxon: Optional taxon hint to scope gene fan-out. Accepts the same TaxonArg forms as elsewhere (common name `mouse`, scientific name `Mus musculus`, NCBI taxonomy id `10090`, or numeric Gemma taxon id). When supplied, gene matches are restricted to that taxon — typing `Il10` on a mouse dataset no longer surfaces rat/human Il10 rows. When omitted (default), gene fan-out returns all taxa as before. The ontology search side is unaffected.
+        :param Taxon taxon: Optional taxon hint to scope gene fan-out. Accepts the same TaxonArg forms as elsewhere (common name `mouse`, scientific name `Mus musculus`, NCBI taxonomy id `10090`, or numeric Gemma taxon id). When supplied, gene matches are restricted to that taxon — typing `Il10` on a mouse dataset no longer surfaces rat/human Il10 rows. When omitted (default), gene fan-out returns all taxa as before. The ontology search side is unaffected.
         :param bool include_gene_count: When true, populate `geneCount` on each hit with the distinct number of genes annotated to that GO term (including descendants walked under the `geneCountMaxTerms` cap). Adds a parallel fan-out at the response shape boundary; sub-100ms on a warm GO index. Default false.
         :param int gene_count_max_terms: When `includeGeneCount=true`, cap the per-hit BFS descendant walk at this many GO terms. Default 50 (bounds broad parents like `metabolic process` to ~50ms per hit). 0 = unbounded; not recommended for typeahead.
         :param bool include_genes: When `true` (default), merge synthetic gene rows (symbol / name / alias matches) into the results — the STAT5B-finds-the-gene behaviour. Each query token fires three sequential GeneService probes, the dominant slice of the per-call latency floor. Resolver-style callers working a non-gene position (organism part, disease, …) pass `false` to skip the fan-out entirely and cut that floor.
@@ -22007,7 +15419,7 @@ class DefaultApi(object):
         :param bool exact_label: When `true`, keep only candidates whose label is case-insensitively equal to the (trimmed) query string. Cuts wire traffic for resolver-style callers that already know the exact label and only need the canonical row(s). Filter is applied BEFORE ranking + truncation, so `top_k`/`limit` still applies when an exact match has multiple alternate-URI rows. Empty result is `200` with `data: []`. Default `false` (current substring behaviour). See handoffs/HANDOFF_2026-05-25_EXACT_LABEL_PARAM.md.
         :param str category: Hint from the calling widget about what kind of annotation is being edited. Accepts the category label (e.g. `genotype`, `organism part`), the matching EFO URI, or any spelling that differs only in case and separators — `cell line`, `cellLine`, `Cell Line` and `cell_line` are one category. An unrecognised value is ignored (no promotion), never an error. Gene-symbol matches (value=symbol, valueUri=NCBI Gene URI, category=`gene`) are merged in unconditionally so STAT5B finds the gene whether the picker is on Genotype, Treatment, or a generic characteristic. When supplied WITHOUT an explicit `prefixes` allow-list, the category's preferred ontology namespaces (configured by `annotation.category.prefixes`, and readable per-category from `/annotations/categories`) promote *exactly-matching* hits in those namespaces to the front. \"Exactly-matching\" means the hit NAMES the query through its preferred label, an OBO exact/narrow synonym, or an alt label — an OBO *related* synonym does not qualify. That gate is why promotion cannot separate drug abbreviations: ChEBI files most abbreviations as related synonyms (`FTC` on both ferroptocide and emtricitabine, `DMSO` on dimethyl sulfoxide), so under `category=treatment` no CHEBI candidate is promotable and `FTC` still leads with the identically-named MGI gene. Loosening the gate would not fix it either — it would promote ferroptocide, which the corpus never uses, ahead of emtricitabine, whose matched string is `(-)-FTC` rather than `FTC`. Only corpus usage separates that pair; pass `rank=usage`. Promotion never filters and never applies to near-matches; see `suppress_near_matches` for the filtering counterpart. The parameter keys the response cache.
         :param bool suppress_near_matches: When `true`, drop near-matches for *designation-shaped* queries — a single token carrying both letters and digits, which is the shape of a compound code (`MK-2206`, `GSK2879552`), a cell-line designation (`NCI-H358`), or a mouse strain (`C57BL/6J`). For those, a hit that merely shares a prefix or some tokens is never the same entity — `MK-8353` is a different compound from `MK-2206` — so only hits matching the query exactly on the preferred label or a declared synonym are kept (compared hyphen- and `cell`-suffix-insensitively, so `MK2206` still finds `MK-2206`). Descriptive queries (`diamide`, `high fat diet`) are left alone: there a near-match is often the right term, and returning nothing just pushes the caller onto a fuzzy fallback, which is the failure mode this flag exists to prevent. Off by default — typeahead needs prefix matching, and a curator mid-way through typing `NCI-H3` must still see candidates. Resolver-style callers that hold a complete name should pass `true`.  When identity matching runs, the response carries a `negativeEvidence` object beside `data`. `solidMatch: false` is a CONFIDENT negative — we searched and nothing names this string — which an empty `data` array alone cannot tell you apart from \"the ontology wasn't loaded\" or \"this call never ran\". `ruledOut` lists the terms that came back and are NOT it, because knowing there is no match does not stop a downstream stage from proposing `mk-8353` for `MK-8722`, whereas knowing it is not `mk-8353` does. The ruled-out terms are deliberately kept OUT of `data`, so a client that ignores the new field can never pick one up by reading `data[0]`.
-        :param Taxon1 taxon: Optional taxon hint to scope gene fan-out. Accepts the same TaxonArg forms as elsewhere (common name `mouse`, scientific name `Mus musculus`, NCBI taxonomy id `10090`, or numeric Gemma taxon id). When supplied, gene matches are restricted to that taxon — typing `Il10` on a mouse dataset no longer surfaces rat/human Il10 rows. When omitted (default), gene fan-out returns all taxa as before. The ontology search side is unaffected.
+        :param Taxon taxon: Optional taxon hint to scope gene fan-out. Accepts the same TaxonArg forms as elsewhere (common name `mouse`, scientific name `Mus musculus`, NCBI taxonomy id `10090`, or numeric Gemma taxon id). When supplied, gene matches are restricted to that taxon — typing `Il10` on a mouse dataset no longer surfaces rat/human Il10 rows. When omitted (default), gene fan-out returns all taxa as before. The ontology search side is unaffected.
         :param bool include_gene_count: When true, populate `geneCount` on each hit with the distinct number of genes annotated to that GO term (including descendants walked under the `geneCountMaxTerms` cap). Adds a parallel fan-out at the response shape boundary; sub-100ms on a warm GO index. Default false.
         :param int gene_count_max_terms: When `includeGeneCount=true`, cap the per-hit BFS descendant walk at this many GO terms. Default 50 (bounds broad parents like `metabolic process` to ~50ms per hit). 0 = unbounded; not recommended for typeahead.
         :param bool include_genes: When `true` (default), merge synthetic gene rows (symbol / name / alias matches) into the results — the STAT5B-finds-the-gene behaviour. Each query token fires three sequential GeneService probes, the dominant slice of the per-call latency floor. Resolver-style callers working a non-gene position (organism part, disease, …) pass `false` to skip the fan-out entirely and cut that floor.
@@ -22095,121 +15507,6 @@ class DefaultApi(object):
 
         return self.api_client.call_api(
             '/annotations/search', 'GET',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
-    def search_annotations_batch(self, **kwargs):  # noqa: E501
-        """Batch search for annotation tags  # noqa: E501
-
-        Resolve many labels in ONE request. Each item is searched independently (NOT unioned into a single result set the way a comma-delimited ?query= is) and returns its own ordered result list, so a curation resolver can collapse the dozens of round-trips a proposal pass would otherwise fire into a single call. Per-item work runs in parallel server-side (bounded to 8 workers) and reuses the SAME response cache as GET /annotations/search, so repeated labels — within the batch or across later calls — are free. The shared knobs (rank, limit, prefixes, exactLabel, suppressNearMatches, taxon, includeGenes, includeGeneCount, geneCountMaxTerms) apply to every item; only category is per-item. A per-item failure is reported in that item's `error` field and does NOT fail the batch. At most 200 items per request.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.search_annotations_batch(async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param AnnotationSearchBatchRequest body:
-        :return: ResponseDataObjectListAnnotationSearchBatchResultValueObject
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.search_annotations_batch_with_http_info(**kwargs)  # noqa: E501
-                else:
-                    (data) = self.search_annotations_batch_with_http_info(**kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def search_annotations_batch_with_http_info(self, **kwargs):  # noqa: E501
-        """Batch search for annotation tags  # noqa: E501
-
-        Resolve many labels in ONE request. Each item is searched independently (NOT unioned into a single result set the way a comma-delimited ?query= is) and returns its own ordered result list, so a curation resolver can collapse the dozens of round-trips a proposal pass would otherwise fire into a single call. Per-item work runs in parallel server-side (bounded to 8 workers) and reuses the SAME response cache as GET /annotations/search, so repeated labels — within the batch or across later calls — are free. The shared knobs (rank, limit, prefixes, exactLabel, suppressNearMatches, taxon, includeGenes, includeGeneCount, geneCountMaxTerms) apply to every item; only category is per-item. A per-item failure is reported in that item's `error` field and does NOT fail the batch. At most 200 items per request.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.search_annotations_batch_with_http_info(async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param AnnotationSearchBatchRequest body:
-        :return: ResponseDataObjectListAnnotationSearchBatchResultValueObject
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['body']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method search_annotations_batch" % key
-                )
-            params[key] = val
-        del params['kwargs']
-
-        collection_formats = {}
-
-        path_params = {}
-
-        query_params = []
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        if 'body' in params:
-            body_params = params['body']
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = 'ResponseDataObjectListAnnotationSearchBatchResultValueObject' # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/annotations/search/batch', 'POST',
             path_params,
             query_params,
             header_params,
@@ -22730,7 +16027,7 @@ class DefaultApi(object):
 
         :param async_req bool
         :param str query:
-        :param Taxon7 taxon:
+        :param Taxon6 taxon:
         :param int limit:
         :return: ResponseDataObjectListGeneValueObject
                  If the method is called asynchronously,
@@ -22766,7 +16063,7 @@ class DefaultApi(object):
 
         :param async_req bool
         :param str query:
-        :param Taxon7 taxon:
+        :param Taxon6 taxon:
         :param int limit:
         :return: ResponseDataObjectListGeneValueObject
                  If the method is called asynchronously,
@@ -22848,7 +16145,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Taxon2 taxon: (required)
+        :param Taxon1 taxon: (required)
         :param list[str] query: A comma-delimited list of keywords to find annotations. Matching datasets for each query are intersected.
         :param FilterArgExpressionExperiment filter:
         :param int offset:
@@ -22887,7 +16184,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Taxon2 taxon: (required)
+        :param Taxon1 taxon: (required)
         :param list[str] query: A comma-delimited list of keywords to find annotations. Matching datasets for each query are intersected.
         :param FilterArgExpressionExperiment filter:
         :param int offset:
@@ -22984,7 +16281,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Taxon3 taxon: (required)
+        :param Taxon2 taxon: (required)
         :param list[str] query: A comma-delimited list of keywords to find annotations. Matching datasets for each query are intersected. (required)
         :param FilterArgExpressionExperiment filter:
         :param int offset:
@@ -23023,7 +16320,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param Taxon3 taxon: (required)
+        :param Taxon2 taxon: (required)
         :param list[str] query: A comma-delimited list of keywords to find annotations. Matching datasets for each query are intersected. (required)
         :param FilterArgExpressionExperiment filter:
         :param int offset:
@@ -23100,2004 +16397,6 @@ class DefaultApi(object):
 
         return self.api_client.call_api(
             '/annotations/{taxon}/search/{query}/datasets', 'GET',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
-    def set_annotation_set_status(self, id, **kwargs):  # noqa: E501
-        """Set a proposal's review status  # noqa: E501
-
-        The values in use are `pending`, `needs_changes`, `accepted` and `rejected` — the curation store's own four, adopted rather than re-spelled.  🛑 THOSE ARE THE VALUES IN USE, NOT THE VALUES PERMITTED. The field is a free string on purpose (Paul, 2026-09-04: \"don't lock us into any kind of enums. if we settle down on this we might formalize it\"), so a value outside that list is STORED AND RETURNED rather than rejected. The gate here is structural only — a status must be non-blank and must fit the column — and never a vocabulary check. A client must not switch exhaustively on the value it reads back.  Stored lowercase, which is the spelling every curation vocabulary uses on the wire, so a caller never has to case-fold to compare.  🛑 Not `/triage`, which records one judge's `fine|wont_fix|might_fix|must_fix` on how much a set matters, and not the per-finding `/dispositions`. This answers what happened to the proposal as a whole.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.set_annotation_set_status(id, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param int id: (required)
-        :param StatusRequest body:
-        :return: AnnotationSetResponse
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.set_annotation_set_status_with_http_info(id, **kwargs)  # noqa: E501
-                else:
-                    (data) = self.set_annotation_set_status_with_http_info(id, **kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def set_annotation_set_status_with_http_info(self, id, **kwargs):  # noqa: E501
-        """Set a proposal's review status  # noqa: E501
-
-        The values in use are `pending`, `needs_changes`, `accepted` and `rejected` — the curation store's own four, adopted rather than re-spelled.  🛑 THOSE ARE THE VALUES IN USE, NOT THE VALUES PERMITTED. The field is a free string on purpose (Paul, 2026-09-04: \"don't lock us into any kind of enums. if we settle down on this we might formalize it\"), so a value outside that list is STORED AND RETURNED rather than rejected. The gate here is structural only — a status must be non-blank and must fit the column — and never a vocabulary check. A client must not switch exhaustively on the value it reads back.  Stored lowercase, which is the spelling every curation vocabulary uses on the wire, so a caller never has to case-fold to compare.  🛑 Not `/triage`, which records one judge's `fine|wont_fix|might_fix|must_fix` on how much a set matters, and not the per-finding `/dispositions`. This answers what happened to the proposal as a whole.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.set_annotation_set_status_with_http_info(id, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param int id: (required)
-        :param StatusRequest body:
-        :return: AnnotationSetResponse
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['id', 'body']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method set_annotation_set_status" % key
-                )
-            params[key] = val
-        del params['kwargs']
-        # verify the required parameter 'id' is set
-        if ('id' not in params or
-                params['id'] is None):
-            raise ValueError("Missing the required parameter `id` when calling `set_annotation_set_status`")  # noqa: E501
-
-        collection_formats = {}
-
-        path_params = {}
-        if 'id' in params:
-            path_params['id'] = params['id']  # noqa: E501
-
-        query_params = []
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        if 'body' in params:
-            body_params = params['body']
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = 'AnnotationSetResponse' # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/annotation-sets/{id}/status', 'PATCH',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
-    def set_dataset_quantitation_type_preferred(self, dataset, qt_id, **kwargs):  # noqa: E501
-        """Set (or clear) a quantitation type's preferred flag  # noqa: E501
-
-        Body: optional `{\"preferred\": true|false}` (defaults to `true`). Marks the named QT as preferred for its vector-type bucket on the given dataset; any other QT that was previously preferred in the same bucket is automatically unmarked. Returns the updated `QuantitationTypeValueObject`.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.set_dataset_quantitation_type_preferred(dataset, qt_id, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset90 dataset: (required)
-        :param int qt_id: (required)
-        :param QuantitationTypePreferredRequest body:
-        :return: ResponseDataObjectQuantitationTypeValueObject
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.set_dataset_quantitation_type_preferred_with_http_info(dataset, qt_id, **kwargs)  # noqa: E501
-                else:
-                    (data) = self.set_dataset_quantitation_type_preferred_with_http_info(dataset, qt_id, **kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def set_dataset_quantitation_type_preferred_with_http_info(self, dataset, qt_id, **kwargs):  # noqa: E501
-        """Set (or clear) a quantitation type's preferred flag  # noqa: E501
-
-        Body: optional `{\"preferred\": true|false}` (defaults to `true`). Marks the named QT as preferred for its vector-type bucket on the given dataset; any other QT that was previously preferred in the same bucket is automatically unmarked. Returns the updated `QuantitationTypeValueObject`.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.set_dataset_quantitation_type_preferred_with_http_info(dataset, qt_id, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset90 dataset: (required)
-        :param int qt_id: (required)
-        :param QuantitationTypePreferredRequest body:
-        :return: ResponseDataObjectQuantitationTypeValueObject
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['dataset', 'qt_id', 'body']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method set_dataset_quantitation_type_preferred" % key
-                )
-            params[key] = val
-        del params['kwargs']
-        # verify the required parameter 'dataset' is set
-        if ('dataset' not in params or
-                params['dataset'] is None):
-            raise ValueError("Missing the required parameter `dataset` when calling `set_dataset_quantitation_type_preferred`")  # noqa: E501
-        # verify the required parameter 'qt_id' is set
-        if ('qt_id' not in params or
-                params['qt_id'] is None):
-            raise ValueError("Missing the required parameter `qt_id` when calling `set_dataset_quantitation_type_preferred`")  # noqa: E501
-
-        collection_formats = {}
-
-        path_params = {}
-        if 'dataset' in params:
-            path_params['dataset'] = params['dataset']  # noqa: E501
-        if 'qt_id' in params:
-            path_params['qtId'] = params['qt_id']  # noqa: E501
-
-        query_params = []
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        if 'body' in params:
-            body_params = params['body']
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = 'ResponseDataObjectQuantitationTypeValueObject' # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/datasets/{dataset}/quantitationTypes/{qtId}/preferred', 'PATCH',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
-    def sign_dataset_curation(self, dataset, **kwargs):  # noqa: E501
-        """Sign off a dataset's curation, applying what an ordinary commit holds back.  # noqa: E501
-
-        🛑 Not `POST /datasets/{id}/publish`. That one flips the ACL with a named reviewer and is unrelated; this one applies curation.  An ordinary `PUT /datasets/{id}/curation` refuses a change that would destroy derived data (409 `REQUIRES_FORCE`). Sign-off is where such a change belongs: it is the same commit, run once, with the analysis cascade, and **the signature is the consent** — no `?force=true`, and no admin requirement.  **The lock is what gates it.** Take it with `POST /datasets/{id}/curation/lock` first; signing without it is 409 `LOCK_REQUIRED`, as is signing while someone else holds it. Sign is the one write that requires holding the lock; a commit or restore is refused only while someone else holds it.  **With no request body — or an empty one** — the caller's `DRAFT` annotation set is what gets signed: that is the held-back delta, and its payload must be a `CurationDocument`. Pass a body with at least one section to sign something else; the body wins.  Everything the ordinary commit does still happens: the pre-commit `SNAPSHOT`, the `COMMIT` annotation set parented to the proposal when `run.proposalSetId` is given, the `baseline.lastModified` 409, and the ontology-term gate.  **A successful sign releases the lock**, because signing off ends the curator's turn — otherwise every signed dataset stays locked until its lease lapses. A sign that fails does not: the curator keeps the lock they need in order to re-read and sign again. A dry run never releases anything.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.sign_dataset_curation(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset91 dataset: (required)
-        :param CurationDocument body:
-        :param str on_behalf_of: Which curator is signing. Agents and admins only; the lock must be held by that identity.
-        :param bool dry_run: Predict the sign without writing. Still requires the lock — a dry run of a sign a curator could not perform is a misleading answer.
-        :param bool keep_lock: Keep the lock instead of releasing it on success. For a batch run, which signs many datasets under one claim and would otherwise drop its lock at the first sign and have every later commit refused by its own gate.
-        :return: ResponseDataObjectCurationCommitReport
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.sign_dataset_curation_with_http_info(dataset, **kwargs)  # noqa: E501
-                else:
-                    (data) = self.sign_dataset_curation_with_http_info(dataset, **kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def sign_dataset_curation_with_http_info(self, dataset, **kwargs):  # noqa: E501
-        """Sign off a dataset's curation, applying what an ordinary commit holds back.  # noqa: E501
-
-        🛑 Not `POST /datasets/{id}/publish`. That one flips the ACL with a named reviewer and is unrelated; this one applies curation.  An ordinary `PUT /datasets/{id}/curation` refuses a change that would destroy derived data (409 `REQUIRES_FORCE`). Sign-off is where such a change belongs: it is the same commit, run once, with the analysis cascade, and **the signature is the consent** — no `?force=true`, and no admin requirement.  **The lock is what gates it.** Take it with `POST /datasets/{id}/curation/lock` first; signing without it is 409 `LOCK_REQUIRED`, as is signing while someone else holds it. Sign is the one write that requires holding the lock; a commit or restore is refused only while someone else holds it.  **With no request body — or an empty one** — the caller's `DRAFT` annotation set is what gets signed: that is the held-back delta, and its payload must be a `CurationDocument`. Pass a body with at least one section to sign something else; the body wins.  Everything the ordinary commit does still happens: the pre-commit `SNAPSHOT`, the `COMMIT` annotation set parented to the proposal when `run.proposalSetId` is given, the `baseline.lastModified` 409, and the ontology-term gate.  **A successful sign releases the lock**, because signing off ends the curator's turn — otherwise every signed dataset stays locked until its lease lapses. A sign that fails does not: the curator keeps the lock they need in order to re-read and sign again. A dry run never releases anything.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.sign_dataset_curation_with_http_info(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset91 dataset: (required)
-        :param CurationDocument body:
-        :param str on_behalf_of: Which curator is signing. Agents and admins only; the lock must be held by that identity.
-        :param bool dry_run: Predict the sign without writing. Still requires the lock — a dry run of a sign a curator could not perform is a misleading answer.
-        :param bool keep_lock: Keep the lock instead of releasing it on success. For a batch run, which signs many datasets under one claim and would otherwise drop its lock at the first sign and have every later commit refused by its own gate.
-        :return: ResponseDataObjectCurationCommitReport
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['dataset', 'body', 'on_behalf_of', 'dry_run', 'keep_lock']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method sign_dataset_curation" % key
-                )
-            params[key] = val
-        del params['kwargs']
-        # verify the required parameter 'dataset' is set
-        if ('dataset' not in params or
-                params['dataset'] is None):
-            raise ValueError("Missing the required parameter `dataset` when calling `sign_dataset_curation`")  # noqa: E501
-
-        collection_formats = {}
-
-        path_params = {}
-        if 'dataset' in params:
-            path_params['dataset'] = params['dataset']  # noqa: E501
-
-        query_params = []
-        if 'on_behalf_of' in params:
-            query_params.append(('onBehalfOf', params['on_behalf_of']))  # noqa: E501
-        if 'dry_run' in params:
-            query_params.append(('dryRun', params['dry_run']))  # noqa: E501
-        if 'keep_lock' in params:
-            query_params.append(('keepLock', params['keep_lock']))  # noqa: E501
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        if 'body' in params:
-            body_params = params['body']
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = 'ResponseDataObjectCurationCommitReport' # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/datasets/{dataset}/curation/sign', 'POST',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
-    def snapshot_dataset_curation(self, dataset, **kwargs):  # noqa: E501
-        """Capture the dataset's current curation as an immutable SNAPSHOT AnnotationSet.  # noqa: E501
-
-        Takes the backup for you: the server reads the current basics, publications (with the evidence on record for each), design, tags, sample characteristics and curation note and stores them as the AnnotationSet's `payloadJson`. Append-only, and deliberate: this is the backup you take before letting an agent apply a batch of changes. `PUT /datasets/{id}/curation` also takes one on its own — an automatic capture of what each commit displaced, marked by a `precommit-` run id — so this endpoint is for the backup you want at a moment of your choosing.  The payload is a `CurationDocument`, the same shape `PUT /datasets/{id}/curation` accepts. That is what makes the two companion operations free: `POST /datasets/{id}/annotation-sets/{setId}/restore?dryRun=true` compares the snapshot with the present, and the same call without `dryRun` puts it back.  Emits no audit event, so the dataset's `lastUpdated` does not move: a backup must not modify what it backs up, and `lastUpdated` is the optimistic-concurrency token the curation commit checks. The AnnotationSet row is its own record of the capture, carrying `createdAt`, `createdBy` and `runId`. (PROPOSAL and DRAFT do emit an `AnnotationSetEvent`.)  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.snapshot_dataset_curation(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset92 dataset: (required)
-        :param str created_by: Optional note recorded as the snapshot's producer identity, e.g. why the backup was taken.
-        :return: AnnotationSetResponse
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.snapshot_dataset_curation_with_http_info(dataset, **kwargs)  # noqa: E501
-                else:
-                    (data) = self.snapshot_dataset_curation_with_http_info(dataset, **kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def snapshot_dataset_curation_with_http_info(self, dataset, **kwargs):  # noqa: E501
-        """Capture the dataset's current curation as an immutable SNAPSHOT AnnotationSet.  # noqa: E501
-
-        Takes the backup for you: the server reads the current basics, publications (with the evidence on record for each), design, tags, sample characteristics and curation note and stores them as the AnnotationSet's `payloadJson`. Append-only, and deliberate: this is the backup you take before letting an agent apply a batch of changes. `PUT /datasets/{id}/curation` also takes one on its own — an automatic capture of what each commit displaced, marked by a `precommit-` run id — so this endpoint is for the backup you want at a moment of your choosing.  The payload is a `CurationDocument`, the same shape `PUT /datasets/{id}/curation` accepts. That is what makes the two companion operations free: `POST /datasets/{id}/annotation-sets/{setId}/restore?dryRun=true` compares the snapshot with the present, and the same call without `dryRun` puts it back.  Emits no audit event, so the dataset's `lastUpdated` does not move: a backup must not modify what it backs up, and `lastUpdated` is the optimistic-concurrency token the curation commit checks. The AnnotationSet row is its own record of the capture, carrying `createdAt`, `createdBy` and `runId`. (PROPOSAL and DRAFT do emit an `AnnotationSetEvent`.)  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.snapshot_dataset_curation_with_http_info(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset92 dataset: (required)
-        :param str created_by: Optional note recorded as the snapshot's producer identity, e.g. why the backup was taken.
-        :return: AnnotationSetResponse
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['dataset', 'created_by']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method snapshot_dataset_curation" % key
-                )
-            params[key] = val
-        del params['kwargs']
-        # verify the required parameter 'dataset' is set
-        if ('dataset' not in params or
-                params['dataset'] is None):
-            raise ValueError("Missing the required parameter `dataset` when calling `snapshot_dataset_curation`")  # noqa: E501
-
-        collection_formats = {}
-
-        path_params = {}
-        if 'dataset' in params:
-            path_params['dataset'] = params['dataset']  # noqa: E501
-
-        query_params = []
-        if 'created_by' in params:
-            query_params.append(('createdBy', params['created_by']))  # noqa: E501
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = 'AnnotationSetResponse' # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/datasets/{dataset}/annotation-sets/snapshot', 'POST',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
-    def submit_dataset_annotation_set(self, dataset, **kwargs):  # noqa: E501
-        """Attach an AnnotationSet to a dataset.  # noqa: E501
-
-        Idempotent on `(role, runId)`: a retry returns the existing row as 200 OK rather than 201 Created. Body's `role` selects PROPOSAL / DRAFT / SNAPSHOT.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.submit_dataset_annotation_set(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset67 dataset: (required)
-        :param AnnotationSetRequest body:
-        :return: None
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.submit_dataset_annotation_set_with_http_info(dataset, **kwargs)  # noqa: E501
-                else:
-                    (data) = self.submit_dataset_annotation_set_with_http_info(dataset, **kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def submit_dataset_annotation_set_with_http_info(self, dataset, **kwargs):  # noqa: E501
-        """Attach an AnnotationSet to a dataset.  # noqa: E501
-
-        Idempotent on `(role, runId)`: a retry returns the existing row as 200 OK rather than 201 Created. Body's `role` selects PROPOSAL / DRAFT / SNAPSHOT.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.submit_dataset_annotation_set_with_http_info(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset67 dataset: (required)
-        :param AnnotationSetRequest body:
-        :return: None
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['dataset', 'body']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method submit_dataset_annotation_set" % key
-                )
-            params[key] = val
-        del params['kwargs']
-        # verify the required parameter 'dataset' is set
-        if ('dataset' not in params or
-                params['dataset'] is None):
-            raise ValueError("Missing the required parameter `dataset` when calling `submit_dataset_annotation_set`")  # noqa: E501
-
-        collection_formats = {}
-
-        path_params = {}
-        if 'dataset' in params:
-            path_params['dataset'] = params['dataset']  # noqa: E501
-
-        query_params = []
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        if 'body' in params:
-            body_params = params['body']
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = None # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/datasets/{dataset}/annotation-sets', 'POST',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
-    def triage_annotation_set(self, id, **kwargs):  # noqa: E501
-        """Rule on how much an annotation set matters  # noqa: E501
-
-        `triage` is one of `fine`, `wont_fix`, `might_fix`, `must_fix`. There is no `pending` -- a set nobody has ruled on simply has no triage row, so absence is the state.  One standing ruling per judge; several judges coexist, and the effective verdict is the most recent. `?onBehalfOf=` records the ruling curator when the call is relayed by an agent, and is honoured only for `GROUP_AGENT` / `GROUP_ADMIN`.  🛑 Not the per-finding audit disposition (`accepted` / `dismissed` / ...), which answers whether a curator agrees with one finding. This answers how much the whole set matters, and a finding can be dismissed inside a set ruled `must_fix`.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.triage_annotation_set(id, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param int id: (required)
-        :param TriageRequest body:
-        :param str on_behalf_of: Who is ruling. Agents and admins only.
-        :return: TriageResponse
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.triage_annotation_set_with_http_info(id, **kwargs)  # noqa: E501
-                else:
-                    (data) = self.triage_annotation_set_with_http_info(id, **kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def triage_annotation_set_with_http_info(self, id, **kwargs):  # noqa: E501
-        """Rule on how much an annotation set matters  # noqa: E501
-
-        `triage` is one of `fine`, `wont_fix`, `might_fix`, `must_fix`. There is no `pending` -- a set nobody has ruled on simply has no triage row, so absence is the state.  One standing ruling per judge; several judges coexist, and the effective verdict is the most recent. `?onBehalfOf=` records the ruling curator when the call is relayed by an agent, and is honoured only for `GROUP_AGENT` / `GROUP_ADMIN`.  🛑 Not the per-finding audit disposition (`accepted` / `dismissed` / ...), which answers whether a curator agrees with one finding. This answers how much the whole set matters, and a finding can be dismissed inside a set ruled `must_fix`.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.triage_annotation_set_with_http_info(id, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param int id: (required)
-        :param TriageRequest body:
-        :param str on_behalf_of: Who is ruling. Agents and admins only.
-        :return: TriageResponse
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['id', 'body', 'on_behalf_of']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method triage_annotation_set" % key
-                )
-            params[key] = val
-        del params['kwargs']
-        # verify the required parameter 'id' is set
-        if ('id' not in params or
-                params['id'] is None):
-            raise ValueError("Missing the required parameter `id` when calling `triage_annotation_set`")  # noqa: E501
-
-        collection_formats = {}
-
-        path_params = {}
-        if 'id' in params:
-            path_params['id'] = params['id']  # noqa: E501
-
-        query_params = []
-        if 'on_behalf_of' in params:
-            query_params.append(('onBehalfOf', params['on_behalf_of']))  # noqa: E501
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        if 'body' in params:
-            body_params = params['body']
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = 'TriageResponse' # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/annotation-sets/{id}/triage', 'PATCH',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
-    def update_annotation_set_provenance(self, id, **kwargs):  # noqa: E501
-        """Correct the run-provenance envelope on an annotation set  # noqa: E501
-
-        Fixes a mis-stamped `agentVersion` / `model` / `agentName` / `runSha` / `ranAt` in place. Without it the only correction is delete-and-recreate, which mints a new id, and set ids are quoted across handoffs.  Envelope only. The set's content (`payloadJson`, `parkedElements`), its identity (`role`, `source`, `runId`, `investigation`, `parent`) and its finalized status are not reachable here.  Per field: omit it to leave the stored value alone, send a blank string to clear it. `ranAt` has no blank form, so it can be corrected but not cleared.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.update_annotation_set_provenance(id, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param int id: (required)
-        :param ProvenanceRequest body:
-        :return: AnnotationSetResponse
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.update_annotation_set_provenance_with_http_info(id, **kwargs)  # noqa: E501
-                else:
-                    (data) = self.update_annotation_set_provenance_with_http_info(id, **kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def update_annotation_set_provenance_with_http_info(self, id, **kwargs):  # noqa: E501
-        """Correct the run-provenance envelope on an annotation set  # noqa: E501
-
-        Fixes a mis-stamped `agentVersion` / `model` / `agentName` / `runSha` / `ranAt` in place. Without it the only correction is delete-and-recreate, which mints a new id, and set ids are quoted across handoffs.  Envelope only. The set's content (`payloadJson`, `parkedElements`), its identity (`role`, `source`, `runId`, `investigation`, `parent`) and its finalized status are not reachable here.  Per field: omit it to leave the stored value alone, send a blank string to clear it. `ranAt` has no blank form, so it can be corrected but not cleared.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.update_annotation_set_provenance_with_http_info(id, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param int id: (required)
-        :param ProvenanceRequest body:
-        :return: AnnotationSetResponse
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['id', 'body']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method update_annotation_set_provenance" % key
-                )
-            params[key] = val
-        del params['kwargs']
-        # verify the required parameter 'id' is set
-        if ('id' not in params or
-                params['id'] is None):
-            raise ValueError("Missing the required parameter `id` when calling `update_annotation_set_provenance`")  # noqa: E501
-
-        collection_formats = {}
-
-        path_params = {}
-        if 'id' in params:
-            path_params['id'] = params['id']  # noqa: E501
-
-        query_params = []
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        if 'body' in params:
-            body_params = params['body']
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = 'AnnotationSetResponse' # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/annotation-sets/{id}', 'PATCH',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
-    def update_dataset_annotations(self, dataset, **kwargs):  # noqa: E501
-        """Replace the direct annotations of a dataset  # noqa: E501
-
-        Idempotent set-replace for the experiment-level tags (organism part, disease, treatment, etc.) held directly by the dataset. Tags on subsets, factor values, and biomaterials are NOT touched. The diff is computed by (category, categoryUri, value, valueUri); unchanged tags keep their identity, drops are removed, new ones are added with an `IC` evidence code. A single `ManualAnnotationEvent` is recorded when the call actually changes the set. Requires `ACL_SECURABLE_EDIT` on the dataset.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.update_dataset_annotations(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset8 dataset: (required)
-        :param AnnotationsUpdateRequest body:
-        :param str on_behalf_of: The curator this write is being carried FOR, when an agent is carrying it. The authenticated credential stays the performer on the audit row; this names the person in charge. Agents and admins only — anyone else naming someone else is a 403.
-        :return: ResponseDataObjectSetAnnotationValueObject
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.update_dataset_annotations_with_http_info(dataset, **kwargs)  # noqa: E501
-                else:
-                    (data) = self.update_dataset_annotations_with_http_info(dataset, **kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def update_dataset_annotations_with_http_info(self, dataset, **kwargs):  # noqa: E501
-        """Replace the direct annotations of a dataset  # noqa: E501
-
-        Idempotent set-replace for the experiment-level tags (organism part, disease, treatment, etc.) held directly by the dataset. Tags on subsets, factor values, and biomaterials are NOT touched. The diff is computed by (category, categoryUri, value, valueUri); unchanged tags keep their identity, drops are removed, new ones are added with an `IC` evidence code. A single `ManualAnnotationEvent` is recorded when the call actually changes the set. Requires `ACL_SECURABLE_EDIT` on the dataset.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.update_dataset_annotations_with_http_info(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset8 dataset: (required)
-        :param AnnotationsUpdateRequest body:
-        :param str on_behalf_of: The curator this write is being carried FOR, when an agent is carrying it. The authenticated credential stays the performer on the audit row; this names the person in charge. Agents and admins only — anyone else naming someone else is a 403.
-        :return: ResponseDataObjectSetAnnotationValueObject
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['dataset', 'body', 'on_behalf_of']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method update_dataset_annotations" % key
-                )
-            params[key] = val
-        del params['kwargs']
-        # verify the required parameter 'dataset' is set
-        if ('dataset' not in params or
-                params['dataset'] is None):
-            raise ValueError("Missing the required parameter `dataset` when calling `update_dataset_annotations`")  # noqa: E501
-
-        collection_formats = {}
-
-        path_params = {}
-        if 'dataset' in params:
-            path_params['dataset'] = params['dataset']  # noqa: E501
-
-        query_params = []
-        if 'on_behalf_of' in params:
-            query_params.append(('onBehalfOf', params['on_behalf_of']))  # noqa: E501
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        if 'body' in params:
-            body_params = params['body']
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = 'ResponseDataObjectSetAnnotationValueObject' # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/datasets/{dataset}/annotations', 'PUT',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
-    def update_dataset_basics(self, dataset, **kwargs):  # noqa: E501
-        """Update the name and/or description of a dataset  # noqa: E501
-
-        Partial update of the curator-editable basics of an ExpressionExperiment: `name` (the human-readable title) and `description`. A field omitted or null is left unchanged; a provided `name` must be non-blank. The `shortName` (identity) has its own admin-only route (`PUT /{dataset}/short-name`). Requires `ACL_SECURABLE_EDIT` on the dataset. Closes the name/description half of the retired gemma-web `updateBasics`.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.update_dataset_basics(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset65 dataset: (required)
-        :param DatasetBasicsUpdateRequest body:
-        :return: ResponseDataObjectDatasetBasicsResponse
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.update_dataset_basics_with_http_info(dataset, **kwargs)  # noqa: E501
-                else:
-                    (data) = self.update_dataset_basics_with_http_info(dataset, **kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def update_dataset_basics_with_http_info(self, dataset, **kwargs):  # noqa: E501
-        """Update the name and/or description of a dataset  # noqa: E501
-
-        Partial update of the curator-editable basics of an ExpressionExperiment: `name` (the human-readable title) and `description`. A field omitted or null is left unchanged; a provided `name` must be non-blank. The `shortName` (identity) has its own admin-only route (`PUT /{dataset}/short-name`). Requires `ACL_SECURABLE_EDIT` on the dataset. Closes the name/description half of the retired gemma-web `updateBasics`.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.update_dataset_basics_with_http_info(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset65 dataset: (required)
-        :param DatasetBasicsUpdateRequest body:
-        :return: ResponseDataObjectDatasetBasicsResponse
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['dataset', 'body']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method update_dataset_basics" % key
-                )
-            params[key] = val
-        del params['kwargs']
-        # verify the required parameter 'dataset' is set
-        if ('dataset' not in params or
-                params['dataset'] is None):
-            raise ValueError("Missing the required parameter `dataset` when calling `update_dataset_basics`")  # noqa: E501
-
-        collection_formats = {}
-
-        path_params = {}
-        if 'dataset' in params:
-            path_params['dataset'] = params['dataset']  # noqa: E501
-
-        query_params = []
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        if 'body' in params:
-            body_params = params['body']
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = 'ResponseDataObjectDatasetBasicsResponse' # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/datasets/{dataset}', 'PATCH',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
-    def update_dataset_curation_details(self, dataset, **kwargs):  # noqa: E501
-        """Update the curation details of a dataset (deprecated; use /tickets)  # noqa: E501
-
-        DEPRECATED — the troubled/needsAttention flips are now backed by the Ticket layer (see /tickets). Setting troubled=true opens a QUALITY_REVIEW ticket targeting the dataset; troubled=false resolves all open QUALITY_REVIEW tickets. needsAttention=true opens a GENERIC ticket; needsAttention=false resolves all open GENERIC/BATCH_INFO_NEEDED tickets. An optional `note` is supplied as the ticket title (on open) or transition reason (on resolve). `curationNote` is still applied via the legacy CurationNoteUpdateEvent pending the note-to-comment migration. New clients should call /tickets directly.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.update_dataset_curation_details(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset29 dataset: (required)
-        :param CurationDetailsUpdateRequest body:
-        :return: ResponseDataObjectCurationDetailsValueObject
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.update_dataset_curation_details_with_http_info(dataset, **kwargs)  # noqa: E501
-                else:
-                    (data) = self.update_dataset_curation_details_with_http_info(dataset, **kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def update_dataset_curation_details_with_http_info(self, dataset, **kwargs):  # noqa: E501
-        """Update the curation details of a dataset (deprecated; use /tickets)  # noqa: E501
-
-        DEPRECATED — the troubled/needsAttention flips are now backed by the Ticket layer (see /tickets). Setting troubled=true opens a QUALITY_REVIEW ticket targeting the dataset; troubled=false resolves all open QUALITY_REVIEW tickets. needsAttention=true opens a GENERIC ticket; needsAttention=false resolves all open GENERIC/BATCH_INFO_NEEDED tickets. An optional `note` is supplied as the ticket title (on open) or transition reason (on resolve). `curationNote` is still applied via the legacy CurationNoteUpdateEvent pending the note-to-comment migration. New clients should call /tickets directly.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.update_dataset_curation_details_with_http_info(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset29 dataset: (required)
-        :param CurationDetailsUpdateRequest body:
-        :return: ResponseDataObjectCurationDetailsValueObject
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['dataset', 'body']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method update_dataset_curation_details" % key
-                )
-            params[key] = val
-        del params['kwargs']
-        # verify the required parameter 'dataset' is set
-        if ('dataset' not in params or
-                params['dataset'] is None):
-            raise ValueError("Missing the required parameter `dataset` when calling `update_dataset_curation_details`")  # noqa: E501
-
-        collection_formats = {}
-
-        path_params = {}
-        if 'dataset' in params:
-            path_params['dataset'] = params['dataset']  # noqa: E501
-
-        query_params = []
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        if 'body' in params:
-            body_params = params['body']
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = 'ResponseDataObjectCurationDetailsValueObject' # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/datasets/{dataset}/curationDetails', 'PUT',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
-    def update_dataset_permissions(self, dataset, **kwargs):  # noqa: E501
-        """Update the sharing permissions of a dataset  # noqa: E501
-
-        Toggle whether a dataset is publicly readable. The `isPublic` field is optional; if omitted, no change is made and the current state is returned.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.update_dataset_permissions(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset47 dataset: (required)
-        :param PermissionsUpdateRequest body:
-        :return: ResponseDataObjectDatasetPermissionsValueObject
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.update_dataset_permissions_with_http_info(dataset, **kwargs)  # noqa: E501
-                else:
-                    (data) = self.update_dataset_permissions_with_http_info(dataset, **kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def update_dataset_permissions_with_http_info(self, dataset, **kwargs):  # noqa: E501
-        """Update the sharing permissions of a dataset  # noqa: E501
-
-        Toggle whether a dataset is publicly readable. The `isPublic` field is optional; if omitted, no change is made and the current state is returned.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.update_dataset_permissions_with_http_info(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset47 dataset: (required)
-        :param PermissionsUpdateRequest body:
-        :return: ResponseDataObjectDatasetPermissionsValueObject
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['dataset', 'body']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method update_dataset_permissions" % key
-                )
-            params[key] = val
-        del params['kwargs']
-        # verify the required parameter 'dataset' is set
-        if ('dataset' not in params or
-                params['dataset'] is None):
-            raise ValueError("Missing the required parameter `dataset` when calling `update_dataset_permissions`")  # noqa: E501
-
-        collection_formats = {}
-
-        path_params = {}
-        if 'dataset' in params:
-            path_params['dataset'] = params['dataset']  # noqa: E501
-
-        query_params = []
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        if 'body' in params:
-            body_params = params['body']
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = 'ResponseDataObjectDatasetPermissionsValueObject' # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/datasets/{dataset}/permissions', 'PUT',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
-    def update_dataset_publications(self, dataset, **kwargs):  # noqa: E501
-        """Replace the publications associated with a dataset  # noqa: E501
-
-        Idempotent set-replace for the dataset's primary, other-relevant and rejected publications. Each publication is an object carrying exactly one of `pubMedId` or `doi`, e.g. `{\"pubMedId\":\"22438826\"}` or `{\"doi\":\"10.1101/2025.01.02.634567\"}`. `primaryPublication` sets the primary publication, or clears it when null/omitted; `otherRelevantPublications` replaces the other-relevant set (an empty list clears it, and the field is required so a partial body can't silently wipe publications). Identifiers not already held by Gemma are fetched and persisted on demand: PubMed ids from PubMed; DOIs via PubMed-by-DOI then CrossRef (which covers bioRxiv / medRxiv preprints PubMed doesn't index). An identifier that resolves nowhere yields a 400. A publication given both as the primary and in the other-relevant list is kept only as the primary; one given as both accepted and rejected is a 400.  Every entry may carry the evidence behind it — `source`, `evidence`, `supportingEvidence`, `evidenceCode`, `confidence`, `assertedBy` — which is stored against the (dataset, publication) pair and returned under `association` by the GET.  `rejectedPublications` records the papers considered for this dataset and ruled out. This is not the same as leaving them out: a rejection is enforced, so a later writer of lower authority (a GEO re-fetch, a publication finder) that re-proposes the paper is refused, whereas a paper merely dropped from the lists can be re-attached by anyone. Precedence runs curator > geo_submitter_link / external_import > agent > legacy. An accepted publication that stands rejected by an authority the caller's `source` does not outrank yields a 409. **Omit the field entirely to leave the standing rejections untouched**; send a list (an empty one included) to replace them wholesale. The default is deliberate: rejections are not in what the plain GET returns, so a client writing back what it read has not seen them and its silence must not delete them.  Returns the dataset's publication list, same shape as the GET (rejections excluded — read them back with `?includeRejected=true`). Requires `ACL_SECURABLE_EDIT` on the dataset. Replaces the retired gemma-web `updatePubMed` / `removePrimaryPublication` controller methods, and the workaround of noting a preprint in a curation comment.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.update_dataset_publications(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset24 dataset: (required)
-        :param PublicationsUpdateRequest body:
-        :return: ResponseDataObjectListDatasetPublicationValueObject
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.update_dataset_publications_with_http_info(dataset, **kwargs)  # noqa: E501
-                else:
-                    (data) = self.update_dataset_publications_with_http_info(dataset, **kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def update_dataset_publications_with_http_info(self, dataset, **kwargs):  # noqa: E501
-        """Replace the publications associated with a dataset  # noqa: E501
-
-        Idempotent set-replace for the dataset's primary, other-relevant and rejected publications. Each publication is an object carrying exactly one of `pubMedId` or `doi`, e.g. `{\"pubMedId\":\"22438826\"}` or `{\"doi\":\"10.1101/2025.01.02.634567\"}`. `primaryPublication` sets the primary publication, or clears it when null/omitted; `otherRelevantPublications` replaces the other-relevant set (an empty list clears it, and the field is required so a partial body can't silently wipe publications). Identifiers not already held by Gemma are fetched and persisted on demand: PubMed ids from PubMed; DOIs via PubMed-by-DOI then CrossRef (which covers bioRxiv / medRxiv preprints PubMed doesn't index). An identifier that resolves nowhere yields a 400. A publication given both as the primary and in the other-relevant list is kept only as the primary; one given as both accepted and rejected is a 400.  Every entry may carry the evidence behind it — `source`, `evidence`, `supportingEvidence`, `evidenceCode`, `confidence`, `assertedBy` — which is stored against the (dataset, publication) pair and returned under `association` by the GET.  `rejectedPublications` records the papers considered for this dataset and ruled out. This is not the same as leaving them out: a rejection is enforced, so a later writer of lower authority (a GEO re-fetch, a publication finder) that re-proposes the paper is refused, whereas a paper merely dropped from the lists can be re-attached by anyone. Precedence runs curator > geo_submitter_link / external_import > agent > legacy. An accepted publication that stands rejected by an authority the caller's `source` does not outrank yields a 409. **Omit the field entirely to leave the standing rejections untouched**; send a list (an empty one included) to replace them wholesale. The default is deliberate: rejections are not in what the plain GET returns, so a client writing back what it read has not seen them and its silence must not delete them.  Returns the dataset's publication list, same shape as the GET (rejections excluded — read them back with `?includeRejected=true`). Requires `ACL_SECURABLE_EDIT` on the dataset. Replaces the retired gemma-web `updatePubMed` / `removePrimaryPublication` controller methods, and the workaround of noting a preprint in a curation comment.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.update_dataset_publications_with_http_info(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset24 dataset: (required)
-        :param PublicationsUpdateRequest body:
-        :return: ResponseDataObjectListDatasetPublicationValueObject
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['dataset', 'body']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method update_dataset_publications" % key
-                )
-            params[key] = val
-        del params['kwargs']
-        # verify the required parameter 'dataset' is set
-        if ('dataset' not in params or
-                params['dataset'] is None):
-            raise ValueError("Missing the required parameter `dataset` when calling `update_dataset_publications`")  # noqa: E501
-
-        collection_formats = {}
-
-        path_params = {}
-        if 'dataset' in params:
-            path_params['dataset'] = params['dataset']  # noqa: E501
-
-        query_params = []
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        if 'body' in params:
-            body_params = params['body']
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = 'ResponseDataObjectListDatasetPublicationValueObject' # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/datasets/{dataset}/publications', 'PUT',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
-    def update_dataset_sample_metadata(self, dataset, **kwargs):  # noqa: E501
-        """Set libraryStrategy, librarySelection and/or extractedMolecule on samples  # noqa: E501
-
-        Body: `{\"bioAssayIds\": [1,2], \"libraryStrategy\": \"RIBO_SEQ\"}`. Omit `bioAssayIds` to apply to every sample in the dataset. A field that is absent is left alone; to CLEAR a column send the field as null together with its `clear*` flag. `libraryStrategy` must be a GeoLibraryStrategy constant name (`RNA_SEQ`, `RIBO_SEQ`, `ATAC_SEQ`, …) or `MICROARRAY_ONE_COLOR` / `MICROARRAY_TWO_COLOR`; `extractedMolecule` must be an ExtractedMolecule constant (`totalRNA`, `polyARNA`, `genomicDNA`, …). `librarySelection` is free text on purpose — it is the submitter's raw string and normalizing it to a closed set would drop values we do not know. Samples already holding the value are skipped, so a repeat call is a no-op and records no audit event.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.update_dataset_sample_metadata(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset93 dataset: (required)
-        :param SampleMetadataRequest body:
-        :return: ResponseDataObjectSampleMetadataResponse
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.update_dataset_sample_metadata_with_http_info(dataset, **kwargs)  # noqa: E501
-                else:
-                    (data) = self.update_dataset_sample_metadata_with_http_info(dataset, **kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def update_dataset_sample_metadata_with_http_info(self, dataset, **kwargs):  # noqa: E501
-        """Set libraryStrategy, librarySelection and/or extractedMolecule on samples  # noqa: E501
-
-        Body: `{\"bioAssayIds\": [1,2], \"libraryStrategy\": \"RIBO_SEQ\"}`. Omit `bioAssayIds` to apply to every sample in the dataset. A field that is absent is left alone; to CLEAR a column send the field as null together with its `clear*` flag. `libraryStrategy` must be a GeoLibraryStrategy constant name (`RNA_SEQ`, `RIBO_SEQ`, `ATAC_SEQ`, …) or `MICROARRAY_ONE_COLOR` / `MICROARRAY_TWO_COLOR`; `extractedMolecule` must be an ExtractedMolecule constant (`totalRNA`, `polyARNA`, `genomicDNA`, …). `librarySelection` is free text on purpose — it is the submitter's raw string and normalizing it to a closed set would drop values we do not know. Samples already holding the value are skipped, so a repeat call is a no-op and records no audit event.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.update_dataset_sample_metadata_with_http_info(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset93 dataset: (required)
-        :param SampleMetadataRequest body:
-        :return: ResponseDataObjectSampleMetadataResponse
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['dataset', 'body']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method update_dataset_sample_metadata" % key
-                )
-            params[key] = val
-        del params['kwargs']
-        # verify the required parameter 'dataset' is set
-        if ('dataset' not in params or
-                params['dataset'] is None):
-            raise ValueError("Missing the required parameter `dataset` when calling `update_dataset_sample_metadata`")  # noqa: E501
-
-        collection_formats = {}
-
-        path_params = {}
-        if 'dataset' in params:
-            path_params['dataset'] = params['dataset']  # noqa: E501
-
-        query_params = []
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        if 'body' in params:
-            body_params = params['body']
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = 'ResponseDataObjectSampleMetadataResponse' # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/datasets/{dataset}/samples/metadata', 'PUT',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
-    def update_sample_characteristics(self, dataset, bio_assay_id, **kwargs):  # noqa: E501
-        """Replace the characteristics (tags) of a sample  # noqa: E501
-
-        Idempotent set-replace for the direct characteristics of the sample's biomaterial. The diff is computed by (category, categoryUri, value, valueUri) plus statement awareness; unchanged tags keep their identity, drops are removed, new ones are added with an `IC` evidence code. The sample is addressed by its BioAssay id. A single `ManualAnnotationEvent` is recorded on the owning experiment (sample tag edits surface on the experiment's history). Requires `ACL_SECURABLE_EDIT` on the dataset.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.update_sample_characteristics(dataset, bio_assay_id, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset11 dataset: (required)
-        :param int bio_assay_id: (required)
-        :param AnnotationsUpdateRequest body:
-        :return: ResponseDataObjectSetAnnotationValueObject
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.update_sample_characteristics_with_http_info(dataset, bio_assay_id, **kwargs)  # noqa: E501
-                else:
-                    (data) = self.update_sample_characteristics_with_http_info(dataset, bio_assay_id, **kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def update_sample_characteristics_with_http_info(self, dataset, bio_assay_id, **kwargs):  # noqa: E501
-        """Replace the characteristics (tags) of a sample  # noqa: E501
-
-        Idempotent set-replace for the direct characteristics of the sample's biomaterial. The diff is computed by (category, categoryUri, value, valueUri) plus statement awareness; unchanged tags keep their identity, drops are removed, new ones are added with an `IC` evidence code. The sample is addressed by its BioAssay id. A single `ManualAnnotationEvent` is recorded on the owning experiment (sample tag edits surface on the experiment's history). Requires `ACL_SECURABLE_EDIT` on the dataset.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.update_sample_characteristics_with_http_info(dataset, bio_assay_id, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset11 dataset: (required)
-        :param int bio_assay_id: (required)
-        :param AnnotationsUpdateRequest body:
-        :return: ResponseDataObjectSetAnnotationValueObject
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['dataset', 'bio_assay_id', 'body']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method update_sample_characteristics" % key
-                )
-            params[key] = val
-        del params['kwargs']
-        # verify the required parameter 'dataset' is set
-        if ('dataset' not in params or
-                params['dataset'] is None):
-            raise ValueError("Missing the required parameter `dataset` when calling `update_sample_characteristics`")  # noqa: E501
-        # verify the required parameter 'bio_assay_id' is set
-        if ('bio_assay_id' not in params or
-                params['bio_assay_id'] is None):
-            raise ValueError("Missing the required parameter `bio_assay_id` when calling `update_sample_characteristics`")  # noqa: E501
-
-        collection_formats = {}
-
-        path_params = {}
-        if 'dataset' in params:
-            path_params['dataset'] = params['dataset']  # noqa: E501
-        if 'bio_assay_id' in params:
-            path_params['bioAssayId'] = params['bio_assay_id']  # noqa: E501
-
-        query_params = []
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        if 'body' in params:
-            body_params = params['body']
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = 'ResponseDataObjectSetAnnotationValueObject' # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/datasets/{dataset}/samples/{bioAssayId}/characteristics', 'PUT',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
-    def upsert_dataset_draft_annotation_set(self, dataset, **kwargs):  # noqa: E501
-        """Upsert a curator's DRAFT for a dataset.  # noqa: E501
-
-        One DRAFT per (dataset, curator); returns 201 on create, 200 on update.  🛑 Pass `?onBehalfOf=` when writing for someone else. The curator's name is part of the draft's run id, and that run id sits inside `UNIQUE(investigation, role, runId)` — so a client that writes several curators' drafts without naming them keys them all to its own identity, one row, and each autosave silently overwrites the last. Honoured only for `GROUP_AGENT` / `GROUP_ADMIN`; refused, not ignored, for anyone else.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.upsert_dataset_draft_annotation_set(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset37 dataset: (required)
-        :param UpsertDraftRequest body:
-        :param str on_behalf_of: Which curator this draft belongs to. Agents and admins only.
-        :return: None
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.upsert_dataset_draft_annotation_set_with_http_info(dataset, **kwargs)  # noqa: E501
-                else:
-                    (data) = self.upsert_dataset_draft_annotation_set_with_http_info(dataset, **kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def upsert_dataset_draft_annotation_set_with_http_info(self, dataset, **kwargs):  # noqa: E501
-        """Upsert a curator's DRAFT for a dataset.  # noqa: E501
-
-        One DRAFT per (dataset, curator); returns 201 on create, 200 on update.  🛑 Pass `?onBehalfOf=` when writing for someone else. The curator's name is part of the draft's run id, and that run id sits inside `UNIQUE(investigation, role, runId)` — so a client that writes several curators' drafts without naming them keys them all to its own identity, one row, and each autosave silently overwrites the last. Honoured only for `GROUP_AGENT` / `GROUP_ADMIN`; refused, not ignored, for anyone else.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.upsert_dataset_draft_annotation_set_with_http_info(dataset, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param Dataset37 dataset: (required)
-        :param UpsertDraftRequest body:
-        :param str on_behalf_of: Which curator this draft belongs to. Agents and admins only.
-        :return: None
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['dataset', 'body', 'on_behalf_of']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method upsert_dataset_draft_annotation_set" % key
-                )
-            params[key] = val
-        del params['kwargs']
-        # verify the required parameter 'dataset' is set
-        if ('dataset' not in params or
-                params['dataset'] is None):
-            raise ValueError("Missing the required parameter `dataset` when calling `upsert_dataset_draft_annotation_set`")  # noqa: E501
-
-        collection_formats = {}
-
-        path_params = {}
-        if 'dataset' in params:
-            path_params['dataset'] = params['dataset']  # noqa: E501
-
-        query_params = []
-        if 'on_behalf_of' in params:
-            query_params.append(('onBehalfOf', params['on_behalf_of']))  # noqa: E501
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        if 'body' in params:
-            body_params = params['body']
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = None # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/datasets/{dataset}/annotation-sets/draft', 'PUT',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type=response_type,
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
-    def withdraw_triage(self, id, **kwargs):  # noqa: E501
-        """Withdraw a triage ruling  # noqa: E501
-
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.withdraw_triage(id, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param int id: (required)
-        :param str on_behalf_of: Whose ruling to withdraw. Agents and admins only.
-        :return: None
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        
-         
-        attempts = 0
-        
-        while True:
-            try:
-                if kwargs.get('async_req'):
-                    return self.withdraw_triage_with_http_info(id, **kwargs)  # noqa: E501
-                else:
-                    (data) = self.withdraw_triage_with_http_info(id, **kwargs)  # noqa: E501
-                    return data
-            except ApiException as err:
-                if err.status in [429,500] and attempts < 2:
-                    attempts += 1
-                    time.sleep(3)
-                else: 
-                    raise err
-
-    def withdraw_triage_with_http_info(self, id, **kwargs):  # noqa: E501
-        """Withdraw a triage ruling  # noqa: E501
-
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.withdraw_triage_with_http_info(id, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param int id: (required)
-        :param str on_behalf_of: Whose ruling to withdraw. Agents and admins only.
-        :return: None
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['id', 'on_behalf_of']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-        all_params.append('_force_table')
-
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method withdraw_triage" % key
-                )
-            params[key] = val
-        del params['kwargs']
-        # verify the required parameter 'id' is set
-        if ('id' not in params or
-                params['id'] is None):
-            raise ValueError("Missing the required parameter `id` when calling `withdraw_triage`")  # noqa: E501
-
-        collection_formats = {}
-
-        path_params = {}
-        if 'id' in params:
-            path_params['id'] = params['id']  # noqa: E501
-
-        query_params = []
-        if 'on_behalf_of' in params:
-            query_params.append(('onBehalfOf', params['on_behalf_of']))  # noqa: E501
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        # HTTP header `Accept`
-        if not kwargs.get('_force_table'):
-            header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])  # noqa: E501
-            response_type = None # noqa: E501
-        else:
-            header_params['Accept'] = 'text/tab-separated-values; charset=UTF-8'
-            response_type = 'str'
-            
-
-        # Authentication setting
-        auth_settings = ['basicAuth', 'cookieAuth']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/annotation-sets/{id}/triage', 'DELETE',
             path_params,
             query_params,
             header_params,
