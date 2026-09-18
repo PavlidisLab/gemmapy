@@ -32,8 +32,11 @@ class DesignPreflightReport(object):
         'summary': 'Summary',
         'factors_to_delete': 'list[EntityRef]',
         'factor_values_to_delete': 'list[EntityRef]',
+        'factors_to_update': 'list[EntityRef]',
+        'factor_values_to_update': 'list[EntityRef]',
         'differential_expression_analyses_to_delete': 'list[AnalysisRef]',
-        'subsets_with_stale_anchor': 'list[SubsetRef]'
+        'subsets_with_stale_anchor': 'list[SubsetRef]',
+        'requires_force': 'bool'
     }
 
     attribute_map = {
@@ -41,18 +44,24 @@ class DesignPreflightReport(object):
         'summary': 'summary',
         'factors_to_delete': 'factorsToDelete',
         'factor_values_to_delete': 'factorValuesToDelete',
+        'factors_to_update': 'factorsToUpdate',
+        'factor_values_to_update': 'factorValuesToUpdate',
         'differential_expression_analyses_to_delete': 'differentialExpressionAnalysesToDelete',
-        'subsets_with_stale_anchor': 'subsetsWithStaleAnchor'
+        'subsets_with_stale_anchor': 'subsetsWithStaleAnchor',
+        'requires_force': 'requiresForce'
     }
 
-    def __init__(self, blockers=None, summary=None, factors_to_delete=None, factor_values_to_delete=None, differential_expression_analyses_to_delete=None, subsets_with_stale_anchor=None):  # noqa: E501
+    def __init__(self, blockers=None, summary=None, factors_to_delete=None, factor_values_to_delete=None, factors_to_update=None, factor_values_to_update=None, differential_expression_analyses_to_delete=None, subsets_with_stale_anchor=None, requires_force=None):  # noqa: E501
         """DesignPreflightReport - a model defined in Swagger"""  # noqa: E501
         self._blockers = None
         self._summary = None
         self._factors_to_delete = None
         self._factor_values_to_delete = None
+        self._factors_to_update = None
+        self._factor_values_to_update = None
         self._differential_expression_analyses_to_delete = None
         self._subsets_with_stale_anchor = None
+        self._requires_force = None
         self.discriminator = None
         if blockers is not None:
             self.blockers = blockers
@@ -62,10 +71,16 @@ class DesignPreflightReport(object):
             self.factors_to_delete = factors_to_delete
         if factor_values_to_delete is not None:
             self.factor_values_to_delete = factor_values_to_delete
+        if factors_to_update is not None:
+            self.factors_to_update = factors_to_update
+        if factor_values_to_update is not None:
+            self.factor_values_to_update = factor_values_to_update
         if differential_expression_analyses_to_delete is not None:
             self.differential_expression_analyses_to_delete = differential_expression_analyses_to_delete
         if subsets_with_stale_anchor is not None:
             self.subsets_with_stale_anchor = subsets_with_stale_anchor
+        if requires_force is not None:
+            self.requires_force = requires_force
 
     @property
     def blockers(self):
@@ -152,6 +167,48 @@ class DesignPreflightReport(object):
         self._factor_values_to_delete = factor_values_to_delete
 
     @property
+    def factors_to_update(self):
+        """Gets the factors_to_update of this DesignPreflightReport.  # noqa: E501
+
+
+        :return: The factors_to_update of this DesignPreflightReport.  # noqa: E501
+        :rtype: list[EntityRef]
+        """
+        return self._factors_to_update
+
+    @factors_to_update.setter
+    def factors_to_update(self, factors_to_update):
+        """Sets the factors_to_update of this DesignPreflightReport.
+
+
+        :param factors_to_update: The factors_to_update of this DesignPreflightReport.  # noqa: E501
+        :type: list[EntityRef]
+        """
+
+        self._factors_to_update = factors_to_update
+
+    @property
+    def factor_values_to_update(self):
+        """Gets the factor_values_to_update of this DesignPreflightReport.  # noqa: E501
+
+
+        :return: The factor_values_to_update of this DesignPreflightReport.  # noqa: E501
+        :rtype: list[EntityRef]
+        """
+        return self._factor_values_to_update
+
+    @factor_values_to_update.setter
+    def factor_values_to_update(self, factor_values_to_update):
+        """Sets the factor_values_to_update of this DesignPreflightReport.
+
+
+        :param factor_values_to_update: The factor_values_to_update of this DesignPreflightReport.  # noqa: E501
+        :type: list[EntityRef]
+        """
+
+        self._factor_values_to_update = factor_values_to_update
+
+    @property
     def differential_expression_analyses_to_delete(self):
         """Gets the differential_expression_analyses_to_delete of this DesignPreflightReport.  # noqa: E501
 
@@ -192,6 +249,29 @@ class DesignPreflightReport(object):
         """
 
         self._subsets_with_stale_anchor = subsets_with_stale_anchor
+
+    @property
+    def requires_force(self):
+        """Gets the requires_force of this DesignPreflightReport.  # noqa: E501
+
+        True when applying this change needs ?force=true (admin) to consent — it would delete differential-expression analyses, or leave a subset anchored on factor values that no longer exist. Computed server-side so a client never has to re-derive the rule.  # noqa: E501
+
+        :return: The requires_force of this DesignPreflightReport.  # noqa: E501
+        :rtype: bool
+        """
+        return self._requires_force
+
+    @requires_force.setter
+    def requires_force(self, requires_force):
+        """Sets the requires_force of this DesignPreflightReport.
+
+        True when applying this change needs ?force=true (admin) to consent — it would delete differential-expression analyses, or leave a subset anchored on factor values that no longer exist. Computed server-side so a client never has to re-derive the rule.  # noqa: E501
+
+        :param requires_force: The requires_force of this DesignPreflightReport.  # noqa: E501
+        :type: bool
+        """
+
+        self._requires_force = requires_force
 
     def to_dict(self):
         """Returns the model properties as a dict"""

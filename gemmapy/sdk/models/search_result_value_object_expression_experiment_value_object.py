@@ -32,6 +32,7 @@ class SearchResultValueObjectExpressionExperimentValueObject(object):
         'result_type': 'SearchResultType',
         'score': 'float',
         'highlights': 'dict(str, str)',
+        'match_type': 'str',
         'result_object': 'ExpressionExperimentValueObject',
         'result_object_url': 'str',
         'result_object_url_external': 'bool'
@@ -42,17 +43,19 @@ class SearchResultValueObjectExpressionExperimentValueObject(object):
         'result_type': 'resultType',
         'score': 'score',
         'highlights': 'highlights',
+        'match_type': 'matchType',
         'result_object': 'resultObject',
         'result_object_url': 'resultObjectUrl',
         'result_object_url_external': 'resultObjectUrlExternal'
     }
 
-    def __init__(self, result_id=None, result_type=None, score=None, highlights=None, result_object=None, result_object_url=None, result_object_url_external=None):  # noqa: E501
+    def __init__(self, result_id=None, result_type=None, score=None, highlights=None, match_type=None, result_object=None, result_object_url=None, result_object_url_external=None):  # noqa: E501
         """SearchResultValueObjectExpressionExperimentValueObject - a model defined in Swagger"""  # noqa: E501
         self._result_id = None
         self._result_type = None
         self._score = None
         self._highlights = None
+        self._match_type = None
         self._result_object = None
         self._result_object_url = None
         self._result_object_url_external = None
@@ -65,6 +68,8 @@ class SearchResultValueObjectExpressionExperimentValueObject(object):
             self.score = score
         if highlights is not None:
             self.highlights = highlights
+        if match_type is not None:
+            self.match_type = match_type
         if result_object is not None:
             self.result_object = result_object
         if result_object_url is not None:
@@ -155,6 +160,29 @@ class SearchResultValueObjectExpressionExperimentValueObject(object):
         """
 
         self._highlights = highlights
+
+    @property
+    def match_type(self):
+        """Gets the match_type of this SearchResultValueObjectExpressionExperimentValueObject.  # noqa: E501
+
+        How the result matched the query (exact_symbol, alias, prefix, official_name, official_name_prefix, exact_identifier); omitted if unclassified.  # noqa: E501
+
+        :return: The match_type of this SearchResultValueObjectExpressionExperimentValueObject.  # noqa: E501
+        :rtype: str
+        """
+        return self._match_type
+
+    @match_type.setter
+    def match_type(self, match_type):
+        """Sets the match_type of this SearchResultValueObjectExpressionExperimentValueObject.
+
+        How the result matched the query (exact_symbol, alias, prefix, official_name, official_name_prefix, exact_identifier); omitted if unclassified.  # noqa: E501
+
+        :param match_type: The match_type of this SearchResultValueObjectExpressionExperimentValueObject.  # noqa: E501
+        :type: str
+        """
+
+        self._match_type = match_type
 
     @property
     def result_object(self):

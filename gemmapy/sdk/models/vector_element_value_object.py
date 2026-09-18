@@ -29,23 +29,33 @@ class VectorElementValueObject(object):
     """
     swagger_types = {
         'design_element_name': 'str',
-        'bio_assay_expression_levels': 'dict(str, float)'
+        'bio_assay_expression_levels': 'dict(str, float)',
+        'rank_by_mean': 'float',
+        'rank_by_max': 'float'
     }
 
     attribute_map = {
         'design_element_name': 'designElementName',
-        'bio_assay_expression_levels': 'bioAssayExpressionLevels'
+        'bio_assay_expression_levels': 'bioAssayExpressionLevels',
+        'rank_by_mean': 'rankByMean',
+        'rank_by_max': 'rankByMax'
     }
 
-    def __init__(self, design_element_name=None, bio_assay_expression_levels=None):  # noqa: E501
+    def __init__(self, design_element_name=None, bio_assay_expression_levels=None, rank_by_mean=None, rank_by_max=None):  # noqa: E501
         """VectorElementValueObject - a model defined in Swagger"""  # noqa: E501
         self._design_element_name = None
         self._bio_assay_expression_levels = None
+        self._rank_by_mean = None
+        self._rank_by_max = None
         self.discriminator = None
         if design_element_name is not None:
             self.design_element_name = design_element_name
         if bio_assay_expression_levels is not None:
             self.bio_assay_expression_levels = bio_assay_expression_levels
+        if rank_by_mean is not None:
+            self.rank_by_mean = rank_by_mean
+        if rank_by_max is not None:
+            self.rank_by_max = rank_by_max
 
     @property
     def design_element_name(self):
@@ -88,6 +98,48 @@ class VectorElementValueObject(object):
         """
 
         self._bio_assay_expression_levels = bio_assay_expression_levels
+
+    @property
+    def rank_by_mean(self):
+        """Gets the rank_by_mean of this VectorElementValueObject.  # noqa: E501
+
+
+        :return: The rank_by_mean of this VectorElementValueObject.  # noqa: E501
+        :rtype: float
+        """
+        return self._rank_by_mean
+
+    @rank_by_mean.setter
+    def rank_by_mean(self, rank_by_mean):
+        """Sets the rank_by_mean of this VectorElementValueObject.
+
+
+        :param rank_by_mean: The rank_by_mean of this VectorElementValueObject.  # noqa: E501
+        :type: float
+        """
+
+        self._rank_by_mean = rank_by_mean
+
+    @property
+    def rank_by_max(self):
+        """Gets the rank_by_max of this VectorElementValueObject.  # noqa: E501
+
+
+        :return: The rank_by_max of this VectorElementValueObject.  # noqa: E501
+        :rtype: float
+        """
+        return self._rank_by_max
+
+    @rank_by_max.setter
+    def rank_by_max(self, rank_by_max):
+        """Sets the rank_by_max of this VectorElementValueObject.
+
+
+        :param rank_by_max: The rank_by_max of this VectorElementValueObject.  # noqa: E501
+        :type: float
+        """
+
+        self._rank_by_max = rank_by_max
 
     def to_dict(self):
         """Returns the model properties as a dict"""

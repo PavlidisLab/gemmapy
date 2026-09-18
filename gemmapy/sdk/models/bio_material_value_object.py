@@ -33,8 +33,8 @@ class BioMaterialValueObject(object):
         'description': 'str',
         'bio_assay_ids': 'list[int]',
         'characteristics': 'list[CharacteristicValueObject]',
+        'statements': 'list[StatementValueObject]',
         'source_bio_material_id': 'int',
-        'factors': 'dict(str, str)',
         'fvbasic_vos': 'list[FactorValueBasicValueObject]',
         'factor_value_objects': 'list[FactorValueBasicValueObject]',
         'factor_values': 'list[FactorValueBasicValueObject]'
@@ -46,22 +46,22 @@ class BioMaterialValueObject(object):
         'description': 'description',
         'bio_assay_ids': 'bioAssayIds',
         'characteristics': 'characteristics',
+        'statements': 'statements',
         'source_bio_material_id': 'sourceBioMaterialId',
-        'factors': 'factors',
         'fvbasic_vos': 'fvbasicVOs',
         'factor_value_objects': 'factorValueObjects',
         'factor_values': 'factorValues'
     }
 
-    def __init__(self, id=None, name=None, description=None, bio_assay_ids=None, characteristics=None, source_bio_material_id=None, factors=None, fvbasic_vos=None, factor_value_objects=None, factor_values=None):  # noqa: E501
+    def __init__(self, id=None, name=None, description=None, bio_assay_ids=None, characteristics=None, statements=None, source_bio_material_id=None, fvbasic_vos=None, factor_value_objects=None, factor_values=None):  # noqa: E501
         """BioMaterialValueObject - a model defined in Swagger"""  # noqa: E501
         self._id = None
         self._name = None
         self._description = None
         self._bio_assay_ids = None
         self._characteristics = None
+        self._statements = None
         self._source_bio_material_id = None
-        self._factors = None
         self._fvbasic_vos = None
         self._factor_value_objects = None
         self._factor_values = None
@@ -76,10 +76,10 @@ class BioMaterialValueObject(object):
             self.bio_assay_ids = bio_assay_ids
         if characteristics is not None:
             self.characteristics = characteristics
+        if statements is not None:
+            self.statements = statements
         if source_bio_material_id is not None:
             self.source_bio_material_id = source_bio_material_id
-        if factors is not None:
-            self.factors = factors
         if fvbasic_vos is not None:
             self.fvbasic_vos = fvbasic_vos
         if factor_value_objects is not None:
@@ -193,9 +193,31 @@ class BioMaterialValueObject(object):
         self._characteristics = characteristics
 
     @property
+    def statements(self):
+        """Gets the statements of this BioMaterialValueObject.  # noqa: E501
+
+
+        :return: The statements of this BioMaterialValueObject.  # noqa: E501
+        :rtype: list[StatementValueObject]
+        """
+        return self._statements
+
+    @statements.setter
+    def statements(self, statements):
+        """Sets the statements of this BioMaterialValueObject.
+
+
+        :param statements: The statements of this BioMaterialValueObject.  # noqa: E501
+        :type: list[StatementValueObject]
+        """
+
+        self._statements = statements
+
+    @property
     def source_bio_material_id(self):
         """Gets the source_bio_material_id of this BioMaterialValueObject.  # noqa: E501
 
+        The BioMaterial this sample was derived from, or null if it derives from nothing. Always null on /datasets/{dataset}/samples, which returns the dataset's own samples — these are biological samples and have no source. Derived samples come from single-cell aggregation and are reached via /datasets/{dataset}/subSets/{subSet}/samples, where this holds the id of a sample listed by the parent route. Not a single-cell indicator: it is null for single-cell datasets too — use the assay ExperimentTag or /datasets/{dataset}/singleCellDimension.  # noqa: E501
 
         :return: The source_bio_material_id of this BioMaterialValueObject.  # noqa: E501
         :rtype: int
@@ -206,35 +228,13 @@ class BioMaterialValueObject(object):
     def source_bio_material_id(self, source_bio_material_id):
         """Sets the source_bio_material_id of this BioMaterialValueObject.
 
+        The BioMaterial this sample was derived from, or null if it derives from nothing. Always null on /datasets/{dataset}/samples, which returns the dataset's own samples — these are biological samples and have no source. Derived samples come from single-cell aggregation and are reached via /datasets/{dataset}/subSets/{subSet}/samples, where this holds the id of a sample listed by the parent route. Not a single-cell indicator: it is null for single-cell datasets too — use the assay ExperimentTag or /datasets/{dataset}/singleCellDimension.  # noqa: E501
 
         :param source_bio_material_id: The source_bio_material_id of this BioMaterialValueObject.  # noqa: E501
         :type: int
         """
 
         self._source_bio_material_id = source_bio_material_id
-
-    @property
-    def factors(self):
-        """Gets the factors of this BioMaterialValueObject.  # noqa: E501
-
-        This is deprecated, use the `factorValues` collection instead.  # noqa: E501
-
-        :return: The factors of this BioMaterialValueObject.  # noqa: E501
-        :rtype: dict(str, str)
-        """
-        return self._factors
-
-    @factors.setter
-    def factors(self, factors):
-        """Sets the factors of this BioMaterialValueObject.
-
-        This is deprecated, use the `factorValues` collection instead.  # noqa: E501
-
-        :param factors: The factors of this BioMaterialValueObject.  # noqa: E501
-        :type: dict(str, str)
-        """
-
-        self._factors = factors
 
     @property
     def fvbasic_vos(self):

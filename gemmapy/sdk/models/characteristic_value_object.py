@@ -33,7 +33,9 @@ class CharacteristicValueObject(object):
         'category_uri': 'str',
         'value': 'str',
         'value_uri': 'str',
-        'value_id': 'str'
+        'original_value': 'str',
+        'value_id': 'str',
+        'supporting_evidence': 'JsonNode'
     }
 
     attribute_map = {
@@ -42,17 +44,21 @@ class CharacteristicValueObject(object):
         'category_uri': 'categoryUri',
         'value': 'value',
         'value_uri': 'valueUri',
-        'value_id': 'valueId'
+        'original_value': 'originalValue',
+        'value_id': 'valueId',
+        'supporting_evidence': 'supportingEvidence'
     }
 
-    def __init__(self, id=None, category=None, category_uri=None, value=None, value_uri=None, value_id=None):  # noqa: E501
+    def __init__(self, id=None, category=None, category_uri=None, value=None, value_uri=None, original_value=None, value_id=None, supporting_evidence=None):  # noqa: E501
         """CharacteristicValueObject - a model defined in Swagger"""  # noqa: E501
         self._id = None
         self._category = None
         self._category_uri = None
         self._value = None
         self._value_uri = None
+        self._original_value = None
         self._value_id = None
+        self._supporting_evidence = None
         self.discriminator = None
         if id is not None:
             self.id = id
@@ -64,8 +70,12 @@ class CharacteristicValueObject(object):
             self.value = value
         if value_uri is not None:
             self.value_uri = value_uri
+        if original_value is not None:
+            self.original_value = original_value
         if value_id is not None:
             self.value_id = value_id
+        if supporting_evidence is not None:
+            self.supporting_evidence = supporting_evidence
 
     @property
     def id(self):
@@ -173,6 +183,27 @@ class CharacteristicValueObject(object):
         self._value_uri = value_uri
 
     @property
+    def original_value(self):
+        """Gets the original_value of this CharacteristicValueObject.  # noqa: E501
+
+
+        :return: The original_value of this CharacteristicValueObject.  # noqa: E501
+        :rtype: str
+        """
+        return self._original_value
+
+    @original_value.setter
+    def original_value(self, original_value):
+        """Sets the original_value of this CharacteristicValueObject.
+
+
+        :param original_value: The original_value of this CharacteristicValueObject.  # noqa: E501
+        :type: str
+        """
+
+        self._original_value = original_value
+
+    @property
     def value_id(self):
         """Gets the value_id of this CharacteristicValueObject.  # noqa: E501
 
@@ -192,6 +223,27 @@ class CharacteristicValueObject(object):
         """
 
         self._value_id = value_id
+
+    @property
+    def supporting_evidence(self):
+        """Gets the supporting_evidence of this CharacteristicValueObject.  # noqa: E501
+
+
+        :return: The supporting_evidence of this CharacteristicValueObject.  # noqa: E501
+        :rtype: JsonNode
+        """
+        return self._supporting_evidence
+
+    @supporting_evidence.setter
+    def supporting_evidence(self, supporting_evidence):
+        """Sets the supporting_evidence of this CharacteristicValueObject.
+
+
+        :param supporting_evidence: The supporting_evidence of this CharacteristicValueObject.  # noqa: E501
+        :type: JsonNode
+        """
+
+        self._supporting_evidence = supporting_evidence
 
     def to_dict(self):
         """Returns the model properties as a dict"""

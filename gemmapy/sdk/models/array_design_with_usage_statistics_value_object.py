@@ -40,7 +40,12 @@ class ArrayDesignWithUsageStatisticsValueObject(object):
         'description': 'str',
         'is_merged': 'bool',
         'is_mergee': 'bool',
+        'merged_into': 'ArrayDesignReferenceValueObject',
+        'mergees': 'list[ArrayDesignReferenceValueObject]',
         'name': 'str',
+        'number_of_genes': 'int',
+        'number_of_mapped_elements': 'int',
+        'gene_counts_last_updated': 'str',
         'short_name': 'str',
         'technology_type': 'str',
         'release_version': 'str',
@@ -66,7 +71,12 @@ class ArrayDesignWithUsageStatisticsValueObject(object):
         'description': 'description',
         'is_merged': 'isMerged',
         'is_mergee': 'isMergee',
+        'merged_into': 'mergedInto',
+        'mergees': 'mergees',
         'name': 'name',
+        'number_of_genes': 'numberOfGenes',
+        'number_of_mapped_elements': 'numberOfMappedElements',
+        'gene_counts_last_updated': 'geneCountsLastUpdated',
         'short_name': 'shortName',
         'technology_type': 'technologyType',
         'release_version': 'releaseVersion',
@@ -79,7 +89,7 @@ class ArrayDesignWithUsageStatisticsValueObject(object):
         'taxon': 'taxon'
     }
 
-    def __init__(self, id=None, last_updated=None, troubled=None, last_troubled_event=None, needs_attention=None, last_needs_attention_event=None, curation_note=None, last_note_update_event=None, color=None, description=None, is_merged=None, is_mergee=None, name=None, short_name=None, technology_type=None, release_version=None, release_url=None, external_references=None, number_of_expression_experiments_for_technology_type=None, number_of_expression_experiments=None, taxon_id=None, trouble_details=None, taxon=None):  # noqa: E501
+    def __init__(self, id=None, last_updated=None, troubled=None, last_troubled_event=None, needs_attention=None, last_needs_attention_event=None, curation_note=None, last_note_update_event=None, color=None, description=None, is_merged=None, is_mergee=None, merged_into=None, mergees=None, name=None, number_of_genes=None, number_of_mapped_elements=None, gene_counts_last_updated=None, short_name=None, technology_type=None, release_version=None, release_url=None, external_references=None, number_of_expression_experiments_for_technology_type=None, number_of_expression_experiments=None, taxon_id=None, trouble_details=None, taxon=None):  # noqa: E501
         """ArrayDesignWithUsageStatisticsValueObject - a model defined in Swagger"""  # noqa: E501
         self._id = None
         self._last_updated = None
@@ -93,7 +103,12 @@ class ArrayDesignWithUsageStatisticsValueObject(object):
         self._description = None
         self._is_merged = None
         self._is_mergee = None
+        self._merged_into = None
+        self._mergees = None
         self._name = None
+        self._number_of_genes = None
+        self._number_of_mapped_elements = None
+        self._gene_counts_last_updated = None
         self._short_name = None
         self._technology_type = None
         self._release_version = None
@@ -129,8 +144,18 @@ class ArrayDesignWithUsageStatisticsValueObject(object):
             self.is_merged = is_merged
         if is_mergee is not None:
             self.is_mergee = is_mergee
+        if merged_into is not None:
+            self.merged_into = merged_into
+        if mergees is not None:
+            self.mergees = mergees
         if name is not None:
             self.name = name
+        if number_of_genes is not None:
+            self.number_of_genes = number_of_genes
+        if number_of_mapped_elements is not None:
+            self.number_of_mapped_elements = number_of_mapped_elements
+        if gene_counts_last_updated is not None:
+            self.gene_counts_last_updated = gene_counts_last_updated
         if short_name is not None:
             self.short_name = short_name
         if technology_type is not None:
@@ -411,6 +436,48 @@ class ArrayDesignWithUsageStatisticsValueObject(object):
         self._is_mergee = is_mergee
 
     @property
+    def merged_into(self):
+        """Gets the merged_into of this ArrayDesignWithUsageStatisticsValueObject.  # noqa: E501
+
+
+        :return: The merged_into of this ArrayDesignWithUsageStatisticsValueObject.  # noqa: E501
+        :rtype: ArrayDesignReferenceValueObject
+        """
+        return self._merged_into
+
+    @merged_into.setter
+    def merged_into(self, merged_into):
+        """Sets the merged_into of this ArrayDesignWithUsageStatisticsValueObject.
+
+
+        :param merged_into: The merged_into of this ArrayDesignWithUsageStatisticsValueObject.  # noqa: E501
+        :type: ArrayDesignReferenceValueObject
+        """
+
+        self._merged_into = merged_into
+
+    @property
+    def mergees(self):
+        """Gets the mergees of this ArrayDesignWithUsageStatisticsValueObject.  # noqa: E501
+
+
+        :return: The mergees of this ArrayDesignWithUsageStatisticsValueObject.  # noqa: E501
+        :rtype: list[ArrayDesignReferenceValueObject]
+        """
+        return self._mergees
+
+    @mergees.setter
+    def mergees(self, mergees):
+        """Sets the mergees of this ArrayDesignWithUsageStatisticsValueObject.
+
+
+        :param mergees: The mergees of this ArrayDesignWithUsageStatisticsValueObject.  # noqa: E501
+        :type: list[ArrayDesignReferenceValueObject]
+        """
+
+        self._mergees = mergees
+
+    @property
     def name(self):
         """Gets the name of this ArrayDesignWithUsageStatisticsValueObject.  # noqa: E501
 
@@ -430,6 +497,69 @@ class ArrayDesignWithUsageStatisticsValueObject(object):
         """
 
         self._name = name
+
+    @property
+    def number_of_genes(self):
+        """Gets the number_of_genes of this ArrayDesignWithUsageStatisticsValueObject.  # noqa: E501
+
+
+        :return: The number_of_genes of this ArrayDesignWithUsageStatisticsValueObject.  # noqa: E501
+        :rtype: int
+        """
+        return self._number_of_genes
+
+    @number_of_genes.setter
+    def number_of_genes(self, number_of_genes):
+        """Sets the number_of_genes of this ArrayDesignWithUsageStatisticsValueObject.
+
+
+        :param number_of_genes: The number_of_genes of this ArrayDesignWithUsageStatisticsValueObject.  # noqa: E501
+        :type: int
+        """
+
+        self._number_of_genes = number_of_genes
+
+    @property
+    def number_of_mapped_elements(self):
+        """Gets the number_of_mapped_elements of this ArrayDesignWithUsageStatisticsValueObject.  # noqa: E501
+
+
+        :return: The number_of_mapped_elements of this ArrayDesignWithUsageStatisticsValueObject.  # noqa: E501
+        :rtype: int
+        """
+        return self._number_of_mapped_elements
+
+    @number_of_mapped_elements.setter
+    def number_of_mapped_elements(self, number_of_mapped_elements):
+        """Sets the number_of_mapped_elements of this ArrayDesignWithUsageStatisticsValueObject.
+
+
+        :param number_of_mapped_elements: The number_of_mapped_elements of this ArrayDesignWithUsageStatisticsValueObject.  # noqa: E501
+        :type: int
+        """
+
+        self._number_of_mapped_elements = number_of_mapped_elements
+
+    @property
+    def gene_counts_last_updated(self):
+        """Gets the gene_counts_last_updated of this ArrayDesignWithUsageStatisticsValueObject.  # noqa: E501
+
+
+        :return: The gene_counts_last_updated of this ArrayDesignWithUsageStatisticsValueObject.  # noqa: E501
+        :rtype: str
+        """
+        return self._gene_counts_last_updated
+
+    @gene_counts_last_updated.setter
+    def gene_counts_last_updated(self, gene_counts_last_updated):
+        """Sets the gene_counts_last_updated of this ArrayDesignWithUsageStatisticsValueObject.
+
+
+        :param gene_counts_last_updated: The gene_counts_last_updated of this ArrayDesignWithUsageStatisticsValueObject.  # noqa: E501
+        :type: str
+        """
+
+        self._gene_counts_last_updated = gene_counts_last_updated
 
     @property
     def short_name(self):

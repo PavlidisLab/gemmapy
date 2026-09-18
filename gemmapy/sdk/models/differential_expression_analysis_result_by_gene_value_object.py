@@ -33,6 +33,7 @@ class DifferentialExpressionAnalysisResultByGeneValueObject(object):
         'probe_id': 'int',
         'probe_name': 'str',
         'genes': 'list[GeneValueObject]',
+        'p_value': 'float',
         'corrected_pvalue': 'float',
         'rank': 'float',
         'contrasts': 'list[ContrastResultValueObject]',
@@ -49,6 +50,7 @@ class DifferentialExpressionAnalysisResultByGeneValueObject(object):
         'probe_id': 'probeId',
         'probe_name': 'probeName',
         'genes': 'genes',
+        'p_value': 'pValue',
         'corrected_pvalue': 'correctedPvalue',
         'rank': 'rank',
         'contrasts': 'contrasts',
@@ -59,13 +61,14 @@ class DifferentialExpressionAnalysisResultByGeneValueObject(object):
         'pvalue': 'pvalue'
     }
 
-    def __init__(self, id=None, result_set_id=None, probe_id=None, probe_name=None, genes=None, corrected_pvalue=None, rank=None, contrasts=None, source_experiment_id=None, experiment_analyzed_id=None, baseline=None, second_baseline=None, pvalue=None):  # noqa: E501
+    def __init__(self, id=None, result_set_id=None, probe_id=None, probe_name=None, genes=None, p_value=None, corrected_pvalue=None, rank=None, contrasts=None, source_experiment_id=None, experiment_analyzed_id=None, baseline=None, second_baseline=None, pvalue=None):  # noqa: E501
         """DifferentialExpressionAnalysisResultByGeneValueObject - a model defined in Swagger"""  # noqa: E501
         self._id = None
         self._result_set_id = None
         self._probe_id = None
         self._probe_name = None
         self._genes = None
+        self._p_value = None
         self._corrected_pvalue = None
         self._rank = None
         self._contrasts = None
@@ -85,6 +88,8 @@ class DifferentialExpressionAnalysisResultByGeneValueObject(object):
             self.probe_name = probe_name
         if genes is not None:
             self.genes = genes
+        if p_value is not None:
+            self.p_value = p_value
         if corrected_pvalue is not None:
             self.corrected_pvalue = corrected_pvalue
         if rank is not None:
@@ -206,6 +211,27 @@ class DifferentialExpressionAnalysisResultByGeneValueObject(object):
         """
 
         self._genes = genes
+
+    @property
+    def p_value(self):
+        """Gets the p_value of this DifferentialExpressionAnalysisResultByGeneValueObject.  # noqa: E501
+
+
+        :return: The p_value of this DifferentialExpressionAnalysisResultByGeneValueObject.  # noqa: E501
+        :rtype: float
+        """
+        return self._p_value
+
+    @p_value.setter
+    def p_value(self, p_value):
+        """Sets the p_value of this DifferentialExpressionAnalysisResultByGeneValueObject.
+
+
+        :param p_value: The p_value of this DifferentialExpressionAnalysisResultByGeneValueObject.  # noqa: E501
+        :type: float
+        """
+
+        self._p_value = p_value
 
     @property
     def corrected_pvalue(self):

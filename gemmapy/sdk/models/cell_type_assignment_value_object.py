@@ -34,6 +34,7 @@ class CellTypeAssignmentValueObject(object):
         'cell_types': 'list[CharacteristicValueObject]',
         'cell_type_ids': 'list[int]',
         'number_of_assigned_cells': 'int',
+        'number_of_assigned_cells_by_cell_type': 'dict(str, int)',
         'preferred': 'bool'
     }
 
@@ -44,10 +45,11 @@ class CellTypeAssignmentValueObject(object):
         'cell_types': 'cellTypes',
         'cell_type_ids': 'cellTypeIds',
         'number_of_assigned_cells': 'numberOfAssignedCells',
+        'number_of_assigned_cells_by_cell_type': 'numberOfAssignedCellsByCellType',
         'preferred': 'preferred'
     }
 
-    def __init__(self, id=None, name=None, protocol=None, cell_types=None, cell_type_ids=None, number_of_assigned_cells=None, preferred=None):  # noqa: E501
+    def __init__(self, id=None, name=None, protocol=None, cell_types=None, cell_type_ids=None, number_of_assigned_cells=None, number_of_assigned_cells_by_cell_type=None, preferred=None):  # noqa: E501
         """CellTypeAssignmentValueObject - a model defined in Swagger"""  # noqa: E501
         self._id = None
         self._name = None
@@ -55,6 +57,7 @@ class CellTypeAssignmentValueObject(object):
         self._cell_types = None
         self._cell_type_ids = None
         self._number_of_assigned_cells = None
+        self._number_of_assigned_cells_by_cell_type = None
         self._preferred = None
         self.discriminator = None
         if id is not None:
@@ -69,6 +72,8 @@ class CellTypeAssignmentValueObject(object):
             self.cell_type_ids = cell_type_ids
         if number_of_assigned_cells is not None:
             self.number_of_assigned_cells = number_of_assigned_cells
+        if number_of_assigned_cells_by_cell_type is not None:
+            self.number_of_assigned_cells_by_cell_type = number_of_assigned_cells_by_cell_type
         if preferred is not None:
             self.preferred = preferred
 
@@ -197,6 +202,27 @@ class CellTypeAssignmentValueObject(object):
         """
 
         self._number_of_assigned_cells = number_of_assigned_cells
+
+    @property
+    def number_of_assigned_cells_by_cell_type(self):
+        """Gets the number_of_assigned_cells_by_cell_type of this CellTypeAssignmentValueObject.  # noqa: E501
+
+
+        :return: The number_of_assigned_cells_by_cell_type of this CellTypeAssignmentValueObject.  # noqa: E501
+        :rtype: dict(str, int)
+        """
+        return self._number_of_assigned_cells_by_cell_type
+
+    @number_of_assigned_cells_by_cell_type.setter
+    def number_of_assigned_cells_by_cell_type(self, number_of_assigned_cells_by_cell_type):
+        """Sets the number_of_assigned_cells_by_cell_type of this CellTypeAssignmentValueObject.
+
+
+        :param number_of_assigned_cells_by_cell_type: The number_of_assigned_cells_by_cell_type of this CellTypeAssignmentValueObject.  # noqa: E501
+        :type: dict(str, int)
+        """
+
+        self._number_of_assigned_cells_by_cell_type = number_of_assigned_cells_by_cell_type
 
     @property
     def preferred(self):

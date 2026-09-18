@@ -39,7 +39,6 @@ class DiffExResultSetSummaryValueObject(object):
         'number_of_diff_expressed_probes': 'int',
         'upregulated_count': 'int',
         'downregulated_count': 'int',
-        'qvalue': 'float',
         'number_of_upregulated_probes': 'int',
         'number_of_downregulated_probes': 'int'
     }
@@ -56,12 +55,11 @@ class DiffExResultSetSummaryValueObject(object):
         'number_of_diff_expressed_probes': 'numberOfDiffExpressedProbes',
         'upregulated_count': 'upregulatedCount',
         'downregulated_count': 'downregulatedCount',
-        'qvalue': 'qvalue',
         'number_of_upregulated_probes': 'numberOfUpregulatedProbes',
         'number_of_downregulated_probes': 'numberOfDownregulatedProbes'
     }
 
-    def __init__(self, id=None, array_designs_used=None, baseline_group=None, experimental_factors=None, bio_assays_analyzed=None, number_of_genes_analyzed=None, number_of_probes_analyzed=None, threshold=None, number_of_diff_expressed_probes=None, upregulated_count=None, downregulated_count=None, qvalue=None, number_of_upregulated_probes=None, number_of_downregulated_probes=None):  # noqa: E501
+    def __init__(self, id=None, array_designs_used=None, baseline_group=None, experimental_factors=None, bio_assays_analyzed=None, number_of_genes_analyzed=None, number_of_probes_analyzed=None, threshold=None, number_of_diff_expressed_probes=None, upregulated_count=None, downregulated_count=None, number_of_upregulated_probes=None, number_of_downregulated_probes=None):  # noqa: E501
         """DiffExResultSetSummaryValueObject - a model defined in Swagger"""  # noqa: E501
         self._id = None
         self._array_designs_used = None
@@ -74,7 +72,6 @@ class DiffExResultSetSummaryValueObject(object):
         self._number_of_diff_expressed_probes = None
         self._upregulated_count = None
         self._downregulated_count = None
-        self._qvalue = None
         self._number_of_upregulated_probes = None
         self._number_of_downregulated_probes = None
         self.discriminator = None
@@ -100,8 +97,6 @@ class DiffExResultSetSummaryValueObject(object):
             self.upregulated_count = upregulated_count
         if downregulated_count is not None:
             self.downregulated_count = downregulated_count
-        if qvalue is not None:
-            self.qvalue = qvalue
         if number_of_upregulated_probes is not None:
             self.number_of_upregulated_probes = number_of_upregulated_probes
         if number_of_downregulated_probes is not None:
@@ -337,27 +332,6 @@ class DiffExResultSetSummaryValueObject(object):
         """
 
         self._downregulated_count = downregulated_count
-
-    @property
-    def qvalue(self):
-        """Gets the qvalue of this DiffExResultSetSummaryValueObject.  # noqa: E501
-
-
-        :return: The qvalue of this DiffExResultSetSummaryValueObject.  # noqa: E501
-        :rtype: float
-        """
-        return self._qvalue
-
-    @qvalue.setter
-    def qvalue(self, qvalue):
-        """Sets the qvalue of this DiffExResultSetSummaryValueObject.
-
-
-        :param qvalue: The qvalue of this DiffExResultSetSummaryValueObject.  # noqa: E501
-        :type: float
-        """
-
-        self._qvalue = qvalue
 
     @property
     def number_of_upregulated_probes(self):

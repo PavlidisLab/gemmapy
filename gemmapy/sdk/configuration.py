@@ -46,7 +46,7 @@ class Configuration(six.with_metaclass(TypeWithDefault, object)):
     def __init__(self):
         """Constructor"""
         # Default Base url
-        self.host = "https://gemma.msl.ubc.ca/rest/v2"
+        self.host = "https://gemma2.msl.ubc.ca/rest/v2"
         # Temp file folder for downloading files
         self.temp_folder_path = None
 

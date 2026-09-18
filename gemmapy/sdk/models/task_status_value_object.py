@@ -35,7 +35,8 @@ class TaskStatusValueObject(object):
         'submitted_at': 'datetime',
         'started_at': 'datetime',
         'completed_at': 'datetime',
-        'message': 'str'
+        'message': 'str',
+        'error': 'TaskError'
     }
 
     attribute_map = {
@@ -46,10 +47,11 @@ class TaskStatusValueObject(object):
         'submitted_at': 'submittedAt',
         'started_at': 'startedAt',
         'completed_at': 'completedAt',
-        'message': 'message'
+        'message': 'message',
+        'error': 'error'
     }
 
-    def __init__(self, task_id=None, experiment_id=None, step=None, status=None, submitted_at=None, started_at=None, completed_at=None, message=None):  # noqa: E501
+    def __init__(self, task_id=None, experiment_id=None, step=None, status=None, submitted_at=None, started_at=None, completed_at=None, message=None, error=None):  # noqa: E501
         """TaskStatusValueObject - a model defined in Swagger"""  # noqa: E501
         self._task_id = None
         self._experiment_id = None
@@ -59,6 +61,7 @@ class TaskStatusValueObject(object):
         self._started_at = None
         self._completed_at = None
         self._message = None
+        self._error = None
         self.discriminator = None
         if task_id is not None:
             self.task_id = task_id
@@ -76,6 +79,8 @@ class TaskStatusValueObject(object):
             self.completed_at = completed_at
         if message is not None:
             self.message = message
+        if error is not None:
+            self.error = error
 
     @property
     def task_id(self):
@@ -244,6 +249,27 @@ class TaskStatusValueObject(object):
         """
 
         self._message = message
+
+    @property
+    def error(self):
+        """Gets the error of this TaskStatusValueObject.  # noqa: E501
+
+
+        :return: The error of this TaskStatusValueObject.  # noqa: E501
+        :rtype: TaskError
+        """
+        return self._error
+
+    @error.setter
+    def error(self, error):
+        """Sets the error of this TaskStatusValueObject.
+
+
+        :param error: The error of this TaskStatusValueObject.  # noqa: E501
+        :type: TaskError
+        """
+
+        self._error = error
 
     def to_dict(self):
         """Returns the model properties as a dict"""

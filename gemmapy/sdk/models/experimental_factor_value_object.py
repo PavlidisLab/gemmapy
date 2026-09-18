@@ -34,6 +34,8 @@ class ExperimentalFactorValueObject(object):
         'type': 'str',
         'category': 'str',
         'category_uri': 'str',
+        'baseline_relevance': 'str',
+        'baseline_relevance_reason': 'str',
         'factor_values': 'str',
         'values': 'list[FactorValueValueObject]'
     }
@@ -45,11 +47,13 @@ class ExperimentalFactorValueObject(object):
         'type': 'type',
         'category': 'category',
         'category_uri': 'categoryUri',
+        'baseline_relevance': 'baselineRelevance',
+        'baseline_relevance_reason': 'baselineRelevanceReason',
         'factor_values': 'factorValues',
         'values': 'values'
     }
 
-    def __init__(self, id=None, name=None, description=None, type=None, category=None, category_uri=None, factor_values=None, values=None):  # noqa: E501
+    def __init__(self, id=None, name=None, description=None, type=None, category=None, category_uri=None, baseline_relevance=None, baseline_relevance_reason=None, factor_values=None, values=None):  # noqa: E501
         """ExperimentalFactorValueObject - a model defined in Swagger"""  # noqa: E501
         self._id = None
         self._name = None
@@ -57,6 +61,8 @@ class ExperimentalFactorValueObject(object):
         self._type = None
         self._category = None
         self._category_uri = None
+        self._baseline_relevance = None
+        self._baseline_relevance_reason = None
         self._factor_values = None
         self._values = None
         self.discriminator = None
@@ -72,6 +78,10 @@ class ExperimentalFactorValueObject(object):
             self.category = category
         if category_uri is not None:
             self.category_uri = category_uri
+        if baseline_relevance is not None:
+            self.baseline_relevance = baseline_relevance
+        if baseline_relevance_reason is not None:
+            self.baseline_relevance_reason = baseline_relevance_reason
         if factor_values is not None:
             self.factor_values = factor_values
         if values is not None:
@@ -208,6 +218,50 @@ class ExperimentalFactorValueObject(object):
         """
 
         self._category_uri = category_uri
+
+    @property
+    def baseline_relevance(self):
+        """Gets the baseline_relevance of this ExperimentalFactorValueObject.  # noqa: E501
+
+        Curator/agent baseline-relevance hint: \"required\" | \"not_applicable\" | \"uncertain\" are the values in use, not the values permitted; null when unset.  # noqa: E501
+
+        :return: The baseline_relevance of this ExperimentalFactorValueObject.  # noqa: E501
+        :rtype: str
+        """
+        return self._baseline_relevance
+
+    @baseline_relevance.setter
+    def baseline_relevance(self, baseline_relevance):
+        """Sets the baseline_relevance of this ExperimentalFactorValueObject.
+
+        Curator/agent baseline-relevance hint: \"required\" | \"not_applicable\" | \"uncertain\" are the values in use, not the values permitted; null when unset.  # noqa: E501
+
+        :param baseline_relevance: The baseline_relevance of this ExperimentalFactorValueObject.  # noqa: E501
+        :type: str
+        """
+
+        self._baseline_relevance = baseline_relevance
+
+    @property
+    def baseline_relevance_reason(self):
+        """Gets the baseline_relevance_reason of this ExperimentalFactorValueObject.  # noqa: E501
+
+
+        :return: The baseline_relevance_reason of this ExperimentalFactorValueObject.  # noqa: E501
+        :rtype: str
+        """
+        return self._baseline_relevance_reason
+
+    @baseline_relevance_reason.setter
+    def baseline_relevance_reason(self, baseline_relevance_reason):
+        """Sets the baseline_relevance_reason of this ExperimentalFactorValueObject.
+
+
+        :param baseline_relevance_reason: The baseline_relevance_reason of this ExperimentalFactorValueObject.  # noqa: E501
+        :type: str
+        """
+
+        self._baseline_relevance_reason = baseline_relevance_reason
 
     @property
     def factor_values(self):

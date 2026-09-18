@@ -30,22 +30,11 @@ class GeeqValueObject(object):
     swagger_types = {
         'id': 'int',
         'public_quality_score': 'float',
-        'public_suitability_score': 'float',
         'no_vectors': 'bool',
         'corr_mat_issues': 'str',
         'replicates_issues': 'str',
         'batch_corrected': 'bool',
         'last_computed': 'datetime',
-        'qscore_public_batch_effect': 'float',
-        'qscore_public_batch_confound': 'float',
-        'sscore_publication': 'float',
-        'sscore_platform_amount': 'float',
-        'sscore_platforms_tech_multi': 'float',
-        'sscore_avg_platform_popularity': 'float',
-        'sscore_avg_platform_size': 'float',
-        'sscore_sample_size': 'float',
-        'sscore_raw_data': 'float',
-        'sscore_missing_values': 'float',
         'qscore_outliers': 'float',
         'qscore_sample_mean_correlation': 'float',
         'qscore_sample_median_correlation': 'float',
@@ -53,14 +42,8 @@ class GeeqValueObject(object):
         'qscore_platforms_tech': 'float',
         'qscore_replicates': 'float',
         'qscore_batch_info': 'float',
-        's_score_publication': 'float',
-        's_score_platform_amount': 'float',
-        's_score_platform_tech_multi': 'float',
-        's_score_avg_platform_popularity': 'float',
-        's_score_avg_platform_size': 'float',
-        's_score_sample_size': 'float',
-        's_score_raw_data': 'float',
-        's_score_missing_values': 'float',
+        'qscore_public_batch_confound': 'float',
+        'qscore_public_batch_effect': 'float',
         'q_score_outliers': 'float',
         'q_score_sample_mean_correlation': 'float',
         'q_score_sample_median_correlation': 'float',
@@ -75,22 +58,11 @@ class GeeqValueObject(object):
     attribute_map = {
         'id': 'id',
         'public_quality_score': 'publicQualityScore',
-        'public_suitability_score': 'publicSuitabilityScore',
         'no_vectors': 'noVectors',
         'corr_mat_issues': 'corrMatIssues',
         'replicates_issues': 'replicatesIssues',
         'batch_corrected': 'batchCorrected',
         'last_computed': 'lastComputed',
-        'qscore_public_batch_effect': 'qscorePublicBatchEffect',
-        'qscore_public_batch_confound': 'qscorePublicBatchConfound',
-        'sscore_publication': 'sscorePublication',
-        'sscore_platform_amount': 'sscorePlatformAmount',
-        'sscore_platforms_tech_multi': 'sscorePlatformsTechMulti',
-        'sscore_avg_platform_popularity': 'sscoreAvgPlatformPopularity',
-        'sscore_avg_platform_size': 'sscoreAvgPlatformSize',
-        'sscore_sample_size': 'sscoreSampleSize',
-        'sscore_raw_data': 'sscoreRawData',
-        'sscore_missing_values': 'sscoreMissingValues',
         'qscore_outliers': 'qscoreOutliers',
         'qscore_sample_mean_correlation': 'qscoreSampleMeanCorrelation',
         'qscore_sample_median_correlation': 'qscoreSampleMedianCorrelation',
@@ -98,14 +70,8 @@ class GeeqValueObject(object):
         'qscore_platforms_tech': 'qscorePlatformsTech',
         'qscore_replicates': 'qscoreReplicates',
         'qscore_batch_info': 'qscoreBatchInfo',
-        's_score_publication': 'sScorePublication',
-        's_score_platform_amount': 'sScorePlatformAmount',
-        's_score_platform_tech_multi': 'sScorePlatformTechMulti',
-        's_score_avg_platform_popularity': 'sScoreAvgPlatformPopularity',
-        's_score_avg_platform_size': 'sScoreAvgPlatformSize',
-        's_score_sample_size': 'sScoreSampleSize',
-        's_score_raw_data': 'sScoreRawData',
-        's_score_missing_values': 'sScoreMissingValues',
+        'qscore_public_batch_confound': 'qscorePublicBatchConfound',
+        'qscore_public_batch_effect': 'qscorePublicBatchEffect',
         'q_score_outliers': 'qScoreOutliers',
         'q_score_sample_mean_correlation': 'qScoreSampleMeanCorrelation',
         'q_score_sample_median_correlation': 'qScoreSampleMedianCorrelation',
@@ -117,26 +83,15 @@ class GeeqValueObject(object):
         'q_score_public_batch_confound': 'qScorePublicBatchConfound'
     }
 
-    def __init__(self, id=None, public_quality_score=None, public_suitability_score=None, no_vectors=None, corr_mat_issues=None, replicates_issues=None, batch_corrected=None, last_computed=None, qscore_public_batch_effect=None, qscore_public_batch_confound=None, sscore_publication=None, sscore_platform_amount=None, sscore_platforms_tech_multi=None, sscore_avg_platform_popularity=None, sscore_avg_platform_size=None, sscore_sample_size=None, sscore_raw_data=None, sscore_missing_values=None, qscore_outliers=None, qscore_sample_mean_correlation=None, qscore_sample_median_correlation=None, qscore_sample_correlation_variance=None, qscore_platforms_tech=None, qscore_replicates=None, qscore_batch_info=None, s_score_publication=None, s_score_platform_amount=None, s_score_platform_tech_multi=None, s_score_avg_platform_popularity=None, s_score_avg_platform_size=None, s_score_sample_size=None, s_score_raw_data=None, s_score_missing_values=None, q_score_outliers=None, q_score_sample_mean_correlation=None, q_score_sample_median_correlation=None, q_score_sample_correlation_variance=None, q_score_platforms_tech=None, q_score_replicates=None, q_score_batch_info=None, q_score_public_batch_effect=None, q_score_public_batch_confound=None):  # noqa: E501
+    def __init__(self, id=None, public_quality_score=None, no_vectors=None, corr_mat_issues=None, replicates_issues=None, batch_corrected=None, last_computed=None, qscore_outliers=None, qscore_sample_mean_correlation=None, qscore_sample_median_correlation=None, qscore_sample_correlation_variance=None, qscore_platforms_tech=None, qscore_replicates=None, qscore_batch_info=None, qscore_public_batch_confound=None, qscore_public_batch_effect=None, q_score_outliers=None, q_score_sample_mean_correlation=None, q_score_sample_median_correlation=None, q_score_sample_correlation_variance=None, q_score_platforms_tech=None, q_score_replicates=None, q_score_batch_info=None, q_score_public_batch_effect=None, q_score_public_batch_confound=None):  # noqa: E501
         """GeeqValueObject - a model defined in Swagger"""  # noqa: E501
         self._id = None
         self._public_quality_score = None
-        self._public_suitability_score = None
         self._no_vectors = None
         self._corr_mat_issues = None
         self._replicates_issues = None
         self._batch_corrected = None
         self._last_computed = None
-        self._qscore_public_batch_effect = None
-        self._qscore_public_batch_confound = None
-        self._sscore_publication = None
-        self._sscore_platform_amount = None
-        self._sscore_platforms_tech_multi = None
-        self._sscore_avg_platform_popularity = None
-        self._sscore_avg_platform_size = None
-        self._sscore_sample_size = None
-        self._sscore_raw_data = None
-        self._sscore_missing_values = None
         self._qscore_outliers = None
         self._qscore_sample_mean_correlation = None
         self._qscore_sample_median_correlation = None
@@ -144,14 +99,8 @@ class GeeqValueObject(object):
         self._qscore_platforms_tech = None
         self._qscore_replicates = None
         self._qscore_batch_info = None
-        self._s_score_publication = None
-        self._s_score_platform_amount = None
-        self._s_score_platform_tech_multi = None
-        self._s_score_avg_platform_popularity = None
-        self._s_score_avg_platform_size = None
-        self._s_score_sample_size = None
-        self._s_score_raw_data = None
-        self._s_score_missing_values = None
+        self._qscore_public_batch_confound = None
+        self._qscore_public_batch_effect = None
         self._q_score_outliers = None
         self._q_score_sample_mean_correlation = None
         self._q_score_sample_median_correlation = None
@@ -166,8 +115,6 @@ class GeeqValueObject(object):
             self.id = id
         if public_quality_score is not None:
             self.public_quality_score = public_quality_score
-        if public_suitability_score is not None:
-            self.public_suitability_score = public_suitability_score
         if no_vectors is not None:
             self.no_vectors = no_vectors
         if corr_mat_issues is not None:
@@ -178,26 +125,6 @@ class GeeqValueObject(object):
             self.batch_corrected = batch_corrected
         if last_computed is not None:
             self.last_computed = last_computed
-        if qscore_public_batch_effect is not None:
-            self.qscore_public_batch_effect = qscore_public_batch_effect
-        if qscore_public_batch_confound is not None:
-            self.qscore_public_batch_confound = qscore_public_batch_confound
-        if sscore_publication is not None:
-            self.sscore_publication = sscore_publication
-        if sscore_platform_amount is not None:
-            self.sscore_platform_amount = sscore_platform_amount
-        if sscore_platforms_tech_multi is not None:
-            self.sscore_platforms_tech_multi = sscore_platforms_tech_multi
-        if sscore_avg_platform_popularity is not None:
-            self.sscore_avg_platform_popularity = sscore_avg_platform_popularity
-        if sscore_avg_platform_size is not None:
-            self.sscore_avg_platform_size = sscore_avg_platform_size
-        if sscore_sample_size is not None:
-            self.sscore_sample_size = sscore_sample_size
-        if sscore_raw_data is not None:
-            self.sscore_raw_data = sscore_raw_data
-        if sscore_missing_values is not None:
-            self.sscore_missing_values = sscore_missing_values
         if qscore_outliers is not None:
             self.qscore_outliers = qscore_outliers
         if qscore_sample_mean_correlation is not None:
@@ -212,22 +139,10 @@ class GeeqValueObject(object):
             self.qscore_replicates = qscore_replicates
         if qscore_batch_info is not None:
             self.qscore_batch_info = qscore_batch_info
-        if s_score_publication is not None:
-            self.s_score_publication = s_score_publication
-        if s_score_platform_amount is not None:
-            self.s_score_platform_amount = s_score_platform_amount
-        if s_score_platform_tech_multi is not None:
-            self.s_score_platform_tech_multi = s_score_platform_tech_multi
-        if s_score_avg_platform_popularity is not None:
-            self.s_score_avg_platform_popularity = s_score_avg_platform_popularity
-        if s_score_avg_platform_size is not None:
-            self.s_score_avg_platform_size = s_score_avg_platform_size
-        if s_score_sample_size is not None:
-            self.s_score_sample_size = s_score_sample_size
-        if s_score_raw_data is not None:
-            self.s_score_raw_data = s_score_raw_data
-        if s_score_missing_values is not None:
-            self.s_score_missing_values = s_score_missing_values
+        if qscore_public_batch_confound is not None:
+            self.qscore_public_batch_confound = qscore_public_batch_confound
+        if qscore_public_batch_effect is not None:
+            self.qscore_public_batch_effect = qscore_public_batch_effect
         if q_score_outliers is not None:
             self.q_score_outliers = q_score_outliers
         if q_score_sample_mean_correlation is not None:
@@ -288,27 +203,6 @@ class GeeqValueObject(object):
         """
 
         self._public_quality_score = public_quality_score
-
-    @property
-    def public_suitability_score(self):
-        """Gets the public_suitability_score of this GeeqValueObject.  # noqa: E501
-
-
-        :return: The public_suitability_score of this GeeqValueObject.  # noqa: E501
-        :rtype: float
-        """
-        return self._public_suitability_score
-
-    @public_suitability_score.setter
-    def public_suitability_score(self, public_suitability_score):
-        """Sets the public_suitability_score of this GeeqValueObject.
-
-
-        :param public_suitability_score: The public_suitability_score of this GeeqValueObject.  # noqa: E501
-        :type: float
-        """
-
-        self._public_suitability_score = public_suitability_score
 
     @property
     def no_vectors(self):
@@ -414,216 +308,6 @@ class GeeqValueObject(object):
         """
 
         self._last_computed = last_computed
-
-    @property
-    def qscore_public_batch_effect(self):
-        """Gets the qscore_public_batch_effect of this GeeqValueObject.  # noqa: E501
-
-
-        :return: The qscore_public_batch_effect of this GeeqValueObject.  # noqa: E501
-        :rtype: float
-        """
-        return self._qscore_public_batch_effect
-
-    @qscore_public_batch_effect.setter
-    def qscore_public_batch_effect(self, qscore_public_batch_effect):
-        """Sets the qscore_public_batch_effect of this GeeqValueObject.
-
-
-        :param qscore_public_batch_effect: The qscore_public_batch_effect of this GeeqValueObject.  # noqa: E501
-        :type: float
-        """
-
-        self._qscore_public_batch_effect = qscore_public_batch_effect
-
-    @property
-    def qscore_public_batch_confound(self):
-        """Gets the qscore_public_batch_confound of this GeeqValueObject.  # noqa: E501
-
-
-        :return: The qscore_public_batch_confound of this GeeqValueObject.  # noqa: E501
-        :rtype: float
-        """
-        return self._qscore_public_batch_confound
-
-    @qscore_public_batch_confound.setter
-    def qscore_public_batch_confound(self, qscore_public_batch_confound):
-        """Sets the qscore_public_batch_confound of this GeeqValueObject.
-
-
-        :param qscore_public_batch_confound: The qscore_public_batch_confound of this GeeqValueObject.  # noqa: E501
-        :type: float
-        """
-
-        self._qscore_public_batch_confound = qscore_public_batch_confound
-
-    @property
-    def sscore_publication(self):
-        """Gets the sscore_publication of this GeeqValueObject.  # noqa: E501
-
-
-        :return: The sscore_publication of this GeeqValueObject.  # noqa: E501
-        :rtype: float
-        """
-        return self._sscore_publication
-
-    @sscore_publication.setter
-    def sscore_publication(self, sscore_publication):
-        """Sets the sscore_publication of this GeeqValueObject.
-
-
-        :param sscore_publication: The sscore_publication of this GeeqValueObject.  # noqa: E501
-        :type: float
-        """
-
-        self._sscore_publication = sscore_publication
-
-    @property
-    def sscore_platform_amount(self):
-        """Gets the sscore_platform_amount of this GeeqValueObject.  # noqa: E501
-
-
-        :return: The sscore_platform_amount of this GeeqValueObject.  # noqa: E501
-        :rtype: float
-        """
-        return self._sscore_platform_amount
-
-    @sscore_platform_amount.setter
-    def sscore_platform_amount(self, sscore_platform_amount):
-        """Sets the sscore_platform_amount of this GeeqValueObject.
-
-
-        :param sscore_platform_amount: The sscore_platform_amount of this GeeqValueObject.  # noqa: E501
-        :type: float
-        """
-
-        self._sscore_platform_amount = sscore_platform_amount
-
-    @property
-    def sscore_platforms_tech_multi(self):
-        """Gets the sscore_platforms_tech_multi of this GeeqValueObject.  # noqa: E501
-
-
-        :return: The sscore_platforms_tech_multi of this GeeqValueObject.  # noqa: E501
-        :rtype: float
-        """
-        return self._sscore_platforms_tech_multi
-
-    @sscore_platforms_tech_multi.setter
-    def sscore_platforms_tech_multi(self, sscore_platforms_tech_multi):
-        """Sets the sscore_platforms_tech_multi of this GeeqValueObject.
-
-
-        :param sscore_platforms_tech_multi: The sscore_platforms_tech_multi of this GeeqValueObject.  # noqa: E501
-        :type: float
-        """
-
-        self._sscore_platforms_tech_multi = sscore_platforms_tech_multi
-
-    @property
-    def sscore_avg_platform_popularity(self):
-        """Gets the sscore_avg_platform_popularity of this GeeqValueObject.  # noqa: E501
-
-
-        :return: The sscore_avg_platform_popularity of this GeeqValueObject.  # noqa: E501
-        :rtype: float
-        """
-        return self._sscore_avg_platform_popularity
-
-    @sscore_avg_platform_popularity.setter
-    def sscore_avg_platform_popularity(self, sscore_avg_platform_popularity):
-        """Sets the sscore_avg_platform_popularity of this GeeqValueObject.
-
-
-        :param sscore_avg_platform_popularity: The sscore_avg_platform_popularity of this GeeqValueObject.  # noqa: E501
-        :type: float
-        """
-
-        self._sscore_avg_platform_popularity = sscore_avg_platform_popularity
-
-    @property
-    def sscore_avg_platform_size(self):
-        """Gets the sscore_avg_platform_size of this GeeqValueObject.  # noqa: E501
-
-
-        :return: The sscore_avg_platform_size of this GeeqValueObject.  # noqa: E501
-        :rtype: float
-        """
-        return self._sscore_avg_platform_size
-
-    @sscore_avg_platform_size.setter
-    def sscore_avg_platform_size(self, sscore_avg_platform_size):
-        """Sets the sscore_avg_platform_size of this GeeqValueObject.
-
-
-        :param sscore_avg_platform_size: The sscore_avg_platform_size of this GeeqValueObject.  # noqa: E501
-        :type: float
-        """
-
-        self._sscore_avg_platform_size = sscore_avg_platform_size
-
-    @property
-    def sscore_sample_size(self):
-        """Gets the sscore_sample_size of this GeeqValueObject.  # noqa: E501
-
-
-        :return: The sscore_sample_size of this GeeqValueObject.  # noqa: E501
-        :rtype: float
-        """
-        return self._sscore_sample_size
-
-    @sscore_sample_size.setter
-    def sscore_sample_size(self, sscore_sample_size):
-        """Sets the sscore_sample_size of this GeeqValueObject.
-
-
-        :param sscore_sample_size: The sscore_sample_size of this GeeqValueObject.  # noqa: E501
-        :type: float
-        """
-
-        self._sscore_sample_size = sscore_sample_size
-
-    @property
-    def sscore_raw_data(self):
-        """Gets the sscore_raw_data of this GeeqValueObject.  # noqa: E501
-
-
-        :return: The sscore_raw_data of this GeeqValueObject.  # noqa: E501
-        :rtype: float
-        """
-        return self._sscore_raw_data
-
-    @sscore_raw_data.setter
-    def sscore_raw_data(self, sscore_raw_data):
-        """Sets the sscore_raw_data of this GeeqValueObject.
-
-
-        :param sscore_raw_data: The sscore_raw_data of this GeeqValueObject.  # noqa: E501
-        :type: float
-        """
-
-        self._sscore_raw_data = sscore_raw_data
-
-    @property
-    def sscore_missing_values(self):
-        """Gets the sscore_missing_values of this GeeqValueObject.  # noqa: E501
-
-
-        :return: The sscore_missing_values of this GeeqValueObject.  # noqa: E501
-        :rtype: float
-        """
-        return self._sscore_missing_values
-
-    @sscore_missing_values.setter
-    def sscore_missing_values(self, sscore_missing_values):
-        """Sets the sscore_missing_values of this GeeqValueObject.
-
-
-        :param sscore_missing_values: The sscore_missing_values of this GeeqValueObject.  # noqa: E501
-        :type: float
-        """
-
-        self._sscore_missing_values = sscore_missing_values
 
     @property
     def qscore_outliers(self):
@@ -773,172 +457,46 @@ class GeeqValueObject(object):
         self._qscore_batch_info = qscore_batch_info
 
     @property
-    def s_score_publication(self):
-        """Gets the s_score_publication of this GeeqValueObject.  # noqa: E501
+    def qscore_public_batch_confound(self):
+        """Gets the qscore_public_batch_confound of this GeeqValueObject.  # noqa: E501
 
 
-        :return: The s_score_publication of this GeeqValueObject.  # noqa: E501
+        :return: The qscore_public_batch_confound of this GeeqValueObject.  # noqa: E501
         :rtype: float
         """
-        return self._s_score_publication
+        return self._qscore_public_batch_confound
 
-    @s_score_publication.setter
-    def s_score_publication(self, s_score_publication):
-        """Sets the s_score_publication of this GeeqValueObject.
+    @qscore_public_batch_confound.setter
+    def qscore_public_batch_confound(self, qscore_public_batch_confound):
+        """Sets the qscore_public_batch_confound of this GeeqValueObject.
 
 
-        :param s_score_publication: The s_score_publication of this GeeqValueObject.  # noqa: E501
+        :param qscore_public_batch_confound: The qscore_public_batch_confound of this GeeqValueObject.  # noqa: E501
         :type: float
         """
 
-        self._s_score_publication = s_score_publication
+        self._qscore_public_batch_confound = qscore_public_batch_confound
 
     @property
-    def s_score_platform_amount(self):
-        """Gets the s_score_platform_amount of this GeeqValueObject.  # noqa: E501
+    def qscore_public_batch_effect(self):
+        """Gets the qscore_public_batch_effect of this GeeqValueObject.  # noqa: E501
 
 
-        :return: The s_score_platform_amount of this GeeqValueObject.  # noqa: E501
+        :return: The qscore_public_batch_effect of this GeeqValueObject.  # noqa: E501
         :rtype: float
         """
-        return self._s_score_platform_amount
+        return self._qscore_public_batch_effect
 
-    @s_score_platform_amount.setter
-    def s_score_platform_amount(self, s_score_platform_amount):
-        """Sets the s_score_platform_amount of this GeeqValueObject.
+    @qscore_public_batch_effect.setter
+    def qscore_public_batch_effect(self, qscore_public_batch_effect):
+        """Sets the qscore_public_batch_effect of this GeeqValueObject.
 
 
-        :param s_score_platform_amount: The s_score_platform_amount of this GeeqValueObject.  # noqa: E501
+        :param qscore_public_batch_effect: The qscore_public_batch_effect of this GeeqValueObject.  # noqa: E501
         :type: float
         """
 
-        self._s_score_platform_amount = s_score_platform_amount
-
-    @property
-    def s_score_platform_tech_multi(self):
-        """Gets the s_score_platform_tech_multi of this GeeqValueObject.  # noqa: E501
-
-
-        :return: The s_score_platform_tech_multi of this GeeqValueObject.  # noqa: E501
-        :rtype: float
-        """
-        return self._s_score_platform_tech_multi
-
-    @s_score_platform_tech_multi.setter
-    def s_score_platform_tech_multi(self, s_score_platform_tech_multi):
-        """Sets the s_score_platform_tech_multi of this GeeqValueObject.
-
-
-        :param s_score_platform_tech_multi: The s_score_platform_tech_multi of this GeeqValueObject.  # noqa: E501
-        :type: float
-        """
-
-        self._s_score_platform_tech_multi = s_score_platform_tech_multi
-
-    @property
-    def s_score_avg_platform_popularity(self):
-        """Gets the s_score_avg_platform_popularity of this GeeqValueObject.  # noqa: E501
-
-
-        :return: The s_score_avg_platform_popularity of this GeeqValueObject.  # noqa: E501
-        :rtype: float
-        """
-        return self._s_score_avg_platform_popularity
-
-    @s_score_avg_platform_popularity.setter
-    def s_score_avg_platform_popularity(self, s_score_avg_platform_popularity):
-        """Sets the s_score_avg_platform_popularity of this GeeqValueObject.
-
-
-        :param s_score_avg_platform_popularity: The s_score_avg_platform_popularity of this GeeqValueObject.  # noqa: E501
-        :type: float
-        """
-
-        self._s_score_avg_platform_popularity = s_score_avg_platform_popularity
-
-    @property
-    def s_score_avg_platform_size(self):
-        """Gets the s_score_avg_platform_size of this GeeqValueObject.  # noqa: E501
-
-
-        :return: The s_score_avg_platform_size of this GeeqValueObject.  # noqa: E501
-        :rtype: float
-        """
-        return self._s_score_avg_platform_size
-
-    @s_score_avg_platform_size.setter
-    def s_score_avg_platform_size(self, s_score_avg_platform_size):
-        """Sets the s_score_avg_platform_size of this GeeqValueObject.
-
-
-        :param s_score_avg_platform_size: The s_score_avg_platform_size of this GeeqValueObject.  # noqa: E501
-        :type: float
-        """
-
-        self._s_score_avg_platform_size = s_score_avg_platform_size
-
-    @property
-    def s_score_sample_size(self):
-        """Gets the s_score_sample_size of this GeeqValueObject.  # noqa: E501
-
-
-        :return: The s_score_sample_size of this GeeqValueObject.  # noqa: E501
-        :rtype: float
-        """
-        return self._s_score_sample_size
-
-    @s_score_sample_size.setter
-    def s_score_sample_size(self, s_score_sample_size):
-        """Sets the s_score_sample_size of this GeeqValueObject.
-
-
-        :param s_score_sample_size: The s_score_sample_size of this GeeqValueObject.  # noqa: E501
-        :type: float
-        """
-
-        self._s_score_sample_size = s_score_sample_size
-
-    @property
-    def s_score_raw_data(self):
-        """Gets the s_score_raw_data of this GeeqValueObject.  # noqa: E501
-
-
-        :return: The s_score_raw_data of this GeeqValueObject.  # noqa: E501
-        :rtype: float
-        """
-        return self._s_score_raw_data
-
-    @s_score_raw_data.setter
-    def s_score_raw_data(self, s_score_raw_data):
-        """Sets the s_score_raw_data of this GeeqValueObject.
-
-
-        :param s_score_raw_data: The s_score_raw_data of this GeeqValueObject.  # noqa: E501
-        :type: float
-        """
-
-        self._s_score_raw_data = s_score_raw_data
-
-    @property
-    def s_score_missing_values(self):
-        """Gets the s_score_missing_values of this GeeqValueObject.  # noqa: E501
-
-
-        :return: The s_score_missing_values of this GeeqValueObject.  # noqa: E501
-        :rtype: float
-        """
-        return self._s_score_missing_values
-
-    @s_score_missing_values.setter
-    def s_score_missing_values(self, s_score_missing_values):
-        """Sets the s_score_missing_values of this GeeqValueObject.
-
-
-        :param s_score_missing_values: The s_score_missing_values of this GeeqValueObject.  # noqa: E501
-        :type: float
-        """
-
-        self._s_score_missing_values = s_score_missing_values
+        self._qscore_public_batch_effect = qscore_public_batch_effect
 
     @property
     def q_score_outliers(self):

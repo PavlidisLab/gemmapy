@@ -33,6 +33,11 @@ class ExperimentalFactorEntry(object):
         'description': 'str',
         'type': 'str',
         'category': 'CharacteristicValueObject',
+        'baseline_relevance': 'str',
+        'baseline_relevance_reason': 'str',
+        'subset_relevance': 'str',
+        'subset_relevance_reason': 'str',
+        'supporting_evidence': 'JsonNode',
         'values': 'list[FactorValueBasicValueObject]'
     }
 
@@ -42,16 +47,26 @@ class ExperimentalFactorEntry(object):
         'description': 'description',
         'type': 'type',
         'category': 'category',
+        'baseline_relevance': 'baselineRelevance',
+        'baseline_relevance_reason': 'baselineRelevanceReason',
+        'subset_relevance': 'subsetRelevance',
+        'subset_relevance_reason': 'subsetRelevanceReason',
+        'supporting_evidence': 'supportingEvidence',
         'values': 'values'
     }
 
-    def __init__(self, id=None, name=None, description=None, type=None, category=None, values=None):  # noqa: E501
+    def __init__(self, id=None, name=None, description=None, type=None, category=None, baseline_relevance=None, baseline_relevance_reason=None, subset_relevance=None, subset_relevance_reason=None, supporting_evidence=None, values=None):  # noqa: E501
         """ExperimentalFactorEntry - a model defined in Swagger"""  # noqa: E501
         self._id = None
         self._name = None
         self._description = None
         self._type = None
         self._category = None
+        self._baseline_relevance = None
+        self._baseline_relevance_reason = None
+        self._subset_relevance = None
+        self._subset_relevance_reason = None
+        self._supporting_evidence = None
         self._values = None
         self.discriminator = None
         if id is not None:
@@ -64,6 +79,16 @@ class ExperimentalFactorEntry(object):
             self.type = type
         if category is not None:
             self.category = category
+        if baseline_relevance is not None:
+            self.baseline_relevance = baseline_relevance
+        if baseline_relevance_reason is not None:
+            self.baseline_relevance_reason = baseline_relevance_reason
+        if subset_relevance is not None:
+            self.subset_relevance = subset_relevance
+        if subset_relevance_reason is not None:
+            self.subset_relevance_reason = subset_relevance_reason
+        if supporting_evidence is not None:
+            self.supporting_evidence = supporting_evidence
         if values is not None:
             self.values = values
 
@@ -177,6 +202,115 @@ class ExperimentalFactorEntry(object):
         """
 
         self._category = category
+
+    @property
+    def baseline_relevance(self):
+        """Gets the baseline_relevance of this ExperimentalFactorEntry.  # noqa: E501
+
+        Curator/agent baseline-relevance hint: \"required\" | \"not_applicable\" | \"uncertain\" are the values in use, not the values permitted. Null when unset.  # noqa: E501
+
+        :return: The baseline_relevance of this ExperimentalFactorEntry.  # noqa: E501
+        :rtype: str
+        """
+        return self._baseline_relevance
+
+    @baseline_relevance.setter
+    def baseline_relevance(self, baseline_relevance):
+        """Sets the baseline_relevance of this ExperimentalFactorEntry.
+
+        Curator/agent baseline-relevance hint: \"required\" | \"not_applicable\" | \"uncertain\" are the values in use, not the values permitted. Null when unset.  # noqa: E501
+
+        :param baseline_relevance: The baseline_relevance of this ExperimentalFactorEntry.  # noqa: E501
+        :type: str
+        """
+
+        self._baseline_relevance = baseline_relevance
+
+    @property
+    def baseline_relevance_reason(self):
+        """Gets the baseline_relevance_reason of this ExperimentalFactorEntry.  # noqa: E501
+
+
+        :return: The baseline_relevance_reason of this ExperimentalFactorEntry.  # noqa: E501
+        :rtype: str
+        """
+        return self._baseline_relevance_reason
+
+    @baseline_relevance_reason.setter
+    def baseline_relevance_reason(self, baseline_relevance_reason):
+        """Sets the baseline_relevance_reason of this ExperimentalFactorEntry.
+
+
+        :param baseline_relevance_reason: The baseline_relevance_reason of this ExperimentalFactorEntry.  # noqa: E501
+        :type: str
+        """
+
+        self._baseline_relevance_reason = baseline_relevance_reason
+
+    @property
+    def subset_relevance(self):
+        """Gets the subset_relevance of this ExperimentalFactorEntry.  # noqa: E501
+
+        Curator/agent hint about whether a differential expression analysis should subset by this factor: \"recommended\" | \"not_applicable\" | \"uncertain\" are the values in use, not the values permitted. Advice only — what an analysis actually subsetted by is its own subsetFactorValue. Null when unset.  # noqa: E501
+
+        :return: The subset_relevance of this ExperimentalFactorEntry.  # noqa: E501
+        :rtype: str
+        """
+        return self._subset_relevance
+
+    @subset_relevance.setter
+    def subset_relevance(self, subset_relevance):
+        """Sets the subset_relevance of this ExperimentalFactorEntry.
+
+        Curator/agent hint about whether a differential expression analysis should subset by this factor: \"recommended\" | \"not_applicable\" | \"uncertain\" are the values in use, not the values permitted. Advice only — what an analysis actually subsetted by is its own subsetFactorValue. Null when unset.  # noqa: E501
+
+        :param subset_relevance: The subset_relevance of this ExperimentalFactorEntry.  # noqa: E501
+        :type: str
+        """
+
+        self._subset_relevance = subset_relevance
+
+    @property
+    def subset_relevance_reason(self):
+        """Gets the subset_relevance_reason of this ExperimentalFactorEntry.  # noqa: E501
+
+
+        :return: The subset_relevance_reason of this ExperimentalFactorEntry.  # noqa: E501
+        :rtype: str
+        """
+        return self._subset_relevance_reason
+
+    @subset_relevance_reason.setter
+    def subset_relevance_reason(self, subset_relevance_reason):
+        """Sets the subset_relevance_reason of this ExperimentalFactorEntry.
+
+
+        :param subset_relevance_reason: The subset_relevance_reason of this ExperimentalFactorEntry.  # noqa: E501
+        :type: str
+        """
+
+        self._subset_relevance_reason = subset_relevance_reason
+
+    @property
+    def supporting_evidence(self):
+        """Gets the supporting_evidence of this ExperimentalFactorEntry.  # noqa: E501
+
+
+        :return: The supporting_evidence of this ExperimentalFactorEntry.  # noqa: E501
+        :rtype: JsonNode
+        """
+        return self._supporting_evidence
+
+    @supporting_evidence.setter
+    def supporting_evidence(self, supporting_evidence):
+        """Sets the supporting_evidence of this ExperimentalFactorEntry.
+
+
+        :param supporting_evidence: The supporting_evidence of this ExperimentalFactorEntry.  # noqa: E501
+        :type: JsonNode
+        """
+
+        self._supporting_evidence = supporting_evidence
 
     @property
     def values(self):

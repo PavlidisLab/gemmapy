@@ -30,6 +30,7 @@ class ContrastResultValueObject(object):
     swagger_types = {
         'id': 'int',
         'pvalue': 'float',
+        't_stat': 'float',
         'coefficient': 'float',
         'log_fold_change': 'float',
         'factor_value_id': 'int',
@@ -42,6 +43,7 @@ class ContrastResultValueObject(object):
     attribute_map = {
         'id': 'id',
         'pvalue': 'pvalue',
+        't_stat': 'tStat',
         'coefficient': 'coefficient',
         'log_fold_change': 'logFoldChange',
         'factor_value_id': 'factorValueId',
@@ -51,10 +53,11 @@ class ContrastResultValueObject(object):
         'tstat': 'tstat'
     }
 
-    def __init__(self, id=None, pvalue=None, coefficient=None, log_fold_change=None, factor_value_id=None, factor_value=None, second_factor_value_id=None, second_factor_value=None, tstat=None):  # noqa: E501
+    def __init__(self, id=None, pvalue=None, t_stat=None, coefficient=None, log_fold_change=None, factor_value_id=None, factor_value=None, second_factor_value_id=None, second_factor_value=None, tstat=None):  # noqa: E501
         """ContrastResultValueObject - a model defined in Swagger"""  # noqa: E501
         self._id = None
         self._pvalue = None
+        self._t_stat = None
         self._coefficient = None
         self._log_fold_change = None
         self._factor_value_id = None
@@ -67,6 +70,8 @@ class ContrastResultValueObject(object):
             self.id = id
         if pvalue is not None:
             self.pvalue = pvalue
+        if t_stat is not None:
+            self.t_stat = t_stat
         if coefficient is not None:
             self.coefficient = coefficient
         if log_fold_change is not None:
@@ -123,6 +128,27 @@ class ContrastResultValueObject(object):
         """
 
         self._pvalue = pvalue
+
+    @property
+    def t_stat(self):
+        """Gets the t_stat of this ContrastResultValueObject.  # noqa: E501
+
+
+        :return: The t_stat of this ContrastResultValueObject.  # noqa: E501
+        :rtype: float
+        """
+        return self._t_stat
+
+    @t_stat.setter
+    def t_stat(self, t_stat):
+        """Sets the t_stat of this ContrastResultValueObject.
+
+
+        :param t_stat: The t_stat of this ContrastResultValueObject.  # noqa: E501
+        :type: float
+        """
+
+        self._t_stat = t_stat
 
     @property
     def coefficient(self):

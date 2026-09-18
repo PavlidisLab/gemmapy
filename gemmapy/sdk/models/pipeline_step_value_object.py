@@ -29,38 +29,48 @@ class PipelineStepValueObject(object):
     """
     swagger_types = {
         'step': 'str',
-        'state': 'str',
+        'filter_attrition': 'SampleCorrelationAnalysisPayload',
+        'processed_vectors': 'ProcessedVectorComputationPayload',
+        'status': 'str',
         'last_run': 'datetime',
         'event_type': 'str',
-        'message': 'str'
+        'details': 'str'
     }
 
     attribute_map = {
         'step': 'step',
-        'state': 'state',
+        'filter_attrition': 'filterAttrition',
+        'processed_vectors': 'processedVectors',
+        'status': 'status',
         'last_run': 'lastRun',
         'event_type': 'eventType',
-        'message': 'message'
+        'details': 'details'
     }
 
-    def __init__(self, step=None, state=None, last_run=None, event_type=None, message=None):  # noqa: E501
+    def __init__(self, step=None, filter_attrition=None, processed_vectors=None, status=None, last_run=None, event_type=None, details=None):  # noqa: E501
         """PipelineStepValueObject - a model defined in Swagger"""  # noqa: E501
         self._step = None
-        self._state = None
+        self._filter_attrition = None
+        self._processed_vectors = None
+        self._status = None
         self._last_run = None
         self._event_type = None
-        self._message = None
+        self._details = None
         self.discriminator = None
         if step is not None:
             self.step = step
-        if state is not None:
-            self.state = state
+        if filter_attrition is not None:
+            self.filter_attrition = filter_attrition
+        if processed_vectors is not None:
+            self.processed_vectors = processed_vectors
+        if status is not None:
+            self.status = status
         if last_run is not None:
             self.last_run = last_run
         if event_type is not None:
             self.event_type = event_type
-        if message is not None:
-            self.message = message
+        if details is not None:
+            self.details = details
 
     @property
     def step(self):
@@ -80,29 +90,83 @@ class PipelineStepValueObject(object):
         :param step: The step of this PipelineStepValueObject.  # noqa: E501
         :type: str
         """
+        allowed_values = ["batchInfo", "preprocess", "batchCorrection", "pca", "sampleCorrelation", "meanVariance", "dea", "coexpression", "missingValue"]  # noqa: E501
+        if step not in allowed_values:
+            raise ValueError(
+                "Invalid value for `step` ({0}), must be one of {1}"  # noqa: E501
+                .format(step, allowed_values)
+            )
 
         self._step = step
 
     @property
-    def state(self):
-        """Gets the state of this PipelineStepValueObject.  # noqa: E501
+    def filter_attrition(self):
+        """Gets the filter_attrition of this PipelineStepValueObject.  # noqa: E501
 
 
-        :return: The state of this PipelineStepValueObject.  # noqa: E501
+        :return: The filter_attrition of this PipelineStepValueObject.  # noqa: E501
+        :rtype: SampleCorrelationAnalysisPayload
+        """
+        return self._filter_attrition
+
+    @filter_attrition.setter
+    def filter_attrition(self, filter_attrition):
+        """Sets the filter_attrition of this PipelineStepValueObject.
+
+
+        :param filter_attrition: The filter_attrition of this PipelineStepValueObject.  # noqa: E501
+        :type: SampleCorrelationAnalysisPayload
+        """
+
+        self._filter_attrition = filter_attrition
+
+    @property
+    def processed_vectors(self):
+        """Gets the processed_vectors of this PipelineStepValueObject.  # noqa: E501
+
+
+        :return: The processed_vectors of this PipelineStepValueObject.  # noqa: E501
+        :rtype: ProcessedVectorComputationPayload
+        """
+        return self._processed_vectors
+
+    @processed_vectors.setter
+    def processed_vectors(self, processed_vectors):
+        """Sets the processed_vectors of this PipelineStepValueObject.
+
+
+        :param processed_vectors: The processed_vectors of this PipelineStepValueObject.  # noqa: E501
+        :type: ProcessedVectorComputationPayload
+        """
+
+        self._processed_vectors = processed_vectors
+
+    @property
+    def status(self):
+        """Gets the status of this PipelineStepValueObject.  # noqa: E501
+
+
+        :return: The status of this PipelineStepValueObject.  # noqa: E501
         :rtype: str
         """
-        return self._state
+        return self._status
 
-    @state.setter
-    def state(self, state):
-        """Sets the state of this PipelineStepValueObject.
+    @status.setter
+    def status(self, status):
+        """Sets the status of this PipelineStepValueObject.
 
 
-        :param state: The state of this PipelineStepValueObject.  # noqa: E501
+        :param status: The status of this PipelineStepValueObject.  # noqa: E501
         :type: str
         """
+        allowed_values = ["ok", "failed", "notRun", "notApplicable", "stale"]  # noqa: E501
+        if status not in allowed_values:
+            raise ValueError(
+                "Invalid value for `status` ({0}), must be one of {1}"  # noqa: E501
+                .format(status, allowed_values)
+            )
 
-        self._state = state
+        self._status = status
 
     @property
     def last_run(self):
@@ -147,25 +211,25 @@ class PipelineStepValueObject(object):
         self._event_type = event_type
 
     @property
-    def message(self):
-        """Gets the message of this PipelineStepValueObject.  # noqa: E501
+    def details(self):
+        """Gets the details of this PipelineStepValueObject.  # noqa: E501
 
 
-        :return: The message of this PipelineStepValueObject.  # noqa: E501
+        :return: The details of this PipelineStepValueObject.  # noqa: E501
         :rtype: str
         """
-        return self._message
+        return self._details
 
-    @message.setter
-    def message(self, message):
-        """Sets the message of this PipelineStepValueObject.
+    @details.setter
+    def details(self, details):
+        """Sets the details of this PipelineStepValueObject.
 
 
-        :param message: The message of this PipelineStepValueObject.  # noqa: E501
+        :param details: The details of this PipelineStepValueObject.  # noqa: E501
         :type: str
         """
 
-        self._message = message
+        self._details = details
 
     def to_dict(self):
         """Returns the model properties as a dict"""

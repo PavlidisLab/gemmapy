@@ -34,10 +34,13 @@ class BioAssayValueObject(object):
         'description': 'str',
         'metadata': 'str',
         'accession': 'DatabaseEntryValueObject',
-        'array_design': 'ArrayDesignValueObject',
-        'original_platform': 'ArrayDesignValueObject',
+        'array_design': 'ArrayDesignReferenceValueObject',
+        'original_platform': 'ArrayDesignReferenceValueObject',
         'processing_date': 'datetime',
         'sample': 'BioMaterialValueObject',
+        'extracted_molecule': 'str',
+        'library_selection': 'str',
+        'library_strategy': 'str',
         'sequence_paired_reads': 'bool',
         'sequence_read_count': 'int',
         'sequence_read_length': 'int',
@@ -61,6 +64,9 @@ class BioAssayValueObject(object):
         'original_platform': 'originalPlatform',
         'processing_date': 'processingDate',
         'sample': 'sample',
+        'extracted_molecule': 'extractedMolecule',
+        'library_selection': 'librarySelection',
+        'library_strategy': 'libraryStrategy',
         'sequence_paired_reads': 'sequencePairedReads',
         'sequence_read_count': 'sequenceReadCount',
         'sequence_read_length': 'sequenceReadLength',
@@ -73,7 +79,7 @@ class BioAssayValueObject(object):
         'source_bio_assay_id': 'sourceBioAssayId'
     }
 
-    def __init__(self, id=None, short_name=None, name=None, description=None, metadata=None, accession=None, array_design=None, original_platform=None, processing_date=None, sample=None, sequence_paired_reads=None, sequence_read_count=None, sequence_read_length=None, number_of_cells=None, number_of_design_elements=None, number_of_cells_by_design_elements=None, outlier=None, predicted_outlier=None, user_flagged_outlier=None, source_bio_assay_id=None):  # noqa: E501
+    def __init__(self, id=None, short_name=None, name=None, description=None, metadata=None, accession=None, array_design=None, original_platform=None, processing_date=None, sample=None, extracted_molecule=None, library_selection=None, library_strategy=None, sequence_paired_reads=None, sequence_read_count=None, sequence_read_length=None, number_of_cells=None, number_of_design_elements=None, number_of_cells_by_design_elements=None, outlier=None, predicted_outlier=None, user_flagged_outlier=None, source_bio_assay_id=None):  # noqa: E501
         """BioAssayValueObject - a model defined in Swagger"""  # noqa: E501
         self._id = None
         self._short_name = None
@@ -85,6 +91,9 @@ class BioAssayValueObject(object):
         self._original_platform = None
         self._processing_date = None
         self._sample = None
+        self._extracted_molecule = None
+        self._library_selection = None
+        self._library_strategy = None
         self._sequence_paired_reads = None
         self._sequence_read_count = None
         self._sequence_read_length = None
@@ -116,6 +125,12 @@ class BioAssayValueObject(object):
             self.processing_date = processing_date
         if sample is not None:
             self.sample = sample
+        if extracted_molecule is not None:
+            self.extracted_molecule = extracted_molecule
+        if library_selection is not None:
+            self.library_selection = library_selection
+        if library_strategy is not None:
+            self.library_strategy = library_strategy
         if sequence_paired_reads is not None:
             self.sequence_paired_reads = sequence_paired_reads
         if sequence_read_count is not None:
@@ -269,7 +284,7 @@ class BioAssayValueObject(object):
 
 
         :return: The array_design of this BioAssayValueObject.  # noqa: E501
-        :rtype: ArrayDesignValueObject
+        :rtype: ArrayDesignReferenceValueObject
         """
         return self._array_design
 
@@ -279,7 +294,7 @@ class BioAssayValueObject(object):
 
 
         :param array_design: The array_design of this BioAssayValueObject.  # noqa: E501
-        :type: ArrayDesignValueObject
+        :type: ArrayDesignReferenceValueObject
         """
 
         self._array_design = array_design
@@ -290,7 +305,7 @@ class BioAssayValueObject(object):
 
 
         :return: The original_platform of this BioAssayValueObject.  # noqa: E501
-        :rtype: ArrayDesignValueObject
+        :rtype: ArrayDesignReferenceValueObject
         """
         return self._original_platform
 
@@ -300,7 +315,7 @@ class BioAssayValueObject(object):
 
 
         :param original_platform: The original_platform of this BioAssayValueObject.  # noqa: E501
-        :type: ArrayDesignValueObject
+        :type: ArrayDesignReferenceValueObject
         """
 
         self._original_platform = original_platform
@@ -346,6 +361,81 @@ class BioAssayValueObject(object):
         """
 
         self._sample = sample
+
+    @property
+    def extracted_molecule(self):
+        """Gets the extracted_molecule of this BioAssayValueObject.  # noqa: E501
+
+        What was extracted and assayed (GEO's molecule): totalRNA, polyARNA, cytoplasmicRNA, nuclearRNA, genomicDNA, protein, other. Null when unstated or non-GEO. This is what distinguishes single-nucleus from single-cell RNA-seq — isSingleCell is true for both.  # noqa: E501
+
+        :return: The extracted_molecule of this BioAssayValueObject.  # noqa: E501
+        :rtype: str
+        """
+        return self._extracted_molecule
+
+    @extracted_molecule.setter
+    def extracted_molecule(self, extracted_molecule):
+        """Sets the extracted_molecule of this BioAssayValueObject.
+
+        What was extracted and assayed (GEO's molecule): totalRNA, polyARNA, cytoplasmicRNA, nuclearRNA, genomicDNA, protein, other. Null when unstated or non-GEO. This is what distinguishes single-nucleus from single-cell RNA-seq — isSingleCell is true for both.  # noqa: E501
+
+        :param extracted_molecule: The extracted_molecule of this BioAssayValueObject.  # noqa: E501
+        :type: str
+        """
+        allowed_values = ["totalRNA", "polyARNA", "cytoplasmicRNA", "nuclearRNA", "genomicDNA", "protein", "other"]  # noqa: E501
+        if extracted_molecule not in allowed_values:
+            raise ValueError(
+                "Invalid value for `extracted_molecule` ({0}), must be one of {1}"  # noqa: E501
+                .format(extracted_molecule, allowed_values)
+            )
+
+        self._extracted_molecule = extracted_molecule
+
+    @property
+    def library_selection(self):
+        """Gets the library_selection of this BioAssayValueObject.  # noqa: E501
+
+        GEO's library_selection, verbatim (polyA, cDNA, RANDOM, …). Read beside extractedMolecule: total RNA with a polyA selection step is common, and the molecule alone is misleading there.  # noqa: E501
+
+        :return: The library_selection of this BioAssayValueObject.  # noqa: E501
+        :rtype: str
+        """
+        return self._library_selection
+
+    @library_selection.setter
+    def library_selection(self, library_selection):
+        """Sets the library_selection of this BioAssayValueObject.
+
+        GEO's library_selection, verbatim (polyA, cDNA, RANDOM, …). Read beside extractedMolecule: total RNA with a polyA selection step is common, and the molecule alone is misleading there.  # noqa: E501
+
+        :param library_selection: The library_selection of this BioAssayValueObject.  # noqa: E501
+        :type: str
+        """
+
+        self._library_selection = library_selection
+
+    @property
+    def library_strategy(self):
+        """Gets the library_strategy of this BioAssayValueObject.  # noqa: E501
+
+        GEO's library_strategy as a constant name (RNA_SEQ, SCRNA_SEQ, RIBO_SEQ, ATAC_SEQ, …), not GEO's spelling (RNA-Seq); MICROARRAY_ONE_COLOR or MICROARRAY_TWO_COLOR for a microarray sample, by channel count. Free text, so a new strategy needs no schema change.  # noqa: E501
+
+        :return: The library_strategy of this BioAssayValueObject.  # noqa: E501
+        :rtype: str
+        """
+        return self._library_strategy
+
+    @library_strategy.setter
+    def library_strategy(self, library_strategy):
+        """Sets the library_strategy of this BioAssayValueObject.
+
+        GEO's library_strategy as a constant name (RNA_SEQ, SCRNA_SEQ, RIBO_SEQ, ATAC_SEQ, …), not GEO's spelling (RNA-Seq); MICROARRAY_ONE_COLOR or MICROARRAY_TWO_COLOR for a microarray sample, by channel count. Free text, so a new strategy needs no schema change.  # noqa: E501
+
+        :param library_strategy: The library_strategy of this BioAssayValueObject.  # noqa: E501
+        :type: str
+        """
+
+        self._library_strategy = library_strategy
 
     @property
     def sequence_paired_reads(self):

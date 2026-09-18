@@ -31,12 +31,18 @@ class GeneValueObject(object):
         'id': 'int',
         'aliases': 'list[str]',
         'associated_experiment_count': 'int',
+        'composite_sequence_count': 'int',
+        'gene_sets': 'list[GeneSetValueObject]',
+        'homologues': 'list[GeneValueObject]',
         'multifunctionality_rank': 'float',
         'ncbi_id': 'int',
         'ensembl_id': 'str',
         'accessions': 'list[DatabaseEntryValueObject]',
+        'num_go_terms': 'int',
         'official_name': 'str',
         'official_symbol': 'str',
+        'platform_count': 'int',
+        'match_type': 'str',
         'ncbi_uri': 'str',
         'taxon': 'TaxonValueObject',
         'taxon_id': 'int'
@@ -46,28 +52,40 @@ class GeneValueObject(object):
         'id': 'id',
         'aliases': 'aliases',
         'associated_experiment_count': 'associatedExperimentCount',
+        'composite_sequence_count': 'compositeSequenceCount',
+        'gene_sets': 'geneSets',
+        'homologues': 'homologues',
         'multifunctionality_rank': 'multifunctionalityRank',
         'ncbi_id': 'ncbiId',
         'ensembl_id': 'ensemblId',
         'accessions': 'accessions',
+        'num_go_terms': 'numGoTerms',
         'official_name': 'officialName',
         'official_symbol': 'officialSymbol',
+        'platform_count': 'platformCount',
+        'match_type': 'matchType',
         'ncbi_uri': 'ncbiUri',
         'taxon': 'taxon',
         'taxon_id': 'taxonId'
     }
 
-    def __init__(self, id=None, aliases=None, associated_experiment_count=None, multifunctionality_rank=None, ncbi_id=None, ensembl_id=None, accessions=None, official_name=None, official_symbol=None, ncbi_uri=None, taxon=None, taxon_id=None):  # noqa: E501
+    def __init__(self, id=None, aliases=None, associated_experiment_count=None, composite_sequence_count=None, gene_sets=None, homologues=None, multifunctionality_rank=None, ncbi_id=None, ensembl_id=None, accessions=None, num_go_terms=None, official_name=None, official_symbol=None, platform_count=None, match_type=None, ncbi_uri=None, taxon=None, taxon_id=None):  # noqa: E501
         """GeneValueObject - a model defined in Swagger"""  # noqa: E501
         self._id = None
         self._aliases = None
         self._associated_experiment_count = None
+        self._composite_sequence_count = None
+        self._gene_sets = None
+        self._homologues = None
         self._multifunctionality_rank = None
         self._ncbi_id = None
         self._ensembl_id = None
         self._accessions = None
+        self._num_go_terms = None
         self._official_name = None
         self._official_symbol = None
+        self._platform_count = None
+        self._match_type = None
         self._ncbi_uri = None
         self._taxon = None
         self._taxon_id = None
@@ -78,6 +96,12 @@ class GeneValueObject(object):
             self.aliases = aliases
         if associated_experiment_count is not None:
             self.associated_experiment_count = associated_experiment_count
+        if composite_sequence_count is not None:
+            self.composite_sequence_count = composite_sequence_count
+        if gene_sets is not None:
+            self.gene_sets = gene_sets
+        if homologues is not None:
+            self.homologues = homologues
         if multifunctionality_rank is not None:
             self.multifunctionality_rank = multifunctionality_rank
         if ncbi_id is not None:
@@ -86,10 +110,16 @@ class GeneValueObject(object):
             self.ensembl_id = ensembl_id
         if accessions is not None:
             self.accessions = accessions
+        if num_go_terms is not None:
+            self.num_go_terms = num_go_terms
         if official_name is not None:
             self.official_name = official_name
         if official_symbol is not None:
             self.official_symbol = official_symbol
+        if platform_count is not None:
+            self.platform_count = platform_count
+        if match_type is not None:
+            self.match_type = match_type
         if ncbi_uri is not None:
             self.ncbi_uri = ncbi_uri
         if taxon is not None:
@@ -159,6 +189,75 @@ class GeneValueObject(object):
         """
 
         self._associated_experiment_count = associated_experiment_count
+
+    @property
+    def composite_sequence_count(self):
+        """Gets the composite_sequence_count of this GeneValueObject.  # noqa: E501
+
+        Number of probes across all platforms mapping to this gene; only populated by `GET /genes/{gene}/overview`.  # noqa: E501
+
+        :return: The composite_sequence_count of this GeneValueObject.  # noqa: E501
+        :rtype: int
+        """
+        return self._composite_sequence_count
+
+    @composite_sequence_count.setter
+    def composite_sequence_count(self, composite_sequence_count):
+        """Sets the composite_sequence_count of this GeneValueObject.
+
+        Number of probes across all platforms mapping to this gene; only populated by `GET /genes/{gene}/overview`.  # noqa: E501
+
+        :param composite_sequence_count: The composite_sequence_count of this GeneValueObject.  # noqa: E501
+        :type: int
+        """
+
+        self._composite_sequence_count = composite_sequence_count
+
+    @property
+    def gene_sets(self):
+        """Gets the gene_sets of this GeneValueObject.  # noqa: E501
+
+        Gene-set memberships in light form; only populated by `GET /genes/{gene}/overview`.  # noqa: E501
+
+        :return: The gene_sets of this GeneValueObject.  # noqa: E501
+        :rtype: list[GeneSetValueObject]
+        """
+        return self._gene_sets
+
+    @gene_sets.setter
+    def gene_sets(self, gene_sets):
+        """Sets the gene_sets of this GeneValueObject.
+
+        Gene-set memberships in light form; only populated by `GET /genes/{gene}/overview`.  # noqa: E501
+
+        :param gene_sets: The gene_sets of this GeneValueObject.  # noqa: E501
+        :type: list[GeneSetValueObject]
+        """
+
+        self._gene_sets = gene_sets
+
+    @property
+    def homologues(self):
+        """Gets the homologues of this GeneValueObject.  # noqa: E501
+
+        Homologues across taxa, one level deep (the nested gene objects carry no homologues of their own); only populated by `GET /genes/{gene}/overview`.  # noqa: E501
+
+        :return: The homologues of this GeneValueObject.  # noqa: E501
+        :rtype: list[GeneValueObject]
+        """
+        return self._homologues
+
+    @homologues.setter
+    def homologues(self, homologues):
+        """Sets the homologues of this GeneValueObject.
+
+        Homologues across taxa, one level deep (the nested gene objects carry no homologues of their own); only populated by `GET /genes/{gene}/overview`.  # noqa: E501
+
+        :param homologues: The homologues of this GeneValueObject.  # noqa: E501
+        :type: list[GeneValueObject]
+        """
+
+        self._homologues = homologues
 
     @property
     def multifunctionality_rank(self):
@@ -245,6 +344,29 @@ class GeneValueObject(object):
         self._accessions = accessions
 
     @property
+    def num_go_terms(self):
+        """Gets the num_go_terms of this GeneValueObject.  # noqa: E501
+
+        Number of associated GO terms; only populated by `GET /genes/{gene}/overview`.  # noqa: E501
+
+        :return: The num_go_terms of this GeneValueObject.  # noqa: E501
+        :rtype: int
+        """
+        return self._num_go_terms
+
+    @num_go_terms.setter
+    def num_go_terms(self, num_go_terms):
+        """Sets the num_go_terms of this GeneValueObject.
+
+        Number of associated GO terms; only populated by `GET /genes/{gene}/overview`.  # noqa: E501
+
+        :param num_go_terms: The num_go_terms of this GeneValueObject.  # noqa: E501
+        :type: int
+        """
+
+        self._num_go_terms = num_go_terms
+
+    @property
     def official_name(self):
         """Gets the official_name of this GeneValueObject.  # noqa: E501
 
@@ -285,6 +407,52 @@ class GeneValueObject(object):
         """
 
         self._official_symbol = official_symbol
+
+    @property
+    def platform_count(self):
+        """Gets the platform_count of this GeneValueObject.  # noqa: E501
+
+        Number of platforms with a probe for this gene; only populated by `GET /genes/{gene}/overview`.  # noqa: E501
+
+        :return: The platform_count of this GeneValueObject.  # noqa: E501
+        :rtype: int
+        """
+        return self._platform_count
+
+    @platform_count.setter
+    def platform_count(self, platform_count):
+        """Sets the platform_count of this GeneValueObject.
+
+        Number of platforms with a probe for this gene; only populated by `GET /genes/{gene}/overview`.  # noqa: E501
+
+        :param platform_count: The platform_count of this GeneValueObject.  # noqa: E501
+        :type: int
+        """
+
+        self._platform_count = platform_count
+
+    @property
+    def match_type(self):
+        """Gets the match_type of this GeneValueObject.  # noqa: E501
+
+        How this gene matched the search query (exact_symbol, alias, prefix, official_name, official_name_prefix, exact_identifier); present only on search results.  # noqa: E501
+
+        :return: The match_type of this GeneValueObject.  # noqa: E501
+        :rtype: str
+        """
+        return self._match_type
+
+    @match_type.setter
+    def match_type(self, match_type):
+        """Sets the match_type of this GeneValueObject.
+
+        How this gene matched the search query (exact_symbol, alias, prefix, official_name, official_name_prefix, exact_identifier); present only on search results.  # noqa: E501
+
+        :param match_type: The match_type of this GeneValueObject.  # noqa: E501
+        :type: str
+        """
+
+        self._match_type = match_type
 
     @property
     def ncbi_uri(self):

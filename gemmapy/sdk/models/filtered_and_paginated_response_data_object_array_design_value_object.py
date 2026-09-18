@@ -29,53 +29,53 @@ class FilteredAndPaginatedResponseDataObjectArrayDesignValueObject(object):
     """
     swagger_types = {
         'data': 'list[ArrayDesignValueObject]',
-        'warnings': 'list[WellComposedWarning]',
+        'filter': 'str',
         'group_by': 'list[str]',
-        'sort': 'SortValueObject',
-        'offset': 'int',
         'limit': 'int',
+        'offset': 'int',
+        'sort': 'SortValueObject',
         'total_elements': 'int',
-        'filter': 'str'
+        'warnings': 'list[WellComposedWarning]'
     }
 
     attribute_map = {
         'data': 'data',
-        'warnings': 'warnings',
+        'filter': 'filter',
         'group_by': 'groupBy',
-        'sort': 'sort',
-        'offset': 'offset',
         'limit': 'limit',
+        'offset': 'offset',
+        'sort': 'sort',
         'total_elements': 'totalElements',
-        'filter': 'filter'
+        'warnings': 'warnings'
     }
 
-    def __init__(self, data=None, warnings=None, group_by=None, sort=None, offset=None, limit=None, total_elements=None, filter=None):  # noqa: E501
+    def __init__(self, data=None, filter=None, group_by=None, limit=None, offset=None, sort=None, total_elements=None, warnings=None):  # noqa: E501
         """FilteredAndPaginatedResponseDataObjectArrayDesignValueObject - a model defined in Swagger"""  # noqa: E501
         self._data = None
-        self._warnings = None
-        self._group_by = None
-        self._sort = None
-        self._offset = None
-        self._limit = None
-        self._total_elements = None
         self._filter = None
+        self._group_by = None
+        self._limit = None
+        self._offset = None
+        self._sort = None
+        self._total_elements = None
+        self._warnings = None
         self.discriminator = None
         if data is not None:
             self.data = data
-        if warnings is not None:
-            self.warnings = warnings
-        if group_by is not None:
-            self.group_by = group_by
-        if sort is not None:
-            self.sort = sort
-        if offset is not None:
-            self.offset = offset
-        if limit is not None:
-            self.limit = limit
-        if total_elements is not None:
-            self.total_elements = total_elements
         if filter is not None:
             self.filter = filter
+        if group_by is not None:
+            self.group_by = group_by
+        if limit is not None:
+            self.limit = limit
+        if offset is not None:
+            self.offset = offset
+        if sort is not None:
+            self.sort = sort
+        if total_elements is not None:
+            self.total_elements = total_elements
+        if warnings is not None:
+            self.warnings = warnings
 
     @property
     def data(self):
@@ -99,25 +99,25 @@ class FilteredAndPaginatedResponseDataObjectArrayDesignValueObject(object):
         self._data = data
 
     @property
-    def warnings(self):
-        """Gets the warnings of this FilteredAndPaginatedResponseDataObjectArrayDesignValueObject.  # noqa: E501
+    def filter(self):
+        """Gets the filter of this FilteredAndPaginatedResponseDataObjectArrayDesignValueObject.  # noqa: E501
 
 
-        :return: The warnings of this FilteredAndPaginatedResponseDataObjectArrayDesignValueObject.  # noqa: E501
-        :rtype: list[WellComposedWarning]
+        :return: The filter of this FilteredAndPaginatedResponseDataObjectArrayDesignValueObject.  # noqa: E501
+        :rtype: str
         """
-        return self._warnings
+        return self._filter
 
-    @warnings.setter
-    def warnings(self, warnings):
-        """Sets the warnings of this FilteredAndPaginatedResponseDataObjectArrayDesignValueObject.
+    @filter.setter
+    def filter(self, filter):
+        """Sets the filter of this FilteredAndPaginatedResponseDataObjectArrayDesignValueObject.
 
 
-        :param warnings: The warnings of this FilteredAndPaginatedResponseDataObjectArrayDesignValueObject.  # noqa: E501
-        :type: list[WellComposedWarning]
+        :param filter: The filter of this FilteredAndPaginatedResponseDataObjectArrayDesignValueObject.  # noqa: E501
+        :type: str
         """
 
-        self._warnings = warnings
+        self._filter = filter
 
     @property
     def group_by(self):
@@ -141,25 +141,25 @@ class FilteredAndPaginatedResponseDataObjectArrayDesignValueObject(object):
         self._group_by = group_by
 
     @property
-    def sort(self):
-        """Gets the sort of this FilteredAndPaginatedResponseDataObjectArrayDesignValueObject.  # noqa: E501
+    def limit(self):
+        """Gets the limit of this FilteredAndPaginatedResponseDataObjectArrayDesignValueObject.  # noqa: E501
 
 
-        :return: The sort of this FilteredAndPaginatedResponseDataObjectArrayDesignValueObject.  # noqa: E501
-        :rtype: SortValueObject
+        :return: The limit of this FilteredAndPaginatedResponseDataObjectArrayDesignValueObject.  # noqa: E501
+        :rtype: int
         """
-        return self._sort
+        return self._limit
 
-    @sort.setter
-    def sort(self, sort):
-        """Sets the sort of this FilteredAndPaginatedResponseDataObjectArrayDesignValueObject.
+    @limit.setter
+    def limit(self, limit):
+        """Sets the limit of this FilteredAndPaginatedResponseDataObjectArrayDesignValueObject.
 
 
-        :param sort: The sort of this FilteredAndPaginatedResponseDataObjectArrayDesignValueObject.  # noqa: E501
-        :type: SortValueObject
+        :param limit: The limit of this FilteredAndPaginatedResponseDataObjectArrayDesignValueObject.  # noqa: E501
+        :type: int
         """
 
-        self._sort = sort
+        self._limit = limit
 
     @property
     def offset(self):
@@ -183,25 +183,25 @@ class FilteredAndPaginatedResponseDataObjectArrayDesignValueObject(object):
         self._offset = offset
 
     @property
-    def limit(self):
-        """Gets the limit of this FilteredAndPaginatedResponseDataObjectArrayDesignValueObject.  # noqa: E501
+    def sort(self):
+        """Gets the sort of this FilteredAndPaginatedResponseDataObjectArrayDesignValueObject.  # noqa: E501
 
 
-        :return: The limit of this FilteredAndPaginatedResponseDataObjectArrayDesignValueObject.  # noqa: E501
-        :rtype: int
+        :return: The sort of this FilteredAndPaginatedResponseDataObjectArrayDesignValueObject.  # noqa: E501
+        :rtype: SortValueObject
         """
-        return self._limit
+        return self._sort
 
-    @limit.setter
-    def limit(self, limit):
-        """Sets the limit of this FilteredAndPaginatedResponseDataObjectArrayDesignValueObject.
+    @sort.setter
+    def sort(self, sort):
+        """Sets the sort of this FilteredAndPaginatedResponseDataObjectArrayDesignValueObject.
 
 
-        :param limit: The limit of this FilteredAndPaginatedResponseDataObjectArrayDesignValueObject.  # noqa: E501
-        :type: int
+        :param sort: The sort of this FilteredAndPaginatedResponseDataObjectArrayDesignValueObject.  # noqa: E501
+        :type: SortValueObject
         """
 
-        self._limit = limit
+        self._sort = sort
 
     @property
     def total_elements(self):
@@ -225,25 +225,25 @@ class FilteredAndPaginatedResponseDataObjectArrayDesignValueObject(object):
         self._total_elements = total_elements
 
     @property
-    def filter(self):
-        """Gets the filter of this FilteredAndPaginatedResponseDataObjectArrayDesignValueObject.  # noqa: E501
+    def warnings(self):
+        """Gets the warnings of this FilteredAndPaginatedResponseDataObjectArrayDesignValueObject.  # noqa: E501
 
 
-        :return: The filter of this FilteredAndPaginatedResponseDataObjectArrayDesignValueObject.  # noqa: E501
-        :rtype: str
+        :return: The warnings of this FilteredAndPaginatedResponseDataObjectArrayDesignValueObject.  # noqa: E501
+        :rtype: list[WellComposedWarning]
         """
-        return self._filter
+        return self._warnings
 
-    @filter.setter
-    def filter(self, filter):
-        """Sets the filter of this FilteredAndPaginatedResponseDataObjectArrayDesignValueObject.
+    @warnings.setter
+    def warnings(self, warnings):
+        """Sets the warnings of this FilteredAndPaginatedResponseDataObjectArrayDesignValueObject.
 
 
-        :param filter: The filter of this FilteredAndPaginatedResponseDataObjectArrayDesignValueObject.  # noqa: E501
-        :type: str
+        :param warnings: The warnings of this FilteredAndPaginatedResponseDataObjectArrayDesignValueObject.  # noqa: E501
+        :type: list[WellComposedWarning]
         """
 
-        self._filter = filter
+        self._warnings = warnings
 
     def to_dict(self):
         """Returns the model properties as a dict"""

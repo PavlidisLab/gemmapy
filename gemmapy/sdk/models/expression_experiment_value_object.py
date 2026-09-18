@@ -44,6 +44,14 @@ class ExpressionExperimentValueObject(object):
         'external_label': 'str',
         'external_database': 'str',
         'external_database_uri': 'str',
+        'pubmed_id': 'str',
+        'doi': 'str',
+        'platforms': 'list[ArrayDesignReferenceValueObject]',
+        'original_platforms': 'list[ArrayDesignReferenceValueObject]',
+        'library_strategies': 'list[BioAssayFieldCountValueObject]',
+        'library_selections': 'list[BioAssayFieldCountValueObject]',
+        'extracted_molecules': 'list[BioAssayFieldCountValueObject]',
+        'date_created': 'datetime',
         'batch_confound': 'str',
         'batch_effect': 'str',
         'batch_effect_statistics': 'str',
@@ -53,9 +61,13 @@ class ExpressionExperimentValueObject(object):
         'source': 'str',
         'is_public': 'bool',
         'technology_type': 'str',
+        'is_single_cell': 'bool',
+        'number_of_cells': 'int',
+        'number_of_cell_ids': 'int',
+        'other_parts': 'list[ExpressionExperimentReferenceValueObject]',
         'characteristics': 'list[CharacteristicValueObject]',
-        'bio_assay_count': 'int',
         'taxon_id': 'int',
+        'bio_assay_count': 'int',
         'trouble_details': 'str',
         'number_of_array_designs': 'int',
         'number_of_processed_expression_vectors': 'int',
@@ -79,6 +91,14 @@ class ExpressionExperimentValueObject(object):
         'external_label': 'externalLabel',
         'external_database': 'externalDatabase',
         'external_database_uri': 'externalDatabaseUri',
+        'pubmed_id': 'pubmedId',
+        'doi': 'doi',
+        'platforms': 'platforms',
+        'original_platforms': 'originalPlatforms',
+        'library_strategies': 'libraryStrategies',
+        'library_selections': 'librarySelections',
+        'extracted_molecules': 'extractedMolecules',
+        'date_created': 'dateCreated',
         'batch_confound': 'batchConfound',
         'batch_effect': 'batchEffect',
         'batch_effect_statistics': 'batchEffectStatistics',
@@ -88,16 +108,20 @@ class ExpressionExperimentValueObject(object):
         'source': 'source',
         'is_public': 'isPublic',
         'technology_type': 'technologyType',
+        'is_single_cell': 'isSingleCell',
+        'number_of_cells': 'numberOfCells',
+        'number_of_cell_ids': 'numberOfCellIds',
+        'other_parts': 'otherParts',
         'characteristics': 'characteristics',
-        'bio_assay_count': 'bioAssayCount',
         'taxon_id': 'taxonId',
+        'bio_assay_count': 'bioAssayCount',
         'trouble_details': 'troubleDetails',
         'number_of_array_designs': 'numberOfArrayDesigns',
         'number_of_processed_expression_vectors': 'numberOfProcessedExpressionVectors',
         'taxon': 'taxon'
     }
 
-    def __init__(self, id=None, last_updated=None, troubled=None, last_troubled_event=None, needs_attention=None, last_needs_attention_event=None, curation_note=None, last_note_update_event=None, number_of_bio_assays=None, description=None, name=None, accession=None, external_uri=None, external_label=None, external_database=None, external_database_uri=None, batch_confound=None, batch_effect=None, batch_effect_statistics=None, geeq=None, metadata=None, short_name=None, source=None, is_public=None, technology_type=None, characteristics=None, bio_assay_count=None, taxon_id=None, trouble_details=None, number_of_array_designs=None, number_of_processed_expression_vectors=None, taxon=None):  # noqa: E501
+    def __init__(self, id=None, last_updated=None, troubled=None, last_troubled_event=None, needs_attention=None, last_needs_attention_event=None, curation_note=None, last_note_update_event=None, number_of_bio_assays=None, description=None, name=None, accession=None, external_uri=None, external_label=None, external_database=None, external_database_uri=None, pubmed_id=None, doi=None, platforms=None, original_platforms=None, library_strategies=None, library_selections=None, extracted_molecules=None, date_created=None, batch_confound=None, batch_effect=None, batch_effect_statistics=None, geeq=None, metadata=None, short_name=None, source=None, is_public=None, technology_type=None, is_single_cell=None, number_of_cells=None, number_of_cell_ids=None, other_parts=None, characteristics=None, taxon_id=None, bio_assay_count=None, trouble_details=None, number_of_array_designs=None, number_of_processed_expression_vectors=None, taxon=None):  # noqa: E501
         """ExpressionExperimentValueObject - a model defined in Swagger"""  # noqa: E501
         self._id = None
         self._last_updated = None
@@ -115,6 +139,14 @@ class ExpressionExperimentValueObject(object):
         self._external_label = None
         self._external_database = None
         self._external_database_uri = None
+        self._pubmed_id = None
+        self._doi = None
+        self._platforms = None
+        self._original_platforms = None
+        self._library_strategies = None
+        self._library_selections = None
+        self._extracted_molecules = None
+        self._date_created = None
         self._batch_confound = None
         self._batch_effect = None
         self._batch_effect_statistics = None
@@ -124,9 +156,13 @@ class ExpressionExperimentValueObject(object):
         self._source = None
         self._is_public = None
         self._technology_type = None
+        self._is_single_cell = None
+        self._number_of_cells = None
+        self._number_of_cell_ids = None
+        self._other_parts = None
         self._characteristics = None
-        self._bio_assay_count = None
         self._taxon_id = None
+        self._bio_assay_count = None
         self._trouble_details = None
         self._number_of_array_designs = None
         self._number_of_processed_expression_vectors = None
@@ -164,6 +200,22 @@ class ExpressionExperimentValueObject(object):
             self.external_database = external_database
         if external_database_uri is not None:
             self.external_database_uri = external_database_uri
+        if pubmed_id is not None:
+            self.pubmed_id = pubmed_id
+        if doi is not None:
+            self.doi = doi
+        if platforms is not None:
+            self.platforms = platforms
+        if original_platforms is not None:
+            self.original_platforms = original_platforms
+        if library_strategies is not None:
+            self.library_strategies = library_strategies
+        if library_selections is not None:
+            self.library_selections = library_selections
+        if extracted_molecules is not None:
+            self.extracted_molecules = extracted_molecules
+        if date_created is not None:
+            self.date_created = date_created
         if batch_confound is not None:
             self.batch_confound = batch_confound
         if batch_effect is not None:
@@ -182,12 +234,20 @@ class ExpressionExperimentValueObject(object):
             self.is_public = is_public
         if technology_type is not None:
             self.technology_type = technology_type
+        if is_single_cell is not None:
+            self.is_single_cell = is_single_cell
+        if number_of_cells is not None:
+            self.number_of_cells = number_of_cells
+        if number_of_cell_ids is not None:
+            self.number_of_cell_ids = number_of_cell_ids
+        if other_parts is not None:
+            self.other_parts = other_parts
         if characteristics is not None:
             self.characteristics = characteristics
-        if bio_assay_count is not None:
-            self.bio_assay_count = bio_assay_count
         if taxon_id is not None:
             self.taxon_id = taxon_id
+        if bio_assay_count is not None:
+            self.bio_assay_count = bio_assay_count
         if trouble_details is not None:
             self.trouble_details = trouble_details
         if number_of_array_designs is not None:
@@ -534,6 +594,186 @@ class ExpressionExperimentValueObject(object):
         self._external_database_uri = external_database_uri
 
     @property
+    def pubmed_id(self):
+        """Gets the pubmed_id of this ExpressionExperimentValueObject.  # noqa: E501
+
+
+        :return: The pubmed_id of this ExpressionExperimentValueObject.  # noqa: E501
+        :rtype: str
+        """
+        return self._pubmed_id
+
+    @pubmed_id.setter
+    def pubmed_id(self, pubmed_id):
+        """Sets the pubmed_id of this ExpressionExperimentValueObject.
+
+
+        :param pubmed_id: The pubmed_id of this ExpressionExperimentValueObject.  # noqa: E501
+        :type: str
+        """
+
+        self._pubmed_id = pubmed_id
+
+    @property
+    def doi(self):
+        """Gets the doi of this ExpressionExperimentValueObject.  # noqa: E501
+
+
+        :return: The doi of this ExpressionExperimentValueObject.  # noqa: E501
+        :rtype: str
+        """
+        return self._doi
+
+    @doi.setter
+    def doi(self, doi):
+        """Sets the doi of this ExpressionExperimentValueObject.
+
+
+        :param doi: The doi of this ExpressionExperimentValueObject.  # noqa: E501
+        :type: str
+        """
+
+        self._doi = doi
+
+    @property
+    def platforms(self):
+        """Gets the platforms of this ExpressionExperimentValueObject.  # noqa: E501
+
+        Platforms the dataset's assays were run on, as id + shortName + name. Empty when the dataset has no assays.  # noqa: E501
+
+        :return: The platforms of this ExpressionExperimentValueObject.  # noqa: E501
+        :rtype: list[ArrayDesignReferenceValueObject]
+        """
+        return self._platforms
+
+    @platforms.setter
+    def platforms(self, platforms):
+        """Sets the platforms of this ExpressionExperimentValueObject.
+
+        Platforms the dataset's assays were run on, as id + shortName + name. Empty when the dataset has no assays.  # noqa: E501
+
+        :param platforms: The platforms of this ExpressionExperimentValueObject.  # noqa: E501
+        :type: list[ArrayDesignReferenceValueObject]
+        """
+
+        self._platforms = platforms
+
+    @property
+    def original_platforms(self):
+        """Gets the original_platforms of this ExpressionExperimentValueObject.  # noqa: E501
+
+        Platforms the assays were originally run on, when the dataset was switched to another platform. Empty when there was no switch; a switch to the same platform is not reported.  # noqa: E501
+
+        :return: The original_platforms of this ExpressionExperimentValueObject.  # noqa: E501
+        :rtype: list[ArrayDesignReferenceValueObject]
+        """
+        return self._original_platforms
+
+    @original_platforms.setter
+    def original_platforms(self, original_platforms):
+        """Sets the original_platforms of this ExpressionExperimentValueObject.
+
+        Platforms the assays were originally run on, when the dataset was switched to another platform. Empty when there was no switch; a switch to the same platform is not reported.  # noqa: E501
+
+        :param original_platforms: The original_platforms of this ExpressionExperimentValueObject.  # noqa: E501
+        :type: list[ArrayDesignReferenceValueObject]
+        """
+
+        self._original_platforms = original_platforms
+
+    @property
+    def library_strategies(self):
+        """Gets the library_strategies of this ExpressionExperimentValueObject.  # noqa: E501
+
+        Distinct libraryStrategy values across the dataset's samples, with the number of samples carrying each. One entry for all but ~0.08% of datasets. Empty when the dataset has no samples.  # noqa: E501
+
+        :return: The library_strategies of this ExpressionExperimentValueObject.  # noqa: E501
+        :rtype: list[BioAssayFieldCountValueObject]
+        """
+        return self._library_strategies
+
+    @library_strategies.setter
+    def library_strategies(self, library_strategies):
+        """Sets the library_strategies of this ExpressionExperimentValueObject.
+
+        Distinct libraryStrategy values across the dataset's samples, with the number of samples carrying each. One entry for all but ~0.08% of datasets. Empty when the dataset has no samples.  # noqa: E501
+
+        :param library_strategies: The library_strategies of this ExpressionExperimentValueObject.  # noqa: E501
+        :type: list[BioAssayFieldCountValueObject]
+        """
+
+        self._library_strategies = library_strategies
+
+    @property
+    def library_selections(self):
+        """Gets the library_selections of this ExpressionExperimentValueObject.  # noqa: E501
+
+        Distinct librarySelection values across the dataset's samples, with the number of samples carrying each. Null-valued on microarray datasets, where the field does not apply.  # noqa: E501
+
+        :return: The library_selections of this ExpressionExperimentValueObject.  # noqa: E501
+        :rtype: list[BioAssayFieldCountValueObject]
+        """
+        return self._library_selections
+
+    @library_selections.setter
+    def library_selections(self, library_selections):
+        """Sets the library_selections of this ExpressionExperimentValueObject.
+
+        Distinct librarySelection values across the dataset's samples, with the number of samples carrying each. Null-valued on microarray datasets, where the field does not apply.  # noqa: E501
+
+        :param library_selections: The library_selections of this ExpressionExperimentValueObject.  # noqa: E501
+        :type: list[BioAssayFieldCountValueObject]
+        """
+
+        self._library_selections = library_selections
+
+    @property
+    def extracted_molecules(self):
+        """Gets the extracted_molecules of this ExpressionExperimentValueObject.  # noqa: E501
+
+        Distinct extractedMolecule values across the dataset's samples, with the number of samples carrying each.  # noqa: E501
+
+        :return: The extracted_molecules of this ExpressionExperimentValueObject.  # noqa: E501
+        :rtype: list[BioAssayFieldCountValueObject]
+        """
+        return self._extracted_molecules
+
+    @extracted_molecules.setter
+    def extracted_molecules(self, extracted_molecules):
+        """Sets the extracted_molecules of this ExpressionExperimentValueObject.
+
+        Distinct extractedMolecule values across the dataset's samples, with the number of samples carrying each.  # noqa: E501
+
+        :param extracted_molecules: The extracted_molecules of this ExpressionExperimentValueObject.  # noqa: E501
+        :type: list[BioAssayFieldCountValueObject]
+        """
+
+        self._extracted_molecules = extracted_molecules
+
+    @property
+    def date_created(self):
+        """Gets the date_created of this ExpressionExperimentValueObject.  # noqa: E501
+
+        When the dataset was loaded into Gemma, from its creation audit event. Null when that event is missing. Display only — not filterable or sortable.  # noqa: E501
+
+        :return: The date_created of this ExpressionExperimentValueObject.  # noqa: E501
+        :rtype: datetime
+        """
+        return self._date_created
+
+    @date_created.setter
+    def date_created(self, date_created):
+        """Sets the date_created of this ExpressionExperimentValueObject.
+
+        When the dataset was loaded into Gemma, from its creation audit event. Null when that event is missing. Display only — not filterable or sortable.  # noqa: E501
+
+        :param date_created: The date_created of this ExpressionExperimentValueObject.  # noqa: E501
+        :type: datetime
+        """
+
+        self._date_created = date_created
+
+    @property
     def batch_confound(self):
         """Gets the batch_confound of this ExpressionExperimentValueObject.  # noqa: E501
 
@@ -729,6 +969,90 @@ class ExpressionExperimentValueObject(object):
         self._technology_type = technology_type
 
     @property
+    def is_single_cell(self):
+        """Gets the is_single_cell of this ExpressionExperimentValueObject.  # noqa: E501
+
+
+        :return: The is_single_cell of this ExpressionExperimentValueObject.  # noqa: E501
+        :rtype: bool
+        """
+        return self._is_single_cell
+
+    @is_single_cell.setter
+    def is_single_cell(self, is_single_cell):
+        """Sets the is_single_cell of this ExpressionExperimentValueObject.
+
+
+        :param is_single_cell: The is_single_cell of this ExpressionExperimentValueObject.  # noqa: E501
+        :type: bool
+        """
+
+        self._is_single_cell = is_single_cell
+
+    @property
+    def number_of_cells(self):
+        """Gets the number_of_cells of this ExpressionExperimentValueObject.  # noqa: E501
+
+
+        :return: The number_of_cells of this ExpressionExperimentValueObject.  # noqa: E501
+        :rtype: int
+        """
+        return self._number_of_cells
+
+    @number_of_cells.setter
+    def number_of_cells(self, number_of_cells):
+        """Sets the number_of_cells of this ExpressionExperimentValueObject.
+
+
+        :param number_of_cells: The number_of_cells of this ExpressionExperimentValueObject.  # noqa: E501
+        :type: int
+        """
+
+        self._number_of_cells = number_of_cells
+
+    @property
+    def number_of_cell_ids(self):
+        """Gets the number_of_cell_ids of this ExpressionExperimentValueObject.  # noqa: E501
+
+
+        :return: The number_of_cell_ids of this ExpressionExperimentValueObject.  # noqa: E501
+        :rtype: int
+        """
+        return self._number_of_cell_ids
+
+    @number_of_cell_ids.setter
+    def number_of_cell_ids(self, number_of_cell_ids):
+        """Sets the number_of_cell_ids of this ExpressionExperimentValueObject.
+
+
+        :param number_of_cell_ids: The number_of_cell_ids of this ExpressionExperimentValueObject.  # noqa: E501
+        :type: int
+        """
+
+        self._number_of_cell_ids = number_of_cell_ids
+
+    @property
+    def other_parts(self):
+        """Gets the other_parts of this ExpressionExperimentValueObject.  # noqa: E501
+
+
+        :return: The other_parts of this ExpressionExperimentValueObject.  # noqa: E501
+        :rtype: list[ExpressionExperimentReferenceValueObject]
+        """
+        return self._other_parts
+
+    @other_parts.setter
+    def other_parts(self, other_parts):
+        """Sets the other_parts of this ExpressionExperimentValueObject.
+
+
+        :param other_parts: The other_parts of this ExpressionExperimentValueObject.  # noqa: E501
+        :type: list[ExpressionExperimentReferenceValueObject]
+        """
+
+        self._other_parts = other_parts
+
+    @property
     def characteristics(self):
         """Gets the characteristics of this ExpressionExperimentValueObject.  # noqa: E501
 
@@ -750,27 +1074,6 @@ class ExpressionExperimentValueObject(object):
         self._characteristics = characteristics
 
     @property
-    def bio_assay_count(self):
-        """Gets the bio_assay_count of this ExpressionExperimentValueObject.  # noqa: E501
-
-
-        :return: The bio_assay_count of this ExpressionExperimentValueObject.  # noqa: E501
-        :rtype: int
-        """
-        return self._bio_assay_count
-
-    @bio_assay_count.setter
-    def bio_assay_count(self, bio_assay_count):
-        """Sets the bio_assay_count of this ExpressionExperimentValueObject.
-
-
-        :param bio_assay_count: The bio_assay_count of this ExpressionExperimentValueObject.  # noqa: E501
-        :type: int
-        """
-
-        self._bio_assay_count = bio_assay_count
-
-    @property
     def taxon_id(self):
         """Gets the taxon_id of this ExpressionExperimentValueObject.  # noqa: E501
 
@@ -790,6 +1093,27 @@ class ExpressionExperimentValueObject(object):
         """
 
         self._taxon_id = taxon_id
+
+    @property
+    def bio_assay_count(self):
+        """Gets the bio_assay_count of this ExpressionExperimentValueObject.  # noqa: E501
+
+
+        :return: The bio_assay_count of this ExpressionExperimentValueObject.  # noqa: E501
+        :rtype: int
+        """
+        return self._bio_assay_count
+
+    @bio_assay_count.setter
+    def bio_assay_count(self, bio_assay_count):
+        """Sets the bio_assay_count of this ExpressionExperimentValueObject.
+
+
+        :param bio_assay_count: The bio_assay_count of this ExpressionExperimentValueObject.  # noqa: E501
+        :type: int
+        """
+
+        self._bio_assay_count = bio_assay_count
 
     @property
     def trouble_details(self):

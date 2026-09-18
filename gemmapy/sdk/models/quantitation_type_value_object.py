@@ -43,6 +43,7 @@ class QuantitationTypeValueObject(object):
         'is_recomputed_from_raw_data': 'bool',
         'is_preferred': 'bool',
         'is_masked_preferred': 'bool',
+        'is_single_cell_preferred': 'bool',
         'vector_type': 'str'
     }
 
@@ -62,10 +63,11 @@ class QuantitationTypeValueObject(object):
         'is_recomputed_from_raw_data': 'isRecomputedFromRawData',
         'is_preferred': 'isPreferred',
         'is_masked_preferred': 'isMaskedPreferred',
+        'is_single_cell_preferred': 'isSingleCellPreferred',
         'vector_type': 'vectorType'
     }
 
-    def __init__(self, id=None, name=None, description=None, general_type=None, type=None, representation=None, scale=None, is_background=None, is_background_subtracted=None, is_batch_corrected=None, is_normalized=None, is_ratio=None, is_recomputed_from_raw_data=None, is_preferred=None, is_masked_preferred=None, vector_type=None):  # noqa: E501
+    def __init__(self, id=None, name=None, description=None, general_type=None, type=None, representation=None, scale=None, is_background=None, is_background_subtracted=None, is_batch_corrected=None, is_normalized=None, is_ratio=None, is_recomputed_from_raw_data=None, is_preferred=None, is_masked_preferred=None, is_single_cell_preferred=None, vector_type=None):  # noqa: E501
         """QuantitationTypeValueObject - a model defined in Swagger"""  # noqa: E501
         self._id = None
         self._name = None
@@ -82,6 +84,7 @@ class QuantitationTypeValueObject(object):
         self._is_recomputed_from_raw_data = None
         self._is_preferred = None
         self._is_masked_preferred = None
+        self._is_single_cell_preferred = None
         self._vector_type = None
         self.discriminator = None
         if id is not None:
@@ -114,6 +117,8 @@ class QuantitationTypeValueObject(object):
             self.is_preferred = is_preferred
         if is_masked_preferred is not None:
             self.is_masked_preferred = is_masked_preferred
+        if is_single_cell_preferred is not None:
+            self.is_single_cell_preferred = is_single_cell_preferred
         if vector_type is not None:
             self.vector_type = vector_type
 
@@ -455,6 +460,27 @@ class QuantitationTypeValueObject(object):
         """
 
         self._is_masked_preferred = is_masked_preferred
+
+    @property
+    def is_single_cell_preferred(self):
+        """Gets the is_single_cell_preferred of this QuantitationTypeValueObject.  # noqa: E501
+
+
+        :return: The is_single_cell_preferred of this QuantitationTypeValueObject.  # noqa: E501
+        :rtype: bool
+        """
+        return self._is_single_cell_preferred
+
+    @is_single_cell_preferred.setter
+    def is_single_cell_preferred(self, is_single_cell_preferred):
+        """Sets the is_single_cell_preferred of this QuantitationTypeValueObject.
+
+
+        :param is_single_cell_preferred: The is_single_cell_preferred of this QuantitationTypeValueObject.  # noqa: E501
+        :type: bool
+        """
+
+        self._is_single_cell_preferred = is_single_cell_preferred
 
     @property
     def vector_type(self):

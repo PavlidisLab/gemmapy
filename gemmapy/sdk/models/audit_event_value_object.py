@@ -34,6 +34,7 @@ class AuditEventValueObject(object):
         'action': 'str',
         'note': 'str',
         'detail': 'str',
+        'on_behalf_of': 'str',
         'action_name': 'str',
         'event_type_name': 'str'
     }
@@ -45,11 +46,12 @@ class AuditEventValueObject(object):
         'action': 'action',
         'note': 'note',
         'detail': 'detail',
+        'on_behalf_of': 'onBehalfOf',
         'action_name': 'actionName',
         'event_type_name': 'eventTypeName'
     }
 
-    def __init__(self, id=None, performer=None, _date=None, action=None, note=None, detail=None, action_name=None, event_type_name=None):  # noqa: E501
+    def __init__(self, id=None, performer=None, _date=None, action=None, note=None, detail=None, on_behalf_of=None, action_name=None, event_type_name=None):  # noqa: E501
         """AuditEventValueObject - a model defined in Swagger"""  # noqa: E501
         self._id = None
         self._performer = None
@@ -57,6 +59,7 @@ class AuditEventValueObject(object):
         self._action = None
         self._note = None
         self._detail = None
+        self._on_behalf_of = None
         self._action_name = None
         self._event_type_name = None
         self.discriminator = None
@@ -72,6 +75,8 @@ class AuditEventValueObject(object):
             self.note = note
         if detail is not None:
             self.detail = detail
+        if on_behalf_of is not None:
+            self.on_behalf_of = on_behalf_of
         if action_name is not None:
             self.action_name = action_name
         if event_type_name is not None:
@@ -208,6 +213,27 @@ class AuditEventValueObject(object):
         """
 
         self._detail = detail
+
+    @property
+    def on_behalf_of(self):
+        """Gets the on_behalf_of of this AuditEventValueObject.  # noqa: E501
+
+
+        :return: The on_behalf_of of this AuditEventValueObject.  # noqa: E501
+        :rtype: str
+        """
+        return self._on_behalf_of
+
+    @on_behalf_of.setter
+    def on_behalf_of(self, on_behalf_of):
+        """Sets the on_behalf_of of this AuditEventValueObject.
+
+
+        :param on_behalf_of: The on_behalf_of of this AuditEventValueObject.  # noqa: E501
+        :type: str
+        """
+
+        self._on_behalf_of = on_behalf_of
 
     @property
     def action_name(self):

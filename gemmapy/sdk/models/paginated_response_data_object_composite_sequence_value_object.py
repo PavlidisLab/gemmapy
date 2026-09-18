@@ -29,48 +29,48 @@ class PaginatedResponseDataObjectCompositeSequenceValueObject(object):
     """
     swagger_types = {
         'data': 'list[CompositeSequenceValueObject]',
-        'warnings': 'list[WellComposedWarning]',
         'group_by': 'list[str]',
-        'sort': 'SortValueObject',
-        'offset': 'int',
         'limit': 'int',
-        'total_elements': 'int'
+        'offset': 'int',
+        'sort': 'SortValueObject',
+        'total_elements': 'int',
+        'warnings': 'list[WellComposedWarning]'
     }
 
     attribute_map = {
         'data': 'data',
-        'warnings': 'warnings',
         'group_by': 'groupBy',
-        'sort': 'sort',
-        'offset': 'offset',
         'limit': 'limit',
-        'total_elements': 'totalElements'
+        'offset': 'offset',
+        'sort': 'sort',
+        'total_elements': 'totalElements',
+        'warnings': 'warnings'
     }
 
-    def __init__(self, data=None, warnings=None, group_by=None, sort=None, offset=None, limit=None, total_elements=None):  # noqa: E501
+    def __init__(self, data=None, group_by=None, limit=None, offset=None, sort=None, total_elements=None, warnings=None):  # noqa: E501
         """PaginatedResponseDataObjectCompositeSequenceValueObject - a model defined in Swagger"""  # noqa: E501
         self._data = None
-        self._warnings = None
         self._group_by = None
-        self._sort = None
-        self._offset = None
         self._limit = None
+        self._offset = None
+        self._sort = None
         self._total_elements = None
+        self._warnings = None
         self.discriminator = None
         if data is not None:
             self.data = data
-        if warnings is not None:
-            self.warnings = warnings
         if group_by is not None:
             self.group_by = group_by
-        if sort is not None:
-            self.sort = sort
-        if offset is not None:
-            self.offset = offset
         if limit is not None:
             self.limit = limit
+        if offset is not None:
+            self.offset = offset
+        if sort is not None:
+            self.sort = sort
         if total_elements is not None:
             self.total_elements = total_elements
+        if warnings is not None:
+            self.warnings = warnings
 
     @property
     def data(self):
@@ -94,27 +94,6 @@ class PaginatedResponseDataObjectCompositeSequenceValueObject(object):
         self._data = data
 
     @property
-    def warnings(self):
-        """Gets the warnings of this PaginatedResponseDataObjectCompositeSequenceValueObject.  # noqa: E501
-
-
-        :return: The warnings of this PaginatedResponseDataObjectCompositeSequenceValueObject.  # noqa: E501
-        :rtype: list[WellComposedWarning]
-        """
-        return self._warnings
-
-    @warnings.setter
-    def warnings(self, warnings):
-        """Sets the warnings of this PaginatedResponseDataObjectCompositeSequenceValueObject.
-
-
-        :param warnings: The warnings of this PaginatedResponseDataObjectCompositeSequenceValueObject.  # noqa: E501
-        :type: list[WellComposedWarning]
-        """
-
-        self._warnings = warnings
-
-    @property
     def group_by(self):
         """Gets the group_by of this PaginatedResponseDataObjectCompositeSequenceValueObject.  # noqa: E501
 
@@ -134,48 +113,6 @@ class PaginatedResponseDataObjectCompositeSequenceValueObject(object):
         """
 
         self._group_by = group_by
-
-    @property
-    def sort(self):
-        """Gets the sort of this PaginatedResponseDataObjectCompositeSequenceValueObject.  # noqa: E501
-
-
-        :return: The sort of this PaginatedResponseDataObjectCompositeSequenceValueObject.  # noqa: E501
-        :rtype: SortValueObject
-        """
-        return self._sort
-
-    @sort.setter
-    def sort(self, sort):
-        """Sets the sort of this PaginatedResponseDataObjectCompositeSequenceValueObject.
-
-
-        :param sort: The sort of this PaginatedResponseDataObjectCompositeSequenceValueObject.  # noqa: E501
-        :type: SortValueObject
-        """
-
-        self._sort = sort
-
-    @property
-    def offset(self):
-        """Gets the offset of this PaginatedResponseDataObjectCompositeSequenceValueObject.  # noqa: E501
-
-
-        :return: The offset of this PaginatedResponseDataObjectCompositeSequenceValueObject.  # noqa: E501
-        :rtype: int
-        """
-        return self._offset
-
-    @offset.setter
-    def offset(self, offset):
-        """Sets the offset of this PaginatedResponseDataObjectCompositeSequenceValueObject.
-
-
-        :param offset: The offset of this PaginatedResponseDataObjectCompositeSequenceValueObject.  # noqa: E501
-        :type: int
-        """
-
-        self._offset = offset
 
     @property
     def limit(self):
@@ -199,6 +136,48 @@ class PaginatedResponseDataObjectCompositeSequenceValueObject(object):
         self._limit = limit
 
     @property
+    def offset(self):
+        """Gets the offset of this PaginatedResponseDataObjectCompositeSequenceValueObject.  # noqa: E501
+
+
+        :return: The offset of this PaginatedResponseDataObjectCompositeSequenceValueObject.  # noqa: E501
+        :rtype: int
+        """
+        return self._offset
+
+    @offset.setter
+    def offset(self, offset):
+        """Sets the offset of this PaginatedResponseDataObjectCompositeSequenceValueObject.
+
+
+        :param offset: The offset of this PaginatedResponseDataObjectCompositeSequenceValueObject.  # noqa: E501
+        :type: int
+        """
+
+        self._offset = offset
+
+    @property
+    def sort(self):
+        """Gets the sort of this PaginatedResponseDataObjectCompositeSequenceValueObject.  # noqa: E501
+
+
+        :return: The sort of this PaginatedResponseDataObjectCompositeSequenceValueObject.  # noqa: E501
+        :rtype: SortValueObject
+        """
+        return self._sort
+
+    @sort.setter
+    def sort(self, sort):
+        """Sets the sort of this PaginatedResponseDataObjectCompositeSequenceValueObject.
+
+
+        :param sort: The sort of this PaginatedResponseDataObjectCompositeSequenceValueObject.  # noqa: E501
+        :type: SortValueObject
+        """
+
+        self._sort = sort
+
+    @property
     def total_elements(self):
         """Gets the total_elements of this PaginatedResponseDataObjectCompositeSequenceValueObject.  # noqa: E501
 
@@ -218,6 +197,27 @@ class PaginatedResponseDataObjectCompositeSequenceValueObject(object):
         """
 
         self._total_elements = total_elements
+
+    @property
+    def warnings(self):
+        """Gets the warnings of this PaginatedResponseDataObjectCompositeSequenceValueObject.  # noqa: E501
+
+
+        :return: The warnings of this PaginatedResponseDataObjectCompositeSequenceValueObject.  # noqa: E501
+        :rtype: list[WellComposedWarning]
+        """
+        return self._warnings
+
+    @warnings.setter
+    def warnings(self, warnings):
+        """Sets the warnings of this PaginatedResponseDataObjectCompositeSequenceValueObject.
+
+
+        :param warnings: The warnings of this PaginatedResponseDataObjectCompositeSequenceValueObject.  # noqa: E501
+        :type: list[WellComposedWarning]
+        """
+
+        self._warnings = warnings
 
     def to_dict(self):
         """Returns the model properties as a dict"""

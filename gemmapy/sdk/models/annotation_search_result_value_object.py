@@ -32,7 +32,21 @@ class AnnotationSearchResultValueObject(object):
         'value_uri': 'str',
         'category': 'str',
         'category_uri': 'str',
-        'usage_count': 'int'
+        'usage_count': 'int',
+        'definition': 'str',
+        'parents': 'list[OntologyTermSimpleValueObject]',
+        'matched_via': 'str',
+        'matched_text': 'str',
+        'gene_count': 'int',
+        'prior_categories': 'dict(str, int)',
+        'taxon_id': 'int',
+        'taxon_common_name': 'str',
+        'taxon_scientific_name': 'str',
+        'example_usage': 'ExampleUsageValueObject',
+        'prior_curation_count': 'int',
+        'source_metadata': 'LexicalTermMetadataValueObject',
+        'taxon_constraint': 'TaxonConstraintValueObject',
+        'via_sub_class_of': 'bool'
     }
 
     attribute_map = {
@@ -40,16 +54,44 @@ class AnnotationSearchResultValueObject(object):
         'value_uri': 'valueUri',
         'category': 'category',
         'category_uri': 'categoryUri',
-        'usage_count': 'usageCount'
+        'usage_count': 'usageCount',
+        'definition': 'definition',
+        'parents': 'parents',
+        'matched_via': 'matchedVia',
+        'matched_text': 'matchedText',
+        'gene_count': 'geneCount',
+        'prior_categories': 'priorCategories',
+        'taxon_id': 'taxonId',
+        'taxon_common_name': 'taxonCommonName',
+        'taxon_scientific_name': 'taxonScientificName',
+        'example_usage': 'exampleUsage',
+        'prior_curation_count': 'priorCurationCount',
+        'source_metadata': 'sourceMetadata',
+        'taxon_constraint': 'taxonConstraint',
+        'via_sub_class_of': 'viaSubClassOf'
     }
 
-    def __init__(self, value=None, value_uri=None, category=None, category_uri=None, usage_count=None):  # noqa: E501
+    def __init__(self, value=None, value_uri=None, category=None, category_uri=None, usage_count=None, definition=None, parents=None, matched_via=None, matched_text=None, gene_count=None, prior_categories=None, taxon_id=None, taxon_common_name=None, taxon_scientific_name=None, example_usage=None, prior_curation_count=None, source_metadata=None, taxon_constraint=None, via_sub_class_of=None):  # noqa: E501
         """AnnotationSearchResultValueObject - a model defined in Swagger"""  # noqa: E501
         self._value = None
         self._value_uri = None
         self._category = None
         self._category_uri = None
         self._usage_count = None
+        self._definition = None
+        self._parents = None
+        self._matched_via = None
+        self._matched_text = None
+        self._gene_count = None
+        self._prior_categories = None
+        self._taxon_id = None
+        self._taxon_common_name = None
+        self._taxon_scientific_name = None
+        self._example_usage = None
+        self._prior_curation_count = None
+        self._source_metadata = None
+        self._taxon_constraint = None
+        self._via_sub_class_of = None
         self.discriminator = None
         if value is not None:
             self.value = value
@@ -61,6 +103,34 @@ class AnnotationSearchResultValueObject(object):
             self.category_uri = category_uri
         if usage_count is not None:
             self.usage_count = usage_count
+        if definition is not None:
+            self.definition = definition
+        if parents is not None:
+            self.parents = parents
+        if matched_via is not None:
+            self.matched_via = matched_via
+        if matched_text is not None:
+            self.matched_text = matched_text
+        if gene_count is not None:
+            self.gene_count = gene_count
+        if prior_categories is not None:
+            self.prior_categories = prior_categories
+        if taxon_id is not None:
+            self.taxon_id = taxon_id
+        if taxon_common_name is not None:
+            self.taxon_common_name = taxon_common_name
+        if taxon_scientific_name is not None:
+            self.taxon_scientific_name = taxon_scientific_name
+        if example_usage is not None:
+            self.example_usage = example_usage
+        if prior_curation_count is not None:
+            self.prior_curation_count = prior_curation_count
+        if source_metadata is not None:
+            self.source_metadata = source_metadata
+        if taxon_constraint is not None:
+            self.taxon_constraint = taxon_constraint
+        if via_sub_class_of is not None:
+            self.via_sub_class_of = via_sub_class_of
 
     @property
     def value(self):
@@ -166,6 +236,300 @@ class AnnotationSearchResultValueObject(object):
         """
 
         self._usage_count = usage_count
+
+    @property
+    def definition(self):
+        """Gets the definition of this AnnotationSearchResultValueObject.  # noqa: E501
+
+
+        :return: The definition of this AnnotationSearchResultValueObject.  # noqa: E501
+        :rtype: str
+        """
+        return self._definition
+
+    @definition.setter
+    def definition(self, definition):
+        """Sets the definition of this AnnotationSearchResultValueObject.
+
+
+        :param definition: The definition of this AnnotationSearchResultValueObject.  # noqa: E501
+        :type: str
+        """
+
+        self._definition = definition
+
+    @property
+    def parents(self):
+        """Gets the parents of this AnnotationSearchResultValueObject.  # noqa: E501
+
+
+        :return: The parents of this AnnotationSearchResultValueObject.  # noqa: E501
+        :rtype: list[OntologyTermSimpleValueObject]
+        """
+        return self._parents
+
+    @parents.setter
+    def parents(self, parents):
+        """Sets the parents of this AnnotationSearchResultValueObject.
+
+
+        :param parents: The parents of this AnnotationSearchResultValueObject.  # noqa: E501
+        :type: list[OntologyTermSimpleValueObject]
+        """
+
+        self._parents = parents
+
+    @property
+    def matched_via(self):
+        """Gets the matched_via of this AnnotationSearchResultValueObject.  # noqa: E501
+
+
+        :return: The matched_via of this AnnotationSearchResultValueObject.  # noqa: E501
+        :rtype: str
+        """
+        return self._matched_via
+
+    @matched_via.setter
+    def matched_via(self, matched_via):
+        """Sets the matched_via of this AnnotationSearchResultValueObject.
+
+
+        :param matched_via: The matched_via of this AnnotationSearchResultValueObject.  # noqa: E501
+        :type: str
+        """
+
+        self._matched_via = matched_via
+
+    @property
+    def matched_text(self):
+        """Gets the matched_text of this AnnotationSearchResultValueObject.  # noqa: E501
+
+
+        :return: The matched_text of this AnnotationSearchResultValueObject.  # noqa: E501
+        :rtype: str
+        """
+        return self._matched_text
+
+    @matched_text.setter
+    def matched_text(self, matched_text):
+        """Sets the matched_text of this AnnotationSearchResultValueObject.
+
+
+        :param matched_text: The matched_text of this AnnotationSearchResultValueObject.  # noqa: E501
+        :type: str
+        """
+
+        self._matched_text = matched_text
+
+    @property
+    def gene_count(self):
+        """Gets the gene_count of this AnnotationSearchResultValueObject.  # noqa: E501
+
+
+        :return: The gene_count of this AnnotationSearchResultValueObject.  # noqa: E501
+        :rtype: int
+        """
+        return self._gene_count
+
+    @gene_count.setter
+    def gene_count(self, gene_count):
+        """Sets the gene_count of this AnnotationSearchResultValueObject.
+
+
+        :param gene_count: The gene_count of this AnnotationSearchResultValueObject.  # noqa: E501
+        :type: int
+        """
+
+        self._gene_count = gene_count
+
+    @property
+    def prior_categories(self):
+        """Gets the prior_categories of this AnnotationSearchResultValueObject.  # noqa: E501
+
+
+        :return: The prior_categories of this AnnotationSearchResultValueObject.  # noqa: E501
+        :rtype: dict(str, int)
+        """
+        return self._prior_categories
+
+    @prior_categories.setter
+    def prior_categories(self, prior_categories):
+        """Sets the prior_categories of this AnnotationSearchResultValueObject.
+
+
+        :param prior_categories: The prior_categories of this AnnotationSearchResultValueObject.  # noqa: E501
+        :type: dict(str, int)
+        """
+
+        self._prior_categories = prior_categories
+
+    @property
+    def taxon_id(self):
+        """Gets the taxon_id of this AnnotationSearchResultValueObject.  # noqa: E501
+
+
+        :return: The taxon_id of this AnnotationSearchResultValueObject.  # noqa: E501
+        :rtype: int
+        """
+        return self._taxon_id
+
+    @taxon_id.setter
+    def taxon_id(self, taxon_id):
+        """Sets the taxon_id of this AnnotationSearchResultValueObject.
+
+
+        :param taxon_id: The taxon_id of this AnnotationSearchResultValueObject.  # noqa: E501
+        :type: int
+        """
+
+        self._taxon_id = taxon_id
+
+    @property
+    def taxon_common_name(self):
+        """Gets the taxon_common_name of this AnnotationSearchResultValueObject.  # noqa: E501
+
+
+        :return: The taxon_common_name of this AnnotationSearchResultValueObject.  # noqa: E501
+        :rtype: str
+        """
+        return self._taxon_common_name
+
+    @taxon_common_name.setter
+    def taxon_common_name(self, taxon_common_name):
+        """Sets the taxon_common_name of this AnnotationSearchResultValueObject.
+
+
+        :param taxon_common_name: The taxon_common_name of this AnnotationSearchResultValueObject.  # noqa: E501
+        :type: str
+        """
+
+        self._taxon_common_name = taxon_common_name
+
+    @property
+    def taxon_scientific_name(self):
+        """Gets the taxon_scientific_name of this AnnotationSearchResultValueObject.  # noqa: E501
+
+
+        :return: The taxon_scientific_name of this AnnotationSearchResultValueObject.  # noqa: E501
+        :rtype: str
+        """
+        return self._taxon_scientific_name
+
+    @taxon_scientific_name.setter
+    def taxon_scientific_name(self, taxon_scientific_name):
+        """Sets the taxon_scientific_name of this AnnotationSearchResultValueObject.
+
+
+        :param taxon_scientific_name: The taxon_scientific_name of this AnnotationSearchResultValueObject.  # noqa: E501
+        :type: str
+        """
+
+        self._taxon_scientific_name = taxon_scientific_name
+
+    @property
+    def example_usage(self):
+        """Gets the example_usage of this AnnotationSearchResultValueObject.  # noqa: E501
+
+
+        :return: The example_usage of this AnnotationSearchResultValueObject.  # noqa: E501
+        :rtype: ExampleUsageValueObject
+        """
+        return self._example_usage
+
+    @example_usage.setter
+    def example_usage(self, example_usage):
+        """Sets the example_usage of this AnnotationSearchResultValueObject.
+
+
+        :param example_usage: The example_usage of this AnnotationSearchResultValueObject.  # noqa: E501
+        :type: ExampleUsageValueObject
+        """
+
+        self._example_usage = example_usage
+
+    @property
+    def prior_curation_count(self):
+        """Gets the prior_curation_count of this AnnotationSearchResultValueObject.  # noqa: E501
+
+
+        :return: The prior_curation_count of this AnnotationSearchResultValueObject.  # noqa: E501
+        :rtype: int
+        """
+        return self._prior_curation_count
+
+    @prior_curation_count.setter
+    def prior_curation_count(self, prior_curation_count):
+        """Sets the prior_curation_count of this AnnotationSearchResultValueObject.
+
+
+        :param prior_curation_count: The prior_curation_count of this AnnotationSearchResultValueObject.  # noqa: E501
+        :type: int
+        """
+
+        self._prior_curation_count = prior_curation_count
+
+    @property
+    def source_metadata(self):
+        """Gets the source_metadata of this AnnotationSearchResultValueObject.  # noqa: E501
+
+
+        :return: The source_metadata of this AnnotationSearchResultValueObject.  # noqa: E501
+        :rtype: LexicalTermMetadataValueObject
+        """
+        return self._source_metadata
+
+    @source_metadata.setter
+    def source_metadata(self, source_metadata):
+        """Sets the source_metadata of this AnnotationSearchResultValueObject.
+
+
+        :param source_metadata: The source_metadata of this AnnotationSearchResultValueObject.  # noqa: E501
+        :type: LexicalTermMetadataValueObject
+        """
+
+        self._source_metadata = source_metadata
+
+    @property
+    def taxon_constraint(self):
+        """Gets the taxon_constraint of this AnnotationSearchResultValueObject.  # noqa: E501
+
+
+        :return: The taxon_constraint of this AnnotationSearchResultValueObject.  # noqa: E501
+        :rtype: TaxonConstraintValueObject
+        """
+        return self._taxon_constraint
+
+    @taxon_constraint.setter
+    def taxon_constraint(self, taxon_constraint):
+        """Sets the taxon_constraint of this AnnotationSearchResultValueObject.
+
+
+        :param taxon_constraint: The taxon_constraint of this AnnotationSearchResultValueObject.  # noqa: E501
+        :type: TaxonConstraintValueObject
+        """
+
+        self._taxon_constraint = taxon_constraint
+
+    @property
+    def via_sub_class_of(self):
+        """Gets the via_sub_class_of of this AnnotationSearchResultValueObject.  # noqa: E501
+
+
+        :return: The via_sub_class_of of this AnnotationSearchResultValueObject.  # noqa: E501
+        :rtype: bool
+        """
+        return self._via_sub_class_of
+
+    @via_sub_class_of.setter
+    def via_sub_class_of(self, via_sub_class_of):
+        """Sets the via_sub_class_of of this AnnotationSearchResultValueObject.
+
+
+        :param via_sub_class_of: The via_sub_class_of of this AnnotationSearchResultValueObject.  # noqa: E501
+        :type: bool
+        """
+
+        self._via_sub_class_of = via_sub_class_of
 
     def to_dict(self):
         """Returns the model properties as a dict"""

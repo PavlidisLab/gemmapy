@@ -34,7 +34,16 @@ class AnnotationValueObject(object):
         'value_uri': 'str',
         'value': 'str',
         'evidence_code': 'str',
-        'object_class': 'str'
+        'object_class': 'str',
+        'predicate': 'str',
+        'predicate_uri': 'str',
+        'object': 'str',
+        'object_uri': 'str',
+        'second_predicate': 'str',
+        'second_predicate_uri': 'str',
+        'second_object': 'str',
+        'second_object_uri': 'str',
+        'supporting_evidence': 'JsonNode'
     }
 
     attribute_map = {
@@ -44,10 +53,19 @@ class AnnotationValueObject(object):
         'value_uri': 'valueUri',
         'value': 'value',
         'evidence_code': 'evidenceCode',
-        'object_class': 'objectClass'
+        'object_class': 'objectClass',
+        'predicate': 'predicate',
+        'predicate_uri': 'predicateUri',
+        'object': 'object',
+        'object_uri': 'objectUri',
+        'second_predicate': 'secondPredicate',
+        'second_predicate_uri': 'secondPredicateUri',
+        'second_object': 'secondObject',
+        'second_object_uri': 'secondObjectUri',
+        'supporting_evidence': 'supportingEvidence'
     }
 
-    def __init__(self, id=None, category_uri=None, category=None, value_uri=None, value=None, evidence_code=None, object_class=None):  # noqa: E501
+    def __init__(self, id=None, category_uri=None, category=None, value_uri=None, value=None, evidence_code=None, object_class=None, predicate=None, predicate_uri=None, object=None, object_uri=None, second_predicate=None, second_predicate_uri=None, second_object=None, second_object_uri=None, supporting_evidence=None):  # noqa: E501
         """AnnotationValueObject - a model defined in Swagger"""  # noqa: E501
         self._id = None
         self._category_uri = None
@@ -56,6 +74,15 @@ class AnnotationValueObject(object):
         self._value = None
         self._evidence_code = None
         self._object_class = None
+        self._predicate = None
+        self._predicate_uri = None
+        self._object = None
+        self._object_uri = None
+        self._second_predicate = None
+        self._second_predicate_uri = None
+        self._second_object = None
+        self._second_object_uri = None
+        self._supporting_evidence = None
         self.discriminator = None
         if id is not None:
             self.id = id
@@ -71,6 +98,24 @@ class AnnotationValueObject(object):
             self.evidence_code = evidence_code
         if object_class is not None:
             self.object_class = object_class
+        if predicate is not None:
+            self.predicate = predicate
+        if predicate_uri is not None:
+            self.predicate_uri = predicate_uri
+        if object is not None:
+            self.object = object
+        if object_uri is not None:
+            self.object_uri = object_uri
+        if second_predicate is not None:
+            self.second_predicate = second_predicate
+        if second_predicate_uri is not None:
+            self.second_predicate_uri = second_predicate_uri
+        if second_object is not None:
+            self.second_object = second_object
+        if second_object_uri is not None:
+            self.second_object_uri = second_object_uri
+        if supporting_evidence is not None:
+            self.supporting_evidence = supporting_evidence
 
     @property
     def id(self):
@@ -224,6 +269,211 @@ class AnnotationValueObject(object):
         """
 
         self._object_class = object_class
+
+    @property
+    def predicate(self):
+        """Gets the predicate of this AnnotationValueObject.  # noqa: E501
+
+        Predicate label of a Statement-backed annotation (e.g. \"has_dose\"). Null on plain Characteristic rows.  # noqa: E501
+
+        :return: The predicate of this AnnotationValueObject.  # noqa: E501
+        :rtype: str
+        """
+        return self._predicate
+
+    @predicate.setter
+    def predicate(self, predicate):
+        """Sets the predicate of this AnnotationValueObject.
+
+        Predicate label of a Statement-backed annotation (e.g. \"has_dose\"). Null on plain Characteristic rows.  # noqa: E501
+
+        :param predicate: The predicate of this AnnotationValueObject.  # noqa: E501
+        :type: str
+        """
+
+        self._predicate = predicate
+
+    @property
+    def predicate_uri(self):
+        """Gets the predicate_uri of this AnnotationValueObject.  # noqa: E501
+
+        Predicate URI of a Statement-backed annotation. Null on plain Characteristic rows.  # noqa: E501
+
+        :return: The predicate_uri of this AnnotationValueObject.  # noqa: E501
+        :rtype: str
+        """
+        return self._predicate_uri
+
+    @predicate_uri.setter
+    def predicate_uri(self, predicate_uri):
+        """Sets the predicate_uri of this AnnotationValueObject.
+
+        Predicate URI of a Statement-backed annotation. Null on plain Characteristic rows.  # noqa: E501
+
+        :param predicate_uri: The predicate_uri of this AnnotationValueObject.  # noqa: E501
+        :type: str
+        """
+
+        self._predicate_uri = predicate_uri
+
+    @property
+    def object(self):
+        """Gets the object of this AnnotationValueObject.  # noqa: E501
+
+        Object label of a Statement-backed annotation (e.g. \"30%\"). Null on plain Characteristic rows.  # noqa: E501
+
+        :return: The object of this AnnotationValueObject.  # noqa: E501
+        :rtype: str
+        """
+        return self._object
+
+    @object.setter
+    def object(self, object):
+        """Sets the object of this AnnotationValueObject.
+
+        Object label of a Statement-backed annotation (e.g. \"30%\"). Null on plain Characteristic rows.  # noqa: E501
+
+        :param object: The object of this AnnotationValueObject.  # noqa: E501
+        :type: str
+        """
+
+        self._object = object
+
+    @property
+    def object_uri(self):
+        """Gets the object_uri of this AnnotationValueObject.  # noqa: E501
+
+        Object URI of a Statement-backed annotation. Null on plain Characteristic rows.  # noqa: E501
+
+        :return: The object_uri of this AnnotationValueObject.  # noqa: E501
+        :rtype: str
+        """
+        return self._object_uri
+
+    @object_uri.setter
+    def object_uri(self, object_uri):
+        """Sets the object_uri of this AnnotationValueObject.
+
+        Object URI of a Statement-backed annotation. Null on plain Characteristic rows.  # noqa: E501
+
+        :param object_uri: The object_uri of this AnnotationValueObject.  # noqa: E501
+        :type: str
+        """
+
+        self._object_uri = object_uri
+
+    @property
+    def second_predicate(self):
+        """Gets the second_predicate of this AnnotationValueObject.  # noqa: E501
+
+        Second predicate label for compound Statement annotations (e.g. \"for\" in \"HFD for 12 weeks\").  # noqa: E501
+
+        :return: The second_predicate of this AnnotationValueObject.  # noqa: E501
+        :rtype: str
+        """
+        return self._second_predicate
+
+    @second_predicate.setter
+    def second_predicate(self, second_predicate):
+        """Sets the second_predicate of this AnnotationValueObject.
+
+        Second predicate label for compound Statement annotations (e.g. \"for\" in \"HFD for 12 weeks\").  # noqa: E501
+
+        :param second_predicate: The second_predicate of this AnnotationValueObject.  # noqa: E501
+        :type: str
+        """
+
+        self._second_predicate = second_predicate
+
+    @property
+    def second_predicate_uri(self):
+        """Gets the second_predicate_uri of this AnnotationValueObject.  # noqa: E501
+
+        Second predicate URI for compound Statement annotations.  # noqa: E501
+
+        :return: The second_predicate_uri of this AnnotationValueObject.  # noqa: E501
+        :rtype: str
+        """
+        return self._second_predicate_uri
+
+    @second_predicate_uri.setter
+    def second_predicate_uri(self, second_predicate_uri):
+        """Sets the second_predicate_uri of this AnnotationValueObject.
+
+        Second predicate URI for compound Statement annotations.  # noqa: E501
+
+        :param second_predicate_uri: The second_predicate_uri of this AnnotationValueObject.  # noqa: E501
+        :type: str
+        """
+
+        self._second_predicate_uri = second_predicate_uri
+
+    @property
+    def second_object(self):
+        """Gets the second_object of this AnnotationValueObject.  # noqa: E501
+
+        Second object label for compound Statement annotations (e.g. \"12 weeks\").  # noqa: E501
+
+        :return: The second_object of this AnnotationValueObject.  # noqa: E501
+        :rtype: str
+        """
+        return self._second_object
+
+    @second_object.setter
+    def second_object(self, second_object):
+        """Sets the second_object of this AnnotationValueObject.
+
+        Second object label for compound Statement annotations (e.g. \"12 weeks\").  # noqa: E501
+
+        :param second_object: The second_object of this AnnotationValueObject.  # noqa: E501
+        :type: str
+        """
+
+        self._second_object = second_object
+
+    @property
+    def second_object_uri(self):
+        """Gets the second_object_uri of this AnnotationValueObject.  # noqa: E501
+
+        Second object URI for compound Statement annotations.  # noqa: E501
+
+        :return: The second_object_uri of this AnnotationValueObject.  # noqa: E501
+        :rtype: str
+        """
+        return self._second_object_uri
+
+    @second_object_uri.setter
+    def second_object_uri(self, second_object_uri):
+        """Sets the second_object_uri of this AnnotationValueObject.
+
+        Second object URI for compound Statement annotations.  # noqa: E501
+
+        :param second_object_uri: The second_object_uri of this AnnotationValueObject.  # noqa: E501
+        :type: str
+        """
+
+        self._second_object_uri = second_object_uri
+
+    @property
+    def supporting_evidence(self):
+        """Gets the supporting_evidence of this AnnotationValueObject.  # noqa: E501
+
+
+        :return: The supporting_evidence of this AnnotationValueObject.  # noqa: E501
+        :rtype: JsonNode
+        """
+        return self._supporting_evidence
+
+    @supporting_evidence.setter
+    def supporting_evidence(self, supporting_evidence):
+        """Sets the supporting_evidence of this AnnotationValueObject.
+
+
+        :param supporting_evidence: The supporting_evidence of this AnnotationValueObject.  # noqa: E501
+        :type: JsonNode
+        """
+
+        self._supporting_evidence = supporting_evidence
 
     def to_dict(self):
         """Returns the model properties as a dict"""

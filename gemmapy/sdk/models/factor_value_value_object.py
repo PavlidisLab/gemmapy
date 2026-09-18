@@ -35,6 +35,7 @@ class FactorValueValueObject(object):
         'experimental_factor_category': 'CharacteristicValueObject',
         'characteristics': 'list[CharacteristicValueObject]',
         'statements': 'list[StatementValueObject]',
+        'supporting_evidence': 'JsonNode',
         'summary': 'str',
         'factor_id': 'int',
         'category': 'str',
@@ -42,6 +43,7 @@ class FactorValueValueObject(object):
         'description': 'str',
         'factor_value': 'str',
         'measurement': 'MeasurementValueObject',
+        'is_baseline': 'bool',
         'is_measurement': 'bool'
     }
 
@@ -53,6 +55,7 @@ class FactorValueValueObject(object):
         'experimental_factor_category': 'experimentalFactorCategory',
         'characteristics': 'characteristics',
         'statements': 'statements',
+        'supporting_evidence': 'supportingEvidence',
         'summary': 'summary',
         'factor_id': 'factorId',
         'category': 'category',
@@ -60,10 +63,11 @@ class FactorValueValueObject(object):
         'description': 'description',
         'factor_value': 'factorValue',
         'measurement': 'measurement',
+        'is_baseline': 'isBaseline',
         'is_measurement': 'isMeasurement'
     }
 
-    def __init__(self, id=None, ontology_id=None, experimental_factor_id=None, experimental_factor_type=None, experimental_factor_category=None, characteristics=None, statements=None, summary=None, factor_id=None, category=None, category_uri=None, description=None, factor_value=None, measurement=None, is_measurement=None):  # noqa: E501
+    def __init__(self, id=None, ontology_id=None, experimental_factor_id=None, experimental_factor_type=None, experimental_factor_category=None, characteristics=None, statements=None, supporting_evidence=None, summary=None, factor_id=None, category=None, category_uri=None, description=None, factor_value=None, measurement=None, is_baseline=None, is_measurement=None):  # noqa: E501
         """FactorValueValueObject - a model defined in Swagger"""  # noqa: E501
         self._id = None
         self._ontology_id = None
@@ -72,6 +76,7 @@ class FactorValueValueObject(object):
         self._experimental_factor_category = None
         self._characteristics = None
         self._statements = None
+        self._supporting_evidence = None
         self._summary = None
         self._factor_id = None
         self._category = None
@@ -79,6 +84,7 @@ class FactorValueValueObject(object):
         self._description = None
         self._factor_value = None
         self._measurement = None
+        self._is_baseline = None
         self._is_measurement = None
         self.discriminator = None
         if id is not None:
@@ -95,6 +101,8 @@ class FactorValueValueObject(object):
             self.characteristics = characteristics
         if statements is not None:
             self.statements = statements
+        if supporting_evidence is not None:
+            self.supporting_evidence = supporting_evidence
         if summary is not None:
             self.summary = summary
         if factor_id is not None:
@@ -109,6 +117,8 @@ class FactorValueValueObject(object):
             self.factor_value = factor_value
         if measurement is not None:
             self.measurement = measurement
+        if is_baseline is not None:
+            self.is_baseline = is_baseline
         if is_measurement is not None:
             self.is_measurement = is_measurement
 
@@ -270,6 +280,27 @@ class FactorValueValueObject(object):
         self._statements = statements
 
     @property
+    def supporting_evidence(self):
+        """Gets the supporting_evidence of this FactorValueValueObject.  # noqa: E501
+
+
+        :return: The supporting_evidence of this FactorValueValueObject.  # noqa: E501
+        :rtype: JsonNode
+        """
+        return self._supporting_evidence
+
+    @supporting_evidence.setter
+    def supporting_evidence(self, supporting_evidence):
+        """Sets the supporting_evidence of this FactorValueValueObject.
+
+
+        :param supporting_evidence: The supporting_evidence of this FactorValueValueObject.  # noqa: E501
+        :type: JsonNode
+        """
+
+        self._supporting_evidence = supporting_evidence
+
+    @property
     def summary(self):
         """Gets the summary of this FactorValueValueObject.  # noqa: E501
 
@@ -425,6 +456,27 @@ class FactorValueValueObject(object):
         """
 
         self._measurement = measurement
+
+    @property
+    def is_baseline(self):
+        """Gets the is_baseline of this FactorValueValueObject.  # noqa: E501
+
+
+        :return: The is_baseline of this FactorValueValueObject.  # noqa: E501
+        :rtype: bool
+        """
+        return self._is_baseline
+
+    @is_baseline.setter
+    def is_baseline(self, is_baseline):
+        """Sets the is_baseline of this FactorValueValueObject.
+
+
+        :param is_baseline: The is_baseline of this FactorValueValueObject.  # noqa: E501
+        :type: bool
+        """
+
+        self._is_baseline = is_baseline
 
     @property
     def is_measurement(self):

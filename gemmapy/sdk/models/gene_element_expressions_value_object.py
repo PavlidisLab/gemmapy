@@ -29,26 +29,51 @@ class GeneElementExpressionsValueObject(object):
     """
     swagger_types = {
         'gene_official_symbol': 'str',
+        'gene_official_name': 'str',
         'gene_ncbi_id': 'int',
+        'gene_ensembl_id': 'str',
+        'corrected_pvalue': 'float',
+        'pvalue': 'float',
+        'log2_fold_change': 'float',
         'vectors': 'list[VectorElementValueObject]'
     }
 
     attribute_map = {
         'gene_official_symbol': 'geneOfficialSymbol',
+        'gene_official_name': 'geneOfficialName',
         'gene_ncbi_id': 'geneNcbiId',
+        'gene_ensembl_id': 'geneEnsemblId',
+        'corrected_pvalue': 'correctedPvalue',
+        'pvalue': 'pvalue',
+        'log2_fold_change': 'log2FoldChange',
         'vectors': 'vectors'
     }
 
-    def __init__(self, gene_official_symbol=None, gene_ncbi_id=None, vectors=None):  # noqa: E501
+    def __init__(self, gene_official_symbol=None, gene_official_name=None, gene_ncbi_id=None, gene_ensembl_id=None, corrected_pvalue=None, pvalue=None, log2_fold_change=None, vectors=None):  # noqa: E501
         """GeneElementExpressionsValueObject - a model defined in Swagger"""  # noqa: E501
         self._gene_official_symbol = None
+        self._gene_official_name = None
         self._gene_ncbi_id = None
+        self._gene_ensembl_id = None
+        self._corrected_pvalue = None
+        self._pvalue = None
+        self._log2_fold_change = None
         self._vectors = None
         self.discriminator = None
         if gene_official_symbol is not None:
             self.gene_official_symbol = gene_official_symbol
+        if gene_official_name is not None:
+            self.gene_official_name = gene_official_name
         if gene_ncbi_id is not None:
             self.gene_ncbi_id = gene_ncbi_id
+        if gene_ensembl_id is not None:
+            self.gene_ensembl_id = gene_ensembl_id
+        if corrected_pvalue is not None:
+            self.corrected_pvalue = corrected_pvalue
+        if pvalue is not None:
+            self.pvalue = pvalue
+        if log2_fold_change is not None:
+            self.log2_fold_change = log2_fold_change
         if vectors is not None:
             self.vectors = vectors
 
@@ -74,6 +99,29 @@ class GeneElementExpressionsValueObject(object):
         self._gene_official_symbol = gene_official_symbol
 
     @property
+    def gene_official_name(self):
+        """Gets the gene_official_name of this GeneElementExpressionsValueObject.  # noqa: E501
+
+        Long descriptive gene name. May be null if unknown.  # noqa: E501
+
+        :return: The gene_official_name of this GeneElementExpressionsValueObject.  # noqa: E501
+        :rtype: str
+        """
+        return self._gene_official_name
+
+    @gene_official_name.setter
+    def gene_official_name(self, gene_official_name):
+        """Sets the gene_official_name of this GeneElementExpressionsValueObject.
+
+        Long descriptive gene name. May be null if unknown.  # noqa: E501
+
+        :param gene_official_name: The gene_official_name of this GeneElementExpressionsValueObject.  # noqa: E501
+        :type: str
+        """
+
+        self._gene_official_name = gene_official_name
+
+    @property
     def gene_ncbi_id(self):
         """Gets the gene_ncbi_id of this GeneElementExpressionsValueObject.  # noqa: E501
 
@@ -93,6 +141,98 @@ class GeneElementExpressionsValueObject(object):
         """
 
         self._gene_ncbi_id = gene_ncbi_id
+
+    @property
+    def gene_ensembl_id(self):
+        """Gets the gene_ensembl_id of this GeneElementExpressionsValueObject.  # noqa: E501
+
+        Ensembl accession for the gene. May be null if the gene has no Ensembl mapping.  # noqa: E501
+
+        :return: The gene_ensembl_id of this GeneElementExpressionsValueObject.  # noqa: E501
+        :rtype: str
+        """
+        return self._gene_ensembl_id
+
+    @gene_ensembl_id.setter
+    def gene_ensembl_id(self, gene_ensembl_id):
+        """Sets the gene_ensembl_id of this GeneElementExpressionsValueObject.
+
+        Ensembl accession for the gene. May be null if the gene has no Ensembl mapping.  # noqa: E501
+
+        :param gene_ensembl_id: The gene_ensembl_id of this GeneElementExpressionsValueObject.  # noqa: E501
+        :type: str
+        """
+
+        self._gene_ensembl_id = gene_ensembl_id
+
+    @property
+    def corrected_pvalue(self):
+        """Gets the corrected_pvalue of this GeneElementExpressionsValueObject.  # noqa: E501
+
+        FDR-corrected p-value for the contrast represented by the result-set. Only set for the differential-expression endpoint.  # noqa: E501
+
+        :return: The corrected_pvalue of this GeneElementExpressionsValueObject.  # noqa: E501
+        :rtype: float
+        """
+        return self._corrected_pvalue
+
+    @corrected_pvalue.setter
+    def corrected_pvalue(self, corrected_pvalue):
+        """Sets the corrected_pvalue of this GeneElementExpressionsValueObject.
+
+        FDR-corrected p-value for the contrast represented by the result-set. Only set for the differential-expression endpoint.  # noqa: E501
+
+        :param corrected_pvalue: The corrected_pvalue of this GeneElementExpressionsValueObject.  # noqa: E501
+        :type: float
+        """
+
+        self._corrected_pvalue = corrected_pvalue
+
+    @property
+    def pvalue(self):
+        """Gets the pvalue of this GeneElementExpressionsValueObject.  # noqa: E501
+
+        Uncorrected p-value for the contrast represented by the result-set. Only set for the differential-expression endpoint.  # noqa: E501
+
+        :return: The pvalue of this GeneElementExpressionsValueObject.  # noqa: E501
+        :rtype: float
+        """
+        return self._pvalue
+
+    @pvalue.setter
+    def pvalue(self, pvalue):
+        """Sets the pvalue of this GeneElementExpressionsValueObject.
+
+        Uncorrected p-value for the contrast represented by the result-set. Only set for the differential-expression endpoint.  # noqa: E501
+
+        :param pvalue: The pvalue of this GeneElementExpressionsValueObject.  # noqa: E501
+        :type: float
+        """
+
+        self._pvalue = pvalue
+
+    @property
+    def log2_fold_change(self):
+        """Gets the log2_fold_change of this GeneElementExpressionsValueObject.  # noqa: E501
+
+        Log2 fold change for the primary contrast on the gene's most-significant probe row. Only set for the differential-expression endpoint.  # noqa: E501
+
+        :return: The log2_fold_change of this GeneElementExpressionsValueObject.  # noqa: E501
+        :rtype: float
+        """
+        return self._log2_fold_change
+
+    @log2_fold_change.setter
+    def log2_fold_change(self, log2_fold_change):
+        """Sets the log2_fold_change of this GeneElementExpressionsValueObject.
+
+        Log2 fold change for the primary contrast on the gene's most-significant probe row. Only set for the differential-expression endpoint.  # noqa: E501
+
+        :param log2_fold_change: The log2_fold_change of this GeneElementExpressionsValueObject.  # noqa: E501
+        :type: float
+        """
+
+        self._log2_fold_change = log2_fold_change
 
     @property
     def vectors(self):

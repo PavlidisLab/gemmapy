@@ -31,22 +31,34 @@ class CompositeSequenceValueObject(object):
         'id': 'int',
         'name': 'str',
         'description': 'str',
-        'array_design': 'ArrayDesignValueObject'
+        'array_design': 'ArrayDesignValueObject',
+        'gene_mapping_summaries': 'list[GeneMappingSummaryValueObject]',
+        'sequence': 'str',
+        'sequence_length': 'int',
+        'genes': 'list[GeneReferenceValueObject]'
     }
 
     attribute_map = {
         'id': 'id',
         'name': 'name',
         'description': 'description',
-        'array_design': 'arrayDesign'
+        'array_design': 'arrayDesign',
+        'gene_mapping_summaries': 'geneMappingSummaries',
+        'sequence': 'sequence',
+        'sequence_length': 'sequenceLength',
+        'genes': 'genes'
     }
 
-    def __init__(self, id=None, name=None, description=None, array_design=None):  # noqa: E501
+    def __init__(self, id=None, name=None, description=None, array_design=None, gene_mapping_summaries=None, sequence=None, sequence_length=None, genes=None):  # noqa: E501
         """CompositeSequenceValueObject - a model defined in Swagger"""  # noqa: E501
         self._id = None
         self._name = None
         self._description = None
         self._array_design = None
+        self._gene_mapping_summaries = None
+        self._sequence = None
+        self._sequence_length = None
+        self._genes = None
         self.discriminator = None
         if id is not None:
             self.id = id
@@ -56,6 +68,14 @@ class CompositeSequenceValueObject(object):
             self.description = description
         if array_design is not None:
             self.array_design = array_design
+        if gene_mapping_summaries is not None:
+            self.gene_mapping_summaries = gene_mapping_summaries
+        if sequence is not None:
+            self.sequence = sequence
+        if sequence_length is not None:
+            self.sequence_length = sequence_length
+        if genes is not None:
+            self.genes = genes
 
     @property
     def id(self):
@@ -140,6 +160,90 @@ class CompositeSequenceValueObject(object):
         """
 
         self._array_design = array_design
+
+    @property
+    def gene_mapping_summaries(self):
+        """Gets the gene_mapping_summaries of this CompositeSequenceValueObject.  # noqa: E501
+
+
+        :return: The gene_mapping_summaries of this CompositeSequenceValueObject.  # noqa: E501
+        :rtype: list[GeneMappingSummaryValueObject]
+        """
+        return self._gene_mapping_summaries
+
+    @gene_mapping_summaries.setter
+    def gene_mapping_summaries(self, gene_mapping_summaries):
+        """Sets the gene_mapping_summaries of this CompositeSequenceValueObject.
+
+
+        :param gene_mapping_summaries: The gene_mapping_summaries of this CompositeSequenceValueObject.  # noqa: E501
+        :type: list[GeneMappingSummaryValueObject]
+        """
+
+        self._gene_mapping_summaries = gene_mapping_summaries
+
+    @property
+    def sequence(self):
+        """Gets the sequence of this CompositeSequenceValueObject.  # noqa: E501
+
+
+        :return: The sequence of this CompositeSequenceValueObject.  # noqa: E501
+        :rtype: str
+        """
+        return self._sequence
+
+    @sequence.setter
+    def sequence(self, sequence):
+        """Sets the sequence of this CompositeSequenceValueObject.
+
+
+        :param sequence: The sequence of this CompositeSequenceValueObject.  # noqa: E501
+        :type: str
+        """
+
+        self._sequence = sequence
+
+    @property
+    def sequence_length(self):
+        """Gets the sequence_length of this CompositeSequenceValueObject.  # noqa: E501
+
+
+        :return: The sequence_length of this CompositeSequenceValueObject.  # noqa: E501
+        :rtype: int
+        """
+        return self._sequence_length
+
+    @sequence_length.setter
+    def sequence_length(self, sequence_length):
+        """Sets the sequence_length of this CompositeSequenceValueObject.
+
+
+        :param sequence_length: The sequence_length of this CompositeSequenceValueObject.  # noqa: E501
+        :type: int
+        """
+
+        self._sequence_length = sequence_length
+
+    @property
+    def genes(self):
+        """Gets the genes of this CompositeSequenceValueObject.  # noqa: E501
+
+
+        :return: The genes of this CompositeSequenceValueObject.  # noqa: E501
+        :rtype: list[GeneReferenceValueObject]
+        """
+        return self._genes
+
+    @genes.setter
+    def genes(self, genes):
+        """Sets the genes of this CompositeSequenceValueObject.
+
+
+        :param genes: The genes of this CompositeSequenceValueObject.  # noqa: E501
+        :type: list[GeneReferenceValueObject]
+        """
+
+        self._genes = genes
 
     def to_dict(self):
         """Returns the model properties as a dict"""

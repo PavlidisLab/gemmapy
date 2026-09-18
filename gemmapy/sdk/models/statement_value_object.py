@@ -38,7 +38,9 @@ class StatementValueObject(object):
         'object': 'str',
         'object_uri': 'str',
         'subject_id': 'str',
-        'object_id': 'str'
+        'object_id': 'str',
+        'supporting_evidence': 'JsonNode',
+        'evidence_code': 'str'
     }
 
     attribute_map = {
@@ -52,10 +54,12 @@ class StatementValueObject(object):
         'object': 'object',
         'object_uri': 'objectUri',
         'subject_id': 'subjectId',
-        'object_id': 'objectId'
+        'object_id': 'objectId',
+        'supporting_evidence': 'supportingEvidence',
+        'evidence_code': 'evidenceCode'
     }
 
-    def __init__(self, id=None, category=None, category_uri=None, subject=None, subject_uri=None, predicate=None, predicate_uri=None, object=None, object_uri=None, subject_id=None, object_id=None):  # noqa: E501
+    def __init__(self, id=None, category=None, category_uri=None, subject=None, subject_uri=None, predicate=None, predicate_uri=None, object=None, object_uri=None, subject_id=None, object_id=None, supporting_evidence=None, evidence_code=None):  # noqa: E501
         """StatementValueObject - a model defined in Swagger"""  # noqa: E501
         self._id = None
         self._category = None
@@ -68,6 +72,8 @@ class StatementValueObject(object):
         self._object_uri = None
         self._subject_id = None
         self._object_id = None
+        self._supporting_evidence = None
+        self._evidence_code = None
         self.discriminator = None
         if id is not None:
             self.id = id
@@ -91,6 +97,10 @@ class StatementValueObject(object):
             self.subject_id = subject_id
         if object_id is not None:
             self.object_id = object_id
+        if supporting_evidence is not None:
+            self.supporting_evidence = supporting_evidence
+        if evidence_code is not None:
+            self.evidence_code = evidence_code
 
     @property
     def id(self):
@@ -322,6 +332,50 @@ class StatementValueObject(object):
         """
 
         self._object_id = object_id
+
+    @property
+    def supporting_evidence(self):
+        """Gets the supporting_evidence of this StatementValueObject.  # noqa: E501
+
+
+        :return: The supporting_evidence of this StatementValueObject.  # noqa: E501
+        :rtype: JsonNode
+        """
+        return self._supporting_evidence
+
+    @supporting_evidence.setter
+    def supporting_evidence(self, supporting_evidence):
+        """Sets the supporting_evidence of this StatementValueObject.
+
+
+        :param supporting_evidence: The supporting_evidence of this StatementValueObject.  # noqa: E501
+        :type: JsonNode
+        """
+
+        self._supporting_evidence = supporting_evidence
+
+    @property
+    def evidence_code(self):
+        """Gets the evidence_code of this StatementValueObject.  # noqa: E501
+
+        How this statement was arrived at, as a GOEvidenceCode name (IC, IEA, IIA, TAS, …). Null when none is recorded.  # noqa: E501
+
+        :return: The evidence_code of this StatementValueObject.  # noqa: E501
+        :rtype: str
+        """
+        return self._evidence_code
+
+    @evidence_code.setter
+    def evidence_code(self, evidence_code):
+        """Sets the evidence_code of this StatementValueObject.
+
+        How this statement was arrived at, as a GOEvidenceCode name (IC, IEA, IIA, TAS, …). Null when none is recorded.  # noqa: E501
+
+        :param evidence_code: The evidence_code of this StatementValueObject.  # noqa: E501
+        :type: str
+        """
+
+        self._evidence_code = evidence_code
 
     def to_dict(self):
         """Returns the model properties as a dict"""

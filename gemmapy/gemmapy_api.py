@@ -950,7 +950,14 @@ class GemmaPy(object):
 
         """
 
-        response = self.raw.get_genes(genes, **kwargs)
+        # gemma2 renamed the by-id lookup: /genes/{genes} is now getGenesByIds,
+        # while getGenes became the paginated collection listing at /genes.
+        # That path parameter is a collection, so a bare string would be joined
+        # character by character into a comma separated list and silently match
+        # the wrong gene.
+        if not isinstance(genes, list):
+            genes = [genes]
+        response = self.raw.get_genes_by_ids(genes, **kwargs)
         df = ps.process_genes(response.data)
         return df
 

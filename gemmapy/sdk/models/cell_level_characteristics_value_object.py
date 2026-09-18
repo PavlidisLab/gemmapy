@@ -82,6 +82,7 @@ class CellLevelCharacteristicsValueObject(object):
     def characteristics(self):
         """Gets the characteristics of this CellLevelCharacteristicsValueObject.  # noqa: E501
 
+        The distinct labels cells are grouped under, one entry per label and not one per cell.  # noqa: E501
 
         :return: The characteristics of this CellLevelCharacteristicsValueObject.  # noqa: E501
         :rtype: list[CharacteristicValueObject]
@@ -92,6 +93,7 @@ class CellLevelCharacteristicsValueObject(object):
     def characteristics(self, characteristics):
         """Sets the characteristics of this CellLevelCharacteristicsValueObject.
 
+        The distinct labels cells are grouped under, one entry per label and not one per cell.  # noqa: E501
 
         :param characteristics: The characteristics of this CellLevelCharacteristicsValueObject.  # noqa: E501
         :type: list[CharacteristicValueObject]
@@ -103,6 +105,7 @@ class CellLevelCharacteristicsValueObject(object):
     def characteristic_ids(self):
         """Gets the characteristic_ids of this CellLevelCharacteristicsValueObject.  # noqa: E501
 
+        For each cell of the single-cell dimension, in its cell order, the id of that cell's label in `characteristics`, or null when the cell has none.  # noqa: E501
 
         :return: The characteristic_ids of this CellLevelCharacteristicsValueObject.  # noqa: E501
         :rtype: list[int]
@@ -113,6 +116,7 @@ class CellLevelCharacteristicsValueObject(object):
     def characteristic_ids(self, characteristic_ids):
         """Sets the characteristic_ids of this CellLevelCharacteristicsValueObject.
 
+        For each cell of the single-cell dimension, in its cell order, the id of that cell's label in `characteristics`, or null when the cell has none.  # noqa: E501
 
         :param characteristic_ids: The characteristic_ids of this CellLevelCharacteristicsValueObject.  # noqa: E501
         :type: list[int]

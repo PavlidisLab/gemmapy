@@ -71,7 +71,7 @@ class Blocker(object):
     def type(self):
         """Gets the type of this Blocker.  # noqa: E501
 
-        Stable identifier for this blocker kind, e.g. UNKNOWN_FACTOR_VALUE_ID, FACTOR_TYPE_CHANGE_WITH_VALUES, ORPHAN_STATEMENT, ASSIGNMENT_REFERENCES_DELETED_FV.  # noqa: E501
+        Stable identifier for this blocker kind, e.g. UNKNOWN_FACTOR_VALUE_ID, FACTOR_TYPE_CHANGE_WITH_VALUES, ORPHAN_STATEMENT, ASSIGNMENT_REFERENCES_DELETED_FV, STATEMENT_ID_REPEATED.  # noqa: E501
 
         :return: The type of this Blocker.  # noqa: E501
         :rtype: str
@@ -82,7 +82,7 @@ class Blocker(object):
     def type(self, type):
         """Sets the type of this Blocker.
 
-        Stable identifier for this blocker kind, e.g. UNKNOWN_FACTOR_VALUE_ID, FACTOR_TYPE_CHANGE_WITH_VALUES, ORPHAN_STATEMENT, ASSIGNMENT_REFERENCES_DELETED_FV.  # noqa: E501
+        Stable identifier for this blocker kind, e.g. UNKNOWN_FACTOR_VALUE_ID, FACTOR_TYPE_CHANGE_WITH_VALUES, ORPHAN_STATEMENT, ASSIGNMENT_REFERENCES_DELETED_FV, STATEMENT_ID_REPEATED.  # noqa: E501
 
         :param type: The type of this Blocker.  # noqa: E501
         :type: str

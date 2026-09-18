@@ -35,7 +35,8 @@ class CurationDetailsValueObject(object):
         'needs_attention': 'bool',
         'last_needs_attention_event': 'AuditEventValueObject',
         'curation_note': 'str',
-        'last_note_update_event': 'AuditEventValueObject'
+        'last_note_update_event': 'AuditEventValueObject',
+        'curation_pending': 'bool'
     }
 
     attribute_map = {
@@ -46,10 +47,11 @@ class CurationDetailsValueObject(object):
         'needs_attention': 'needsAttention',
         'last_needs_attention_event': 'lastNeedsAttentionEvent',
         'curation_note': 'curationNote',
-        'last_note_update_event': 'lastNoteUpdateEvent'
+        'last_note_update_event': 'lastNoteUpdateEvent',
+        'curation_pending': 'curationPending'
     }
 
-    def __init__(self, id=None, last_updated=None, troubled=None, last_troubled_event=None, needs_attention=None, last_needs_attention_event=None, curation_note=None, last_note_update_event=None):  # noqa: E501
+    def __init__(self, id=None, last_updated=None, troubled=None, last_troubled_event=None, needs_attention=None, last_needs_attention_event=None, curation_note=None, last_note_update_event=None, curation_pending=None):  # noqa: E501
         """CurationDetailsValueObject - a model defined in Swagger"""  # noqa: E501
         self._id = None
         self._last_updated = None
@@ -59,6 +61,7 @@ class CurationDetailsValueObject(object):
         self._last_needs_attention_event = None
         self._curation_note = None
         self._last_note_update_event = None
+        self._curation_pending = None
         self.discriminator = None
         if id is not None:
             self.id = id
@@ -76,6 +79,8 @@ class CurationDetailsValueObject(object):
             self.curation_note = curation_note
         if last_note_update_event is not None:
             self.last_note_update_event = last_note_update_event
+        if curation_pending is not None:
+            self.curation_pending = curation_pending
 
     @property
     def id(self):
@@ -244,6 +249,29 @@ class CurationDetailsValueObject(object):
         """
 
         self._last_note_update_event = last_note_update_event
+
+    @property
+    def curation_pending(self):
+        """Gets the curation_pending of this CurationDetailsValueObject.  # noqa: E501
+
+        Administrators only; null for everyone else. True while someone holds an unexpired curation lock on the dataset: curation is under way, so treat what you read as provisional. It says nothing about who is curating — no holder, run or agent name is exposed here at any authorization level — and it clears itself when the lease lapses. Also null when the reading path did not consult the lock.  # noqa: E501
+
+        :return: The curation_pending of this CurationDetailsValueObject.  # noqa: E501
+        :rtype: bool
+        """
+        return self._curation_pending
+
+    @curation_pending.setter
+    def curation_pending(self, curation_pending):
+        """Sets the curation_pending of this CurationDetailsValueObject.
+
+        Administrators only; null for everyone else. True while someone holds an unexpired curation lock on the dataset: curation is under way, so treat what you read as provisional. It says nothing about who is curating — no holder, run or agent name is exposed here at any authorization level — and it clears itself when the lease lapses. Also null when the reading path did not consult the lock.  # noqa: E501
+
+        :param curation_pending: The curation_pending of this CurationDetailsValueObject.  # noqa: E501
+        :type: bool
+        """
+
+        self._curation_pending = curation_pending
 
     def to_dict(self):
         """Returns the model properties as a dict"""

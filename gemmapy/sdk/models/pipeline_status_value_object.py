@@ -28,90 +28,84 @@ class PipelineStatusValueObject(object):
                             and the value is json key in definition.
     """
     swagger_types = {
-        'experiment_id': 'int',
         'steps': 'list[PipelineStepValueObject]',
+        'geeq': 'GeeqValueObject',
+        'dataset_id': 'int',
         'has_batch_information': 'bool',
-        'has_differential_expression_analysis': 'bool',
+        'has_dea': 'bool',
         'has_coexpression_analysis': 'bool',
-        'troubled': 'bool',
+        'is_troubled': 'bool',
         'trouble_details': 'str',
         'needs_attention': 'bool',
+        'triage_verdict': 'str',
+        'triage_judge_kind': 'str',
         'curation_note': 'str',
         'is_public': 'bool',
-        'geeq': 'GeeqValueObject'
+        'last_update': 'DatasetUpdateSummaryValueObject'
     }
 
     attribute_map = {
-        'experiment_id': 'experimentId',
         'steps': 'steps',
+        'geeq': 'geeq',
+        'dataset_id': 'datasetId',
         'has_batch_information': 'hasBatchInformation',
-        'has_differential_expression_analysis': 'hasDifferentialExpressionAnalysis',
+        'has_dea': 'hasDea',
         'has_coexpression_analysis': 'hasCoexpressionAnalysis',
-        'troubled': 'troubled',
+        'is_troubled': 'isTroubled',
         'trouble_details': 'troubleDetails',
         'needs_attention': 'needsAttention',
+        'triage_verdict': 'triageVerdict',
+        'triage_judge_kind': 'triageJudgeKind',
         'curation_note': 'curationNote',
         'is_public': 'isPublic',
-        'geeq': 'geeq'
+        'last_update': 'lastUpdate'
     }
 
-    def __init__(self, experiment_id=None, steps=None, has_batch_information=None, has_differential_expression_analysis=None, has_coexpression_analysis=None, troubled=None, trouble_details=None, needs_attention=None, curation_note=None, is_public=None, geeq=None):  # noqa: E501
+    def __init__(self, steps=None, geeq=None, dataset_id=None, has_batch_information=None, has_dea=None, has_coexpression_analysis=None, is_troubled=None, trouble_details=None, needs_attention=None, triage_verdict=None, triage_judge_kind=None, curation_note=None, is_public=None, last_update=None):  # noqa: E501
         """PipelineStatusValueObject - a model defined in Swagger"""  # noqa: E501
-        self._experiment_id = None
         self._steps = None
+        self._geeq = None
+        self._dataset_id = None
         self._has_batch_information = None
-        self._has_differential_expression_analysis = None
+        self._has_dea = None
         self._has_coexpression_analysis = None
-        self._troubled = None
+        self._is_troubled = None
         self._trouble_details = None
         self._needs_attention = None
+        self._triage_verdict = None
+        self._triage_judge_kind = None
         self._curation_note = None
         self._is_public = None
-        self._geeq = None
+        self._last_update = None
         self.discriminator = None
-        if experiment_id is not None:
-            self.experiment_id = experiment_id
         if steps is not None:
             self.steps = steps
+        if geeq is not None:
+            self.geeq = geeq
+        if dataset_id is not None:
+            self.dataset_id = dataset_id
         if has_batch_information is not None:
             self.has_batch_information = has_batch_information
-        if has_differential_expression_analysis is not None:
-            self.has_differential_expression_analysis = has_differential_expression_analysis
+        if has_dea is not None:
+            self.has_dea = has_dea
         if has_coexpression_analysis is not None:
             self.has_coexpression_analysis = has_coexpression_analysis
-        if troubled is not None:
-            self.troubled = troubled
+        if is_troubled is not None:
+            self.is_troubled = is_troubled
         if trouble_details is not None:
             self.trouble_details = trouble_details
         if needs_attention is not None:
             self.needs_attention = needs_attention
+        if triage_verdict is not None:
+            self.triage_verdict = triage_verdict
+        if triage_judge_kind is not None:
+            self.triage_judge_kind = triage_judge_kind
         if curation_note is not None:
             self.curation_note = curation_note
         if is_public is not None:
             self.is_public = is_public
-        if geeq is not None:
-            self.geeq = geeq
-
-    @property
-    def experiment_id(self):
-        """Gets the experiment_id of this PipelineStatusValueObject.  # noqa: E501
-
-
-        :return: The experiment_id of this PipelineStatusValueObject.  # noqa: E501
-        :rtype: int
-        """
-        return self._experiment_id
-
-    @experiment_id.setter
-    def experiment_id(self, experiment_id):
-        """Sets the experiment_id of this PipelineStatusValueObject.
-
-
-        :param experiment_id: The experiment_id of this PipelineStatusValueObject.  # noqa: E501
-        :type: int
-        """
-
-        self._experiment_id = experiment_id
+        if last_update is not None:
+            self.last_update = last_update
 
     @property
     def steps(self):
@@ -135,6 +129,48 @@ class PipelineStatusValueObject(object):
         self._steps = steps
 
     @property
+    def geeq(self):
+        """Gets the geeq of this PipelineStatusValueObject.  # noqa: E501
+
+
+        :return: The geeq of this PipelineStatusValueObject.  # noqa: E501
+        :rtype: GeeqValueObject
+        """
+        return self._geeq
+
+    @geeq.setter
+    def geeq(self, geeq):
+        """Sets the geeq of this PipelineStatusValueObject.
+
+
+        :param geeq: The geeq of this PipelineStatusValueObject.  # noqa: E501
+        :type: GeeqValueObject
+        """
+
+        self._geeq = geeq
+
+    @property
+    def dataset_id(self):
+        """Gets the dataset_id of this PipelineStatusValueObject.  # noqa: E501
+
+
+        :return: The dataset_id of this PipelineStatusValueObject.  # noqa: E501
+        :rtype: int
+        """
+        return self._dataset_id
+
+    @dataset_id.setter
+    def dataset_id(self, dataset_id):
+        """Sets the dataset_id of this PipelineStatusValueObject.
+
+
+        :param dataset_id: The dataset_id of this PipelineStatusValueObject.  # noqa: E501
+        :type: int
+        """
+
+        self._dataset_id = dataset_id
+
+    @property
     def has_batch_information(self):
         """Gets the has_batch_information of this PipelineStatusValueObject.  # noqa: E501
 
@@ -156,25 +192,25 @@ class PipelineStatusValueObject(object):
         self._has_batch_information = has_batch_information
 
     @property
-    def has_differential_expression_analysis(self):
-        """Gets the has_differential_expression_analysis of this PipelineStatusValueObject.  # noqa: E501
+    def has_dea(self):
+        """Gets the has_dea of this PipelineStatusValueObject.  # noqa: E501
 
 
-        :return: The has_differential_expression_analysis of this PipelineStatusValueObject.  # noqa: E501
+        :return: The has_dea of this PipelineStatusValueObject.  # noqa: E501
         :rtype: bool
         """
-        return self._has_differential_expression_analysis
+        return self._has_dea
 
-    @has_differential_expression_analysis.setter
-    def has_differential_expression_analysis(self, has_differential_expression_analysis):
-        """Sets the has_differential_expression_analysis of this PipelineStatusValueObject.
+    @has_dea.setter
+    def has_dea(self, has_dea):
+        """Sets the has_dea of this PipelineStatusValueObject.
 
 
-        :param has_differential_expression_analysis: The has_differential_expression_analysis of this PipelineStatusValueObject.  # noqa: E501
+        :param has_dea: The has_dea of this PipelineStatusValueObject.  # noqa: E501
         :type: bool
         """
 
-        self._has_differential_expression_analysis = has_differential_expression_analysis
+        self._has_dea = has_dea
 
     @property
     def has_coexpression_analysis(self):
@@ -198,25 +234,25 @@ class PipelineStatusValueObject(object):
         self._has_coexpression_analysis = has_coexpression_analysis
 
     @property
-    def troubled(self):
-        """Gets the troubled of this PipelineStatusValueObject.  # noqa: E501
+    def is_troubled(self):
+        """Gets the is_troubled of this PipelineStatusValueObject.  # noqa: E501
 
 
-        :return: The troubled of this PipelineStatusValueObject.  # noqa: E501
+        :return: The is_troubled of this PipelineStatusValueObject.  # noqa: E501
         :rtype: bool
         """
-        return self._troubled
+        return self._is_troubled
 
-    @troubled.setter
-    def troubled(self, troubled):
-        """Sets the troubled of this PipelineStatusValueObject.
+    @is_troubled.setter
+    def is_troubled(self, is_troubled):
+        """Sets the is_troubled of this PipelineStatusValueObject.
 
 
-        :param troubled: The troubled of this PipelineStatusValueObject.  # noqa: E501
+        :param is_troubled: The is_troubled of this PipelineStatusValueObject.  # noqa: E501
         :type: bool
         """
 
-        self._troubled = troubled
+        self._is_troubled = is_troubled
 
     @property
     def trouble_details(self):
@@ -261,6 +297,60 @@ class PipelineStatusValueObject(object):
         self._needs_attention = needs_attention
 
     @property
+    def triage_verdict(self):
+        """Gets the triage_verdict of this PipelineStatusValueObject.  # noqa: E501
+
+
+        :return: The triage_verdict of this PipelineStatusValueObject.  # noqa: E501
+        :rtype: str
+        """
+        return self._triage_verdict
+
+    @triage_verdict.setter
+    def triage_verdict(self, triage_verdict):
+        """Sets the triage_verdict of this PipelineStatusValueObject.
+
+
+        :param triage_verdict: The triage_verdict of this PipelineStatusValueObject.  # noqa: E501
+        :type: str
+        """
+        allowed_values = ["fine", "wont_fix", "might_fix", "must_fix"]  # noqa: E501
+        if triage_verdict not in allowed_values:
+            raise ValueError(
+                "Invalid value for `triage_verdict` ({0}), must be one of {1}"  # noqa: E501
+                .format(triage_verdict, allowed_values)
+            )
+
+        self._triage_verdict = triage_verdict
+
+    @property
+    def triage_judge_kind(self):
+        """Gets the triage_judge_kind of this PipelineStatusValueObject.  # noqa: E501
+
+
+        :return: The triage_judge_kind of this PipelineStatusValueObject.  # noqa: E501
+        :rtype: str
+        """
+        return self._triage_judge_kind
+
+    @triage_judge_kind.setter
+    def triage_judge_kind(self, triage_judge_kind):
+        """Sets the triage_judge_kind of this PipelineStatusValueObject.
+
+
+        :param triage_judge_kind: The triage_judge_kind of this PipelineStatusValueObject.  # noqa: E501
+        :type: str
+        """
+        allowed_values = ["agent", "curator"]  # noqa: E501
+        if triage_judge_kind not in allowed_values:
+            raise ValueError(
+                "Invalid value for `triage_judge_kind` ({0}), must be one of {1}"  # noqa: E501
+                .format(triage_judge_kind, allowed_values)
+            )
+
+        self._triage_judge_kind = triage_judge_kind
+
+    @property
     def curation_note(self):
         """Gets the curation_note of this PipelineStatusValueObject.  # noqa: E501
 
@@ -303,25 +393,25 @@ class PipelineStatusValueObject(object):
         self._is_public = is_public
 
     @property
-    def geeq(self):
-        """Gets the geeq of this PipelineStatusValueObject.  # noqa: E501
+    def last_update(self):
+        """Gets the last_update of this PipelineStatusValueObject.  # noqa: E501
 
 
-        :return: The geeq of this PipelineStatusValueObject.  # noqa: E501
-        :rtype: GeeqValueObject
+        :return: The last_update of this PipelineStatusValueObject.  # noqa: E501
+        :rtype: DatasetUpdateSummaryValueObject
         """
-        return self._geeq
+        return self._last_update
 
-    @geeq.setter
-    def geeq(self, geeq):
-        """Sets the geeq of this PipelineStatusValueObject.
+    @last_update.setter
+    def last_update(self, last_update):
+        """Sets the last_update of this PipelineStatusValueObject.
 
 
-        :param geeq: The geeq of this PipelineStatusValueObject.  # noqa: E501
-        :type: GeeqValueObject
+        :param last_update: The last_update of this PipelineStatusValueObject.  # noqa: E501
+        :type: DatasetUpdateSummaryValueObject
         """
 
-        self._geeq = geeq
+        self._last_update = last_update
 
     def to_dict(self):
         """Returns the model properties as a dict"""

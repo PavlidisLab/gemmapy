@@ -32,6 +32,8 @@ class Summary(object):
         'factor_values_to_delete': 'int',
         'factors_to_create': 'int',
         'factor_values_to_create': 'int',
+        'factors_to_update': 'int',
+        'factor_values_to_update': 'int',
         'differential_expression_analyses_to_delete': 'int',
         'subsets_with_stale_anchor': 'int',
         'biomaterials_with_changed_assignments': 'int'
@@ -42,17 +44,21 @@ class Summary(object):
         'factor_values_to_delete': 'factorValuesToDelete',
         'factors_to_create': 'factorsToCreate',
         'factor_values_to_create': 'factorValuesToCreate',
+        'factors_to_update': 'factorsToUpdate',
+        'factor_values_to_update': 'factorValuesToUpdate',
         'differential_expression_analyses_to_delete': 'differentialExpressionAnalysesToDelete',
         'subsets_with_stale_anchor': 'subsetsWithStaleAnchor',
         'biomaterials_with_changed_assignments': 'biomaterialsWithChangedAssignments'
     }
 
-    def __init__(self, factors_to_delete=None, factor_values_to_delete=None, factors_to_create=None, factor_values_to_create=None, differential_expression_analyses_to_delete=None, subsets_with_stale_anchor=None, biomaterials_with_changed_assignments=None):  # noqa: E501
+    def __init__(self, factors_to_delete=None, factor_values_to_delete=None, factors_to_create=None, factor_values_to_create=None, factors_to_update=None, factor_values_to_update=None, differential_expression_analyses_to_delete=None, subsets_with_stale_anchor=None, biomaterials_with_changed_assignments=None):  # noqa: E501
         """Summary - a model defined in Swagger"""  # noqa: E501
         self._factors_to_delete = None
         self._factor_values_to_delete = None
         self._factors_to_create = None
         self._factor_values_to_create = None
+        self._factors_to_update = None
+        self._factor_values_to_update = None
         self._differential_expression_analyses_to_delete = None
         self._subsets_with_stale_anchor = None
         self._biomaterials_with_changed_assignments = None
@@ -65,6 +71,10 @@ class Summary(object):
             self.factors_to_create = factors_to_create
         if factor_values_to_create is not None:
             self.factor_values_to_create = factor_values_to_create
+        if factors_to_update is not None:
+            self.factors_to_update = factors_to_update
+        if factor_values_to_update is not None:
+            self.factor_values_to_update = factor_values_to_update
         if differential_expression_analyses_to_delete is not None:
             self.differential_expression_analyses_to_delete = differential_expression_analyses_to_delete
         if subsets_with_stale_anchor is not None:
@@ -155,6 +165,48 @@ class Summary(object):
         """
 
         self._factor_values_to_create = factor_values_to_create
+
+    @property
+    def factors_to_update(self):
+        """Gets the factors_to_update of this Summary.  # noqa: E501
+
+
+        :return: The factors_to_update of this Summary.  # noqa: E501
+        :rtype: int
+        """
+        return self._factors_to_update
+
+    @factors_to_update.setter
+    def factors_to_update(self, factors_to_update):
+        """Sets the factors_to_update of this Summary.
+
+
+        :param factors_to_update: The factors_to_update of this Summary.  # noqa: E501
+        :type: int
+        """
+
+        self._factors_to_update = factors_to_update
+
+    @property
+    def factor_values_to_update(self):
+        """Gets the factor_values_to_update of this Summary.  # noqa: E501
+
+
+        :return: The factor_values_to_update of this Summary.  # noqa: E501
+        :rtype: int
+        """
+        return self._factor_values_to_update
+
+    @factor_values_to_update.setter
+    def factor_values_to_update(self, factor_values_to_update):
+        """Sets the factor_values_to_update of this Summary.
+
+
+        :param factor_values_to_update: The factor_values_to_update of this Summary.  # noqa: E501
+        :type: int
+        """
+
+        self._factor_values_to_update = factor_values_to_update
 
     @property
     def differential_expression_analyses_to_delete(self):
