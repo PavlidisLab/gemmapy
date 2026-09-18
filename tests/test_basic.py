@@ -175,6 +175,23 @@ def test_get_dataset_object():
     assert len(obj) == dea.shape[0]
 
 
+def test_get_platform_annotations():
+    res = api.get_platform_annotations("GPL1355")
+    assert type(res) is pd.core.frame.DataFrame
+    assert "ElementName" in res.columns
+
+
+def test_platform_annotations_normalize_probe_name(monkeypatch):
+    """Older annotation files call the first column ProbeName. Gemma currently
+    serves ElementName, so the rename is only reachable with a stubbed body."""
+    old_style = "#comment line\nProbeName\tGeneSymbols\nprobe_1\tDYRK1A\n"
+    monkeypatch.setattr(api.raw, "get_platform_annotations",
+                        lambda platform, **kwargs: old_style)
+    res = api.get_platform_annotations("GPL1355")
+    assert list(res.columns) == ["ElementName", "GeneSymbols"]
+    assert res.ElementName[0] == "probe_1"
+
+
 # def test_measurements():
 #    dataset = "GSE106"
 #    samples = api.get_dataset_samples(dataset)

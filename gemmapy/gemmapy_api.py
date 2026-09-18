@@ -23,6 +23,7 @@ from gemmapy import _processors as ps
 from gemmapy import _subprocessors as sub
 from gemmapy import _validators as vs
 from gemmapy import sdk
+from gemmapy._retry import RetryingRESTClient
 
 logger = logging.getLogger(__name__)
 
@@ -104,7 +105,11 @@ class GemmaPy(object):
                     f'Supply your password for {configuration.username}@{configuration.host}: ')
 
         # create an instance of the API class
-        self.raw = sdk.DefaultApi(sdk.ApiClient(configuration))
+        api_client = sdk.ApiClient(configuration)
+        # Swap in a client that waits out Gemma's transient responses. Done here
+        # rather than in the generated sdk/, which generate-sdk.sh overwrites.
+        api_client.rest_client = RetryingRESTClient(configuration)
+        self.raw = sdk.DefaultApi(api_client)
         try:
             self.raw.get_api_info()
         except:
@@ -982,11 +987,11 @@ class GemmaPy(object):
         :type **kwargs: TYPE
         :return: A DataFrame of annotations
         
-          - ProbeName: Probeset names provided by the platform. Gene symbols for generic annotations
+          - ElementName: Probeset names provided by the platform. Gene symbols for generic annotations
           - GeneSymbols: Genes that were found to be aligned to the probe sequence. Note that it is possible for probes to be non-specific. Alignment to multiple genes are indicated with gene symbols separated by "|"s
           - GeneNames: Name of the gene
           - GOTerms: GO Terms associated with the genes. annotType argument can be used to choose which terms should be included.
-          - GemmaIDs and NCBIids: respective IDs for the genes.
+          - GemmaIDs, NCBIids and EnsemblIds: respective IDs for the genes.
         :rtype: DataFrame
 
         """
@@ -996,7 +1001,10 @@ class GemmaPy(object):
         api_response = uncomment[len(uncomment)-1]
         uncomment = api_response.split('\n',1)
         api_response = uncomment[len(uncomment)-1]
-        return pd.read_csv(StringIO(api_response), sep='\t')
+        df = pd.read_csv(StringIO(api_response), sep='\t')
+        # older annotation files use ProbeName instead of ElementName. we always
+        # return ElementName, as gemma.R's processAnnotationFile does.
+        return df.rename(columns={"ProbeName": "ElementName"})
 
     # platform/{platform}/datasets, get_platform_datasets ----
 
