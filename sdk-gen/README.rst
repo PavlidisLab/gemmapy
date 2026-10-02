@@ -9,14 +9,12 @@ Code generation sources
   every non-GET operation, since gemmapy only reads from Gemma and generating the
   admin, ticket and workflow write endpoints costs hundreds of request-body models
   for a surface the wrapper never calls, then prunes the schemas left unreachable.
-  It also fixes two things swagger-codegen cannot handle. The spec
-  describes cursor pagination as a response-level ``oneOf``, which swagger-codegen
-  v3 cannot express in Python: it emits an empty ``InlineResponseNNN`` model, the
-  raw SDK then returns a plain dict and every ``process_*(response.data)`` call in
-  the wrapper fails. Some endpoints have also lost their parameterized response
-  container, which deserializes to untyped dicts that the processors silently read
-  as NaN. The script collapses each ``oneOf`` to its legacy offset/limit variant
-  and restores the payload types. It writes a patched copy to a temporary file;
+  It also collapses the response-level ``oneOf`` the spec uses to describe
+  cursor pagination, which swagger-codegen v3 cannot express in Python: it emits
+  an empty ``InlineResponseNNN`` model, the raw SDK then returns a plain dict and
+  every ``process_*(response.data)`` call in the wrapper fails. Each ``oneOf`` is
+  reduced to its legacy offset/limit variant; the script exits with an error if
+  that variant has an untyped ``data`` payload. It writes a patched copy to a temporary file;
   openapi.yaml is never modified.
 * openapi-patches.md - generated manifest listing every change patch-openapi.py
   made, with the sha256 and version of the spec it was applied to. Regenerated on

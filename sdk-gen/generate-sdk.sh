@@ -5,7 +5,7 @@ temp_sdk_dir=$(mktemp -d)
 script_dir=$(dirname "${BASH_SOURCE[0]}")
 gemmapy_version=$(grep 'version' "$script_dir/../pyproject.toml" | sed 's/version = //')
 echo "Updating openapi.yaml..."
-curl https://gemma2.msl.ubc.ca/rest/v2/openapi.yaml -o "$script_dir/openapi.yaml" --compressed
+curl https://gemma.msl.ubc.ca/rest/v2/openapi.yaml -o "$script_dir/openapi.yaml" --compressed
 # swagger-codegen v3 cannot generate usable Python for the response-level oneOf
 # schemas the spec uses for cursor pagination, so codegen runs against a patched
 # copy. openapi.yaml itself stays as downloaded; changes are listed in
