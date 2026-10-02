@@ -27,6 +27,14 @@ from gemmapy._retry import RetryingRESTClient
 
 logger = logging.getLogger(__name__)
 
+# The spec tags every operation, so swagger-codegen emits one API class per tag
+# rather than a single DefaultApi. Operation ids are unique across tags, so they
+# are recombined here to keep every endpoint reachable as GemmaPy.raw.<method>.
+_RawApi = type('_RawApi',
+               tuple(c for n, c in vars(sdk.api).items()
+                     if n.endswith('Api') and isinstance(c, type)),
+               {})
+
 class GemmaPath(enum.Enum):
     PROD = "prod"
     DEV = "dev"
@@ -109,7 +117,7 @@ class GemmaPy(object):
         # Swap in a client that waits out Gemma's transient responses. Done here
         # rather than in the generated sdk/, which generate-sdk.sh overwrites.
         api_client.rest_client = RetryingRESTClient(configuration)
-        self.raw = sdk.DefaultApi(api_client)
+        self.raw = _RawApi(api_client)
         try:
             self.raw.get_api_info()
         except:
