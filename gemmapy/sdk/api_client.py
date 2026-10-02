@@ -73,7 +73,7 @@ class ApiClient(object):
             self.default_headers[header_name] = header_value
         self.cookie = cookie
         # Set default User-Agent.
-        self.user_agent = 'gemmapy/"2.0.7"'
+        self.user_agent = 'gemmapy/"3.0.0"'
 
     def __del__(self):
         self.pool.close()
